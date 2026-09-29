@@ -1,11 +1,12 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://src/core/nodes/ui/scrapbook_panel.gd" id="1_rx543"]
-[ext_resource type="Texture2D" path="res://assets/textures/props/album_cloth.png" id="2_otyc0"]
-[ext_resource type="Shader" path="res://assets/shaders/page_leaf.gdshader" id="3_ejh3x"]
-[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="4_4mxfg"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/scrapbook_panel.gd" id="1_otyc0"]
+[ext_resource type="Texture2D" path="res://assets/textures/props/album_cloth.png" id="2_ejh3x"]
+[ext_resource type="Texture2D" path="res://assets/textures/props/album_page_stack.png" id="3_4mxfg"]
+[ext_resource type="Shader" path="res://assets/shaders/page_leaf.gdshader" id="4_mlu0o"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="5_qj3i1"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlu0o"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ip47x"]
 content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
@@ -20,7 +21,7 @@ shadow_color = Color(0, 0, 0, 0.55)
 shadow_size = 28
 shadow_offset = Vector2(0, 12)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qj3i1"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pdhru"]
 content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
@@ -35,30 +36,30 @@ shadow_color = Color(0, 0, 0, 0.55)
 shadow_size = 28
 shadow_offset = Vector2(0, 12)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ip47x"]
-shader = ExtResource("3_ejh3x")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uuo6f"]
+shader = ExtResource("4_mlu0o")
 shader_parameter/angle = null
 shader_parameter/leaf_px = Vector2(400, 540)
 shader_parameter/rect_px = Vector2(1200, 864)
 shader_parameter/eye = null
 shader_parameter/shadow_strength = null
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pdhru"]
-shader = ExtResource("3_ejh3x")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_783ft"]
+shader = ExtResource("4_mlu0o")
 shader_parameter/angle = null
 shader_parameter/leaf_px = Vector2(414, 568)
 shader_parameter/rect_px = Vector2(1242, 908.8)
 shader_parameter/eye = null
 shader_parameter/shadow_strength = null
 
-[node name="Scrapbook" type="Control" unique_id=273678610]
+[node name="Scrapbook" type="Control" unique_id=1060862597]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource("1_rx543")
+script = ExtResource("1_otyc0")
 
-[node name="Dim" type="ColorRect" parent="." unique_id=1199524642]
+[node name="Dim" type="ColorRect" parent="." unique_id=269111479]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
@@ -66,7 +67,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.03, 0.035, 0.043, 0.8)
 
-[node name="Book" type="Control" parent="." unique_id=1007603154]
+[node name="Book" type="Control" parent="." unique_id=218700433]
 unique_name_in_owner = true
 anchors_preset = 0
 anchor_left = 0.5
@@ -77,46 +78,46 @@ offset_top = -10.0
 offset_bottom = -10.0
 mouse_filter = 2
 
-[node name="ShadowRight" type="Panel" parent="Book" unique_id=1538480044]
+[node name="ShadowRight" type="Panel" parent="Book" unique_id=603451634]
 layout_mode = 0
 offset_top = -284.0
 offset_right = 414.0
 offset_bottom = 284.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_mlu0o")
+theme_override_styles/panel = SubResource("StyleBoxFlat_ip47x")
 
-[node name="BoardLeft" type="Control" parent="Book" unique_id=494372608]
+[node name="BoardLeft" type="Control" parent="Book" unique_id=1042820236]
 unique_name_in_owner = true
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="ShadowLeft" type="Panel" parent="Book/BoardLeft" unique_id=324340320]
+[node name="ShadowLeft" type="Panel" parent="Book/BoardLeft" unique_id=1746121]
 layout_mode = 0
 offset_left = -414.0
 offset_top = -284.0
 offset_bottom = 284.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_qj3i1")
+theme_override_styles/panel = SubResource("StyleBoxFlat_pdhru")
 
-[node name="ClothLeft" type="TextureRect" parent="Book/BoardLeft" unique_id=2068213231]
+[node name="ClothLeft" type="TextureRect" parent="Book/BoardLeft" unique_id=209983426]
 layout_mode = 0
 offset_left = -414.0
 offset_top = -284.0
 offset_bottom = 284.0
 mouse_filter = 2
-texture = ExtResource("2_otyc0")
+texture = ExtResource("2_ejh3x")
 expand_mode = 1
 
-[node name="ClothRight" type="TextureRect" parent="Book" unique_id=21850835]
+[node name="ClothRight" type="TextureRect" parent="Book" unique_id=1342818202]
 layout_mode = 0
 offset_top = -284.0
 offset_right = 414.0
 offset_bottom = 284.0
 mouse_filter = 2
-texture = ExtResource("2_otyc0")
+texture = ExtResource("2_ejh3x")
 expand_mode = 1
 
-[node name="Spine" type="ColorRect" parent="Book" unique_id=1470488019]
+[node name="Spine" type="ColorRect" parent="Book" unique_id=295448244]
 layout_mode = 0
 offset_left = -4.0
 offset_top = -284.0
@@ -125,7 +126,7 @@ offset_bottom = 284.0
 mouse_filter = 2
 color = Color(0.2, 0.05, 0.06, 1)
 
-[node name="PageLeft" type="TextureRect" parent="Book" unique_id=2062013654]
+[node name="PageLeft" type="TextureRect" parent="Book" unique_id=568868895]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = -400.0
@@ -134,7 +135,15 @@ offset_bottom = 270.0
 mouse_filter = 2
 expand_mode = 1
 
-[node name="PageRight" type="TextureRect" parent="Book" unique_id=412518769]
+[node name="PageStack" type="TextureRect" parent="Book/PageLeft" unique_id=1520586412]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 540.0
+mouse_filter = 2
+texture = ExtResource("3_4mxfg")
+expand_mode = 1
+
+[node name="PageRight" type="TextureRect" parent="Book" unique_id=1257438551]
 unique_name_in_owner = true
 layout_mode = 0
 offset_top = -270.0
@@ -143,10 +152,20 @@ offset_bottom = 270.0
 mouse_filter = 2
 expand_mode = 1
 
-[node name="PageLeaf" type="ColorRect" parent="Book" unique_id=428779877]
+[node name="PageStack" type="TextureRect" parent="Book/PageRight" unique_id=1449678213]
+layout_mode = 0
+offset_left = 392.0
+offset_right = 400.0
+offset_bottom = 540.0
+mouse_filter = 2
+texture = ExtResource("3_4mxfg")
+expand_mode = 1
+flip_h = true
+
+[node name="PageLeaf" type="ColorRect" parent="Book" unique_id=808879916]
 unique_name_in_owner = true
 visible = false
-material = SubResource("ShaderMaterial_ip47x")
+material = SubResource("ShaderMaterial_uuo6f")
 layout_mode = 0
 offset_left = -600.0
 offset_top = -432.0
@@ -154,10 +173,10 @@ offset_right = 600.0
 offset_bottom = 432.0
 mouse_filter = 2
 
-[node name="CoverLeaf" type="ColorRect" parent="Book" unique_id=1262412657]
+[node name="CoverLeaf" type="ColorRect" parent="Book" unique_id=1544490163]
 unique_name_in_owner = true
 visible = false
-material = SubResource("ShaderMaterial_pdhru")
+material = SubResource("ShaderMaterial_783ft")
 layout_mode = 0
 offset_left = -621.0
 offset_top = -454.4
@@ -165,10 +184,10 @@ offset_right = 621.0
 offset_bottom = 454.4
 mouse_filter = 2
 
-[node name="Viewports" type="Node" parent="." unique_id=1553433631]
+[node name="Viewports" type="Node" parent="." unique_id=27129280]
 unique_name_in_owner = true
 
-[node name="Hint" type="RichTextLabel" parent="." unique_id=2146998636]
+[node name="Hint" type="RichTextLabel" parent="." unique_id=1781732639]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(720, 0)
 layout_mode = 0
@@ -181,7 +200,7 @@ offset_top = -52.0
 offset_right = 360.0
 offset_bottom = -28.0
 mouse_filter = 2
-theme_override_fonts/normal_font = ExtResource("4_4mxfg")
+theme_override_fonts/normal_font = ExtResource("5_qj3i1")
 theme_override_font_sizes/normal_font_size = 14
 theme_override_colors/default_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 bbcode_enabled = true
@@ -189,6 +208,6 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="Rustle" type="AudioStreamPlayer" parent="." unique_id=954477222]
+[node name="Rustle" type="AudioStreamPlayer" parent="." unique_id=1225464272]
 unique_name_in_owner = true
 volume_db = -4.0

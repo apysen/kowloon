@@ -226,7 +226,21 @@ func _run() -> void:
 	var book := slice.scrapbook.panel
 	expect(book.visible and not book.busy and book.spread == 0, "the album opens on the title page")
 	expect(book.spreads() == 2, "one page per photograph, after the title page")
-	book.zoom(1)
+	# through real pointer events, as the mouse would send them
+	var pol: Control = book._photos[1].polaroid
+	var at: Vector2 = book.book.global_position + Vector2(0.0, -book.PAGE.y * 0.5) + pol.position + pol.size * 0.5
+	var move := InputEventMouseMotion.new()
+	move.position = at
+	move.global_position = at
+	root.push_input(move)
+	await frames(3)
+	expect(book._hover == 1, "the pointer over a print shows the magnifying glass")
+	var click := InputEventMouseButton.new()
+	click.position = at
+	click.global_position = at
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	root.push_input(click)
 	await secs(0.5)
 	expect(book.zoomed(), "clicking a print lifts it up to look at")
 	await book.unzoom()

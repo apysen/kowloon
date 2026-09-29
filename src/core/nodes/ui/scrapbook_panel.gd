@@ -212,7 +212,19 @@ func _turn(dir: int, secs := 0.6) -> void:
 	busy = false
 
 
+## The panel covers the screen and stops the mouse, so pointer events arrive
+## here rather than as unhandled input. Keys still come through _unhandled_input.
+func _gui_input(event: InputEvent) -> void:
+	_handle(event)
+
+
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouse:
+		return
+	_handle(event)
+
+
+func _handle(event: InputEvent) -> void:
 	if not visible:
 		return
 	if _filing:
@@ -230,15 +242,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			unzoom()
 		get_viewport().set_input_as_handled()
 		return
+	# gui events carry the pointer in the panel's own space
+	var at := get_global_transform() * (event as InputEventMouse).position if event is InputEventMouse else Vector2.ZERO
 	if event is InputEventMouseMotion:
-		_set_hover(-1 if busy else _photo_at(get_global_mouse_position()))
+		_set_hover(-1 if busy else _photo_at(at))
 		return
 	if event is InputEventMouseButton and event.pressed and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-		var hit := _photo_at(get_global_mouse_position())
+		var hit := _photo_at(at)
 		if hit >= 0 and not busy:
 			zoom(hit)
 		else:
-			var x := get_global_mouse_position().x - book.global_position.x
+			var x := at.x - book.global_position.x
 			turn(1 if x > 0.0 else -1)
 		get_viewport().set_input_as_handled()
 		return

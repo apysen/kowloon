@@ -418,6 +418,16 @@ func build_scrapbook() -> Control:
 		pg.position = Vector2(spec[1], -P.y * 0.5)
 		pg.size = P
 		pg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# the edges of the pages beneath: part of the book, so they stay put while a leaf turns
+		var stack := add(pg, TextureRect.new()) as TextureRect
+		stack.name = "PageStack"
+		stack.texture = load("res://assets/textures/props/album_page_stack.png")
+		stack.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		stack.stretch_mode = TextureRect.STRETCH_SCALE
+		stack.flip_h = spec[0] == "PageRight"
+		stack.position = Vector2(0.0 if spec[0] == "PageLeft" else P.x - 8.0, 0.0)
+		stack.size = Vector2(8, P.y)
+		stack.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var leaf_shader: Shader = load("res://assets/shaders/page_leaf.gdshader")
 	for spec in [["PageLeaf", P], ["CoverLeaf", B]]:
 		var size: Vector2 = spec[1]

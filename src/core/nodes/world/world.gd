@@ -422,6 +422,7 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 		elif same_band:
 			var b: AABB = it.aabb
 			var smin := INF
+			var smax := -INF
 			var lmin := INF
 			var lmax := -INF
 			for x in [b.position.x, b.end.x]:
@@ -431,6 +432,7 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 					var s := dx * back.x + dz * back.z
 					var l := dx * right.x + dz * right.z
 					smin = minf(smin, s)
+					smax = maxf(smax, s)
 					lmin = minf(lmin, l)
 					lmax = maxf(lmax, l)
 			# a closed room Mei isn't in, and the city's buildings, only fade where they
@@ -441,7 +443,10 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 			elif it.room != "" and it.room != current_room:
 				# another room stays closed: only the wall right across the line to Mei gives way
 				reach = 1.4
-			if smin > 0.25 and lmax > -reach and lmin < reach and b.end.y > p.y + 0.9:
+			# a ceiling is overhead: if any of it reaches toward the camera it covers
+			# her, even when its edge overhangs just behind her (a doorway)
+			var in_front := smax > 0.25 if it.is_lid else smin > 0.25
+			if in_front and lmax > -reach and lmin < reach and b.end.y > p.y + 0.9:
 				target_op = 0.12 if it.filler else 0.06
 		if absf(it.opacity - target_op) > 0.004:
 			it.opacity = it.opacity + (target_op - it.opacity) * minf(1.0, delta * 10.0)

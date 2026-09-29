@@ -574,14 +574,22 @@ def album_pages():
         d = (w - 1 - x) if side == "left" else x
         gutter = 1 - 0.22 * np.exp(-d / 34.0) - 0.06 * np.exp(-d / 140.0)
         c = col * gutter[..., None]
-        # the outer edge: the stack of pages below, a few hairlines
+        # the page's own outer edge (the pages beneath are album_page_stack, drawn on
+        # the book rather than the page, so a turning leaf carries only its own edge)
         edge = w - 1 - d
-        for k, a in [(3, 0.18), (8, 0.12), (13, 0.08)]:
-            m = (edge >= k) & (edge < k + 2)
-            c = np.where(m[..., None], c * (1 - a), c)
         c = np.where((edge < 2)[..., None], c * 0.9, c)
         Image.fromarray((np.clip(c, 0, 1) * 255).astype(np.uint8), "RGB").save(os.path.join(OUT, f"album_page_{side}.png"))
     print("wrote album pages")
+
+
+def album_page_stack():
+    """The edges of the pages beneath the open ones: a few hairlines at the
+    outer edge, laid over the left page as is (flipped for the right)."""
+    w, h = 16, 8
+    a = np.zeros((h, w, 4))
+    for k, alpha in [(3, 0.18), (8, 0.12), (13, 0.08)]:
+        a[:, k:k + 2, 3] = alpha
+    save(Image.fromarray((a * 255).astype(np.uint8), "RGBA"), "album_page_stack")
 
 
 def tape():
@@ -621,3 +629,4 @@ if __name__ == "__main__":
     album_cloth()
     album_cover()
     album_pages()
+    album_page_stack()
