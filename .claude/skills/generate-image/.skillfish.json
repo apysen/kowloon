@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "generate-image",
+  "owner": "tomekgancarczyk",
+  "repo": "kata-workshop-cc",
+  "path": ".claude/skills/generate-image",
+  "branch": "main",
+  "sha": "2547be9b524fa8a3b94fc38599ff98844a5240ad",
+  "source": "manual"
+}

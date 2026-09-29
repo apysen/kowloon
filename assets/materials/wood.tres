@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/world_surface.gdshader" id="1_a3w1p"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/wood_albedo.png" id="2_x2lso"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/wood_normal.png" id="3_vjybf"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/wood_rough.png" id="4_hi84l"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_a3w1p")
+shader_parameter/albedo_tex = ExtResource("2_x2lso")
+shader_parameter/normal_tex = ExtResource("3_vjybf")
+shader_parameter/rough_tex = ExtResource("4_hi84l")
+shader_parameter/has_emission = null
+shader_parameter/emission_energy = null
+shader_parameter/has_top = null
+shader_parameter/top_tint = null
+shader_parameter/top_tile = null
+shader_parameter/tile_size = Vector2(2, 2)
+shader_parameter/normal_strength = 1.0
+shader_parameter/roughness_scale = null
+shader_parameter/blend_sharpness = null
+shader_parameter/foot_grime = null

@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/world_surface.gdshader" id="1_v38rr"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/tar_albedo.png" id="2_g4bg8"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/tar_normal.png" id="3_kqj1l"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/tar_rough.png" id="4_8wiou"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_v38rr")
+shader_parameter/albedo_tex = ExtResource("2_g4bg8")
+shader_parameter/normal_tex = ExtResource("3_kqj1l")
+shader_parameter/rough_tex = ExtResource("4_8wiou")
+shader_parameter/has_emission = null
+shader_parameter/emission_energy = null
+shader_parameter/has_top = null
+shader_parameter/top_tint = null
+shader_parameter/top_tile = null
+shader_parameter/tile_size = Vector2(4, 4)
+shader_parameter/normal_strength = 1.0
+shader_parameter/roughness_scale = null
+shader_parameter/blend_sharpness = null
+shader_parameter/foot_grime = null

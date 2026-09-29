@@ -7,3 +7,6 @@
 
 # Scratch files
 /blank_64x64.aseprite
+
+# Generated build data (rebuild with scripts/sprite_catalog.py)
+assets/sprites/aseprite/build/

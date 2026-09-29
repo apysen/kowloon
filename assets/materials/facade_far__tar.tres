@@ -1,0 +1,31 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/world_surface.gdshader" id="1_vq8oa"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/facade_far_albedo.png" id="2_3tm53"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/facade_far_emission.png" id="3_tengr"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/facade_far_normal.png" id="4_k8oca"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/facade_far_rough.png" id="5_qxeyo"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/tar_albedo.png" id="6_2trby"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/tar_normal.png" id="7_n71a0"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/tar_rough.png" id="8_nbcvg"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_vq8oa")
+shader_parameter/albedo_tex = ExtResource("2_3tm53")
+shader_parameter/normal_tex = ExtResource("4_k8oca")
+shader_parameter/rough_tex = ExtResource("5_qxeyo")
+shader_parameter/emission_tex = ExtResource("3_tengr")
+shader_parameter/has_emission = true
+shader_parameter/emission_energy = 2.4
+shader_parameter/has_top = true
+shader_parameter/top_albedo_tex = ExtResource("6_2trby")
+shader_parameter/top_normal_tex = ExtResource("7_n71a0")
+shader_parameter/top_rough_tex = ExtResource("8_nbcvg")
+shader_parameter/top_tint = null
+shader_parameter/top_tile = 4.0
+shader_parameter/tile_size = Vector2(6, 5)
+shader_parameter/normal_strength = 1.0
+shader_parameter/roughness_scale = null
+shader_parameter/blend_sharpness = null
+shader_parameter/foot_grime = 0.0
