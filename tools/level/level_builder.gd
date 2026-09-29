@@ -297,8 +297,21 @@ func room(r: Dictionary) -> void:
 	var parent_path: String = r.get("parent", "Structure") + "/" + room_name.to_pascal_case()
 	var T := 0.3
 	add_floor(x0, x1, z0, z1, y, room_name)
-	box(x0 - T, x1 + T, y - 0.3, y, z0 - T, z1 + T, floor_col,
-		{"band": band, "surface": floor_surface, "is_floor": true, "parent": parent_path, "name": "Floor"})
+	var fo := {"band": band, "surface": floor_surface, "is_floor": true, "parent": parent_path, "name": "Floor"}
+	if r.has("floor_hole"):
+		# a stairwell opening: the slab is laid in pieces around it
+		var hx0: float = r.floor_hole[0]
+		var hx1: float = r.floor_hole[1]
+		var hz0: float = r.floor_hole[2]
+		var hz1: float = r.floor_hole[3]
+		if hx0 > x0 - T:
+			box(x0 - T, hx0, y - 0.3, y, z0 - T, z1 + T, floor_col, fo)
+		box(hx1, x1 + T, y - 0.3, y, z0 - T, z1 + T, floor_col, fo)
+		if hz0 > z0 - T:
+			box(hx0, hx1, y - 0.3, y, z0 - T, hz0, floor_col, fo)
+		box(hx0, hx1, y - 0.3, y, hz1, z1 + T, floor_col, fo)
+	else:
+		box(x0 - T, x1 + T, y - 0.3, y, z0 - T, z1 + T, floor_col, fo)
 	if id != "":
 		closed_room(id, [x0, x1, z0, z1], y, h, band, parent_path)
 
@@ -322,7 +335,7 @@ func room(r: Dictionary) -> void:
 			cursor = maxf(cursor, g[1])
 		if cursor < s.a1:
 			segments.append([cursor, s.a1])
-		var wall_opts := {"fadeable": true, "band": wall_band, "room": id, "surface": wall_surface,
+		var wall_opts := {"fadeable": not r.get("no_fade", false), "band": wall_band, "room": id, "surface": wall_surface,
 			"parent": parent_path, "name": "Wall" + side.to_upper(), "base_y": y}
 		for seg in segments:
 			var m := _wall_segment(s, seg[0], seg[1], y, y + h, wall, wall_opts)
@@ -442,7 +455,8 @@ func door(d: Dictionary) -> void:
 	var base_yaw := atan2(-tangent.z, tangent.x)
 	pivot.rotation.y = base_yaw
 	attach(pivot, group("Doors"))
-	tag(pivot, band)
+	# a door swung open toward the camera must fade like the walls around it
+	tag(pivot, band, true)
 	var col: Color = d.get("color", c8(0x7a93a0))
 	var panel := box(0, width, 0, 2.6, -0.05, 0.05, col, {"surface": "metal", "parent_node": pivot, "name": "Panel"})
 	panel.remove_meta("band")
@@ -460,7 +474,7 @@ func door(d: Dictionary) -> void:
 	# frame, so the opening reads as a doorway from the side it faces
 	var fw := 0.12
 	var frame_col := c8(0x3a3632)
-	var fo := {"band": band, "surface": "metal", "parent": "Doors/" + pivot.name + "Frame", "name": "Frame"}
+	var fo := {"band": band, "fadeable": true, "surface": "metal", "parent": "Doors/" + pivot.name + "Frame", "name": "Frame"}
 	if ax:
 		box(x - 0.2, x + 0.2, y, y + 2.75, z - width / 2 - fw, z - width / 2, frame_col, fo)
 		box(x - 0.2, x + 0.2, y, y + 2.75, z + width / 2, z + width / 2 + fw, frame_col, fo)

@@ -18,6 +18,13 @@ extends Control
 var quiet := false
 var _notice_tween: Tween
 var _obj_tween: Tween
+var _marker: Control
+var _marker_icon: TextureRect
+var _marker_kind := ""
+var _icons: SpriteSheet
+var _icon_textures: Dictionary = {}
+var _tutorial: TutorialKeys
+var _t := 0.0
 
 
 func _ready() -> void:
@@ -25,6 +32,88 @@ func _ready() -> void:
 	prompt_panel.modulate.a = 0.0
 	hint_panel.modulate.a = 0.0
 	notice_label.modulate.a = 0.0
+	_build_marker()
+	_tutorial = TutorialKeys.new()
+	_tutorial.name = "TutorialKeys"
+	_tutorial.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_tutorial.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_tutorial.modulate.a = 0.0
+	add_child(_tutorial)
+
+
+# ----------------------------------------------------------------------------- the icon over what Mei can use
+
+
+func _build_marker() -> void:
+	_icons = SpriteSheet.load_sheet("icons")
+	for kind in ["talk", "look", "use"]:
+		var frames: Array = []
+		for cell in _icons.track(kind, "front").cells:
+			var at := AtlasTexture.new()
+			at.atlas = _icons.texture
+			at.region = Rect2(Vector2(cell) * Vector2(_icons.frame_size), Vector2(_icons.frame_size))
+			frames.append(at)
+		_icon_textures[kind] = frames
+	_marker = Control.new()
+	_marker.name = "InteractMarker"
+	_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_marker.modulate.a = 0.0
+	add_child(_marker)
+	_marker_icon = TextureRect.new()
+	_marker_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_marker_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_marker_icon.size = Vector2(48, 48)
+	_marker_icon.position = Vector2(-24, -48)
+	_marker_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_marker.add_child(_marker_icon)
+	var key := Label.new()
+	key.text = "F"
+	key.add_theme_font_override("font", UIStyle.FONT_MONO)
+	key.add_theme_font_size_override("font_size", 11)
+	key.add_theme_color_override("font_color", UIStyle.CONCRETE)
+	key.add_theme_stylebox_override("normal", UIStyle.panel(Color(0.07, 0.078, 0.09, 0.85), Color(UIStyle.CONCRETE, 0.5), 1, 3, Vector4(5, 0, 5, 1)))
+	key.position = Vector2(-9, 0)
+	key.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_marker.add_child(key)
+
+
+## Show the icon over what Mei can use (kind: talk, look, use), at a screen point.
+func show_marker(kind: String, at: Vector2) -> void:
+	if kind == "":
+		if _marker_kind != "":
+			_marker_kind = ""
+			create_tween().tween_property(_marker, "modulate:a", 0.0, 0.15)
+		return
+	if _marker_kind == "":
+		create_tween().tween_property(_marker, "modulate:a", 1.0, 0.2)
+	_marker_kind = kind
+	var frames: Array = _icon_textures[kind]
+	_marker_icon.texture = frames[int(_t * 2.4) % frames.size()]
+	_marker.position = at.round()
+
+
+# ----------------------------------------------------------------------------- the perspective tutorial
+
+
+func tutorial_show() -> void:
+	_tutorial.your_turn = false
+	create_tween().tween_property(_tutorial, "modulate:a", 1.0, 0.4)
+
+
+func tutorial_press(dir: int) -> void:
+	_tutorial.press(dir)
+
+
+func tutorial_your_turn() -> void:
+	_tutorial.your_turn = true
+
+
+func tutorial_hide() -> void:
+	create_tween().tween_property(_tutorial, "modulate:a", 0.0, 0.5)
+
+
+func _process(delta: float) -> void:
+	_t += delta
 
 
 func set_objective(main: String, hint: String) -> void:

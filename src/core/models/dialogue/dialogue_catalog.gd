@@ -100,9 +100,17 @@ const LINES := {
 	"chan_after": [
 		{"speaker": "Mrs. Chan", "text": "He finally came for them. Go on, it's clear."},
 	],
-	"shaft_route": [
-		{"speaker": "", "text": "Up the ladder, along the pole, onto the old sign, up to the platform."},
-		{"speaker": "", "text": "From the bottom to the top. That's a way up."},
+	"shaft_look": [
+		{"speaker": "", "text": "The airshaft. A rusted ladder climbs the west wall all the way to the roof."},
+		{"speaker": "", "text": "Its bottom rungs have rusted clean away. The first one is out of reach."},
+	],
+	"shaft_look_found": [
+		{"speaker": "", "text": "The ladder's bottom rungs are gone."},
+		{"speaker": "", "text": "That old crate behind the fridge would get you up to them."},
+	],
+	"shaft_climb": [
+		{"speaker": "", "text": "Onto the crate, up to the first rung."},
+		{"speaker": "", "text": "Then straight up, the way Mrs. Chan's boy must go."},
 	],
 	"shaft_down_unknown": [
 		{"speaker": "", "text": "A long drop down the airshaft. You can't see a way down from here."},

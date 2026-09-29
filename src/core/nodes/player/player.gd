@@ -31,6 +31,8 @@ var _path_speed := 2.6
 var _on_path_done: Callable
 var _climbing := false
 var moving := false
+## Set for a frame by a scripted move (pushing the crate) so the walk plays.
+var moving_override := false
 
 
 func band() -> int:
@@ -98,7 +100,8 @@ func _process(delta: float) -> void:
 	elif _climbing and not _path.is_empty() and absf((_path[0] - position).y) > 0.05:
 		sprite.facing = -cam.back_vector()        # climbing faces the wall: we see her back
 		sprite.play("climb")
-	elif moving:
+	elif moving or moving_override:
 		sprite.play("walk")
 	else:
 		sprite.play("idle")
+	moving_override = false

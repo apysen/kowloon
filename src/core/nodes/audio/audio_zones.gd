@@ -53,7 +53,7 @@ func start() -> void:
 	_loop_emitter("radio", "radio_loop", Vector3(-13.7, 0, -1.3), 16.0, 0.0, 0.9)
 	_loop_emitter("tv", "tv_loop", Vector3(3, 5, -12), 9.0, 5.0, 0.6)
 	# places, as repeating one-shots
-	_shot_emitter("drill", ["drill_0", "drill_1", "drill_2"], Vector3(5, 0, -12.5), 17.0, 0.0, [1.2, 4.0], 0.8)
+	_shot_emitter("drill", ["drill_0", "drill_1", "drill_2"], Vector3(5, 0, -12.5), 14.0, 0.0, [1.8, 5.0], 0.32)
 	_shot_emitter("mahjong", ["mahjong_0", "mahjong_1", "mahjong_2", "mahjong_3"], Vector3(-2, 0, 2.7), 10.0, 0.0, [0.3, 1.9], 0.8)
 	_shot_emitter("chop", ["chop_0", "chop_1", "chop_2"], Vector3(-3.4, 0, 2.1), 9.0, 0.0, [0.22, 0.3], 0.8, 0.15)
 	_shot_emitter("drip", ["drip_0", "drip_1", "drip_2"], Vector3(-5, 5, -18.5), 8.0, 5.0, [0.5, 2.3], 0.6)

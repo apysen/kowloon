@@ -37,6 +37,8 @@ var _sprites: Array[CharacterSprite] = []
 var _cloths: Array[Node3D] = []
 var _lights: Array[OmniLight3D] = []
 var _time := 0.0
+var crate_obstacle: WalkSpace.Obstacle
+var _cloth_pivots: Array[Dictionary] = []
 var _plane_t := -1.0
 var _pb := -1
 var _dust: GPUParticles3D
@@ -45,12 +47,13 @@ var _dust: GPUParticles3D
 func _ready() -> void:
 	walk_space = level_data.build_walk_space()
 	refs = level_data.refs
-	for name in ["Fabric", "Bundle", "Sheet", "LostPigeon", "Tank", "Plane", "Fan"]:
+	for name in ["Fabric", "Bundle", "Sheet", "LostPigeon", "Tank", "Plane", "Fan", "Crate", "Ladder"]:
 		var n := level.get_node_or_null("Special/" + name)
 		if n:
 			special[name] = n
 	_build_obstacles()
 	_collect(level)
+	_hang_cloths()
 	_build_doors()
 	_build_holds()
 	_build_dust()
@@ -72,7 +75,9 @@ func _build_obstacles() -> void:
 			active = func() -> bool: return fabric_state == "catwalk"
 		elif key == "sheet":
 			active = func() -> bool: return sheet_blocking
-		walk_space.add_obstacle(o.x0, o.x1, o.z0, o.z1, o.y, o.name, active)
+		var ob := walk_space.add_obstacle(o.x0, o.x1, o.z0, o.z1, o.y, o.name, active)
+		if key == "crate":
+			crate_obstacle = ob
 
 
 func _collect(root: Node) -> void:
@@ -128,10 +133,52 @@ func _item(n: Node3D) -> Dictionary:
 		"opacity": 1.0,
 		"visible": true,
 		"content_of": "",
+		"swings": false,
 	}
-	if not it.room and not it.is_floor and not (n is Resident):
+	# doors stand in a room's boundary: they are never its hidden contents
+	var in_doors := String(level.get_path_to(n)).begins_with("Doors")
+	it.swings = in_doors and n.get_parent().name == "Doors"
+	if not it.room and not it.is_floor and not (n is Resident) and not in_doors:
 		it.content_of = room_at_point(aabb.get_center())
 	return it
+
+
+## Each piece of washing hangs from its line: a pivot at the top edge, so the
+## breeze swings it out and back instead of turning it about its middle.
+func _hang_cloths() -> void:
+	for c in _cloths:
+		var mi := c as MeshInstance3D
+		if mi == null or not (mi.mesh is BoxMesh):
+			continue
+		var size: Vector3 = (mi.mesh as BoxMesh).size
+		var parent := mi.get_parent()
+		var pivot := Node3D.new()
+		pivot.name = mi.name + "Hanger"
+		parent.add_child(pivot)
+		pivot.transform = Transform3D(mi.transform.basis, mi.transform * Vector3(0, size.y * 0.5, 0))
+		parent.remove_child(mi)
+		pivot.add_child(mi)
+		mi.transform = Transform3D(Basis.IDENTITY, Vector3(0, -size.y * 0.5, 0))
+		# swing about the line: the cloth's long horizontal axis
+		_cloth_pivots.append({"pivot": pivot, "axis_x": size.x >= size.z})
+
+
+func move_crate(p: Vector3) -> void:
+	(special.Crate as Node3D).position = p
+	crate_obstacle.x0 = p.x - 0.35
+	crate_obstacle.x1 = p.x + 0.35
+	crate_obstacle.z0 = p.z - 0.35
+	crate_obstacle.z1 = p.z + 0.35
+
+
+func _aabb_of(meshes: Array[GeometryInstance3D]) -> AABB:
+	var aabb := AABB()
+	var first := true
+	for m in meshes:
+		var b: AABB = m.global_transform * m.get_aabb()
+		aabb = b if first else aabb.merge(b)
+		first = false
+	return aabb
 
 
 func _meshes_of(n: Node, out: Array[GeometryInstance3D]) -> void:
@@ -275,11 +322,23 @@ func set_fabric_state(state: String) -> void:
 	bundle.visible = false
 
 
+## The jet on its approach, timed to cross above Mr. Ng about 1.7 s from now.
 func play_plane() -> void:
 	var p: Node3D = special.Plane
 	p.visible = true
-	p.position = Vector3(-110, 21, -31)
+	p.position = Vector3(-68, 19.5, -30)
 	_plane_t = 0.0
+
+
+func plane_over_roof() -> bool:
+	var p: Node3D = special.Plane
+	return p.visible and p.position.x > -6.0 and p.position.x < 14.0
+
+
+## Where the jet is along its approach (x), or INF when none is in the sky.
+func plane_x() -> float:
+	var p: Node3D = special.Plane
+	return p.position.x if p.visible else INF
 
 
 # ----------------------------------------------------------------------------- per frame
@@ -326,6 +385,8 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 			node.visible = vis
 		if not vis or not it.fadeable:
 			continue
+		if it.swings:
+			it.aabb = _aabb_of(it.meshes)
 		var target_op := 1.0
 		var same_band: bool = it.band == pb or (pb == 2 and it.band == 1.5)
 		if it.is_lid and it.room == current_room:
@@ -347,10 +408,11 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 			# a closed room Mei isn't in, and the city's buildings, only fade where they
 			# actually stand in front of her; room shells fade across the view
 			var reach := 15.0
-			if it.room != "" and it.room != current_room:
-				reach = 2.5
-			elif it.filler:
+			if it.filler:
 				reach = 7.0
+			elif it.room != "" and it.room != current_room:
+				# another room stays closed: only the wall right across the line to Mei gives way
+				reach = 1.4
 			if smin > 0.25 and lmax > -reach and lmin < reach and b.end.y > p.y + 0.9:
 				target_op = 0.12 if it.filler else 0.06
 		if absf(it.opacity - target_op) > 0.004:
@@ -370,8 +432,19 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 	roof_mix += (roof_target - roof_mix) * minf(1.0, delta * 1.2)
 	_apply_light_mix(p, pb)
 
-	for c in _cloths:
-		c.rotation.z = sin(_time * 1.7 + c.global_position.x * 2.0 + c.global_position.z) * (0.03 + roof_mix * 0.06)
+	var amp := 0.05 + roof_mix * 0.1
+	for cp in _cloth_pivots:
+		var pivot: Node3D = cp.pivot
+		if not pivot.is_visible_in_tree():
+			continue
+		var gp := pivot.global_position
+		if absf(gp.x - p.x) > 30.0 or absf(gp.z - p.z) > 30.0:
+			continue
+		var a := sin(_time * 1.7 + gp.x * 2.0 + gp.z) * amp
+		if cp.axis_x:
+			pivot.rotation.x = a
+		else:
+			pivot.rotation.z = a
 	if special.has("Fan"):
 		(special.Fan as Node3D).rotation.z += delta * 12.0
 

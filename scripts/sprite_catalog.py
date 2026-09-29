@@ -903,6 +903,70 @@ PLANTS = {
 }
 
 
+ICONS = {
+    # speak with someone
+    "talk": ([
+        "................",
+        "..111111111111..",
+        ".12222222222223.",
+        ".12222222222223.",
+        ".12242242242223.",
+        ".12222222222223.",
+        ".12222222222223.",
+        "..233333333333..",
+        "....233.........",
+        "....23..........",
+        "....3...........",
+        "................",
+    ], {"1": "#ffffff", "2": "#f2ead8", "3": "#b8ac94", "4": "#3a2a20"}),
+    # look at something
+    "look": ([
+        "................",
+        "................",
+        "......1111......",
+        "....11222211....",
+        "..112224422211..",
+        ".12222444442223.",
+        ".12222445442223.",
+        "..322224442223..",
+        "....33222233....",
+        "......3333......",
+        "................",
+        "................",
+    ], {"1": "#ffffff", "2": "#f2ead8", "3": "#b8ac94", "4": "#2a3a5a", "5": "#ffffff"}),
+    # use: doors, stairs, the crate, the ladder
+    "use": ([
+        "......1111......",
+        "....11222211....",
+        "...1222442221...",
+        "..122244442223..",
+        "..122444444223..",
+        ".12222244222223.",
+        ".12222244222223.",
+        "..122224422223..",
+        "..322224422233..",
+        "...3322222233...",
+        "....33333333....",
+        "................",
+    ], {"1": "#f8d890", "2": "#e8b04a", "3": "#a8782a", "4": "#2a2018"}),
+}
+
+
+def icons():
+    """Interaction icons shown over what Mei can use: a gentle two-frame bob."""
+    tags = []
+    for name, (grid, colors) in ICONS.items():
+        rows = [r.ljust(16, ".")[:16] for r in grid] + ["." * 16] * (16 - len(grid))
+        up = rows[1:] + ["." * 16]
+        frames = []
+        for g in (rows, up):
+            fr = Frame(420)
+            fr.add((0, 1, g), "Body", colors=colors, prop=True)
+            frames.append(fr)
+        tags.append(("front", name, frames))
+    return tags
+
+
 def plants():
     """Potted plants, each with a two-frame sway in the breeze."""
     tags = []
@@ -972,6 +1036,14 @@ def export():
         "tags": [{"name": f"{t}_{v}", "anim": t, "view": v,
                   "frames": [{"duration": f.duration, "placements": f.placements} for f in frames]}
                  for (v, t, frames) in plants()],
+    }
+    chars["icons"] = {
+        "size": [16, 16],
+        "palette": {},
+        "look": {},
+        "tags": [{"name": f"{t}_{v}", "anim": t, "view": v,
+                  "frames": [{"duration": f.duration, "placements": f.placements} for f in frames]}
+                 for (v, t, frames) in icons()],
     }
     path = os.path.join(OUT, "doll.json")
     with open(path, "w") as fh:

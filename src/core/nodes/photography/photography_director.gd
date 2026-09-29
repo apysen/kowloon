@@ -7,6 +7,8 @@ extends Node
 ## Then: flash, shutter, the Polaroid developing, and the scrapbook entry.
 
 signal photo_kept(id: String)
+## The reticle has just found someone who can be photographed now.
+signal subject_locked(id: String)
 
 const MAX_PAN := 6.0
 
@@ -28,6 +30,10 @@ var subject: Dictionary = {}
 var photos: Dictionary = {}
 var _targets: Array[Dictionary] = []
 var _pending := ""
+var _locked_id := ""
+var _waiting := false
+## Whether the shutter may fire yet for a subject (the jet for Mr. Ng).
+var shutter_ready: Callable
 
 
 ## A photo target: a resident and when a picture of them counts.
@@ -88,7 +94,14 @@ func _process(delta: float) -> void:
 				hit = t
 	subject = hit if not hit.is_empty() and (hit.valid as Callable).call() else {}
 	viewfinder.locked_on = not subject.is_empty()
-	if not subject.is_empty():
+	var sid: String = subject.get("id", "")
+	if sid != _locked_id:
+		_locked_id = sid
+		if sid != "":
+			subject_locked.emit(sid)
+	if _waiting:
+		viewfinder.set_status("Wait for it...")
+	elif not subject.is_empty():
 		viewfinder.set_status("[SPACE] Take photo")
 	elif not hit.is_empty():
 		viewfinder.set_status("Not now.")
@@ -104,6 +117,14 @@ func capture() -> void:
 		return
 	var id: String = subject.id
 	showing_photo = true
+	# hold the shutter for the moment (the jet coming over Mr. Ng's roof)
+	if shutter_ready.is_valid():
+		var waited := 0.0
+		_waiting = true
+		while not shutter_ready.call(id) and waited < 6.0:
+			await get_tree().process_frame
+			waited += get_process_delta_time()
+		_waiting = false
 	audio.shutter()
 	fade.camera_flash()
 	await get_tree().create_timer(0.42).timeout

@@ -42,21 +42,21 @@ spacing_glyph = 5
 base_font = ExtResource("4_qyrho")
 spacing_glyph = 4
 
-[node name="TitleScreen" type="Control" unique_id=1833279899]
+[node name="TitleScreen" type="Control" unique_id=240582229]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_lcxjy")
 
-[node name="Soot" type="ColorRect" parent="." unique_id=503086714]
+[node name="Soot" type="ColorRect" parent="." unique_id=826365143]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.07058824, 0.078431375, 0.09019608, 1)
 
-[node name="Rooftops" type="TextureRect" parent="." unique_id=211977339]
+[node name="Rooftops" type="TextureRect" parent="." unique_id=1150034753]
 modulate = Color(1, 1, 1, 0.55)
 layout_mode = 0
 anchor_right = 1.0
@@ -66,7 +66,7 @@ texture = ExtResource("2_6gu6j")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="SodiumGlow" type="TextureRect" parent="." unique_id=1200724972]
+[node name="SodiumGlow" type="TextureRect" parent="." unique_id=1955163901]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -74,25 +74,25 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_yf5ak")
 expand_mode = 1
 
-[node name="Center" type="CenterContainer" parent="." unique_id=1898933417]
+[node name="Center" type="CenterContainer" parent="." unique_id=57062294]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Row" type="HBoxContainer" parent="Center" unique_id=1114556207]
+[node name="Row" type="HBoxContainer" parent="Center" unique_id=2101993130]
 layout_mode = 2
 theme_override_constants/separation = 34
 
-[node name="Seal" type="PanelContainer" parent="Center/Row" unique_id=1766349504]
+[node name="Seal" type="PanelContainer" parent="Center/Row" unique_id=643339615]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_y6rpc")
 
-[node name="Characters" type="VBoxContainer" parent="Center/Row/Seal" unique_id=339175439]
+[node name="Characters" type="VBoxContainer" parent="Center/Row/Seal" unique_id=373729089]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="Char" type="Label" parent="Center/Row/Seal/Characters" unique_id=841608899]
+[node name="Char" type="Label" parent="Center/Row/Seal/Characters" unique_id=550581066]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -100,7 +100,7 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "九"
 horizontal_alignment = 1
 
-[node name="Char2" type="Label" parent="Center/Row/Seal/Characters" unique_id=691712662]
+[node name="Char2" type="Label" parent="Center/Row/Seal/Characters" unique_id=155431408]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -108,7 +108,7 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "龍"
 horizontal_alignment = 1
 
-[node name="Char3" type="Label" parent="Center/Row/Seal/Characters" unique_id=1631732124]
+[node name="Char3" type="Label" parent="Center/Row/Seal/Characters" unique_id=1308129815]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -116,7 +116,7 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "城"
 horizontal_alignment = 1
 
-[node name="Char4" type="Label" parent="Center/Row/Seal/Characters" unique_id=1914667335]
+[node name="Char4" type="Label" parent="Center/Row/Seal/Characters" unique_id=1715544862]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -124,12 +124,12 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "寨"
 horizontal_alignment = 1
 
-[node name="Copy" type="VBoxContainer" parent="Center/Row" unique_id=1627273501]
+[node name="Copy" type="VBoxContainer" parent="Center/Row" unique_id=135582792]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 14
 
-[node name="Name" type="Label" parent="Center/Row/Copy" unique_id=943064747]
+[node name="Name" type="Label" parent="Center/Row/Copy" unique_id=1266523695]
 layout_mode = 2
 theme_override_constants/line_spacing = -12
 theme_override_fonts/font = SubResource("FontVariation_4dnjc")
@@ -138,24 +138,24 @@ theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
 text = "PROJECT
 KOWLOON"
 
-[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=584275915]
+[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=1324867763]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=1904961750]
+[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=461437590]
 custom_minimum_size = Vector2(38, 6)
 layout_mode = 2
 size_flags_vertical = 4
 color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 
-[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=993678615]
+[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=782676683]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_na7ja")
 theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 text = "THE BLUE PIPE"
 
-[node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=1909576540]
+[node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=830776206]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_83its")
@@ -164,13 +164,13 @@ theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 text = "Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help."
 autowrap_mode = 3
 
-[node name="Begin" type="Button" parent="Center/Row/Copy" unique_id=867060935]
+[node name="Begin" type="Button" parent="Center/Row/Copy" unique_id=96098815]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "BEGIN"
 
-[node name="Controls" type="RichTextLabel" parent="Center/Row/Copy" unique_id=155238135]
+[node name="Controls" type="RichTextLabel" parent="Center/Row/Copy" unique_id=459435125]
 custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
 mouse_filter = 2

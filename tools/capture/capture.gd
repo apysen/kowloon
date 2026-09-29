@@ -59,6 +59,27 @@ func _run() -> void:
 				_slice.dialogue.advance()
 				await _frames(2)
 			await _frames(40)
+		elif action.begins_with("use="):
+			# use=<interaction id>/<frames to wait>: trigger it, read any dialogue, capture mid-action
+			var spec := action.substr(4).split("/")
+			if spec[0] == "crate":
+				_slice.quests.crate_found = true
+			for it in _slice.interaction._list:
+				if it.id == spec[0]:
+					(it.interact as Callable).call()
+			var wait_n := int(spec[1]) if spec.size() > 1 else 60
+			var n := 0
+			while n < wait_n:
+				if _slice.dialogue.is_open() and n % 4 == 0:
+					_slice.dialogue.advance()
+				await _frames(1)
+				if not _slice.dialogue.is_open():
+					n += 1
+		elif action == "tutorial":
+			_slice.hud.tutorial_show()
+			_slice.hud.tutorial_your_turn()
+			_slice.hud.tutorial_press(1)
+			await _frames(30)
 		elif action == "camera":
 			_slice.photography.enter()
 		elif action.begins_with("photo="):

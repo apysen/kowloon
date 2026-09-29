@@ -9,8 +9,8 @@ uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
 
 uniform bool tilt_shift = true;
 uniform float focus = 0.52;        // screen height (0 top .. 1 bottom) that stays sharp
-uniform float range = 0.16;        // half-height of the sharp band
-uniform float amount = 3.4;        // blur radius in mip levels at the edges
+uniform float range = 0.2;        // half-height of the sharp band
+uniform float amount = 2.6;        // blur radius in mip levels at the edges
 uniform float vignette = 0.46;
 uniform float grain = 0.04;
 uniform float warmth = 1.0;
@@ -29,8 +29,10 @@ void fragment() {
 	vec2 uv = SCREEN_UV;
 	vec3 c = texture(screen_tex, uv).rgb;
 	if (tilt_shift) {
+		// the blur starts faint just outside the sharp band and builds gradually
+		// toward the top and bottom edges, like a real tilt-shift lens
 		float d = abs(uv.y - focus);
-		float b = smoothstep(range, range + 0.3, d);
+		float b = pow(smoothstep(range, 0.55, d), 1.8);
 		if (b > 0.001) {
 			float lod = b * amount;
 			vec2 px = SCREEN_PIXEL_SIZE * exp2(lod) * 1.4;
@@ -38,7 +40,7 @@ void fragment() {
 			for (int i = 0; i < 12; i++) {
 				sum += textureLod(screen_tex, uv + POISSON[i] * px, lod).rgb;
 			}
-			c = mix(c, sum / 13.0, smoothstep(0.0, 0.35, b));
+			c = mix(c, sum / 13.0, smoothstep(0.0, 0.6, b));
 		}
 	}
 	float l = dot(c, vec3(0.2126, 0.7152, 0.0722));

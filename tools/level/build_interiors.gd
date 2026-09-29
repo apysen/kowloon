@@ -145,7 +145,7 @@ static func level_a(b: LevelBuilder) -> void:
 		"id": "corridor", "open": {"w": [[-6, -4], [-1.3, 1.3]]}, "skip": ["n"], "parent": "Structure/LevelA",
 		"dado": "mosaic", "dado_color": c8(0xc9b89a)})
 	b.room({"x0": 0, "x1": 2, "z0": -6, "z1": -4, "y": Y, "name": "Stall", "wall": c8(0x6a6a55), "floor": c8(0x4a463e),
-		"skip": ["e"], "id": "corridor", "parent": "Structure/LevelA"})
+		"skip": ["e"], "id": "corridor", "parent": "Structure/LevelA", "no_fade": true})
 	var PS := "Furniture/Stall"
 	b.box(1.3, 1.7, Y, Y + 1.0, -5.9, -4.1, c8(0x7a5c3a), {"surface": "wood", "parent": PS, "name": "Counter"})
 	b.add_obstacle(1.3, 1.7, -5.9, -4.1, Y, "counter")
@@ -234,15 +234,40 @@ static func level_a(b: LevelBuilder) -> void:
 static func level_b(b: LevelBuilder) -> void:
 	var Y := LevelBuilder.LEVEL_B
 	b.room({"x0": 8, "x1": 12, "z0": -15, "z1": -11, "y": Y, "name": "Landing", "wall": c8(0x7a7466), "floor": c8(0x4e4a42),
-		"open": {"w": [[-13, -11]], "e": [[-13, -11]]}, "parent": "Structure/LevelB", "wall_surface": "concrete"})
+		"open": {"w": [[-13, -11]], "e": [[-13, -11]]}, "parent": "Structure/LevelB", "wall_surface": "concrete",
+		"floor_hole": [8.0, 8.95, -15.0, -13.1]})
 	# the roof door, drawn into the north wall (swollen shut in its frame)
 	b.box(9.9, 10.9, Y, Y + 2.3, -15.05, -14.93, c8(0x6a3f2c), {"surface": "wood", "parent": "Structure/LevelB/Landing", "name": "RoofDoor"})
 	b.box(9.82, 10.98, Y + 2.3, Y + 2.4, -15.06, -14.92, c8(0x3a3028), {"surface": "wood", "parent": "Structure/LevelB/Landing", "name": "RoofDoorHead"})
 	b.box(10.7, 10.78, Y + 1.1, Y + 1.18, -14.93, -14.86, c8(0xc9a55a), {"surface": "metal", "parent": "Structure/LevelB/Landing", "name": "RoofDoorHandle"})
-	b.ref("stairsDownB", Vector3(8.7, Y, -14.3))
+	b.ref("stairsDownB", Vector3(8.5, Y, -13.9))
 	b.ref("roofDoorB", Vector3(10.4, Y, -14.4))
-	for i in 4:
-		b.box(8.05, 8.6, Y - 0.35 * (i + 1), Y, -14.9 + i * 0.5, -14.45 + i * 0.5, c8(0x5d5a52), {"band": 1.0, "surface": "concrete", "parent": "Structure/LevelB/Landing", "name": "StepDown"})
+	# the flight down toward the clinic: steps dropping away from the landing,
+	# their nosings painted safety yellow so the opening reads from any view
+	var SP := "Structure/LevelB/Landing/StairsDown"
+	for i in 6:
+		var top := Y - 0.3 * (i + 1)
+		var sz0 := -15.0 + 0.34 * i
+		b.box(8.02, 8.93, top - 0.3, top, sz0, sz0 + 0.34, c8(0x6a665c), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "Step"})
+		b.box(8.02, 8.93, top - 0.035, top, sz0 + 0.28, sz0 + 0.34, c8(0xd8b23a), {"band": 1.0, "surface": "metal", "parent": SP, "name": "Nosing", "cast_shadow": false})
+	b.box(8.0, 8.95, Y - 2.2, Y - 1.9, -15.0, -13.1, c8(0x2a2826), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "Below"})
+	# the lip of the opening, also painted, and light spilling up from the flight below
+	b.box(8.0, 8.95, Y - 0.04, Y + 0.01, -13.16, -13.1, c8(0xd8b23a), {"band": 1.0, "surface": "metal", "parent": SP, "name": "Lip", "cast_shadow": false})
+	b.box(8.95, 9.0, Y - 0.04, Y + 0.01, -15.0, -13.1, c8(0xd8b23a), {"band": 1.0, "surface": "metal", "parent": SP, "name": "Lip", "cast_shadow": false})
+	PropKit.bulb(b, Vector3(8.48, Y - 0.9, -14.6), Y - 0.35, SP)
+	# a painted green rail round the opening, with balusters, so it reads as a stairwell from every side
+	var rail := c8(0x4f7a5a)
+	for pz in [-13.1, -13.75, -14.4, -14.97]:
+		b.box(8.96, 9.04, Y, Y + 1.0, pz - 0.04, pz + 0.04, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "RailPost"})
+	for px in [8.05, 8.5]:
+		b.box(px - 0.04, px + 0.04, Y, Y + 1.0, -13.14, -13.06, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "RailPost"})
+	b.box(8.95, 9.05, Y + 0.93, Y + 1.0, -15.0, -13.05, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "Rail"})
+	b.box(8.0, 9.05, Y + 0.93, Y + 1.0, -13.15, -13.05, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "Rail"})
+	b.box(8.97, 9.03, Y + 0.45, Y + 0.5, -15.0, -13.07, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "MidRail"})
+	# the painted marker on the walls above the flight
+	b.card("res://assets/textures/props/sign_stairs_down.png", Vector3(8.48, Y + 1.75, -14.94), Vector2(0.6, 0.8), Vector3(0, 0, 1), {"parent": SP, "name": "StairSign", "band": 1.0})
+	b.card("res://assets/textures/props/sign_stairs_down.png", Vector3(8.06, Y + 1.75, -13.9), Vector2(0.6, 0.8), Vector3(1, 0, 0), {"parent": SP, "name": "StairSign", "band": 1.0})
+	b.add_obstacle(8.0, 8.95, -15.0, -13.1, Y, "stairwell")
 	PropKit.bulb(b, Vector3(10, Y + 3.2, -13), Y + 4.2, "Structure/LevelB/Landing")
 
 	b.room({"x0": -2, "x1": 8, "z0": -13, "z1": -11, "y": Y, "name": "CorridorB", "wall": c8(0x807868), "floor": c8(0x4a4640),
@@ -382,54 +407,83 @@ static func laundry_line(b: LevelBuilder, a0: float, a1: float, y: float, fixed:
 
 
 static func airshaft(b: LevelBuilder) -> void:
+	## The way up is a ladder on the west wall that runs all the way to the roof,
+	## but its bottom rungs have rusted away. An old crate sits in the far corner,
+	## hidden behind a broken fridge from the way you walk in: turn the view to
+	## find it, push it under the ladder, and climb.
 	var Y := LevelBuilder.LEVEL_B
+	var R := LevelBuilder.LEVEL_ROOF
 	var P := "Structure/Airshaft"
 	b.room({"x0": -7, "x1": -3, "z0": -21, "z1": -16, "y": Y, "name": "Airshaft", "wall_surface": "concrete", "floor_surface": "concrete",
 		"wall": c8(0x6e716b), "floor": c8(0x3e403c), "h": 8.2, "skip": ["s"], "band": 1.0, "wall_band": 1.0, "parent": "Structure"})
-	b.box(-6.8, -3.2, Y, Y + 0.3, -20.8, -20.2, c8(0x3a3a3a), {"band": 1.0, "surface": "rust", "parent": P, "name": "Drain"})
-	b.box(-6.9, -3.1, Y + 0.001, Y + 0.01, -20.1, -17.0, Color.WHITE, {"material": _decal_mat(b, "puddle"), "parent": P, "name": "Puddle", "band": 1.0, "cast_shadow": false})
+	b.box(-6.6, -4.4, Y, Y + 0.02, -20.9, -20.5, c8(0x3a3a3a), {"band": 1.0, "surface": "rust", "parent": P, "name": "DrainGrate", "cast_shadow": false})
+	b.box(-6.9, -3.1, Y + 0.001, Y + 0.01, -18.2, -17.0, Color.WHITE, {"material": _decal_mat(b, "puddle"), "parent": P, "name": "Puddle", "band": 1.0, "cast_shadow": false})
 
-	# Handholds. Each one is on one wall only, so no single view shows the
-	# whole route: you have to look from more than one side.
-	# Ladder bolted to the west wall: its rungs face east.
+	# the ladder: from well above head height all the way to the roof rim
 	var ladder := Node3D.new()
 	ladder.name = "Ladder"
-	b.attach(ladder, b.group("Holds"))
+	b.attach(ladder, b.group("Special"))
 	b.tag(ladder, 1.0)
-	for z in [-19.2, -18.6]:
-		var rail := b.box(-6.95, -6.85, Y + 0.1, Y + 3.8, z, z + 0.08, c8(0x8a5a3a), {"surface": "rust", "parent_node": ladder, "name": "Rail"})
+	for z in [-20.28, -19.68]:
+		var rail := b.box(-6.96, -6.86, Y + 1.75, R + 0.9, z, z + 0.08, c8(0x8a5a3a), {"surface": "rust", "parent_node": ladder, "name": "Rail"})
 		rail.remove_meta("band")
-	for i in 7:
-		var r := b.box(-6.92, -6.84, Y + 0.47 + i * 0.5, Y + 0.53 + i * 0.5, -19.19, -18.53, c8(0x8a5a3a), {"surface": "rust", "parent_node": ladder, "name": "Rung"})
-		r.remove_meta("band")
-	b.hold("ladder", "A rusted ladder on the west wall.", ladder, Vector3(1, 0, 0), Vector3(-6.5, Y + 3.6, -18.9))
-	# an old shop sign sticking out of the east wall: a ledge you can stand on
-	var sign := b.box(-4.7, -3.0, Y + 4.1, Y + 4.5, -19.8, -19.0, c8(0xa8534a), {"band": 1.0, "surface": "metal", "parent": "Holds/ShopSign", "name": "ShopSign"})
-	b.box(-4.72, -4.68, Y + 4.12, Y + 4.48, -19.75, -19.05, c8(0xe8c070), {"band": 1.0, "material": b.emissive(c8(0xe8c070), 0.6, false), "parent": "Holds/ShopSign", "name": "SignFace"})
-	b.hold("sign", "An old shop sign jutting from the east wall. Wide enough to stand on.", sign, Vector3(-1, 0, 0), Vector3(-3.8, Y + 4.5, -19.4))
-	# a laundry pole across the shaft: a handhold between the two walls
-	var pole := b.box(-7, -3, Y + 5.5, Y + 5.62, -18.3, -18.18, c8(0x7a7a70), {"band": 1.0, "surface": "metal", "parent": "Holds/Pole", "name": "Pole"})
-	b.hold("pole", "A laundry pole across the shaft.", pole, null, Vector3(-5.0, Y + 4.0, -18.24))
-	# an AC unit on the north wall (scenery) and the maintenance platform above it
-	PropKit.ac_unit(b, -6.6, -5.4, Y + 1.5, Y + 2.2, -20.95, -20.1, P, 1.0)
-	b.box(-6.5, -5.5, Y + 1.6, Y + 2.1, -20.12, -20.08, c8(0x555555), {"band": 1.0, "surface": "metal", "parent": P, "name": "ACGrille"})
-	var platform := b.box(-5.2, -3.3, Y + 6.4, Y + 6.6, -20.95, -19.7, c8(0x6a6e70), {"band": 1.0, "surface": "metal", "parent": "Holds/Platform", "name": "Platform"})
-	b.box(-5.2, -3.3, Y + 6.6, Y + 7.3, -19.72, -19.68, c8(0x6a6e70), {"band": 1.0, "surface": "metal", "parent": "Holds/Platform", "name": "Railing"})
-	b.hold("platform", "A maintenance platform high on the north wall, just below the roof.", platform, Vector3(0, 0, 1), Vector3(-4.2, Y + 6.6, -20.3))
-	# the shaft's own clutter: pipes, cables, a broken window, drips
+		var stub := b.box(-6.96, -6.86, Y + 0.0, Y + 0.28, z, z + 0.08, c8(0x6a3a22), {"surface": "rust", "parent_node": ladder, "name": "RustedStub"})
+		stub.remove_meta("band")
+	var ry := Y + 1.95
+	while ry < R + 0.7:
+		var rung := b.box(-6.94, -6.86, ry, ry + 0.05, -20.26, -19.62, c8(0x8a5a3a), {"surface": "rust", "parent_node": ladder, "name": "Rung"})
+		rung.remove_meta("band")
+		ry += 0.35
+	for k in 3:
+		var bracket := b.box(-6.99, -6.86, Y + 2.5 + k * 2.4, Y + 2.56 + k * 2.4, -20.34, -19.56, c8(0x5a3a22), {"surface": "rust", "parent_node": ladder, "name": "WallBracket"})
+		bracket.remove_meta("band")
+	# the rungs that fell, lying where they landed
+	b.box(-6.6, -5.9, Y, Y + 0.05, -18.2, -18.14, c8(0x6a3a22), {"band": 1.0, "surface": "rust", "parent": P, "name": "FallenRung", "cast_shadow": false})
+	b.box(-5.6, -5.0, Y, Y + 0.05, -18.9, -18.84, c8(0x6a3a22), {"band": 1.0, "surface": "rust", "parent": P, "name": "FallenRung", "cast_shadow": false})
+
+	# a broken fridge in the north-east corner, and the crate behind it
+	b.box(-3.95, -3.15, Y, Y + 1.7, -19.45, -18.75, c8(0xd8d8cc), {"band": 1.0, "surface": "metal", "parent": P, "name": "BrokenFridge"})
+	b.box(-3.97, -3.13, Y + 1.1, Y + 1.14, -18.76, -18.7, c8(0x9aa0a0), {"band": 1.0, "surface": "metal", "parent": P, "name": "FridgeHandle", "cast_shadow": false})
+	b.add_obstacle(-3.95, -3.15, -19.45, -18.75, Y, "fridge")
+	b.ref("fridgeMin", Vector3(-3.95, Y, -19.45))
+	b.ref("fridgeMax", Vector3(-3.15, Y + 1.7, -18.75))
+	var crate := Node3D.new()
+	crate.name = "Crate"
+	crate.position = Vector3(-3.55, Y, -19.95)
+	b.attach(crate, b.group("Special"))
+	b.tag(crate, 1.0, false, {"dynamic": true})
+	var cm := b.box(-0.35, 0.35, 0, 0.7, -0.35, 0.35, c8(0x9a7448), {"surface": "wood", "parent_node": crate, "name": "Box"})
+	cm.remove_meta("band")
+	for bx in [[-0.36, -0.33], [0.33, 0.36]]:
+		for lvl in [[0.05, 0.12], [0.58, 0.65]]:
+			var slat := b.box(bx[0], bx[1], lvl[0], lvl[1], -0.36, 0.36, c8(0x6a4a2a), {"surface": "wood", "parent_node": crate, "name": "Slat"})
+			slat.remove_meta("band")
+	var stencil := b.box(-0.2, 0.2, 0.25, 0.45, 0.351, 0.356, c8(0x3a2a1a), {"surface": "grain", "parent_node": crate, "name": "Stencil", "cast_shadow": false})
+	stencil.remove_meta("band")
+	b.add_obstacle(-3.9, -3.2, -20.3, -19.6, Y, "crate", "crate")
+	b.ref("crateStart", Vector3(-3.55, Y, -19.95))
+	b.ref("crateEnd", Vector3(-6.45, Y, -19.95))
+
+	# the shaft's own clutter: the old shop sign, a laundry pole, an AC unit, a platform
+	b.box(-4.7, -3.0, Y + 4.1, Y + 4.5, -19.8, -19.0, c8(0xa8534a), {"band": 1.0, "surface": "metal", "parent": P, "name": "OldShopSign"})
+	b.box(-4.72, -4.68, Y + 4.12, Y + 4.48, -19.75, -19.05, c8(0xe8c070), {"band": 1.0, "material": b.emissive(c8(0xe8c070), 0.6, false), "parent": P, "name": "SignFace"})
+	b.box(-6.8, -3, Y + 5.5, Y + 5.62, -17.3, -17.18, c8(0x7a7a70), {"band": 1.0, "surface": "metal", "parent": P, "name": "LaundryPole"})
+	PropKit.ac_unit(b, -4.6, -3.4, Y + 2.1, Y + 2.8, -20.95, -20.1, P, 1.0)
+	b.box(-4.5, -3.5, Y + 2.2, Y + 2.7, -20.12, -20.08, c8(0x555555), {"band": 1.0, "surface": "metal", "parent": P, "name": "ACGrille"})
+	b.box(-5.2, -3.3, Y + 6.4, Y + 6.6, -20.95, -19.7, c8(0x6a6e70), {"band": 1.0, "surface": "metal", "parent": P, "name": "Platform"})
 	for k in 4:
-		b.cylinder(Vector3(-6.95, Y + 1 + k * 1.7, -16.2), Vector3(-6.95, Y + 1 + k * 1.7, -20.9), 0.015, b.surface("grain"), {"parent": P, "name": "Cable", "tint": c8(0x1c1c1e), "band": 1.0, "cast_shadow": false})
+		b.cylinder(Vector3(-6.97, Y + 1 + k * 1.7, -16.2), Vector3(-6.97, Y + 1 + k * 1.7, -18.4), 0.015, b.surface("grain"), {"parent": P, "name": "Cable", "tint": c8(0x1c1c1e), "band": 1.0, "cast_shadow": false})
 	b.box(-3.05, -3.0, Y + 2.2, Y + 3.2, -17.8, -16.6, c8(0x3a4650), {"band": 1.0, "surface": "metal", "parent": P, "name": "Window"})
 
 	b.ref("shaftBase", Vector3(-5, Y, -18.2))
+	# onto the crate, straight up the ladder, over the rim onto the roof
 	b.data.climb_nodes = [
-		Vector3(-6.3, Y, -18.9),
-		Vector3(-6.5, Y + 3.6, -18.9),
-		Vector3(-5.0, Y + 4.0, -18.24),
-		Vector3(-3.8, Y + 4.5, -19.4),
-		Vector3(-4.2, Y + 6.6, -20.3),
-		Vector3(-4.4, LevelBuilder.LEVEL_ROOF, -16.2),
-		Vector3(-5, LevelBuilder.LEVEL_ROOF, -15.2),
+		Vector3(-5.7, Y, -19.95),
+		Vector3(-6.25, Y + 0.7, -19.95),
+		Vector3(-6.55, Y + 0.7, -19.95),
+		Vector3(-6.55, R + 0.4, -19.95),
+		Vector3(-7.3, R + 0.45, -19.95),
+		Vector3(-7.8, R, -19.95),
 	]
 
 
@@ -462,7 +516,7 @@ static func roof(b: LevelBuilder) -> void:
 	b.box(9.9, 10.9, Y, Y + 2.2, -12.42, -12.3, c8(0x6a3f2c), {"band": 2.0, "surface": "wood", "parent": P, "name": "HutDoor"})
 	b.box(8.7, 11.7, Y + 2.8, Y + 2.86, -15.1, -12.2, c8(0x9a9690), {"band": 2.0, "surface": "rust", "parent": P, "name": "HutRoof"})
 	b.ref("roofDoorTop", Vector3(10.4, Y, -11.8))
-	b.ref("shaftTop", Vector3(-5, Y, -15.4))
+	b.ref("shaftTop", Vector3(-7.8, Y, -19.95))
 
 	# Mr. Ng's pigeon coop: a timber frame with wire mesh, perches inside
 	var PC := "Structure/Roof/Coop"

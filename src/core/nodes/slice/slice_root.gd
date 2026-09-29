@@ -146,4 +146,32 @@ func _process(delta: float) -> void:
 	fx.set_shader_parameter("time", fmod(Time.get_ticks_msec() / 1000.0, 100.0))
 	fx.set_shader_parameter("vignette", 0.48 - 0.16 * t)
 	fx.set_shader_parameter("warmth", 1.0 - 0.4 * t)
-	fx.set_shader_parameter("range", 0.15 + 0.05 * t)
+	fx.set_shader_parameter("range", 0.2 + 0.05 * t)
+	_update_marker()
+
+
+## The small icon over whatever Mei can use right now.
+func _update_marker() -> void:
+	var cur := interaction.current
+	if cur.is_empty() or locks.is_locked() or photography.active or dialogue.is_open():
+		hud.show_marker("", Vector2.ZERO)
+		return
+	var pos: Vector3 = interaction.position_of(cur)
+	var id: String = cur.id
+	var kind := "use"
+	var h := 1.3
+	if int(cur.priority) == InteractionDirector.Priority.NPC:
+		kind = "talk"
+		h = 1.55 if id in ["son", "child"] else (1.25 if id.begins_with("mahjong") else 2.05)
+		if world.residents.has(id):
+			pos = (world.residents[id] as Resident).global_position
+	else:
+		var verb: Variant = cur.verb
+		var v: String = String((verb as Callable).call()) if verb is Callable else String(verb)
+		if v.begins_with("Look"):
+			kind = "look"
+	var world_pos := pos + Vector3(0, h, 0)
+	if cam.camera.is_position_behind(world_pos):
+		hud.show_marker("", Vector2.ZERO)
+		return
+	hud.show_marker(kind, cam.camera.unproject_position(world_pos))

@@ -88,7 +88,7 @@ func photograph(id: String, from: Vector3) -> void:
 		tries += 1
 	expect(not slice.photography.subject.is_empty(), "framed %s in the viewfinder" % id)
 	slice.photography.capture()
-	await secs(4.2)
+	await secs(7.0)
 	expect(slice.photography.dismiss(), "kept the Polaroid of " + id)
 	await frames(4)
 	await read_through()
@@ -109,6 +109,14 @@ func _run() -> void:
 	await read_through()
 	expect(q.stage == S.MEDICINE_RECEIVED, "Grandfather hands over the medicine and the camera")
 	expect(slice.photography.has_camera, "Mei has the camera")
+	# the wordless perspective lesson: the view turns once by itself, then the player turns it both ways
+	await secs(3.6)
+	expect(slice.cam.direction == 0, "the tutorial's demo turn comes back to the start")
+	slice.cam.rotate_view(1)
+	await secs(0.6)
+	slice.cam.rotate_view(-1)
+	await secs(1.4)
+	expect(not q._tutorial, "the tutorial clears after turning both ways")
 
 	print("-- the dead end and the service door")
 	await place(Vector3(1.0, A, 0.0))
@@ -146,17 +154,25 @@ func _run() -> void:
 
 	print("-- the airshaft")
 	await use("shaftBase", w.refs.shaftBase)
-	expect(q.stage == S.SEARCHING_FOR_SON, "no climbing before the handholds are seen")
+	expect(not q.crate_placed, "the ladder's bottom rungs are out of reach")
 	await place(Vector3(-5.0, B, -17.6))
-	for dir in [3, 1, 2]:
-		while slice.cam.direction != dir:
-			slice.cam.rotate_view(1)
-			await secs(0.55)
-		await frames(3)
-	for h in w.holds:
-		expect(h.discovered, "handhold seen: " + String(h.id))
-	await use("shaftBase", w.refs.shaftBase)
+	await frames(10)
+	expect(not q.crate_found, "the crate is hidden behind the fridge from the way in")
+	slice.cam.rotate_view(-1)
+	await secs(0.8)
+	expect(q.crate_found, "turning the view shows the crate")
+	await use("crate", Vector3(-4.35, B, -19.95))
 	var t := 0.0
+	while not q.crate_placed and t < 15.0:
+		await secs(0.25)
+		t += 0.25
+	expect(q.crate_placed, "the crate is pushed under the ladder")
+	var crate_at: Vector3 = (w.special.Crate as Node3D).position
+	expect(crate_at.distance_to(w.refs.crateEnd) < 0.05, "the crate sits under the ladder")
+	slice.cam.rotate_view(1)
+	await secs(0.8)
+	await use("shaftBase", w.refs.shaftBase)
+	t = 0.0
 	while slice.player.on_path() and t < 20.0:
 		await secs(0.25)
 		t += 0.25
@@ -169,6 +185,7 @@ func _run() -> void:
 	expect(q.stage == S.FOUND_SON, "found Chan's son")
 	await use("ng", Vector3(3.4, R, -19.5))
 	expect(q.ng_briefed, "Mr. Ng explains the lost pigeon")
+	expect(not (w.special.Plane as Node3D).visible, "no jet before the photograph")
 	# find her: she is behind the tank from the start view
 	await place(Vector3(6.0, R, -19.0))
 	while slice.cam.direction != 2:
@@ -184,6 +201,7 @@ func _run() -> void:
 		slice.cam.rotate_view(1)
 		await secs(0.55)
 	await photograph("ng", Vector3(3.6, R, -18.0))
+	expect(q.plane_flown, "the jet came over for Mr. Ng's photograph")
 	expect(q.stage == S.FABRIC_MOVED, "Mr. Ng's photo; the Chan boy goes for the washing")
 
 	print("-- the washing moves")

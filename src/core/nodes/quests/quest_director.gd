@@ -51,6 +51,11 @@ var _pigeon_anim: Dictionary = {}
 var _sheet_t := -1.0
 var _homecoming := false
 var _lau_intro_done := false
+var crate_found := false
+var crate_placed := false
+var plane_flown := false
+var _push: Array[Dictionary] = []          # the crate being dragged and pushed, step by step
+var _tutorial := false
 
 
 func setup() -> void:
@@ -66,6 +71,8 @@ func setup() -> void:
 	fade = slice.fade
 	locks = slice.locks
 	photography.photo_kept.connect(_on_photo_kept)
+	photography.subject_locked.connect(_on_subject_locked)
+	photography.shutter_ready = _shutter_ready
 	dialogue.event_fired.connect(_on_dialogue_event)
 	world.resident_blocked.connect(func(id: String) -> void:
 		if id == "son":
@@ -105,8 +112,9 @@ func force_stage(s: int) -> void:
 		door.discovered = true
 		world.open_door(door)
 	if s >= S.FOUND_SON:
-		for h in world.holds:
-			h.discovered = true
+		crate_found = true
+		crate_placed = true
+		world.move_crate(world.refs.crateEnd)
 	if s >= S.HELPED_NG:
 		flags.pigeon_found = true
 		if not sheet_down:
@@ -201,8 +209,7 @@ func on_enter_roof() -> void:
 	mark("rooftopReached")
 	# a few quiet seconds with no dialogue and no interface, then a jet comes over
 	hud.set_quiet(true)
-	later(_plane_over, 2.6)
-	later(_roof_quiet_over, 8.5)
+	later(_roof_quiet_over, 6.0)
 
 
 func _plane_over() -> void:
@@ -355,30 +362,34 @@ func _register_interactions() -> void:
 			audio.creak()
 			w.open_door(door)})
 
-	# the airshaft: Mei can only climb with handholds she has seen, one per wall
-	var route := func() -> bool:
-		for id in ["ladder", "sign", "platform"]:
-			if not w.hold(id).discovered:
-				return false
-		return true
+	# the airshaft: the ladder's bottom rungs have rusted away. An old crate is
+	# hidden behind a broken fridge; turn the view to find it, push it under the
+	# ladder, and climb.
+	I.add({"id": "crate", "radius": 1.2, "priority": InteractionDirector.Priority.QUEST, "verb": "Push",
+		"position": func() -> Vector3: return (w.special.Crate as Node3D).global_position,
+		"can_interact": func() -> bool: return crate_found and not crate_placed and _push.is_empty(),
+		"interact": _push_crate})
 	I.add({"id": "shaftBase", "position": refs.shaftBase, "radius": 1.8, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Look up", "interact": func() -> void:
-			if not route.call():
-				say(_shaft_lines())
+		"verb": func() -> String: return "Climb" if crate_placed else "Look up",
+		"can_interact": func() -> bool: return _push.is_empty(),
+		"interact": func() -> void:
+			if not crate_placed:
+				say("shaft_look_found" if crate_found else "shaft_look")
 				return
-			once("shaft_route", func() -> void:
+			once("shaft_climb", func() -> void:
 				audio.creak()
-				player.traverse(w.level_data.climb_nodes, 2.3, on_enter_roof))})
+				player.traverse(w.level_data.climb_nodes, 2.0, on_enter_roof))})
 	I.add({"id": "shaftTop", "position": refs.shaftTop, "radius": 1.2, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Look down", "interact": func() -> void:
-			if not route.call():
+		"verb": func() -> String: return "Climb down" if crate_placed else "Look down",
+		"interact": func() -> void:
+			if not crate_placed:
 				say("shaft_down_unknown")
 				return
 			audio.creak()
 			var nodes := w.level_data.climb_nodes.duplicate()
 			nodes.reverse()
-			nodes.append(Vector3(-5, LevelBuilder.LEVEL_B, -17.4))
-			player.traverse(nodes, 2.6, _sync_world)})
+			nodes.append(Vector3(-5, LevelBuilder.LEVEL_B, -17.6))
+			player.traverse(nodes, 2.2, _sync_world)})
 
 	# the lost pigeon: find her first (the tank hides her from most sides),
 	# then work out why she won't come down
@@ -526,15 +537,12 @@ func _discover() -> void:
 			audio.chime()
 			mark("found:" + String(d.id))
 
-	if PerspectiveRules.in_shaft(p):
-		for h in world.holds:
-			if h.discovered:
-				continue
-			if PerspectiveRules.hold_seen(h.normal, cam.current_yaw):
-				h.discovered = true
-				if h.normal != null:
-					audio.chime()
-					hud.notice(h.name, 3.2)
+	if not crate_found and PerspectiveRules.in_shaft(p) and p.y < 7.0:
+		var crate: Vector3 = (world.special.Crate as Node3D).global_position + Vector3(0, 0.45, 0)
+		if cam.on_screen(crate) and not _hidden_by_fridge(crate):
+			crate_found = true
+			audio.chime()
+			hud.notice("An old crate, hidden behind the broken fridge.", 3.2)
 
 	# the pigeon: really hidden by the tank, checked with a ray
 	if not flags.pigeon_found and p.y > 12.0 and stage < S.HELPED_NG:
@@ -569,17 +577,66 @@ func _occluded_by_tank(target: Vector3) -> bool:
 	return absf(y - tank.y) <= half_h
 
 
-func _shaft_lines() -> Array:
-	var seen := []
-	for h in world.holds:
-		if h.discovered and h.normal != null:
-			seen.append(h)
-	var lines: Array = [{"speaker": "", "text": "An airshaft. Old junk bolted to the walls all the way up."}]
-	for h in seen:
-		lines.append({"speaker": "", "text": h.name})
-	lines.append({"speaker": "", "text": "Not enough to make a way up. Not that you can see from here." if not seen.is_empty()
-		else "From here you can't make out a way up."})
-	return lines
+## Is the crate hidden from the camera by the fridge standing in front of it?
+## The crate counts as seen only when most of it shows past the fridge
+## (checked at its middle, its top and both top corners). The ladder's rungs
+## cross it from one side but never hide it.
+func _hidden_by_fridge(target: Vector3) -> bool:
+	var toward_cam := cam.camera.global_transform.basis.z
+	var blockers: Array[AABB] = [AABB(world.refs.fridgeMin, world.refs.fridgeMax - world.refs.fridgeMin)]
+	var right := cam.right_vector()
+	var probes: Array[Vector3] = [target, target + Vector3(0, 0.3, 0),
+		target + Vector3(0, 0.3, 0) + right * 0.3, target + Vector3(0, 0.3, 0) - right * 0.3]
+	var blocked := 0
+	for q in probes:
+		for bx in blockers:
+			if bx.intersects_segment(q, q + toward_cam * 30.0) != null:
+				blocked += 1
+				break
+	return blocked >= 2
+
+
+## Drag the crate out from behind the fridge, step round it, shove it under the ladder.
+func _push_crate() -> void:
+	var Y := LevelBuilder.LEVEL_B
+	var z := -19.95
+	locks.lock("push")
+	audio.creak()
+	_push = [
+		{"mei": Vector3(-4.35, Y, z), "crate": null, "speed": 2.4},
+		{"mei": Vector3(-6.15, Y, z), "crate": Vector3(-5.35, Y, z), "speed": 1.1, "face": Vector3(1, 0, 0)},
+		{"mei": Vector3(-6.15, Y, -20.66), "crate": null, "speed": 2.4},
+		{"mei": Vector3(-4.35, Y, -20.66), "crate": null, "speed": 2.4},
+		{"mei": Vector3(-4.35, Y, z), "crate": null, "speed": 2.4},
+		{"mei": Vector3(-5.65, Y, z), "crate": world.refs.crateEnd, "speed": 1.1, "face": Vector3(-1, 0, 0)},
+	]
+
+
+func _tick_push(delta: float) -> void:
+	if _push.is_empty():
+		return
+	var step: Dictionary = _push[0]
+	var to: Vector3 = step.mei
+	var d := to - player.position
+	var move := float(step.speed) * delta
+	var crate: Node3D = world.special.Crate
+	if step.crate != null:
+		var cto: Vector3 = step.crate
+		var cd := cto - crate.position
+		if cd.length() > 0.001:
+			world.move_crate(crate.position + cd.normalized() * minf(move, cd.length()))
+	if d.length() <= move:
+		player.position = to
+		_push.pop_front()
+		if _push.is_empty():
+			crate_placed = true
+			player.pose = ""
+			locks.unlock("push")
+			audio.creak()
+	else:
+		player.position += d.normalized() * move
+		player.facing = step.get("face", d.normalized())
+		player.moving_override = true
 
 
 func _unpin_sheet() -> void:
@@ -601,7 +658,40 @@ func _after_unpin() -> void:
 func start_intro() -> void:
 	say("grandfather_intro", func() -> void:
 		set_stage(S.MEDICINE_RECEIVED)
-		hud.show_hint("[WASD] Move    [F] Interact"))
+		_perspective_tutorial())
+
+
+## A near-wordless lesson: the keys appear, the view turns once by itself and
+## back, then it is the player's turn. It clears after they have turned both ways.
+func _perspective_tutorial() -> void:
+	_tutorial = true
+	locks.lock("tutorial")
+	hud.tutorial_show()
+	await get_tree().create_timer(1.1).timeout
+	hud.tutorial_press(1)
+	locks.unlock("tutorial")
+	cam.rotate_view(1)
+	locks.lock("tutorial")
+	await get_tree().create_timer(1.3).timeout
+	hud.tutorial_press(-1)
+	locks.unlock("tutorial")
+	cam.rotate_view(-1)
+	locks.lock("tutorial")
+	await get_tree().create_timer(0.8).timeout
+	locks.unlock("tutorial")
+	hud.tutorial_your_turn()
+	var turned := {}
+	var prev := cam.direction
+	while turned.size() < 2:
+		var now: int = await cam.rotation_started
+		var step := 1 if posmod(now - prev, 4) == 1 else -1
+		prev = now
+		turned[step] = true
+		hud.tutorial_press(step)
+	await get_tree().create_timer(0.6).timeout
+	hud.tutorial_hide()
+	_tutorial = false
+	hud.show_hint("[WASD] Move    [F] Interact")
 
 
 func _lau_intro() -> void:
@@ -650,10 +740,31 @@ func _on_dialogue_event(e: String) -> void:
 		flags.received_camera = true
 		photography.has_camera = true
 	elif e == "planeApproaches":
-		world.play_plane()
-		audio.plane()
+		# a roar builds far off; the jet itself comes over for the photograph
 		world.residents.ng.idle_anim = "proud"
 		world.residents.ng.sprite.play("proud")
+
+
+## The shutter fires just before the jet crosses Mr. Ng's roof, so it is in the
+## print. If it has already gone, another comes in: Kai Tak's arrivals came
+## over the City every few minutes.
+func _shutter_ready(id: String) -> bool:
+	if id != "ng":
+		return true
+	var x := world.plane_x()
+	if x == INF or x > -8.0:
+		world.play_plane()
+		audio.plane()
+		return false
+	return x > -21.0
+
+
+## Mr. Ng in the viewfinder: the jet comes in low over the roof, into the picture.
+func _on_subject_locked(id: String) -> void:
+	if id == "ng" and not plane_flown:
+		plane_flown = true
+		world.play_plane()
+		audio.plane()
 
 
 func _on_photo_kept(id: String) -> void:
@@ -704,6 +815,7 @@ func _ending() -> void:
 func tick(delta: float, paused: bool) -> void:
 	var p := player.position
 	_run_tasks(delta, paused)
+	_tick_push(delta)
 	_discover()
 	if _sheet_t >= 0.0 and _sheet_t < 1.0:
 		_sheet_t = minf(1.0, _sheet_t + delta * 2.0)

@@ -210,6 +210,21 @@ def signs():
         save(neon(t, rgb, 40 + i), f"neon_{i}")
 
 
+def stair_sign():
+    """A painted stair marker, as on every HK tenement landing: the floor
+    characters and a fat red arrow pointing down the flight."""
+    w, h = 192, 256
+    img = Image.new("RGBA", (w, h), (238, 232, 214, 255))
+    d = ImageDraw.Draw(img)
+    red = (178, 44, 38, 255)
+    d.rectangle([6, 6, w - 7, h - 7], outline=red, width=5)
+    d.text((w / 2, 58), "落樓", font=cjk(62), fill=red, anchor="mm")
+    d.polygon([(w / 2 - 22, 108), (w / 2 + 22, 108), (w / 2 + 22, 168), (w / 2 + 50, 168),
+               (w / 2, 222), (w / 2 - 50, 168), (w / 2 - 22, 168)], fill=red)
+    d.text((w / 2, 240), "1/F", font=latin(22, True), fill=(40, 36, 32, 255), anchor="mm")
+    return weather(img, 44, 0.4)
+
+
 def clearance_notice():
     """The Housing Department's clearance notice, pasted in the hall."""
     w, h = 384, 512
@@ -424,6 +439,7 @@ if __name__ == "__main__":
     stain_decal(51, "stain_a")
     stain_decal(52, "stain_b", (40, 50, 40))
     signs()
+    save(stair_sign(), "sign_stairs_down")
     clearance_notice()
     calendar()
     certificate()

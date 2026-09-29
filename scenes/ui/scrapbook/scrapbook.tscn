@@ -19,7 +19,7 @@ axis_stretch_vertical = 1
 base_font = ExtResource("3_4mxfg")
 spacing_glyph = 4
 
-[node name="Scrapbook" type="Control" unique_id=967802374]
+[node name="Scrapbook" type="Control" unique_id=925555381]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
@@ -27,32 +27,32 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_otyc0")
 
-[node name="Dim" type="ColorRect" parent="." unique_id=1737985547]
+[node name="Dim" type="ColorRect" parent="." unique_id=950999233]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.03, 0.035, 0.043, 0.78)
 
-[node name="Center" type="CenterContainer" parent="." unique_id=2050719671]
+[node name="Center" type="CenterContainer" parent="." unique_id=1676568177]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="Page" type="PanelContainer" parent="Center" unique_id=562011472]
+[node name="Page" type="PanelContainer" parent="Center" unique_id=1002041102]
 custom_minimum_size = Vector2(860, 480)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_ip47x")
 
-[node name="Column" type="VBoxContainer" parent="Center/Page" unique_id=103282104]
+[node name="Column" type="VBoxContainer" parent="Center/Page" unique_id=444967627]
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="Header" type="HBoxContainer" parent="Center/Page/Column" unique_id=122861281]
+[node name="Header" type="HBoxContainer" parent="Center/Page/Column" unique_id=17791047]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Center/Page/Column/Header" unique_id=1339780656]
+[node name="Title" type="Label" parent="Center/Page/Column/Header" unique_id=1046335373]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/font = SubResource("FontVariation_pdhru")
@@ -60,7 +60,7 @@ theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
 text = "PROJECT KOWLOON"
 
-[node name="Close" type="RichTextLabel" parent="Center/Page/Column/Header" unique_id=956199980]
+[node name="Close" type="RichTextLabel" parent="Center/Page/Column/Header" unique_id=746593008]
 layout_mode = 2
 mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("4_mlu0o")
@@ -72,12 +72,12 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="Rule" type="ColorRect" parent="Center/Page/Column" unique_id=1436919423]
+[node name="Rule" type="ColorRect" parent="Center/Page/Column" unique_id=761704645]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 color = Color(0.84705883, 0.8, 0.6901961, 1)
 
-[node name="Empty" type="Label" parent="Center/Page/Column" unique_id=1420368799]
+[node name="Empty" type="Label" parent="Center/Page/Column" unique_id=1308113233]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_qj3i1")
@@ -86,7 +86,7 @@ theme_override_colors/font_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
 text = "Empty pages. Grandfather's camera is still full of film."
 horizontal_alignment = 1
 
-[node name="Entries" type="GridContainer" parent="Center/Page/Column" unique_id=565192924]
+[node name="Entries" type="GridContainer" parent="Center/Page/Column" unique_id=419755070]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 36

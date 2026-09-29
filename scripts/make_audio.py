@@ -176,14 +176,16 @@ def radio():
 
 
 def drill():
+    """Lau's drill heard through the clinic wall: a low, soft motor hum with a
+    gentle rise and fall, not a whine (the old high buzz was hard on the ears)."""
     for k in range(3):
-        dur = 0.5 + k * 0.5
+        dur = 0.6 + k * 0.5
         t = t_axis(dur)
-        f = 2100 + 40 * np.sin(2 * np.pi * 23 * t) + rng.uniform(-80, 80)
+        f = 520 + 18 * np.sin(2 * np.pi * 7 * t) + rng.uniform(-30, 30)
         ph = 2 * np.pi * np.cumsum(f) / SR
-        saw = 2 * ((ph / (2 * np.pi)) % 1) - 1
-        x = biquad(saw, "band", 2600, 2.0) * env(len(t), 0.03, 0.05)
-        save(f"drill_{k}", x, 0.4)
+        body = np.sin(ph) * 0.7 + np.sin(2 * ph) * 0.2 + np.sin(3 * ph) * 0.06
+        x = fast_lowpass(body, 1400) * env(len(t), 0.08, 0.12)
+        save(f"drill_{k}", x, 0.3)
 
 
 def mahjong():
