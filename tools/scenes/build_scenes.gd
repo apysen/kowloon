@@ -450,6 +450,13 @@ func build_title() -> Control:
 	bg.name = "Soot"
 	bg.color = S.SOOT
 	full(bg)
+	var backdrop := add(root, TextureRect.new()) as TextureRect
+	backdrop.name = "Rooftops"
+	full(backdrop)
+	backdrop.texture = load("res://assets/ui/title_backdrop.jpg")
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.modulate = Color(1, 1, 1, 0.55)
 	var glow := add(root, TextureRect.new()) as TextureRect
 	glow.name = "SodiumGlow"
 	full(glow)
@@ -472,12 +479,15 @@ func build_title() -> Control:
 	var cjk := add(row, PanelContainer.new()) as PanelContainer
 	cjk.name = "Seal"
 	cjk.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	cjk.add_theme_stylebox_override("panel", S.panel(Color(0, 0, 0, 0), S.RED, 2, 0, Vector4(12, 10, 12, 10)))
+	cjk.add_theme_stylebox_override("panel", S.panel(Color(0.07, 0.08, 0.09, 0.6), S.RED, 2, 0, Vector4(12, 10, 12, 10)))
 	var chars := add(cjk, VBoxContainer.new()) as VBoxContainer
 	chars.name = "Characters"
 	chars.add_theme_constant_override("separation", 2)
+	var serif_bold := FontVariation.new()
+	serif_bold.base_font = S.FONT_SERIF
+	serif_bold.variation_opentype = {"weight": 700}
 	for ch in ["九", "龍", "城", "寨"]:
-		var l := label(ch, S.FONT_SERIF, 54, S.RED)
+		var l := label(ch, serif_bold, 54, S.RED)
 		l.name = "Char"
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		add(chars, l)

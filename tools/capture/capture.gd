@@ -50,7 +50,29 @@ func _run() -> void:
 			_slice.cam.rotate_view(1)
 			await _frames(40)
 		_slice.cam.snap_next = true
-		await _frames(90)
+		await _frames(60)
+		# optional interface state: say=<dialogue id>, camera, photo=<id>, scrapbook, face=<x,z>
+		var action := parts[4] if parts.size() > 4 else ""
+		if action.begins_with("say="):
+			_slice.dialogue.start(action.substr(4))
+			for k in 3:
+				_slice.dialogue.advance()
+				await _frames(2)
+			await _frames(40)
+		elif action == "camera":
+			_slice.photography.enter()
+		elif action.begins_with("photo="):
+			var tex: Texture2D = await _slice.photography.studio.shoot(action.substr(6))
+			_slice.photography.polaroid.present(tex, ResidentCatalog.entry(action.substr(6)).get("name", ""))
+			await _frames(260)
+		elif action == "scrapbook":
+			_slice.scrapbook.add("lau")
+			_slice.scrapbook.add("ng")
+			await _slice.scrapbook.toggle(true)
+		elif action.begins_with("face="):
+			var f := action.substr(5).split(",")
+			_slice.player.facing = Vector3(float(f[0]), 0, float(f[1]))
+		await _frames(30)
 		var img := root.get_viewport().get_texture().get_image()
 		var path := _out.path_join(name + ".png")
 		img.save_png(path)

@@ -1,163 +1,180 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://src/core/nodes/ui/title_screen.gd" id="1_0v3x5"]
-[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="2_lcxjy"]
-[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="3_6gu6j"]
-[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Regular.ttf" id="4_wsmxf"]
-[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="5_qyrho"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/title_screen.gd" id="1_lcxjy"]
+[ext_resource type="Texture2D" path="res://assets/ui/title_backdrop.jpg" id="2_6gu6j"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="3_wsmxf"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="4_qyrho"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Regular.ttf" id="5_83its"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="6_pm3ky"]
 
-[sub_resource type="Gradient" id="Gradient_83its"]
+[sub_resource type="Gradient" id="Gradient_7xevb"]
 colors = PackedColorArray(0.9098039, 0.6901961, 0.2901961, 0.16, 0.9098039, 0.6901961, 0.2901961, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_pm3ky"]
-gradient = SubResource("Gradient_83its")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_yf5ak"]
+gradient = SubResource("Gradient_7xevb")
 fill = 1
 fill_from = Vector2(0.5, 1.2)
 fill_to = Vector2(0.5, 0.35)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xevb"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6rpc"]
 content_margin_left = 12.0
 content_margin_top = 10.0
 content_margin_right = 12.0
 content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0)
+bg_color = Color(0.07, 0.08, 0.09, 0.6)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 
-[sub_resource type="FontVariation" id="FontVariation_yf5ak"]
-base_font = ExtResource("3_6gu6j")
+[sub_resource type="FontVariation" id="FontVariation_0tssm"]
+base_font = ExtResource("3_wsmxf")
+variation_opentype = {
+"weight": 700
+}
+
+[sub_resource type="FontVariation" id="FontVariation_4dnjc"]
+base_font = ExtResource("4_qyrho")
 spacing_glyph = 5
 
-[sub_resource type="FontVariation" id="FontVariation_y6rpc"]
-base_font = ExtResource("3_6gu6j")
+[sub_resource type="FontVariation" id="FontVariation_na7ja"]
+base_font = ExtResource("4_qyrho")
 spacing_glyph = 4
 
-[node name="TitleScreen" type="Control" unique_id=1951207865]
+[node name="TitleScreen" type="Control" unique_id=1833279899]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource("1_0v3x5")
+script = ExtResource("1_lcxjy")
 
-[node name="Soot" type="ColorRect" parent="." unique_id=1090766838]
+[node name="Soot" type="ColorRect" parent="." unique_id=503086714]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.07058824, 0.078431375, 0.09019608, 1)
 
-[node name="SodiumGlow" type="TextureRect" parent="." unique_id=2027169519]
+[node name="Rooftops" type="TextureRect" parent="." unique_id=211977339]
+modulate = Color(1, 1, 1, 0.55)
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_pm3ky")
+texture = ExtResource("2_6gu6j")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="SodiumGlow" type="TextureRect" parent="." unique_id=1200724972]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_yf5ak")
 expand_mode = 1
 
-[node name="Center" type="CenterContainer" parent="." unique_id=1188033971]
+[node name="Center" type="CenterContainer" parent="." unique_id=1898933417]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Row" type="HBoxContainer" parent="Center" unique_id=1909574926]
+[node name="Row" type="HBoxContainer" parent="Center" unique_id=1114556207]
 layout_mode = 2
 theme_override_constants/separation = 34
 
-[node name="Seal" type="PanelContainer" parent="Center/Row" unique_id=65014019]
+[node name="Seal" type="PanelContainer" parent="Center/Row" unique_id=1766349504]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_7xevb")
+theme_override_styles/panel = SubResource("StyleBoxFlat_y6rpc")
 
-[node name="Characters" type="VBoxContainer" parent="Center/Row/Seal" unique_id=644733912]
+[node name="Characters" type="VBoxContainer" parent="Center/Row/Seal" unique_id=339175439]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="Char" type="Label" parent="Center/Row/Seal/Characters" unique_id=1222880065]
+[node name="Char" type="Label" parent="Center/Row/Seal/Characters" unique_id=841608899]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
 theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "九"
 horizontal_alignment = 1
 
-[node name="Char2" type="Label" parent="Center/Row/Seal/Characters" unique_id=874665268]
+[node name="Char2" type="Label" parent="Center/Row/Seal/Characters" unique_id=691712662]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
 theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "龍"
 horizontal_alignment = 1
 
-[node name="Char3" type="Label" parent="Center/Row/Seal/Characters" unique_id=1691552374]
+[node name="Char3" type="Label" parent="Center/Row/Seal/Characters" unique_id=1631732124]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
 theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "城"
 horizontal_alignment = 1
 
-[node name="Char4" type="Label" parent="Center/Row/Seal/Characters" unique_id=2026451505]
+[node name="Char4" type="Label" parent="Center/Row/Seal/Characters" unique_id=1914667335]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
 theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "寨"
 horizontal_alignment = 1
 
-[node name="Copy" type="VBoxContainer" parent="Center/Row" unique_id=704473795]
+[node name="Copy" type="VBoxContainer" parent="Center/Row" unique_id=1627273501]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 14
 
-[node name="Name" type="Label" parent="Center/Row/Copy" unique_id=351624914]
+[node name="Name" type="Label" parent="Center/Row/Copy" unique_id=943064747]
 layout_mode = 2
 theme_override_constants/line_spacing = -12
-theme_override_fonts/font = SubResource("FontVariation_yf5ak")
+theme_override_fonts/font = SubResource("FontVariation_4dnjc")
 theme_override_font_sizes/font_size = 60
 theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
 text = "PROJECT
 KOWLOON"
 
-[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=1338007911]
+[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=584275915]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=35219316]
+[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=1904961750]
 custom_minimum_size = Vector2(38, 6)
 layout_mode = 2
 size_flags_vertical = 4
 color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 
-[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=810602810]
+[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=993678615]
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_y6rpc")
+theme_override_fonts/font = SubResource("FontVariation_na7ja")
 theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 text = "THE BLUE PIPE"
 
-[node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=870268702]
+[node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=1909576540]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4_wsmxf")
+theme_override_fonts/font = ExtResource("5_83its")
 theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 text = "Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help."
 autowrap_mode = 3
 
-[node name="Begin" type="Button" parent="Center/Row/Copy" unique_id=1377179235]
+[node name="Begin" type="Button" parent="Center/Row/Copy" unique_id=867060935]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "BEGIN"
 
-[node name="Controls" type="RichTextLabel" parent="Center/Row/Copy" unique_id=178970689]
+[node name="Controls" type="RichTextLabel" parent="Center/Row/Copy" unique_id=155238135]
 custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_fonts/normal_font = ExtResource("5_qyrho")
+theme_override_fonts/normal_font = ExtResource("6_pm3ky")
 theme_override_font_sizes/normal_font_size = 13
 theme_override_colors/default_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 bbcode_enabled = true

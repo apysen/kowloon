@@ -7,8 +7,10 @@ extends SubViewport
 ## moment into a square, and the Polaroid shader develops it.
 
 const SHOTS := {
-	"lau": {"eye": Vector3(7.55, 1.45, -9.45), "look": Vector3(5.1, 1.05, -12.2), "fov": 52.0, "face": Vector3(7.55, 0, -9.45)},
-	"ng": {"eye": Vector3(4.9, 13.75, -17.1), "look": Vector3(3.0, 14.9, -21.8), "fov": 58.0, "face": Vector3(4.9, 13, -17.1)},
+	"lau": {"eye": Vector3(7.55, 1.45, -9.45), "look": Vector3(5.1, 1.05, -12.2), "fov": 52.0, "face": Vector3(7.55, 0, -9.45),
+		"stand": Vector3(5.0, 0, -11.0)},
+	"ng": {"eye": Vector3(4.9, 13.75, -17.1), "look": Vector3(3.0, 14.9, -21.8), "fov": 58.0, "face": Vector3(4.9, 13, -17.1),
+		"stand": Vector3(3.5, 13, -19.0)},
 }
 
 @export var world: World
@@ -32,9 +34,13 @@ func shoot(id: String) -> Texture2D:
 	if r:
 		r.face_toward(shot.face, 4.0)
 	world.sprite_yaw_override = cam.global_rotation.y
+	world.view_from = shot.stand
+	await get_tree().process_frame
+	await get_tree().process_frame
 	render_target_update_mode = SubViewport.UPDATE_ONCE
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	var img := get_texture().get_image()
 	world.sprite_yaw_override = NAN
+	world.view_from = null
 	return ImageTexture.create_from_image(img)

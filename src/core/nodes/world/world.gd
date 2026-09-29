@@ -29,6 +29,8 @@ var special: Dictionary = {}      # name -> Node3D ("Fabric", "Bundle", "Sheet",
 var sheet_blocking := true
 ## While a photograph renders, every card turns to the studio camera instead.
 var sprite_yaw_override := NAN
+## While a photograph renders, the cutaway shows the world as if Mei stood here.
+var view_from: Variant = null
 
 var _items: Array[Dictionary] = []
 var _sprites: Array[CharacterSprite] = []
@@ -285,8 +287,8 @@ func play_plane() -> void:
 
 func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 	_time += delta
-	var pb := player.band()
-	var p := player.position
+	var p := player.position if view_from == null else (view_from as Vector3)
+	var pb := PerspectiveRules.player_band(p.y)
 	var back := cam.back_vector()
 	var right := cam.right_vector()
 	current_room = room_at(p)

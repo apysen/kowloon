@@ -542,12 +542,10 @@ static func roof(b: LevelBuilder) -> void:
 	for bx in [-9.5, -8.35]:
 		b.box(bx, bx + 0.08, Y, Y + 0.38, -11.9, -10.7, c8(0x4a3222), {"band": 2.0, "surface": "wood", "parent": P, "name": "BenchLeg"})
 	b.add_obstacle(-9.6, -8.2, -12, -10.6, Y, "bench")
-	var pots := [[0, -10], [1, -10.2], [-1.2, -9.8], [2.2, -9.9], [-0.4, -7.2], [0.6, -7.0]]
+	var pots := [[0.25, -9.75, "aspidistra"], [1.25, -9.9, "chilli"], [-0.95, -9.55, "onions"], [2.45, -9.65, "aspidistra"],
+		[-0.15, -6.95, "onions"], [0.85, -6.75, "chilli"], [-8.9, -12.4, "aspidistra"], [7.9, -9.6, "chilli"]]
 	for i in pots.size():
-		var px: float = pots[i][0]
-		var pz: float = pots[i][1]
-		b.box(px, px + 0.5, Y, Y + 0.4, pz, pz + 0.5, [c8(0x8a5a3a), c8(0x5a7a4a), c8(0xa8453a)][i % 3], {"band": 2.0, "surface": "grain", "parent": P + "/Pots", "name": "Pot"})
-		b.box(px + 0.05, px + 0.45, Y + 0.4, Y + 0.75 + b.rand.randf() * 0.3, pz + 0.05, pz + 0.45, c8(0x3f7a3a).lerp(c8(0x6a9a3a), b.rand.randf()), {"band": 2.0, "surface": "fabric", "parent": P + "/Pots", "name": "Plant"})
+		plant(b, String(pots[i][2]), Vector3(pots[i][0], Y, pots[i][1]), P + "/Pots", 2.0)
 	PropKit.ac_unit(b, 4.5, 6.5, Y, Y + 0.9, -9, -7.2, P, 2.0)
 	b.add_obstacle(4.5, 6.5, -9, -7.2, Y, "acHousing")
 	for i in 16:
@@ -564,6 +562,20 @@ static func roof(b: LevelBuilder) -> void:
 	# a plastic crate, a broom, a folded chair: the roof is somebody's garden
 	b.box(-1.8, -1.3, Y, Y + 0.3, -12.8, -12.4, c8(0xc9463a), {"band": 2.0, "surface": "grain", "parent": P, "name": "Crate"})
 	b.box(-6.2, -6.1, Y, Y + 1.4, -6.35, -6.25, c8(0xc9a55a), {"band": 2.0, "surface": "wood", "parent": P, "name": "Broom"})
+
+
+## A potted plant: a pixel-art card from the plants sheet (drawn in Aseprite).
+static func plant(b: LevelBuilder, kind: String, pos: Vector3, parent: String, band: float) -> Node3D:
+	var s := CharacterSprite.new()
+	s.name = "Plant"
+	s.sheet_id = "plants"
+	s.anim = kind
+	s.contact_shadow = true
+	s.phase = b.rand.randf() * 2.0
+	s.position = pos
+	b.attach(s, b.group(parent))
+	b.tag(s, band)
+	return s
 
 
 static func _aerial(b: LevelBuilder, base: Vector3, h: float, parent: String, band: float) -> void:

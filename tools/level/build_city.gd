@@ -441,11 +441,11 @@ static func _roof_life(b: LevelBuilder, blk: Dictionary) -> void:
 			cloth.set_meta("cloth", true)
 			cx += cw + 0.08
 	# potted plants and polystyrene boxes of spring onions
-	for k in b.rand.randi() % 4:
-		var px := x0 + 0.2 + b.rand.randf() * (w - 0.6)
-		var pz := z0 + 0.2 + b.rand.randf() * (d - 0.6)
-		b.box(px, px + 0.35, y, y + 0.3, pz, pz + 0.35, [c8(0x8a5a3a), c8(0xe8e8e0), c8(0xa8453a)][k % 3], {"band": 1.5, "surface": "grain", "parent": P, "name": "Pot", "cast_shadow": false})
-		b.box(px + 0.04, px + 0.31, y + 0.3, y + 0.55, pz + 0.04, pz + 0.31, c8(0x4f8a3a), {"band": 1.5, "surface": "fabric", "parent": P, "name": "Greens", "cast_shadow": false})
+	var kinds := ["aspidistra", "onions", "chilli", "onions"]
+	for k in b.rand.randi() % 3:
+		var px := x0 + 0.35 + b.rand.randf() * maxf(0.1, w - 0.7)
+		var pz := z0 + 0.35 + b.rand.randf() * maxf(0.1, d - 0.7)
+		BuildInteriors.plant(b, kinds[b.rand.randi() % kinds.size()], Vector3(px, y, pz), P + "/Plants", 1.5)
 	# people up for the air
 	if b.rand.randf() < 0.3:
 		var who: String = EXTRAS[b.rand.randi() % EXTRAS.size()]
