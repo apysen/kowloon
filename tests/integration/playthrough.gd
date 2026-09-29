@@ -94,10 +94,13 @@ func photograph(id: String, from: Vector3) -> void:
 		w8 += 0.1
 	expect(slice.scrapbook.open and slice.scrapbook.panel.visible, "the Polaroid of %s goes into the album by itself" % id)
 	var t := 0.0
-	while slice.scrapbook.open and t < 20.0:
+	while (slice.scrapbook.panel._filing or slice.scrapbook.panel.busy) and t < 20.0:
 		await secs(0.25)
 		t += 0.25
-	expect(not slice.scrapbook.open, "the album shuts again after filing %s" % id)
+	await secs(1.0)
+	expect(slice.scrapbook.open and slice.scrapbook.panel.visible, "the album stays open on %s's page" % id)
+	await slice.scrapbook.toggle(false)
+	expect(not slice.scrapbook.open, "the player shuts the album after filing %s" % id)
 	await read_through()
 
 

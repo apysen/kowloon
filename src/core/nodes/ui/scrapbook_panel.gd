@@ -429,8 +429,9 @@ func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Di
 
 ## A photograph Mei has just kept goes into the album: the Polaroid stays up
 ## while the book opens beneath it and turns to its page, then it drops into
-## place, is taped down, and her notes are written in beside it before the
-## book is shut again. `from` is where the kept Polaroid was on screen.
+## place, is taped down, and her notes are written in beside it. The album is
+## left open there for the player to look through and close.
+## `from` is where the kept Polaroid was on screen.
 func file_photo(ids: Array, photos: Dictionary, id: String, from: Rect2) -> void:
 	_filing = true
 	_speed = 1.0
@@ -480,9 +481,12 @@ func file_photo(ids: Array, photos: Dictionary, id: String, from: Rect2) -> void
 		var write := create_tween()
 		write.tween_property(label, "visible_ratio", 1.0, secs)
 		await write.finished
-	await get_tree().create_timer(1.0 / _speed).timeout
-	await close_book()
+	# done: the album stays open on the new page until the player shuts it
 	_filing = false
+	busy = false
+	_update_hint()
+	create_tween().tween_property(hint, "modulate:a", 1.0, 0.3)
+	_set_hover(_photo_at(get_global_mouse_position()))
 
 
 func _flyer(tex: Texture2D, caption: String) -> Control:

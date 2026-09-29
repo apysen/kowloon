@@ -8,6 +8,8 @@ extends Node
 @export var photography: PhotographyDirector
 @export var studio: PhotoStudio
 
+signal closed
+
 var entries: Array[String] = []
 var open := false
 
@@ -30,9 +32,9 @@ func file_photo(id: String) -> void:
 	polaroid.visible = false
 	panel.visible = true
 	await panel.file_photo(entries, photography.photos, id, from)
-	panel.visible = false
-	open = false
-	locks.unlock("scrapbook")
+	# it stays open on the new page; the story goes on once the player shuts it
+	if open:
+		await closed
 
 
 func toggle(force: Variant = null) -> void:
@@ -54,3 +56,4 @@ func toggle(force: Variant = null) -> void:
 		await panel.close_book()
 		panel.visible = false
 		locks.unlock("scrapbook")
+		closed.emit()
