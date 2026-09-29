@@ -12,7 +12,7 @@ static func c8(hex: int) -> Color:
 
 static func build(b: LevelBuilder) -> void:
 	# the street under everything, so the city never floats over a void
-	b.box(-40, 60, -0.9, -0.35, -60, 30, c8(0x5a5650), {"band": 0.0, "surface": "concrete", "parent": "Structure/Street",
+	b.box(-170, 95, -0.9, -0.35, -90, 80, c8(0x5a5650), {"band": 0.0, "surface": "concrete", "parent": "Structure/Street",
 		"name": "Street", "cast_shadow": false})
 	lighting(b)
 	level_a(b)
@@ -202,10 +202,11 @@ static func level_a(b: LevelBuilder) -> void:
 
 	# The hanging vertical sign: a landmark over the rooftops of Level A.
 	var sign := b.card("res://assets/textures/props/sign_lau_dental.png", Vector3(3, Y + 5.3, -8.6), Vector2(2.4, 1.2), Vector3(0, 0, 1),
-		{"parent": "Dressing/LauSign", "name": "LauSign", "band": 0.0, "emission": 0.25})
+		{"parent": "Dressing/LauSign", "name": "LauSign", "band": 0.0, "emission": 0.25, "fadeable": true})
 	sign.name = "LauSign"
-	b.box(1.75, 4.25, Y + 4.65, Y + 5.95, -8.8, -8.66, c8(0x5a2a22), {"band": 0.0, "surface": "wood", "parent": "Dressing/LauSign", "name": "SignBoard"})
-	b.box(2.9, 3.1, Y + 4.2, Y + 4.7, -8.8, -8.7, c8(0x333333), {"band": 0.0, "surface": "metal", "parent": "Dressing/LauSign", "name": "SignBracket"})
+	# it hangs right over the clinic door: once Mei is inside, it fades like a wall
+	b.box(1.75, 4.25, Y + 4.65, Y + 5.95, -8.8, -8.66, c8(0x5a2a22), {"band": 0.0, "surface": "wood", "parent": "Dressing/LauSign", "name": "SignBoard", "fadeable": true})
+	b.box(2.9, 3.1, Y + 4.2, Y + 4.7, -8.8, -8.7, c8(0x333333), {"band": 0.0, "surface": "metal", "parent": "Dressing/LauSign", "name": "SignBracket", "fadeable": true})
 	b.ref("lauSign", Vector3(3, 0, -8.2))
 
 	# Stairwell

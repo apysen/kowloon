@@ -33,6 +33,13 @@ var sprite_yaw_override := NAN
 var view_from: Variant = null
 
 var _items: Array[Dictionary] = []
+## Pieces that fade, move or belong to a room: looked at every frame.
+var _live: Array[Dictionary] = []
+## Everything else (most of the city): only its band decides, so it is
+## re-checked in full when Mei changes level and otherwise a slice per frame.
+var _static: Array[Dictionary] = []
+var _static_pb := -1
+var _static_at := 0
 var _sprites: Array[CharacterSprite] = []
 var _cloths: Array[Node3D] = []
 var _lights: Array[OmniLight3D] = []
@@ -54,6 +61,9 @@ func _ready() -> void:
 	_build_obstacles()
 	_collect(level)
 	_hang_cloths()
+	for it in _items:
+		var live: bool = it.fadeable or it.dynamic or it.content_of != "" or it.node is Resident
+		(_live if live else _static).append(it)
 	_build_doors()
 	_build_holds()
 	_build_dust()
@@ -169,6 +179,14 @@ func move_crate(p: Vector3) -> void:
 	crate_obstacle.x1 = p.x + 0.35
 	crate_obstacle.z0 = p.z - 0.35
 	crate_obstacle.z1 = p.z + 0.35
+
+
+func _static_visibility(it: Dictionary, pb: int) -> void:
+	var node: Node3D = it.node
+	var vis: bool = PerspectiveRules.band_visible(it.band, pb) and not node.get_meta("gone", false)
+	if vis != it.visible:
+		it.visible = vis
+		node.visible = vis
 
 
 func _aabb_of(meshes: Array[GeometryInstance3D]) -> AABB:
@@ -365,7 +383,17 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 		else:
 			res.sprite.camera_yaw = yaw
 
-	for it in _items:
+	if pb != _static_pb:
+		_static_pb = pb
+		for it in _static:
+			_static_visibility(it, pb)
+	elif not _static.is_empty():
+		var n := ceili(_static.size() / 8.0)
+		for k in n:
+			_static_visibility(_static[_static_at], pb)
+			_static_at = (_static_at + 1) % _static.size()
+
+	for it in _live:
 		var node: Node3D = it.node
 		if it.dynamic:
 			it.band = PerspectiveRules.band_of(node.global_position.y + 0.5)

@@ -498,7 +498,20 @@ func _errand_on_roof() -> void:
 
 
 func _errand_done() -> void:
+	# he reaches up and pegs the sheets out; then they hang and his arms are free
+	var son: Resident = world.residents.son
+	errand.step = "hanging"
+	son.face_toward(Vector3(-4.4, LevelBuilder.LEVEL_ROOF, -8.54), 2.4)
 	world.set_fabric_state("roof")
+	son.idle_anim = "work"
+	son.sprite.play("work")
+	later(_errand_hung, 1.6)
+
+
+func _errand_hung() -> void:
+	var son: Resident = world.residents.son
+	son.idle_anim = "idle"
+	son.sprite.play("idle")
 	errand.step = "done"
 
 
@@ -512,7 +525,7 @@ func _reset_errand(finished: bool) -> void:
 	if finished:
 		errand = {"step": "done", "door_open": true}
 		world.set_fabric_state("roof")
-		son.place_at(Vector3(-5.4, LevelBuilder.LEVEL_ROOF, -9.6))
+		son.place_at(Vector3(-4.4, LevelBuilder.LEVEL_ROOF, -9.6))
 	else:
 		errand = {}
 		world.set_fabric_state("catwalk")

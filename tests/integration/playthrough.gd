@@ -246,6 +246,8 @@ func _run() -> void:
 		t += 0.5
 	expect(w.fabric_state == "roof", "the washing ends up on the roof line")
 	expect(son.position.y > 12.0, "the Chan boy is back on the roof")
+	await secs(2.5)
+	expect(not son.sprite.anim.begins_with("carry"), "his arms are empty once the sheets are hung")
 
 	print("-- pause")
 	var before := AudioSettings.saved_volume()

@@ -10,3 +10,8 @@
 
 # Generated build data (rebuild with scripts/sprite_catalog.py)
 assets/sprites/aseprite/build/
+
+# Exported game builds
+/*.exe
+/*.pck
+/export/

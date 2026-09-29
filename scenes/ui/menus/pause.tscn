@@ -31,7 +31,7 @@ spacing_glyph = 6
 base_font = ExtResource("3_7i833")
 spacing_glyph = 3
 
-[node name="PauseMenu" type="Control" unique_id=295800203]
+[node name="PauseMenu" type="Control" unique_id=1964183075]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
@@ -39,58 +39,58 @@ anchor_bottom = 1.0
 theme = ExtResource("1_ds3wt")
 script = ExtResource("2_6o54q")
 
-[node name="Dim" type="ColorRect" parent="." unique_id=1931018671]
+[node name="Dim" type="ColorRect" parent="." unique_id=902453289]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.03, 0.035, 0.043, 0.72)
 
-[node name="Center" type="CenterContainer" parent="." unique_id=951162240]
+[node name="Center" type="CenterContainer" parent="." unique_id=429255046]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="Card" type="PanelContainer" parent="Center" unique_id=179664848]
+[node name="Card" type="PanelContainer" parent="Center" unique_id=878918761]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8xn2t")
 
-[node name="Column" type="VBoxContainer" parent="Center/Card" unique_id=1271653840]
+[node name="Column" type="VBoxContainer" parent="Center/Card" unique_id=121071025]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Header" type="HBoxContainer" parent="Center/Card/Column" unique_id=1318618600]
+[node name="Header" type="HBoxContainer" parent="Center/Card/Column" unique_id=1260976532]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="PipeRule" type="ColorRect" parent="Center/Card/Column/Header" unique_id=1427331861]
+[node name="PipeRule" type="ColorRect" parent="Center/Card/Column/Header" unique_id=775638444]
 custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
 color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 
-[node name="Title" type="Label" parent="Center/Card/Column/Header" unique_id=1476184929]
+[node name="Title" type="Label" parent="Center/Card/Column/Header" unique_id=1727244288]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_bsgfu")
 theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
 text = "PAUSED"
 
-[node name="Gap" type="Control" parent="Center/Card/Column" unique_id=1356538587]
+[node name="Gap" type="Control" parent="Center/Card/Column" unique_id=1807350291]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
-[node name="Resume" type="Button" parent="Center/Card/Column" unique_id=2146401214]
+[node name="Resume" type="Button" parent="Center/Card/Column" unique_id=1903432189]
 unique_name_in_owner = true
 layout_mode = 2
 text = "RESUME"
 
-[node name="VolumeRow" type="HBoxContainer" parent="Center/Card/Column" unique_id=472355065]
+[node name="VolumeRow" type="HBoxContainer" parent="Center/Card/Column" unique_id=1583698142]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="VolumeLabel" type="Label" parent="Center/Card/Column/VolumeRow" unique_id=673343498]
+[node name="VolumeLabel" type="Label" parent="Center/Card/Column/VolumeRow" unique_id=1088312233]
 custom_minimum_size = Vector2(76, 0)
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_tq4lt")
@@ -98,7 +98,7 @@ theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 text = "VOLUME"
 
-[node name="Volume" type="HSlider" parent="Center/Card/Column/VolumeRow" unique_id=559065930]
+[node name="Volume" type="HSlider" parent="Center/Card/Column/VolumeRow" unique_id=1864248259]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 20)
 layout_mode = 2
@@ -106,7 +106,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 step = 5.0
 
-[node name="VolumeValue" type="Label" parent="Center/Card/Column/VolumeRow" unique_id=890869556]
+[node name="VolumeValue" type="Label" parent="Center/Card/Column/VolumeRow" unique_id=1975310295]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
@@ -116,17 +116,17 @@ theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
 text = "80"
 horizontal_alignment = 2
 
-[node name="Graphics" type="Button" parent="Center/Card/Column" unique_id=1083792483]
+[node name="Graphics" type="Button" parent="Center/Card/Column" unique_id=786267901]
 unique_name_in_owner = true
 layout_mode = 2
 text = "GRAPHICS: FULL"
 
-[node name="Quit" type="Button" parent="Center/Card/Column" unique_id=834078007]
+[node name="Quit" type="Button" parent="Center/Card/Column" unique_id=1719738230]
 unique_name_in_owner = true
 layout_mode = 2
 text = "QUIT TO TITLE"
 
-[node name="Hint" type="RichTextLabel" parent="Center/Card/Column" unique_id=80000187]
+[node name="Hint" type="RichTextLabel" parent="Center/Card/Column" unique_id=821957252]
 layout_mode = 2
 mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("5_wc357")
@@ -138,7 +138,7 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="Tick" type="AudioStreamPlayer" parent="." unique_id=952596907]
+[node name="Tick" type="AudioStreamPlayer" parent="." unique_id=293173508]
 unique_name_in_owner = true
 stream = ExtResource("6_klo41")
 volume_db = -8.0

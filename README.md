@@ -5,6 +5,7 @@ Kowloon Walled City, 1992: the last weeks before the move. Mei's grandfather nee
 This repository holds the Godot build of the vertical slice, **The Blue Pipe** (about fifteen minutes). It's HD-2D: hand-pixelled characters in a lit, textured 3D diorama, seen through an orthographic camera you turn in quarter steps.
 
 - `docs/Project_Kowloon_Vertical_Slice_Implementation_Guide.md` is the design guide.
+- `docs/STATE_OF_THE_GAME.md` describes what is built and how, as of now.
 - `project-kowloon/project-kowloon/` is the original Three.js prototype. The Godot build follows its routes, puzzles and timing exactly.
 
 ## Run it
@@ -23,7 +24,7 @@ godot --path .
 | Space | Advance dialogue, take a photo, keep the Polaroid |
 | C | Raise / lower the camera (WASD frames the shot) |
 | Tab | Scrapbook |
-| Esc | Close |
+| Esc | Close the camera or scrapbook; otherwise pause (volume, graphics, quit to title) |
 | G | Graphics: full / fast |
 | F1 or ` | Debug overlay. While it's open: 1–6 teleport, F2 / ] next stage, F3 / [ previous |
 
@@ -32,7 +33,7 @@ godot --path .
 - **Characters** are pixel art authored in **Aseprite**. Each has front, back and side views with idle, walk, talk and their own actions (climbing, carrying, chopping, reading, feeding pigeons…). They stand on camera-facing cards that are lit by the scene and cast silhouette shadows toward the sun.
 - **No clipping.** Every fragment of a character card writes the depth of one anchor point, so a character sorts as a single object: wholly in front of a wall or wholly behind it, never sliced. Mei's footprint keeps her centre clear of walls, and a warm silhouette shows her through anything that hides her.
 - **Environments** use one world-space triplanar shader over an HD surface library (plaster, glazed tile, mosaic, terrazzo, timber, board-formed concrete, bitumen, rusted and painted metal, fabric, tower-block facades with lit windows), tinted per piece.
-- **The city** is the whole Walled City block with 3D window cages, air conditioners and laundry on every face that sees daylight. The rooftop plateau has aerials, tanks, huts, pigeon lofts, washing, plants and people. The Kowloon City tenements across the road have their balconies (every one different). The horizon has Lion Rock, the Kai Tak checkerboard hill and the runway.
+- **The city** is laid out from the 1985 Kai Fong Association map: the 210 × 120 m plot, its named alleys, the yamen at the centre, and the boundary roads (see `docs/STATE_OF_THE_GAME.md`). It is the whole Walled City block with 3D window cages, air conditioners and laundry on every face that sees daylight. The rooftop plateau has aerials, tanks, huts, pigeon lofts, washing, plants and people. The Kowloon City tenements across the road have their balconies (every one different). The horizon has Lion Rock, the Kai Tak checkerboard hill and the runway.
 - **Lighting and finish:** warm lamps, fluorescent tubes, depth fog, SSAO/SSIL, glow, golden-hour sun on the roof, then a tilt-shift and film grade over the top.
 
 ## Rebuilding assets

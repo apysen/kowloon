@@ -46,7 +46,7 @@ spacing_glyph = 2
 base_font = ExtResource("4_sk683")
 spacing_glyph = 1
 
-[node name="DialogueBox" type="Control" unique_id=1722698371]
+[node name="DialogueBox" type="Control" unique_id=2049247526]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
@@ -54,7 +54,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_1tmw4")
 
-[node name="Box" type="Control" parent="." unique_id=1106061698]
+[node name="Box" type="Control" parent="." unique_id=801073315]
 anchors_preset = 0
 anchor_left = 0.5
 anchor_top = 1.0
@@ -66,14 +66,14 @@ offset_right = 360.0
 offset_bottom = -28.0
 mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="Box" unique_id=158100536]
+[node name="Panel" type="PanelContainer" parent="Box" unique_id=827282622]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_4mh62")
 
-[node name="Text" type="Label" parent="Box/Panel" unique_id=531449095]
+[node name="Text" type="Label" parent="Box/Panel" unique_id=1134542282]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/line_spacing = 5
@@ -82,7 +82,7 @@ theme_override_font_sizes/font_size = 19
 theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
 autowrap_mode = 3
 
-[node name="SpeakerTag" type="PanelContainer" parent="Box" unique_id=1829027824]
+[node name="SpeakerTag" type="PanelContainer" parent="Box" unique_id=1708016705]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 22.0
@@ -91,14 +91,14 @@ offset_right = 22.0
 offset_bottom = -14.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_wsx3j")
 
-[node name="Speaker" type="Label" parent="Box/SpeakerTag" unique_id=819348633]
+[node name="Speaker" type="Label" parent="Box/SpeakerTag" unique_id=237347249]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_7t60p")
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.101960786, 0.078431375, 0.0627451, 1)
 
-[node name="Nudge" type="Label" parent="Box" unique_id=1333506820]
+[node name="Nudge" type="Label" parent="Box" unique_id=788591119]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_left = 1.0

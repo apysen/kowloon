@@ -29,6 +29,7 @@ static func c8(hex: int) -> Color:
 
 static func build(b: LevelBuilder) -> void:
 	filler(b)
+	BuildWalledCity.build(b)
 	shop_signs(b)
 	cables(b)
 	tenements(b)
@@ -534,15 +535,18 @@ static func cables(b: LevelBuilder) -> void:
 static func tenements(b: LevelBuilder) -> void:
 	## Kowloon City's tenements across the road from the City, balconies facing it.
 	## Only seen from the roof (band 1.5).
+	## Across the boundary roads of the 1985 plot (see BuildWalledCity.CITY).
+	## The north and east rows, nearest Mei's roof, carry the full balconies.
+	var C: Dictionary = BuildWalledCity.CITY
 	var rings := [
-		# along the north side (Tung Tsing Road side), faces south toward the City
-		{"axis": "x", "from": -34.0, "to": 50.0, "line": -37.0, "depth": 7.0, "face": "s"},
-		# the south side (Tung Tau Tsuen Road), faces north
-		{"axis": "x", "from": -34.0, "to": 50.0, "line": 15.0, "depth": 7.0, "face": "n"},
-		# the west, faces east
-		{"axis": "z", "from": -30.0, "to": 8.0, "line": -29.0, "depth": 7.0, "face": "e"},
-		# the east, faces west
-		{"axis": "z", "from": -30.0, "to": 8.0, "line": 45.0, "depth": 7.0, "face": "w"},
+		# Tung Tau Tsuen Road, north: faces south toward the City
+		{"axis": "x", "from": float(C.x0) - 20.0, "to": float(C.x1) + 20.0, "line": float(C.z0) - 11.0, "depth": 7.0, "face": "s", "dense": true},
+		# Carpenter Road, south: faces north
+		{"axis": "x", "from": float(C.x0) - 20.0, "to": float(C.x1) + 20.0, "line": float(C.z1) + 9.0, "depth": 7.0, "face": "n", "dense": false},
+		# Sai Tau Tsuen Road, west: faces east
+		{"axis": "z", "from": float(C.z0) - 4.0, "to": float(C.z1) + 4.0, "line": float(C.x0) - 9.0, "depth": 7.0, "face": "e", "dense": false},
+		# Tung Tsing Road, east: faces west
+		{"axis": "z", "from": float(C.z0) - 4.0, "to": float(C.z1) + 4.0, "line": float(C.x1) + 11.0, "depth": 7.0, "face": "w", "dense": true},
 	]
 	for ring in rings:
 		var u: float = ring.from
@@ -584,14 +588,15 @@ static func _tenement(b: LevelBuilder, ring: Dictionary, u0: float, u1: float, h
 	var storey := 2.5
 	var y := 2.5
 	var P := "City/Balconies"
+	var dense: bool = ring.get("dense", true)
 	while y < height - 2.0:
 		var u := a0 + 0.4
 		while u < a1 - 1.6:
 			var bw := 1.6 + b.rand.randf() * 0.9
 			if u + bw > a1 - 0.3:
 				break
-			if b.rand.randf() < 0.85:
-				_balcony(b, face, plane, u, u + bw, y, P)
+			if b.rand.randf() < (0.85 if dense else 0.3):
+				_balcony(b, face, plane, u, u + bw, y, P, dense)
 			u += bw + 0.3
 		y += storey
 	# rooftop: aerials and a water tank, sometimes a kid watching planes
@@ -616,7 +621,7 @@ static func _face_normal(face: String) -> Vector3:
 
 ## One balcony: a slab, a front of one of several kinds, and what the family
 ## keeps out there. Sometimes somebody is out on it.
-static func _balcony(b: LevelBuilder, face: String, plane: float, u0: float, u1: float, y: float, parent: String) -> void:
+static func _balcony(b: LevelBuilder, face: String, plane: float, u0: float, u1: float, y: float, parent: String, people := true) -> void:
 	var n := _face_normal(face)
 	var depth := 0.9
 	var w := u1 - u0
@@ -716,7 +721,7 @@ static func _balcony(b: LevelBuilder, face: String, plane: float, u0: float, u1:
 		tube.rotation = Vector3(0, 0, PI / 2)
 		tube.position = Vector3(0, 2.2, 0.06)
 		b.attach(tube, holder)
-	if b.rand.randf() < 0.22:
+	if people and b.rand.randf() < 0.22:
 		var who: String = EXTRAS[b.rand.randi() % EXTRAS.size()]
 		var gp := holder.transform * Vector3(-w / 4 + b.rand.randf() * w / 2, 0.0, depth * 0.5)
 		var res := b.resident("balcony_%s_%d" % [who, b.rand.randi()], who, gp,
@@ -729,12 +734,14 @@ static func _balcony(b: LevelBuilder, face: String, plane: float, u0: float, u1:
 
 static func horizon(b: LevelBuilder) -> void:
 	var P := "City/Horizon"
-	# the rest of Kowloon: low detail, only seen from the roof
-	for i in 130:
+	# the rest of Kowloon City: low detail, beyond the tenements round the plot
+	for i in 150:
 		var ang := b.rand.randf() * TAU
-		var r := 58 + b.rand.randf() * 55
-		var x := 6 + cos(ang) * r
-		var z := -10 + sin(ang) * r
+		var r := 118 + b.rand.randf() * 70
+		var x := -40 + cos(ang) * r * 1.2
+		var z := -5 + sin(ang) * r
+		if z > 60 and x > -40:
+			continue          # the airport and the bay to the south-east stay open
 		var w := 5 + b.rand.randf() * 9
 		var d := 5 + b.rand.randf() * 9
 		var h := 8 + b.rand.randf() * 22
@@ -743,31 +750,31 @@ static func horizon(b: LevelBuilder) -> void:
 			"parent": P + "/Skyline", "name": "Distant", "cast_shadow": false})
 		m.set_instance_shader_parameter("emission_scale", 0.4 + b.rand.randf() * 0.6)
 	# a flat for the streets and the harbour so the distance is never a void
-	b.box(-160, 180, -2.4, -2.0, -180, 160, c8(0x5f5a52), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Ground", "cast_shadow": false})
+	b.box(-320, 320, -2.4, -2.0, -320, 320, c8(0x5f5a52), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Ground", "cast_shadow": false})
 	var water := StandardMaterial3D.new()
 	water.albedo_color = c8(0x4a6a7a)
 	water.roughness = 0.08
 	water.metallic_specular = 0.9
-	b.box(60, 200, -2.2, -1.9, 40, 180, c8(0x4a6a7a), {"band": 1.5, "material": water, "parent": P, "name": "Harbour", "cast_shadow": false})
-	# Kai Tak's runway, reaching out into the harbour
-	b.box(70, 160, -1.9, -1.8, 60, 72, c8(0x6a6a66), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Runway", "cast_shadow": false})
-	for k in 20:
-		var x := 72 + k * 4.4
-		b.box(x, x + 2.0, -1.8, -1.78, 65.8, 66.2, c8(0xe8e8e0), {"band": 1.5, "material": b.emissive(Color(1, 0.98, 0.9), 1.5, false), "parent": P + "/Runway", "name": "Centreline", "cast_shadow": false})
+	# Kowloon Bay, south-east, with Kai Tak's runway reaching into it
+	b.box(20, 320, -2.2, -1.9, 150, 320, c8(0x4a6a7a), {"band": 1.5, "material": water, "parent": P, "name": "Harbour", "cast_shadow": false})
+	b.box(40, 230, -1.9, -1.8, 158, 172, c8(0x6a6a66), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Runway", "cast_shadow": false})
+	for k in 40:
+		var x := 44 + k * 4.6
+		b.box(x, x + 2.0, -1.8, -1.78, 164.8, 165.2, c8(0xe8e8e0), {"band": 1.5, "material": b.emissive(Color(1, 0.98, 0.9), 1.5, false), "parent": P + "/Runway", "name": "Centreline", "cast_shadow": false})
 	# hills to the north, Lion Rock among them
 	var hills_mat := b.card_material("res://assets/textures/props/hills_north.png", 0.0, true)
 	for k in 3:
 		var q := QuadMesh.new()
-		q.size = Vector2(260, 48)
-		b.piece(q, Vector3(-60 + k * 120, 16, -150 - k * 6), hills_mat, {"band": 1.5, "parent": P, "name": "Hills", "cast_shadow": false})
-	# the checkerboard on the hill to the west
+		q.size = Vector2(420, 78)
+		b.piece(q, Vector3(-150 + k * 190, 28, -236 - k * 6), hills_mat, {"band": 1.5, "parent": P, "name": "Hills", "cast_shadow": false})
+	# the checkerboard on the hill to the west, where the jets turned in
 	var hill := CylinderMesh.new()
-	hill.top_radius = 6
-	hill.bottom_radius = 26
-	hill.height = 26
+	hill.top_radius = 8
+	hill.bottom_radius = 34
+	hill.height = 34
 	hill.radial_segments = 14
-	b.piece(hill, Vector3(-110, 10, -30), b.surface("concrete"), {"band": 1.5, "parent": P, "name": "CheckerboardHill", "tint": c8(0x6f8a66), "cast_shadow": false})
-	b.card("res://assets/textures/props/checkerboard.png", Vector3(-95.5, 12, -30), Vector2(10, 10), Vector3(1, 0, 0),
+	b.piece(hill, Vector3(-235, 14, -40), b.surface("concrete"), {"band": 1.5, "parent": P, "name": "CheckerboardHill", "tint": c8(0x6f8a66), "cast_shadow": false})
+	b.card("res://assets/textures/props/checkerboard.png", Vector3(-215.5, 17, -40), Vector2(13, 13), Vector3(1, 0, 0),
 		{"band": 1.5, "parent": P, "name": "Checkerboard", "unshaded": false})
 
 

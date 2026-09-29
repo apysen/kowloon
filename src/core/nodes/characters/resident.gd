@@ -84,6 +84,9 @@ func fade(dir: String, on_done := Callable()) -> void:
 
 func set_carrying(v: bool) -> void:
 	_carrying = v
+	# standing still: change pose now (walking picks it up on the next step)
+	if _walk_to == null:
+		sprite.play("carry_idle" if v else idle_anim)
 
 
 func face_toward(p: Vector3, hold := 3.0) -> void:
