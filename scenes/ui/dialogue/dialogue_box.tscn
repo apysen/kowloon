@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/core/nodes/ui/dialogue_box.gd" id="1_1tmw4"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Regular.ttf" id="2_0vlka"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="3_v4j6w"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexMono-Regular.ttf" id="4_sk683"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4mh62"]
+content_margin_left = 28.0
+content_margin_top = 24.0
+content_margin_right = 28.0
+content_margin_bottom = 30.0
+bg_color = Color(0.085, 0.078, 0.1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9098039, 0.6901961, 0.2901961, 0.6)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 18
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wsx3j"]
+content_margin_left = 12.0
+content_margin_top = 3.0
+content_margin_right = 12.0
+content_margin_bottom = 3.0
+bg_color = Color(0.9098039, 0.6901961, 0.2901961, 1)
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 6
+
+[sub_resource type="FontVariation" id="FontVariation_7t60p"]
+base_font = ExtResource("3_v4j6w")
+spacing_glyph = 2
+
+[sub_resource type="FontVariation" id="FontVariation_anixr"]
+base_font = ExtResource("4_sk683")
+spacing_glyph = 1
+
+[node name="DialogueBox" type="Control" unique_id=758794720]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_1tmw4")
+
+[node name="Box" type="Control" parent="." unique_id=2073065378]
+anchors_preset = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -360.0
+offset_top = -150.0
+offset_right = 360.0
+offset_bottom = -28.0
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Box" unique_id=1970355126]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4mh62")
+
+[node name="Text" type="Label" parent="Box/Panel" unique_id=103001042]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/line_spacing = 5
+theme_override_fonts/font = ExtResource("2_0vlka")
+theme_override_font_sizes/font_size = 19
+theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
+autowrap_mode = 3
+
+[node name="SpeakerTag" type="PanelContainer" parent="Box" unique_id=1902285475]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 22.0
+offset_top = -14.0
+offset_right = 22.0
+offset_bottom = -14.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wsx3j")
+
+[node name="Speaker" type="Label" parent="Box/SpeakerTag" unique_id=278199116]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_7t60p")
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.101960786, 0.078431375, 0.0627451, 1)
+
+[node name="Nudge" type="Label" parent="Box" unique_id=1256151173]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -24.0
+offset_right = -18.0
+offset_bottom = -8.0
+theme_override_fonts/font = SubResource("FontVariation_anixr")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
+text = "SPACE"

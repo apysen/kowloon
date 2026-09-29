@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/core/nodes/ui/scrapbook_panel.gd" id="1_otyc0"]
+[ext_resource type="Texture2D" path="res://assets/textures/props/paper.png" id="2_ejh3x"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="3_4mxfg"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="4_mlu0o"]
+[ext_resource type="FontFile" path="res://assets/fonts/Caveat.ttf" id="5_qj3i1"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ip47x"]
+content_margin_left = 44.0
+content_margin_top = 28.0
+content_margin_right = 44.0
+content_margin_bottom = 40.0
+texture = ExtResource("2_ejh3x")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[sub_resource type="FontVariation" id="FontVariation_pdhru"]
+base_font = ExtResource("3_4mxfg")
+spacing_glyph = 4
+
+[node name="Scrapbook" type="Control" unique_id=411252727]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_otyc0")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1513815848]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.03, 0.035, 0.043, 0.78)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=143101751]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Page" type="PanelContainer" parent="Center" unique_id=1559666756]
+custom_minimum_size = Vector2(860, 480)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ip47x")
+
+[node name="Column" type="VBoxContainer" parent="Center/Page" unique_id=341075353]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Header" type="HBoxContainer" parent="Center/Page/Column" unique_id=1208134678]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Center/Page/Column/Header" unique_id=96788634]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = SubResource("FontVariation_pdhru")
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
+text = "PROJECT KOWLOON"
+
+[node name="Close" type="RichTextLabel" parent="Center/Page/Column/Header" unique_id=850471361]
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("4_mlu0o")
+theme_override_font_sizes/normal_font_size = 13
+theme_override_colors/default_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
+bbcode_enabled = true
+text = "[font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=12][color=#2a2420] TAB [/color][/font_size][/font] close"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Rule" type="ColorRect" parent="Center/Page/Column" unique_id=1343206215]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.84705883, 0.8, 0.6901961, 1)
+
+[node name="Empty" type="Label" parent="Center/Page/Column" unique_id=1978255250]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_qj3i1")
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
+text = "Empty pages. Grandfather's camera is still full of film."
+horizontal_alignment = 1
+
+[node name="Entries" type="GridContainer" parent="Center/Page/Column" unique_id=1513296695]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 36
+theme_override_constants/v_separation = 40
+columns = 2

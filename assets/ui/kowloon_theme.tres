@@ -1,0 +1,54 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="1_5xgnl"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="2_v42cx"]
+
+[sub_resource type="FontVariation" id="FontVariation_5xgnl"]
+base_font = ExtResource("1_5xgnl")
+spacing_glyph = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v42cx"]
+content_margin_left = 26.0
+content_margin_top = 10.0
+content_margin_right = 26.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9098039, 0.6901961, 0.2901961, 0.14)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9098039, 0.6901961, 0.2901961, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0q8b"]
+content_margin_left = 26.0
+content_margin_top = 10.0
+content_margin_right = 26.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9098039, 0.6901961, 0.2901961, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[resource]
+default_font = ExtResource("2_v42cx")
+default_font_size = 16
+Button/colors/font_color = Color(0.9098039, 0.6901961, 0.2901961, 1)
+Button/colors/font_focus_color = Color(0.9529412, 0.827451, 0.5568628, 1)
+Button/colors/font_hover_color = Color(0.9529412, 0.827451, 0.5568628, 1)
+Button/font_sizes/font_size = 15
+Button/fonts/font = SubResource("FontVariation_5xgnl")
+Button/styles/focus = SubResource("StyleBoxFlat_v42cx")
+Button/styles/hover = SubResource("StyleBoxFlat_v42cx")
+Button/styles/normal = SubResource("StyleBoxFlat_m0q8b")
+Button/styles/pressed = SubResource("StyleBoxFlat_v42cx")
+Label/colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)

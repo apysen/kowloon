@@ -1,0 +1,81 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/core/nodes/ui/ending_screen.gd" id="1_7fnhb"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexMono-Regular.ttf" id="2_w35tp"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="3_jb371"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="4_vojy4"]
+
+[sub_resource type="FontVariation" id="FontVariation_jiohm"]
+base_font = ExtResource("2_w35tp")
+spacing_glyph = 4
+
+[sub_resource type="FontVariation" id="FontVariation_fg610"]
+base_font = ExtResource("3_jb371")
+spacing_glyph = 8
+
+[sub_resource type="FontVariation" id="FontVariation_yojxy"]
+base_font = ExtResource("4_vojy4")
+spacing_glyph = 5
+
+[node name="Ending" type="Control" unique_id=1633602923]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_7fnhb")
+
+[node name="Black" type="ColorRect" parent="." unique_id=853572298]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1566021140]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Lines" type="VBoxContainer" parent="Center" unique_id=1340757153]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Days" type="Label" parent="Center/Lines" unique_id=438125331]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_jiohm")
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
+text = "30 DAYS UNTIL WE LEAVE"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Center/Lines" unique_id=708067030]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_fg610")
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
+text = "PROJECT KOWLOON"
+horizontal_alignment = 1
+
+[node name="Sub" type="Label" parent="Center/Lines" unique_id=1592943906]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_yojxy")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
+text = "VERTICAL SLICE COMPLETE"
+horizontal_alignment = 1
+
+[node name="Replay" type="RichTextLabel" parent="Center/Lines" unique_id=474373788]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("4_vojy4")
+theme_override_font_sizes/normal_font_size = 14
+theme_override_colors/default_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
+bbcode_enabled = true
+text = "[center]Press [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] R [/color][/outline_size][/bgcolor][/font_size][/font]  to play again[/center]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

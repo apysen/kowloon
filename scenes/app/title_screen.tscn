@@ -1,0 +1,166 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/core/nodes/ui/title_screen.gd" id="1_0v3x5"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="2_lcxjy"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="3_6gu6j"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Regular.ttf" id="4_wsmxf"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="5_qyrho"]
+
+[sub_resource type="Gradient" id="Gradient_83its"]
+colors = PackedColorArray(0.9098039, 0.6901961, 0.2901961, 0.16, 0.9098039, 0.6901961, 0.2901961, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pm3ky"]
+gradient = SubResource("Gradient_83its")
+fill = 1
+fill_from = Vector2(0.5, 1.2)
+fill_to = Vector2(0.5, 0.35)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xevb"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_yf5ak"]
+base_font = ExtResource("3_6gu6j")
+spacing_glyph = 5
+
+[sub_resource type="FontVariation" id="FontVariation_y6rpc"]
+base_font = ExtResource("3_6gu6j")
+spacing_glyph = 4
+
+[node name="TitleScreen" type="Control" unique_id=1951207865]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_0v3x5")
+
+[node name="Soot" type="ColorRect" parent="." unique_id=1090766838]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.07058824, 0.078431375, 0.09019608, 1)
+
+[node name="SodiumGlow" type="TextureRect" parent="." unique_id=2027169519]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_pm3ky")
+expand_mode = 1
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1188033971]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Row" type="HBoxContainer" parent="Center" unique_id=1909574926]
+layout_mode = 2
+theme_override_constants/separation = 34
+
+[node name="Seal" type="PanelContainer" parent="Center/Row" unique_id=65014019]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_7xevb")
+
+[node name="Characters" type="VBoxContainer" parent="Center/Row/Seal" unique_id=644733912]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Char" type="Label" parent="Center/Row/Seal/Characters" unique_id=1222880065]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_font_sizes/font_size = 54
+theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
+text = "九"
+horizontal_alignment = 1
+
+[node name="Char2" type="Label" parent="Center/Row/Seal/Characters" unique_id=874665268]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_font_sizes/font_size = 54
+theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
+text = "龍"
+horizontal_alignment = 1
+
+[node name="Char3" type="Label" parent="Center/Row/Seal/Characters" unique_id=1691552374]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_font_sizes/font_size = 54
+theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
+text = "城"
+horizontal_alignment = 1
+
+[node name="Char4" type="Label" parent="Center/Row/Seal/Characters" unique_id=2026451505]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_lcxjy")
+theme_override_font_sizes/font_size = 54
+theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
+text = "寨"
+horizontal_alignment = 1
+
+[node name="Copy" type="VBoxContainer" parent="Center/Row" unique_id=704473795]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 14
+
+[node name="Name" type="Label" parent="Center/Row/Copy" unique_id=351624914]
+layout_mode = 2
+theme_override_constants/line_spacing = -12
+theme_override_fonts/font = SubResource("FontVariation_yf5ak")
+theme_override_font_sizes/font_size = 60
+theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
+text = "PROJECT
+KOWLOON"
+
+[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=1338007911]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=35219316]
+custom_minimum_size = Vector2(38, 6)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.24705882, 0.5254902, 0.81960785, 1)
+
+[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=810602810]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_y6rpc")
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
+text = "THE BLUE PIPE"
+
+[node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=870268702]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_wsmxf")
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
+text = "Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help."
+autowrap_mode = 3
+
+[node name="Begin" type="Button" parent="Center/Row/Copy" unique_id=1377179235]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "BEGIN"
+
+[node name="Controls" type="RichTextLabel" parent="Center/Row/Copy" unique_id=178970689]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("5_qyrho")
+theme_override_font_sizes/normal_font_size = 13
+theme_override_colors/default_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
+bbcode_enabled = true
+text = "[font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] WASD [/color][/outline_size][/bgcolor][/font_size][/font]  move   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] Q [/color][/outline_size][/bgcolor][/font_size][/font] [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] E [/color][/outline_size][/bgcolor][/font_size][/font]  rotate   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] F [/color][/outline_size][/bgcolor][/font_size][/font]  interact   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] C [/color][/outline_size][/bgcolor][/font_size][/font]  camera   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] TAB [/color][/outline_size][/bgcolor][/font_size][/font]  scrapbook   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] G [/color][/outline_size][/bgcolor][/font_size][/font]  graphics   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] F1 [/color][/outline_size][/bgcolor][/font_size][/font]  debug"
+fit_content = true
+scroll_active = false

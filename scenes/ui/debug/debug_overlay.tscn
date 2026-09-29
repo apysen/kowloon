@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexMono-Regular.ttf" id="1_r8urp"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/debug_overlay.gd" id="2_cf7cg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4xynb"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.04, 0.05, 0.05, 0.82)
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="DebugOverlay" type="Label" unique_id=138014276]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 16.0
+offset_right = -16.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_4xynb")
+theme_override_fonts/font = ExtResource("1_r8urp")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.72156864, 0.8784314, 0.7529412, 1)
+script = ExtResource("2_cf7cg")

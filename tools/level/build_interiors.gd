@@ -11,6 +11,9 @@ static func c8(hex: int) -> Color:
 
 
 static func build(b: LevelBuilder) -> void:
+	# the street under everything, so the city never floats over a void
+	b.box(-40, 60, -0.9, -0.35, -60, 30, c8(0x5a5650), {"band": 0.0, "surface": "concrete", "parent": "Structure/Street",
+		"name": "Street", "cast_shadow": false})
 	lighting(b)
 	level_a(b)
 	level_b(b)
@@ -26,20 +29,20 @@ static func build(b: LevelBuilder) -> void:
 static func lighting(b: LevelBuilder) -> void:
 	var A := LevelBuilder.LEVEL_A
 	var B := LevelBuilder.LEVEL_B
-	b.lamp(Vector3(-10, 3.4, -0.5), c8(0xffc47e), 3.2, 11.0, {"name": "ApartmentBulb", "shadow": true})
-	b.lamp(Vector3(-2, 3.6, 0), c8(0xe6f0ff), 2.4, 10.0, {"name": "HallTube", "shadow": true})
-	b.lamp(Vector3(-2, 3.4, 2.6), c8(0xffd08a), 1.8, 7.0, {"name": "MahjongLamp"})
-	b.lamp(Vector3(3, 3.4, -5), c8(0xffd9a0), 2.0, 9.0, {"name": "CorridorBulb", "shadow": true})
-	b.lamp(Vector3(4, 3.6, -12), c8(0xdcf7ec), 3.2, 12.0, {"name": "ClinicTubes", "shadow": true})
-	b.lamp(Vector3(9.3, 3.5, -13.5), c8(0xffe0b0), 1.4, 7.0, {"name": "StairwellBulb"})
-	b.lamp(Vector3(3, B + 3.4, -12), c8(0xffd39a), 2.2, 11.0, {"name": "CorridorBBulb", "shadow": true})
-	b.lamp(Vector3(-5, B + 3.4, -12.5), c8(0xffbf7a), 2.8, 12.0, {"name": "ChanLamp", "shadow": true})
-	b.lamp(Vector3(10, B + 3.4, -13), c8(0xfff0d0), 1.6, 7.0, {"name": "LandingBulb"})
-	b.lamp(Vector3(-5, B + 5.0, -18.5), c8(0xbfd6ff), 1.8, 10.0, {"name": "AirshaftSkylight"})
-	b.lamp(Vector3(27.5, B + 3.4, -12), c8(0xffc07a), 2.8, 12.0, {"name": "WongLamp", "shadow": true})
-	b.lamp(Vector3(30.3, B + 1.6, -15.2), c8(0xff4a3a), 1.0, 4.0, {"name": "WongAltarLamp"})
-	b.lamp(Vector3(18, B + 3.0, -12), c8(0xfff3d6), 1.4, 9.0, {"name": "CatwalkLamp"})
-	b.lamp(Vector3(-12.8, A + 1.5, -1), c8(0xff5a3a), 0.7, 3.5, {"name": "FamilyAltarLamp"})
+	b.lamp(Vector3(-10, 3.4, -0.5), c8(0xffc47e), 5.76, 11.0, {"name": "ApartmentBulb", "shadow": true})
+	b.lamp(Vector3(-2, 3.6, 0), c8(0xe6f0ff), 4.32, 10.0, {"name": "HallTube", "shadow": true})
+	b.lamp(Vector3(-2, 3.4, 2.6), c8(0xffd08a), 3.24, 7.0, {"name": "MahjongLamp"})
+	b.lamp(Vector3(3, 3.4, -5), c8(0xffd9a0), 3.60, 9.0, {"name": "CorridorBulb", "shadow": true})
+	b.lamp(Vector3(4, 3.6, -12), c8(0xdcf7ec), 5.76, 12.0, {"name": "ClinicTubes", "shadow": true})
+	b.lamp(Vector3(9.3, 3.5, -13.5), c8(0xffe0b0), 2.52, 7.0, {"name": "StairwellBulb"})
+	b.lamp(Vector3(3, B + 3.4, -12), c8(0xffd39a), 3.96, 11.0, {"name": "CorridorBBulb", "shadow": true})
+	b.lamp(Vector3(-5, B + 3.4, -12.5), c8(0xffbf7a), 5.04, 12.0, {"name": "ChanLamp", "shadow": true})
+	b.lamp(Vector3(10, B + 3.4, -13), c8(0xfff0d0), 2.88, 7.0, {"name": "LandingBulb"})
+	b.lamp(Vector3(-5, B + 5.0, -18.5), c8(0xbfd6ff), 3.24, 10.0, {"name": "AirshaftSkylight"})
+	b.lamp(Vector3(27.5, B + 3.4, -12), c8(0xffc07a), 5.04, 12.0, {"name": "WongLamp", "shadow": true})
+	b.lamp(Vector3(30.3, B + 1.6, -15.2), c8(0xff4a3a), 1.80, 4.0, {"name": "WongAltarLamp"})
+	b.lamp(Vector3(18, B + 3.0, -12), c8(0xfff3d6), 2.52, 9.0, {"name": "CatwalkLamp"})
+	b.lamp(Vector3(-12.8, A + 1.5, -1), c8(0xff5a3a), 1.26, 3.5, {"name": "FamilyAltarLamp"})
 
 
 # ----------------------------------------------------------------------------- Level A

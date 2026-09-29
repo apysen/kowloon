@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/core/nodes/ui/viewfinder.gd" id="1_gulc3"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexMono-Regular.ttf" id="2_47tfw"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="3_44xna"]
+
+[sub_resource type="Gradient" id="Gradient_kqamm"]
+offsets = PackedFloat32Array(0, 1, 0.52)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.6, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ewvd0"]
+gradient = SubResource("Gradient_kqamm")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="FontVariation" id="FontVariation_1gs6l"]
+base_font = ExtResource("2_47tfw")
+spacing_glyph = 2
+
+[node name="Viewfinder" type="Control" unique_id=288402099]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_gulc3")
+
+[node name="Surround" type="TextureRect" parent="." unique_id=490864329]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_ewvd0")
+expand_mode = 1
+
+[node name="FilmLabel" type="Label" parent="." unique_id=48396665]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -190.0
+offset_top = 22.0
+offset_right = -26.0
+theme_override_fonts/font = SubResource("FontVariation_1gs6l")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.94, 0.9, 0.82, 0.75)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 3
+text = "●  INSTANT FILM"
+horizontal_alignment = 2
+
+[node name="StatusRow" type="CenterContainer" parent="." unique_id=52618973]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
+offset_bottom = -40.0
+mouse_filter = 2
+
+[node name="Status" type="RichTextLabel" parent="StatusRow" unique_id=1148545234]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("3_44xna")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_colors/default_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

@@ -1,0 +1,319 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/core/nodes/slice/slice_root.gd" id="1_pl4ov"]
+[ext_resource type="Script" path="res://src/core/nodes/slice/control_locks.gd" id="2_r6m8p"]
+[ext_resource type="Script" path="res://src/core/nodes/slice/display_settings.gd" id="3_jx6jy"]
+[ext_resource type="Script" path="res://src/core/nodes/quests/quest_director.gd" id="4_l8f7t"]
+[ext_resource type="Script" path="res://src/core/nodes/dialogue/dialogue_director.gd" id="5_fpuqe"]
+[ext_resource type="Script" path="res://src/core/nodes/interaction/interaction_director.gd" id="6_4l7x5"]
+[ext_resource type="Script" path="res://src/core/nodes/photography/photography_director.gd" id="7_ufl0c"]
+[ext_resource type="Script" path="res://src/core/nodes/scrapbook/scrapbook.gd" id="8_g86m5"]
+[ext_resource type="Script" path="res://src/core/nodes/audio/audio_zones.gd" id="9_g17fj"]
+[ext_resource type="Shader" path="res://assets/shaders/sky.gdshader" id="10_imgjp"]
+[ext_resource type="Texture2D" path="res://assets/textures/props/sky_golden.png" id="11_vn12j"]
+[ext_resource type="Script" path="res://src/core/nodes/world/world.gd" id="12_g3wha"]
+[ext_resource type="Resource" path="res://data/level/level_data.tres" id="13_5u5fl"]
+[ext_resource type="PackedScene" path="res://scenes/slice/level.tscn" id="14_y5rdn"]
+[ext_resource type="Script" path="res://src/core/nodes/player/player.gd" id="15_civo7"]
+[ext_resource type="Script" path="res://src/core/nodes/characters/character_sprite.gd" id="16_sqm58"]
+[ext_resource type="Script" path="res://src/core/nodes/camera/camera_rig.gd" id="17_kmixl"]
+[ext_resource type="Script" path="res://src/core/nodes/photography/photo_studio.gd" id="18_101cl"]
+[ext_resource type="Shader" path="res://assets/shaders/screen_fx.gdshader" id="19_celif"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/hud.tscn" id="20_rrvx7"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/hud.gd" id="21_1jhfo"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialogue/dialogue_box.tscn" id="22_p1cip"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/dialogue_box.gd" id="23_pyqu2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/photo/viewfinder.tscn" id="24_vkw6f"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/viewfinder.gd" id="25_mvwte"]
+[ext_resource type="PackedScene" path="res://scenes/ui/photo/polaroid.tscn" id="26_ssr5s"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/polaroid_view.gd" id="27_54ss6"]
+[ext_resource type="PackedScene" path="res://scenes/ui/scrapbook/scrapbook.tscn" id="28_hsukk"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/scrapbook_panel.gd" id="29_0kbwx"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/screen_fade.gd" id="30_ump61"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menus/ending.tscn" id="31_ntbkg"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/ending_screen.gd" id="32_gjwfr"]
+[ext_resource type="PackedScene" path="res://scenes/ui/debug/debug_overlay.tscn" id="33_qiyod"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexMono-Regular.ttf" id="34_g8as2"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/debug_overlay.gd" id="35_5e5dd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cu6rh"]
+shader = ExtResource("10_imgjp")
+shader_parameter/panorama = ExtResource("11_vn12j")
+shader_parameter/interior_color = null
+shader_parameter/roof_mix = null
+shader_parameter/exposure = null
+
+[sub_resource type="Sky" id="Sky_ftfsg"]
+sky_material = SubResource("ShaderMaterial_cu6rh")
+radiance_size = 2
+
+[sub_resource type="Environment" id="Environment_c1ypt"]
+background_mode = 2
+sky = SubResource("Sky_ftfsg")
+ambient_light_source = 2
+ambient_light_color = Color(0.46, 0.44, 0.42, 1)
+ambient_light_energy = 0.55
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_exposure = 1.25
+tonemap_white = 6.0
+ssao_enabled = true
+ssao_radius = 1.1
+ssao_intensity = 1.8
+ssao_power = 1.4
+ssil_enabled = true
+ssil_radius = 3.0
+ssil_intensity = 0.6
+glow_enabled = true
+glow_levels/3 = 1.0
+glow_levels/4 = 0.8
+glow_levels/5 = 0.5
+glow_intensity = 0.9
+glow_bloom = 0.06
+glow_blend_mode = 2
+glow_hdr_threshold = 0.95
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.125, 0.11, 0.1, 1)
+fog_density = 1.0
+fog_sky_affect = 0.0
+fog_depth_curve = 1.2
+fog_depth_begin = 27.0
+fog_depth_end = 55.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.018
+volumetric_fog_albedo = Color(0.92, 0.84, 0.74, 1)
+volumetric_fog_anisotropy = 0.55
+volumetric_fog_length = 48.0
+volumetric_fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_contrast = 1.03
+adjustment_saturation = 1.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgxoc"]
+shader = ExtResource("19_celif")
+shader_parameter/tilt_shift = null
+shader_parameter/focus = null
+shader_parameter/range = null
+shader_parameter/amount = null
+shader_parameter/vignette = null
+shader_parameter/grain = null
+shader_parameter/warmth = null
+shader_parameter/saturation = null
+shader_parameter/time = null
+shader_parameter/fade_black = null
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4xynb"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.04, 0.05, 0.05, 0.82)
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="SliceRoot" type="Node3D" unique_id=717152305 node_paths=PackedStringArray("locks", "display", "quests", "dialogue", "interaction", "photography", "scrapbook", "audio", "world", "player", "cam", "hud", "fade", "ending", "debug", "screen_fx")]
+script = ExtResource("1_pl4ov")
+locks = NodePath("GameplayComponents/ControlLocks")
+display = NodePath("GameplayComponents/DisplaySettings")
+quests = NodePath("GameplayComponents/QuestDirector")
+dialogue = NodePath("GameplayComponents/DialogueDirector")
+interaction = NodePath("GameplayComponents/InteractionDirector")
+photography = NodePath("GameplayComponents/PhotographyDirector")
+scrapbook = NodePath("GameplayComponents/Scrapbook")
+audio = NodePath("GameplayComponents/AudioZones")
+world = NodePath("World")
+player = NodePath("Player")
+cam = NodePath("CameraRig")
+hud = NodePath("Interface/Hud")
+fade = NodePath("Interface/Fade")
+ending = NodePath("Interface/Ending")
+debug = NodePath("Interface/DebugOverlay")
+screen_fx = NodePath("PostProcess/ScreenFX")
+
+[node name="GameplayComponents" type="Node" parent="." unique_id=838214520]
+
+[node name="ControlLocks" type="Node" parent="GameplayComponents" unique_id=1495064522]
+script = ExtResource("2_r6m8p")
+
+[node name="DisplaySettings" type="Node" parent="GameplayComponents" unique_id=834847699 node_paths=PackedStringArray("environment", "sun", "screen_fx")]
+script = ExtResource("3_jx6jy")
+environment = NodePath("../../WorldEnvironment")
+sun = NodePath("../../Sun")
+screen_fx = NodePath("../../PostProcess/ScreenFX")
+
+[node name="QuestDirector" type="Node" parent="GameplayComponents" unique_id=327687071 node_paths=PackedStringArray("slice")]
+script = ExtResource("4_l8f7t")
+slice = NodePath("../..")
+
+[node name="DialogueDirector" type="Node" parent="GameplayComponents" unique_id=1184425090 node_paths=PackedStringArray("locks", "box", "audio")]
+script = ExtResource("5_fpuqe")
+locks = NodePath("../ControlLocks")
+box = NodePath("../../Interface/DialogueBox")
+audio = NodePath("../AudioZones")
+
+[node name="InteractionDirector" type="Node" parent="GameplayComponents" unique_id=1972235098 node_paths=PackedStringArray("player", "locks")]
+script = ExtResource("6_4l7x5")
+player = NodePath("../../Player")
+locks = NodePath("../ControlLocks")
+
+[node name="PhotographyDirector" type="Node" parent="GameplayComponents" unique_id=2096544541 node_paths=PackedStringArray("locks", "cam", "player", "viewfinder", "polaroid", "fade", "hud", "audio", "studio")]
+script = ExtResource("7_ufl0c")
+locks = NodePath("../ControlLocks")
+cam = NodePath("../../CameraRig")
+player = NodePath("../../Player")
+viewfinder = NodePath("../../Interface/Viewfinder")
+polaroid = NodePath("../../Interface/Polaroid")
+fade = NodePath("../../Interface/Fade")
+hud = NodePath("../../Interface/Hud")
+audio = NodePath("../AudioZones")
+studio = NodePath("../../PhotoStudio")
+
+[node name="Scrapbook" type="Node" parent="GameplayComponents" unique_id=1920430070 node_paths=PackedStringArray("locks", "panel", "photography", "studio")]
+script = ExtResource("8_g86m5")
+locks = NodePath("../ControlLocks")
+panel = NodePath("../../Interface/Scrapbook")
+photography = NodePath("../PhotographyDirector")
+studio = NodePath("../../PhotoStudio")
+
+[node name="AudioZones" type="Node" parent="GameplayComponents" unique_id=316367327]
+script = ExtResource("9_g17fj")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1554537452]
+environment = SubResource("Environment_c1ypt")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=942049917]
+transform = Transform3D(0.6507914, 0.5818991, -0.48771307, 0, 0.64235604, 0.76640636, 0.7592566, -0.49877068, 0.4180398, -14, 22, 12)
+light_color = Color(1, 0.94, 0.85, 1)
+light_energy = 0.3
+light_volumetric_fog_energy = 1.5
+light_angular_distance = 0.8
+shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 1.0
+shadow_blur = 1.2
+directional_shadow_mode = 1
+directional_shadow_max_distance = 34.0
+
+[node name="World" type="Node3D" parent="." unique_id=1741609044 node_paths=PackedStringArray("level", "environment", "sun")]
+script = ExtResource("12_g3wha")
+level = NodePath("Level")
+level_data = ExtResource("13_5u5fl")
+environment = NodePath("../WorldEnvironment")
+sun = NodePath("../Sun")
+
+[node name="Level" type="Node3D" parent="World" unique_id=1386129799 instance=ExtResource("14_y5rdn")]
+
+[node name="Player" type="Node3D" parent="." unique_id=1874887094 node_paths=PackedStringArray("locks", "cam")]
+script = ExtResource("15_civo7")
+locks = NodePath("../GameplayComponents/ControlLocks")
+cam = NodePath("../CameraRig")
+
+[node name="Sprite" type="Node3D" parent="Player" unique_id=1071549150]
+script = ExtResource("16_sqm58")
+show_silhouette = true
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=564544391 node_paths=PackedStringArray("locks")]
+script = ExtResource("17_kmixl")
+locks = NodePath("../GameplayComponents/ControlLocks")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=308449618]
+current = true
+
+[node name="PhotoStudio" type="SubViewport" parent="." unique_id=1951072169 node_paths=PackedStringArray("world")]
+script = ExtResource("18_101cl")
+world = NodePath("../World")
+
+[node name="Camera3D" type="Camera3D" parent="PhotoStudio" unique_id=1076289881]
+
+[node name="PostProcess" type="CanvasLayer" parent="." unique_id=1818432140]
+layer = 0
+
+[node name="ScreenFX" type="ColorRect" parent="PostProcess" unique_id=752559032]
+material = SubResource("ShaderMaterial_bgxoc")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Interface" type="CanvasLayer" parent="." unique_id=261362257]
+
+[node name="Hud" type="Control" parent="Interface" unique_id=1105834151 instance=ExtResource("20_rrvx7")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("21_1jhfo")
+
+[node name="DialogueBox" type="Control" parent="Interface" unique_id=758794720 instance=ExtResource("22_p1cip")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("23_pyqu2")
+
+[node name="Viewfinder" type="Control" parent="Interface" unique_id=288402099 instance=ExtResource("24_vkw6f")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("25_mvwte")
+
+[node name="Flash" type="ColorRect" parent="Interface" unique_id=49573327]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 0.98, 0.94, 0)
+
+[node name="Polaroid" type="Control" parent="Interface" unique_id=1214306247 instance=ExtResource("26_ssr5s")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("27_54ss6")
+
+[node name="Scrapbook" type="Control" parent="Interface" unique_id=411252727 instance=ExtResource("28_hsukk")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("29_0kbwx")
+
+[node name="Fade" type="ColorRect" parent="Interface" unique_id=1461801742]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("30_ump61")
+
+[node name="Ending" type="Control" parent="Interface" unique_id=1633602923 instance=ExtResource("31_ntbkg")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("32_gjwfr")
+
+[node name="DebugOverlay" type="Label" parent="Interface" unique_id=138014276 instance=ExtResource("33_qiyod")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 16.0
+offset_right = -16.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_4xynb")
+theme_override_fonts/font = ExtResource("34_g8as2")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.72156864, 0.8784314, 0.7529412, 1)
+script = ExtResource("35_5e5dd")
