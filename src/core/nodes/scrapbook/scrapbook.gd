@@ -17,9 +17,27 @@ func add(id: String) -> void:
 		entries.append(id)
 
 
+## A photograph just kept: it goes straight into the album, taped onto its
+## page while the player watches, and the album shuts again.
+func file_photo(id: String) -> void:
+	add(id)
+	if open or panel.busy:
+		return
+	open = true
+	locks.lock("scrapbook")
+	var polaroid := photography.polaroid
+	var from := polaroid.card.get_global_rect()
+	polaroid.visible = false
+	panel.visible = true
+	await panel.file_photo(entries, photography.photos, id, from)
+	panel.visible = false
+	open = false
+	locks.unlock("scrapbook")
+
+
 func toggle(force: Variant = null) -> void:
 	var next: bool = (not open) if force == null else bool(force)
-	if next == open:
+	if next == open or panel.busy:
 		return
 	if next and locks.is_locked():
 		return
@@ -30,10 +48,9 @@ func toggle(force: Variant = null) -> void:
 		for id in entries:
 			if not photography.photos.has(id):
 				photography.photos[id] = await studio.shoot(id)
-		panel.render(entries, photography.photos)
 		panel.visible = true
-		panel.modulate.a = 0.0
-		create_tween().tween_property(panel, "modulate:a", 1.0, 0.25)
+		await panel.open_book(entries, photography.photos)
 	else:
+		await panel.close_book()
 		panel.visible = false
 		locks.unlock("scrapbook")

@@ -781,7 +781,7 @@ func _on_subject_locked(id: String) -> void:
 
 
 func _on_photo_kept(id: String) -> void:
-	scrapbook.add(id)
+	await scrapbook.file_photo(id)
 	if id == "lau":
 		say("lau_after_photo", func() -> void:
 			set_stage(S.LAU_PHOTO)

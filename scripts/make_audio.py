@@ -314,6 +314,57 @@ def click_ui():
     save("camera_up", click(2200, 0.02, 2) + np.pad(click(1400, 0.03, 2), (int(0.04 * SR), 0))[:int(0.02 * SR)], 0.5)
 
 
+def album():
+    """The scrapbook: a stiff album page turning, the cover opening, the book shut."""
+    # a page: a soft swish of paper, rising and falling, with a crackle as it lifts and lands
+    secs = 0.5
+    n = int(secs * SR)
+    swish = biquad(rng.standard_normal(n), "band", 2600, 0.6)
+    t = t_axis(secs)
+    shape = np.sin(np.pi * np.clip(t / secs, 0, 1)) ** 1.6
+    x = swish * shape * 0.5
+    for at in (0.03, 0.06, 0.41, 0.44):
+        c = click(3000 + rng.uniform(-500, 500), 0.012, 1.5) * 0.35
+        i = int(at * SR)
+        x[i:i + len(c)] += c[:len(x) - i]
+    save("page_flip", x, 0.45)
+    # the cover: the board lifting off the pages, the spine giving a little
+    secs = 0.7
+    n = int(secs * SR)
+    x = biquad(rng.standard_normal(n), "band", 1400, 0.7) * np.sin(np.pi * np.clip(t_axis(secs) / secs, 0, 1)) ** 2 * 0.35
+    cr = biquad(tone(95, 0.25, "saw"), "band", 700, 2.0) * env(int(0.25 * SR), 0.03, 0.12) * 0.25
+    x[:len(cr)] += cr
+    thud = tone(70, 0.18, "sine") * env(int(0.18 * SR), 0.002, 0.15)
+    i = int(0.55 * SR)
+    x[i:i + len(thud)] += thud[:len(x) - i] * 0.8
+    save("book_open", x, 0.5)
+    # shut: a push of air and a soft thump of board on board
+    secs = 0.5
+    n = int(secs * SR)
+    x = biquad(rng.standard_normal(n), "low", 900) * env(n, 0.2, 0.3) * 0.3
+    thud = tone(62, 0.22, "sine") * env(int(0.22 * SR), 0.002, 0.2)
+    knock = click(420, 0.04, 1.0) * 0.5
+    thud[:len(knock)] += knock
+    i = int(0.24 * SR)
+    x[i:i + len(thud)] += thud[:len(x) - i]
+    save("book_close", x, 0.6)
+    # tape: pulled off the roll and pressed down
+    secs = 0.22
+    n = int(secs * SR)
+    rip = biquad(rng.standard_normal(n), "high", 2200) * env(n, 0.005, 0.12, 1.2)
+    grain = np.where(rng.random(n) > 0.985, rng.standard_normal(n) * 2.0, 0.0)
+    x = rip * 0.5 + biquad(grain, "band", 3500, 1.0) * env(n, 0.0, 0.1)
+    save("tape_press", x, 0.4)
+    # a pen on paper: short scratchy strokes
+    secs = 1.1
+    n = int(secs * SR)
+    t = t_axis(secs)
+    strokes = (np.sin(2 * np.pi * 5.5 * t + 1.3 * np.sin(2 * np.pi * 1.7 * t)) > -0.2).astype(float)
+    strokes = fast_lowpass(strokes, 40)
+    x = biquad(rng.standard_normal(n), "band", 4200, 1.4) * strokes * env(n, 0.03, 0.1)
+    save("pen_scribble", x, 0.28)
+
+
 def plane():
     """A four-engined jet low over Kowloon City on its approach to Kai Tak."""
     secs = 7.5
@@ -356,3 +407,4 @@ if __name__ == "__main__":
     blip()
     click_ui()
     plane()
+    album()

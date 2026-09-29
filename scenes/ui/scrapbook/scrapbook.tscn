@@ -1,94 +1,194 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://src/core/nodes/ui/scrapbook_panel.gd" id="1_otyc0"]
-[ext_resource type="Texture2D" path="res://assets/textures/props/paper.png" id="2_ejh3x"]
-[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-SemiBold.ttf" id="3_4mxfg"]
-[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="4_mlu0o"]
-[ext_resource type="FontFile" path="res://assets/fonts/Caveat.ttf" id="5_qj3i1"]
+[ext_resource type="Script" path="res://src/core/nodes/ui/scrapbook_panel.gd" id="1_rx543"]
+[ext_resource type="Texture2D" path="res://assets/textures/props/album_cloth.png" id="2_otyc0"]
+[ext_resource type="Shader" path="res://assets/shaders/page_leaf.gdshader" id="3_ejh3x"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansCondensed-Medium.ttf" id="4_4mxfg"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ip47x"]
-content_margin_left = 44.0
-content_margin_top = 28.0
-content_margin_right = 44.0
-content_margin_bottom = 40.0
-texture = ExtResource("2_ejh3x")
-axis_stretch_horizontal = 1
-axis_stretch_vertical = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlu0o"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12, 0.03, 0.04, 1)
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 28
+shadow_offset = Vector2(0, 12)
 
-[sub_resource type="FontVariation" id="FontVariation_pdhru"]
-base_font = ExtResource("3_4mxfg")
-spacing_glyph = 4
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qj3i1"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12, 0.03, 0.04, 1)
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 28
+shadow_offset = Vector2(0, 12)
 
-[node name="Scrapbook" type="Control" unique_id=157725622]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ip47x"]
+shader = ExtResource("3_ejh3x")
+shader_parameter/angle = null
+shader_parameter/leaf_px = Vector2(400, 540)
+shader_parameter/rect_px = Vector2(1200, 864)
+shader_parameter/eye = null
+shader_parameter/shadow_strength = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pdhru"]
+shader = ExtResource("3_ejh3x")
+shader_parameter/angle = null
+shader_parameter/leaf_px = Vector2(414, 568)
+shader_parameter/rect_px = Vector2(1242, 908.8)
+shader_parameter/eye = null
+shader_parameter/shadow_strength = null
+
+[node name="Scrapbook" type="Control" unique_id=273678610]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 2
-script = ExtResource("1_otyc0")
+script = ExtResource("1_rx543")
 
-[node name="Dim" type="ColorRect" parent="." unique_id=604132975]
+[node name="Dim" type="ColorRect" parent="." unique_id=1199524642]
+unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-color = Color(0.03, 0.035, 0.043, 0.78)
+color = Color(0.03, 0.035, 0.043, 0.8)
 
-[node name="Center" type="CenterContainer" parent="." unique_id=927459662]
+[node name="Book" type="Control" parent="." unique_id=1007603154]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -10.0
+offset_bottom = -10.0
+mouse_filter = 2
+
+[node name="ShadowRight" type="Panel" parent="Book" unique_id=1538480044]
 layout_mode = 0
-anchor_right = 1.0
+offset_top = -284.0
+offset_right = 414.0
+offset_bottom = 284.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mlu0o")
+
+[node name="BoardLeft" type="Control" parent="Book" unique_id=494372608]
+unique_name_in_owner = true
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="ShadowLeft" type="Panel" parent="Book/BoardLeft" unique_id=324340320]
+layout_mode = 0
+offset_left = -414.0
+offset_top = -284.0
+offset_bottom = 284.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qj3i1")
+
+[node name="ClothLeft" type="TextureRect" parent="Book/BoardLeft" unique_id=2068213231]
+layout_mode = 0
+offset_left = -414.0
+offset_top = -284.0
+offset_bottom = 284.0
+mouse_filter = 2
+texture = ExtResource("2_otyc0")
+expand_mode = 1
+
+[node name="ClothRight" type="TextureRect" parent="Book" unique_id=21850835]
+layout_mode = 0
+offset_top = -284.0
+offset_right = 414.0
+offset_bottom = 284.0
+mouse_filter = 2
+texture = ExtResource("2_otyc0")
+expand_mode = 1
+
+[node name="Spine" type="ColorRect" parent="Book" unique_id=1470488019]
+layout_mode = 0
+offset_left = -4.0
+offset_top = -284.0
+offset_right = 4.0
+offset_bottom = 284.0
+mouse_filter = 2
+color = Color(0.2, 0.05, 0.06, 1)
+
+[node name="PageLeft" type="TextureRect" parent="Book" unique_id=2062013654]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -400.0
+offset_top = -270.0
+offset_bottom = 270.0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="PageRight" type="TextureRect" parent="Book" unique_id=412518769]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = -270.0
+offset_right = 400.0
+offset_bottom = 270.0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="PageLeaf" type="ColorRect" parent="Book" unique_id=428779877]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_ip47x")
+layout_mode = 0
+offset_left = -600.0
+offset_top = -432.0
+offset_right = 600.0
+offset_bottom = 432.0
+mouse_filter = 2
+
+[node name="CoverLeaf" type="ColorRect" parent="Book" unique_id=1262412657]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_pdhru")
+layout_mode = 0
+offset_left = -621.0
+offset_top = -454.4
+offset_right = 621.0
+offset_bottom = 454.4
+mouse_filter = 2
+
+[node name="Viewports" type="Node" parent="." unique_id=1553433631]
+unique_name_in_owner = true
+
+[node name="Hint" type="RichTextLabel" parent="." unique_id=2146998636]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(720, 0)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -360.0
+offset_top = -52.0
+offset_right = 360.0
+offset_bottom = -28.0
 mouse_filter = 2
-
-[node name="Page" type="PanelContainer" parent="Center" unique_id=21628023]
-custom_minimum_size = Vector2(860, 480)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_ip47x")
-
-[node name="Column" type="VBoxContainer" parent="Center/Page" unique_id=1436472260]
-layout_mode = 2
-theme_override_constants/separation = 22
-
-[node name="Header" type="HBoxContainer" parent="Center/Page/Column" unique_id=2144130747]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="Center/Page/Column/Header" unique_id=1313331777]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = SubResource("FontVariation_pdhru")
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
-text = "PROJECT KOWLOON"
-
-[node name="Close" type="RichTextLabel" parent="Center/Page/Column/Header" unique_id=16254789]
-layout_mode = 2
-mouse_filter = 2
-theme_override_fonts/normal_font = ExtResource("4_mlu0o")
-theme_override_font_sizes/normal_font_size = 13
-theme_override_colors/default_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
+theme_override_fonts/normal_font = ExtResource("4_4mxfg")
+theme_override_font_sizes/normal_font_size = 14
+theme_override_colors/default_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 bbcode_enabled = true
-text = "[font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=12][color=#2a2420] TAB [/color][/font_size][/font] close"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="Rule" type="ColorRect" parent="Center/Page/Column" unique_id=917588324]
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-color = Color(0.84705883, 0.8, 0.6901961, 1)
-
-[node name="Empty" type="Label" parent="Center/Page/Column" unique_id=557632753]
+[node name="Rustle" type="AudioStreamPlayer" parent="." unique_id=954477222]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_qj3i1")
-theme_override_font_sizes/font_size = 26
-theme_override_colors/font_color = Color(0.3647059, 0.32156864, 0.2784314, 1)
-text = "Empty pages. Grandfather's camera is still full of film."
-horizontal_alignment = 1
-
-[node name="Entries" type="GridContainer" parent="Center/Page/Column" unique_id=304782219]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/h_separation = 36
-theme_override_constants/v_separation = 40
-columns = 2
+volume_db = -4.0

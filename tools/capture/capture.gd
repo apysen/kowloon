@@ -92,6 +92,42 @@ func _run() -> void:
 			_slice.scrapbook.add("lau")
 			_slice.scrapbook.add("ng")
 			await _slice.scrapbook.toggle(true)
+		elif action.begins_with("file="):
+			# file=<id>/<frames>: a kept Polaroid being taped into the album
+			var spec := action.substr(5).split("/")
+			var fid := spec[0]
+			var ph := _slice.photography
+			for prev in ["lau", "ng"]:
+				if prev == fid:
+					break
+				_slice.scrapbook.add(prev)
+				if not ph.photos.has(prev):
+					ph.photos[prev] = await ph.studio.shoot(prev)
+			var ftex: Texture2D = await ph.studio.shoot(fid)
+			ph.photos[fid] = ftex
+			ph.polaroid.present(ftex, ResidentCatalog.entry(fid).get("name", ""))
+			await _frames(30)
+			_slice.scrapbook.file_photo(fid)
+			await _frames(int(spec[1]))
+		elif action.begins_with("book_open/"):
+			# book_open/<frames>: the album partway through opening
+			_slice.scrapbook.add("lau")
+			_slice.scrapbook.add("ng")
+			_slice.scrapbook.toggle(true)
+			await _frames(int(action.substr(10)))
+		elif action.begins_with("book_flip/"):
+			# book_flip/<frames>: open, then partway through turning to the next spread
+			_slice.scrapbook.add("lau")
+			_slice.scrapbook.add("ng")
+			await _slice.scrapbook.toggle(true)
+			_slice.scrapbook.panel.turn(1)
+			await _frames(int(action.substr(10)))
+		elif action.begins_with("book_close/"):
+			_slice.scrapbook.add("lau")
+			_slice.scrapbook.add("ng")
+			await _slice.scrapbook.toggle(true)
+			_slice.scrapbook.toggle(false)
+			await _frames(int(action.substr(11)))
 		elif action.begins_with("face="):
 			var f := action.substr(5).split(",")
 			_slice.player.facing = Vector3(float(f[0]), 0, float(f[1]))
@@ -102,4 +138,8 @@ func _run() -> void:
 		print("captured ", path)
 		if _slice.pause.open:
 			_slice.pause.close()
+		while _slice.scrapbook.panel.busy or _slice.scrapbook.panel._filing:
+			await _frames(1)
+		if _slice.scrapbook.open:
+			await _slice.scrapbook.toggle(false)
 	quit(0)

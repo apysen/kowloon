@@ -134,6 +134,11 @@ func capture() -> void:
 	photos[id] = tex
 	_pending = id
 	await polaroid.present(tex, ResidentCatalog.entry(id).name)
+	# a moment to look at it, then it goes into the album on its own
+	# (Space or F puts it in sooner)
+	await get_tree().create_timer(1.2).timeout
+	if showing_photo and _pending == id:
+		dismiss()
 
 
 func dismiss() -> bool:

@@ -21,9 +21,9 @@ godot --path .
 | WASD / arrows | Move (camera-relative: W is always into the screen) |
 | Q / E | Turn the view 90° |
 | F | Interact / advance dialogue |
-| Space | Advance dialogue, take a photo, keep the Polaroid |
+| Space | Advance dialogue, take a photo (the Polaroid then files itself into the album) |
 | C | Raise / lower the camera (WASD frames the shot) |
-| Tab | Scrapbook |
+| Tab | Open or close the scrapbook album; A / D (or Q / E) turn its pages |
 | Esc | Close the camera or scrapbook; otherwise pause (volume, graphics, quit to title) |
 | G | Graphics: full / fast |
 | F1 or ` | Debug overlay. While it's open: 1–6 teleport, F2 / ] next stage, F3 / [ previous |

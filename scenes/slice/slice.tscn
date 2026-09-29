@@ -119,7 +119,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="SliceRoot" type="Node3D" unique_id=1157876950 node_paths=PackedStringArray("locks", "display", "audio_settings", "quests", "dialogue", "interaction", "photography", "scrapbook", "audio", "world", "player", "cam", "hud", "fade", "ending", "debug", "pause", "screen_fx")]
+[node name="SliceRoot" type="Node3D" unique_id=1284610274 node_paths=PackedStringArray("locks", "display", "audio_settings", "quests", "dialogue", "interaction", "photography", "scrapbook", "audio", "world", "player", "cam", "hud", "fade", "ending", "debug", "pause", "screen_fx")]
 script = ExtResource("1_fpuqe")
 locks = NodePath("GameplayComponents/ControlLocks")
 display = NodePath("GameplayComponents/DisplaySettings")
@@ -140,36 +140,36 @@ debug = NodePath("Interface/DebugOverlay")
 pause = NodePath("Interface/PauseMenu")
 screen_fx = NodePath("PostProcess/ScreenFX")
 
-[node name="GameplayComponents" type="Node" parent="." unique_id=1936833535]
+[node name="GameplayComponents" type="Node" parent="." unique_id=1444641812]
 
-[node name="ControlLocks" type="Node" parent="GameplayComponents" unique_id=666042337]
+[node name="ControlLocks" type="Node" parent="GameplayComponents" unique_id=919944153]
 script = ExtResource("2_4l7x5")
 
-[node name="DisplaySettings" type="Node" parent="GameplayComponents" unique_id=1652644897 node_paths=PackedStringArray("environment", "sun", "screen_fx")]
+[node name="DisplaySettings" type="Node" parent="GameplayComponents" unique_id=972358615 node_paths=PackedStringArray("environment", "sun", "screen_fx")]
 script = ExtResource("3_ufl0c")
 environment = NodePath("../../WorldEnvironment")
 sun = NodePath("../../Sun")
 screen_fx = NodePath("../../PostProcess/ScreenFX")
 
-[node name="AudioSettings" type="Node" parent="GameplayComponents" unique_id=408290257]
+[node name="AudioSettings" type="Node" parent="GameplayComponents" unique_id=1776005829]
 script = ExtResource("4_g86m5")
 
-[node name="QuestDirector" type="Node" parent="GameplayComponents" unique_id=1253994387 node_paths=PackedStringArray("slice")]
+[node name="QuestDirector" type="Node" parent="GameplayComponents" unique_id=1278427124 node_paths=PackedStringArray("slice")]
 script = ExtResource("5_g17fj")
 slice = NodePath("../..")
 
-[node name="DialogueDirector" type="Node" parent="GameplayComponents" unique_id=2137957615 node_paths=PackedStringArray("locks", "box", "audio")]
+[node name="DialogueDirector" type="Node" parent="GameplayComponents" unique_id=2004443713 node_paths=PackedStringArray("locks", "box", "audio")]
 script = ExtResource("6_imgjp")
 locks = NodePath("../ControlLocks")
 box = NodePath("../../Interface/DialogueBox")
 audio = NodePath("../AudioZones")
 
-[node name="InteractionDirector" type="Node" parent="GameplayComponents" unique_id=244817784 node_paths=PackedStringArray("player", "locks")]
+[node name="InteractionDirector" type="Node" parent="GameplayComponents" unique_id=433560508 node_paths=PackedStringArray("player", "locks")]
 script = ExtResource("7_vn12j")
 player = NodePath("../../Player")
 locks = NodePath("../ControlLocks")
 
-[node name="PhotographyDirector" type="Node" parent="GameplayComponents" unique_id=1730844164 node_paths=PackedStringArray("locks", "cam", "player", "viewfinder", "polaroid", "fade", "hud", "audio", "studio")]
+[node name="PhotographyDirector" type="Node" parent="GameplayComponents" unique_id=266651762 node_paths=PackedStringArray("locks", "cam", "player", "viewfinder", "polaroid", "fade", "hud", "audio", "studio")]
 script = ExtResource("8_g3wha")
 locks = NodePath("../ControlLocks")
 cam = NodePath("../../CameraRig")
@@ -181,20 +181,20 @@ hud = NodePath("../../Interface/Hud")
 audio = NodePath("../AudioZones")
 studio = NodePath("../../PhotoStudio")
 
-[node name="Scrapbook" type="Node" parent="GameplayComponents" unique_id=1162727849 node_paths=PackedStringArray("locks", "panel", "photography", "studio")]
+[node name="Scrapbook" type="Node" parent="GameplayComponents" unique_id=1751569055 node_paths=PackedStringArray("locks", "panel", "photography", "studio")]
 script = ExtResource("9_5u5fl")
 locks = NodePath("../ControlLocks")
 panel = NodePath("../../Interface/Scrapbook")
 photography = NodePath("../PhotographyDirector")
 studio = NodePath("../../PhotoStudio")
 
-[node name="AudioZones" type="Node" parent="GameplayComponents" unique_id=40945453]
+[node name="AudioZones" type="Node" parent="GameplayComponents" unique_id=2010054014]
 script = ExtResource("10_y5rdn")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2121214702]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1098024739]
 environment = SubResource("Environment_0rdr5")
 
-[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1776024755]
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1173002602]
 transform = Transform3D(0.6507914, 0.5818991, -0.48771307, 0, 0.64235604, 0.76640636, 0.7592566, -0.49877068, 0.4180398, -14, 22, 12)
 light_color = Color(1, 0.94, 0.85, 1)
 light_energy = 0.3
@@ -207,50 +207,50 @@ shadow_blur = 1.2
 directional_shadow_mode = 1
 directional_shadow_max_distance = 34.0
 
-[node name="World" type="Node3D" parent="." unique_id=1353577849 node_paths=PackedStringArray("level", "environment", "sun")]
+[node name="World" type="Node3D" parent="." unique_id=1371404970 node_paths=PackedStringArray("level", "environment", "sun")]
 script = ExtResource("13_kmixl")
 level = NodePath("Level")
 level_data = ExtResource("14_101cl")
 environment = NodePath("../WorldEnvironment")
 sun = NodePath("../Sun")
 
-[node name="Level" type="Node3D" parent="World" unique_id=177252079 instance=ExtResource("15_celif")]
+[node name="Level" type="Node3D" parent="World" unique_id=1036976856 instance=ExtResource("15_celif")]
 
-[node name="Player" type="Node3D" parent="." unique_id=184361488 node_paths=PackedStringArray("locks", "cam")]
+[node name="Player" type="Node3D" parent="." unique_id=326243418 node_paths=PackedStringArray("locks", "cam")]
 script = ExtResource("16_rrvx7")
 locks = NodePath("../GameplayComponents/ControlLocks")
 cam = NodePath("../CameraRig")
 
-[node name="Sprite" type="Node3D" parent="Player" unique_id=1429948513]
+[node name="Sprite" type="Node3D" parent="Player" unique_id=1645633057]
 script = ExtResource("17_1jhfo")
 show_silhouette = true
 
-[node name="CameraRig" type="Node3D" parent="." unique_id=2120900368 node_paths=PackedStringArray("locks")]
+[node name="CameraRig" type="Node3D" parent="." unique_id=1693291511 node_paths=PackedStringArray("locks")]
 script = ExtResource("18_p1cip")
 locks = NodePath("../GameplayComponents/ControlLocks")
 
-[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1439105579]
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1867056459]
 current = true
 
-[node name="PhotoStudio" type="SubViewport" parent="." unique_id=1775807558 node_paths=PackedStringArray("world")]
+[node name="PhotoStudio" type="SubViewport" parent="." unique_id=1652526864 node_paths=PackedStringArray("world")]
 script = ExtResource("19_pyqu2")
 world = NodePath("../World")
 
-[node name="Camera3D" type="Camera3D" parent="PhotoStudio" unique_id=1699486895]
+[node name="Camera3D" type="Camera3D" parent="PhotoStudio" unique_id=994694171]
 
-[node name="PostProcess" type="CanvasLayer" parent="." unique_id=1194804178]
+[node name="PostProcess" type="CanvasLayer" parent="." unique_id=595524624]
 layer = 0
 
-[node name="ScreenFX" type="ColorRect" parent="PostProcess" unique_id=1228886061]
+[node name="ScreenFX" type="ColorRect" parent="PostProcess" unique_id=1314714155]
 material = SubResource("ShaderMaterial_w1gxq")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="Interface" type="CanvasLayer" parent="." unique_id=16915692]
+[node name="Interface" type="CanvasLayer" parent="." unique_id=795734503]
 
-[node name="Hud" type="Control" parent="Interface" unique_id=862060079 instance=ExtResource("21_mvwte")]
+[node name="Hud" type="Control" parent="Interface" unique_id=650758998 instance=ExtResource("21_mvwte")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -258,7 +258,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("22_ssr5s")
 
-[node name="DialogueBox" type="Control" parent="Interface" unique_id=2049247526 instance=ExtResource("23_54ss6")]
+[node name="DialogueBox" type="Control" parent="Interface" unique_id=1495485272 instance=ExtResource("23_54ss6")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -266,7 +266,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("24_hsukk")
 
-[node name="Viewfinder" type="Control" parent="Interface" unique_id=894537295 instance=ExtResource("25_0kbwx")]
+[node name="Viewfinder" type="Control" parent="Interface" unique_id=931912532 instance=ExtResource("25_0kbwx")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -274,7 +274,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("26_ump61")
 
-[node name="Flash" type="ColorRect" parent="Interface" unique_id=1677131313]
+[node name="Flash" type="ColorRect" parent="Interface" unique_id=1303440444]
 unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -282,7 +282,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(1, 0.98, 0.94, 0)
 
-[node name="Polaroid" type="Control" parent="Interface" unique_id=514374587 instance=ExtResource("27_ntbkg")]
+[node name="Polaroid" type="Control" parent="Interface" unique_id=1852011992 instance=ExtResource("27_ntbkg")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -290,15 +290,14 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("28_gjwfr")
 
-[node name="Scrapbook" type="Control" parent="Interface" unique_id=157725622 instance=ExtResource("29_qiyod")]
+[node name="Scrapbook" type="Control" parent="Interface" unique_id=273678610 instance=ExtResource("29_qiyod")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 2
 script = ExtResource("30_g8as2")
 
-[node name="Fade" type="ColorRect" parent="Interface" unique_id=1938552182]
+[node name="Fade" type="ColorRect" parent="Interface" unique_id=1428077595]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -306,7 +305,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 1)
 script = ExtResource("31_5e5dd")
 
-[node name="Ending" type="Control" parent="Interface" unique_id=506480204 instance=ExtResource("32_cu6rh")]
+[node name="Ending" type="Control" parent="Interface" unique_id=2007898790 instance=ExtResource("32_cu6rh")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -314,7 +313,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("33_ftfsg")
 
-[node name="PauseMenu" type="Control" parent="Interface" unique_id=1964183075 node_paths=PackedStringArray("audio_settings", "display") instance=ExtResource("34_c1ypt")]
+[node name="PauseMenu" type="Control" parent="Interface" unique_id=1065314221 node_paths=PackedStringArray("audio_settings", "display") instance=ExtResource("34_c1ypt")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -324,7 +323,7 @@ script = ExtResource("36_xh3jj")
 audio_settings = NodePath("../../GameplayComponents/AudioSettings")
 display = NodePath("../../GameplayComponents/DisplaySettings")
 
-[node name="DebugOverlay" type="Label" parent="Interface" unique_id=1792480268 instance=ExtResource("37_1n8mk")]
+[node name="DebugOverlay" type="Label" parent="Interface" unique_id=1094447278 instance=ExtResource("37_1n8mk")]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0

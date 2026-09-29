@@ -2,7 +2,7 @@ class_name PolaroidView
 extends Control
 
 ## The Polaroid: slides in tilted, the image develops over three seconds,
-## the name is written underneath by hand, then "SPACE Keep it".
+## the name is written underneath by hand, and a moment later it goes into the album.
 
 @onready var card: Control = %Card
 @onready var photo: TextureRect = %Photo
@@ -14,7 +14,7 @@ var can_dismiss := false
 
 func _ready() -> void:
 	visible = false
-	keep.text = "[center]" + UIStyle.keycaps("[SPACE] Keep it") + "[/center]"
+	keep.text = ""      # it goes into the album by itself once developed
 
 
 func present(tex: Texture2D, name_text: String) -> void:

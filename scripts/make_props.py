@@ -418,6 +418,130 @@ def paper():
     print("wrote paper")
 
 
+# --------------------------------------------------------------------------- the album
+# Mei's scrapbook is a cheap cloth-bound photo album of the kind every
+# stationer sold: burgundy book cloth, a gold-foil border and title, and her
+# own paper label on the front. Drawn at twice the size it is shown.
+
+ALBUM_PAGE = (800, 1080)      # a page, 2x (shown at 400 x 540)
+ALBUM_BOARD = (828, 1136)     # a board: the page plus a 14 px margin, 2x
+
+
+def _cloth(w, h, seed, base=(0.42, 0.11, 0.13)):
+    """Book cloth: a fine weave, a little mottling, darker toward the edges."""
+    g = rng(seed)
+    y, x = np.mgrid[0:h, 0:w]
+    weave = 0.5 + 0.25 * np.sin(x * 1.9) * np.sin(y * 0.35) + 0.25 * np.sin(y * 1.9) * np.sin(x * 0.35)
+    n = g.random((h, w))
+    n = np.asarray(Image.fromarray((n * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.7))) / 255
+    big = g.random((10, 8))
+    big = np.asarray(Image.fromarray((big * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC)) / 255
+    shade = 0.86 + 0.08 * weave + 0.06 * n
+    shade *= 0.93 + 0.07 * big
+    # edges and corners handled a lot: rubbed lighter at the very rim, darker just inside
+    ex = np.minimum(x, w - 1 - x) / w
+    ey = np.minimum(y, h - 1 - y) / h
+    e = np.minimum(ex, ey)
+    shade *= 0.9 + 0.1 * np.clip(e * 12, 0, 1)
+    rub = np.clip(1 - e * 90, 0, 1)
+    col = np.array(base)[None, None] * shade[..., None]
+    col = col + rub[..., None] * np.array([0.18, 0.12, 0.1]) * 0.8
+    return np.clip(col, 0, 1)
+
+
+def album_cloth():
+    w, h = ALBUM_BOARD
+    col = _cloth(w, h, 61, base=(0.36, 0.09, 0.11))
+    Image.fromarray((col * 255).astype(np.uint8), "RGB").save(os.path.join(OUT, "album_cloth.png"))
+    print("wrote album_cloth")
+
+
+def album_cover():
+    w, h = ALBUM_BOARD
+    col = _cloth(w, h, 62)
+    img = Image.fromarray((col * 255).astype(np.uint8), "RGB").convert("RGBA")
+    d = ImageDraw.Draw(img)
+    # the hinge: the cover bends in a groove a little in from the spine
+    d.rectangle([34, 0, 40, h], fill=(70, 16, 20, 255))
+    d.rectangle([41, 0, 43, h], fill=(140, 60, 60, 120))
+    # gold foil: a double rule and corner flourishes, stamped slightly unevenly
+    gold = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(gold)
+    foil = (214, 176, 96, 255)
+    gd.rectangle([96, 72, w - 72, h - 72], outline=foil, width=5)
+    gd.rectangle([114, 90, w - 90, h - 90], outline=foil, width=2)
+    for cx, cy, sx, sy in [(114, 90, 1, 1), (w - 90, 90, -1, 1), (114, h - 90, 1, -1), (w - 90, h - 90, -1, -1)]:
+        for r in (26, 40):
+            gd.arc([cx - r, cy - r, cx + r, cy + r], 0 if sx > 0 and sy > 0 else (90 if sx < 0 and sy > 0 else (270 if sx > 0 else 180)),
+                   90 if sx > 0 and sy > 0 else (180 if sx < 0 and sy > 0 else (360 if sx > 0 else 270)), fill=foil, width=3)
+    mid = (w + 42) // 2
+    gd.text((mid, 330), "相簿", font=cjk(118), fill=foil, anchor="mm")
+    gd.line([(mid - 150, 420), (mid + 150, 420)], fill=foil, width=3)
+    gd.text((mid, 470), "PHOTO  ALBUM", font=latin(40, True), fill=foil, anchor="mm")
+    for k in (-1, 1):
+        gd.regular_polygon((mid + k * 170, 420, 8), 4, fill=foil)
+    # foil wears off where fingers go
+    g = rng(63)
+    wear = (g.random((h, w)) > 0.12).astype(np.uint8) * 255
+    wear = Image.fromarray(wear).filter(ImageFilter.GaussianBlur(0.6))
+    ga = np.asarray(gold).copy()
+    ga[..., 3] = (ga[..., 3].astype(float) * (np.asarray(wear) / 255.0)).astype(np.uint8)
+    # a soft shine across the foil
+    y, x = np.mgrid[0:h, 0:w]
+    shine = 0.85 + 0.3 * np.clip(1 - np.abs((x + y * 0.6) / (w + h * 0.6) - 0.45) * 4, 0, 1)
+    ga[..., :3] = np.clip(ga[..., :3] * shine[..., None], 0, 255).astype(np.uint8)
+    img.alpha_composite(Image.fromarray(ga, "RGBA"))
+    # Mei's label: a stationer's gummed label, her name in pen, a bit crooked
+    lw, lh = 330, 150
+    label = Image.new("RGBA", (lw, lh), (0, 0, 0, 0))
+    ld = ImageDraw.Draw(label)
+    ld.rounded_rectangle([4, 4, lw - 5, lh - 5], radius=18, fill=(244, 236, 214, 255), outline=(170, 40, 40, 255), width=4)
+    ld.rounded_rectangle([14, 14, lw - 15, lh - 15], radius=12, outline=(170, 40, 40, 255), width=2)
+    hand = ImageFont.truetype(os.path.join(FONTS, "Caveat.ttf"), 62)
+    ld.text((lw / 2 - 28, lh / 2 - 6), "Mei", font=hand, fill=(40, 52, 110, 255), anchor="mm")
+    ld.text((lw / 2 + 52, lh / 2 - 4), "美", font=cjk(48, 400), fill=(40, 52, 110, 255), anchor="mm")
+    ld.text((lw / 2, lh - 30), "1992", font=ImageFont.truetype(os.path.join(FONTS, "Caveat.ttf"), 30), fill=(40, 52, 110, 255), anchor="mm")
+    label = weather(label, 64, 0.25, streaks=False).rotate(-3.5, resample=Image.BICUBIC, expand=True)
+    shadow = Image.new("RGBA", label.size, (0, 0, 0, 0))
+    shadow.paste((0, 0, 0, 90), mask=label.split()[3])
+    shadow = shadow.filter(ImageFilter.GaussianBlur(6))
+    lx, ly = mid - label.width // 2, 700
+    img.alpha_composite(shadow, (lx + 6, ly + 8))
+    img.alpha_composite(label, (lx, ly))
+    img.convert("RGB").save(os.path.join(OUT, "album_cover.png"))
+    print("wrote album_cover")
+
+
+def album_pages():
+    """Cream album pages, left and right: fibrous, a little foxed, shadowed
+    into the gutter, with the edges of the pages beneath showing."""
+    w, h = ALBUM_PAGE
+    g = rng(65)
+    n = g.random((h, w))
+    n = np.asarray(Image.fromarray((n * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(1.2))) / 255
+    big = g.random((12, 10))
+    big = np.asarray(Image.fromarray((big * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC)) / 255
+    base = np.array([0.95, 0.91, 0.83])
+    col = base[None, None] * (0.95 + 0.05 * n[..., None]) * (0.95 + 0.05 * big[..., None])
+    fox = (g.random((h, w)) > 0.99965).astype(float)
+    fox = np.asarray(Image.fromarray((fox * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(4))) / 255
+    col = col * (1 - np.clip(fox[..., None] * 3, 0, 1) * 0.12 * np.array([0.3, 0.6, 1.0]))
+    x = np.arange(w)[None, :]
+    for side in ("left", "right"):
+        # distance from the spine, 0 at the gutter
+        d = (w - 1 - x) if side == "left" else x
+        gutter = 1 - 0.22 * np.exp(-d / 34.0) - 0.06 * np.exp(-d / 140.0)
+        c = col * gutter[..., None]
+        # the outer edge: the stack of pages below, a few hairlines
+        edge = w - 1 - d
+        for k, a in [(3, 0.18), (8, 0.12), (13, 0.08)]:
+            m = (edge >= k) & (edge < k + 2)
+            c = np.where(m[..., None], c * (1 - a), c)
+        c = np.where((edge < 2)[..., None], c * 0.9, c)
+        Image.fromarray((np.clip(c, 0, 1) * 255).astype(np.uint8), "RGB").save(os.path.join(OUT, f"album_page_{side}.png"))
+    print("wrote album pages")
+
+
 def tape():
     w, h = 128, 40
     g = rng(41)
@@ -450,3 +574,6 @@ if __name__ == "__main__":
     checkerboard_hill()
     paper()
     tape()
+    album_cloth()
+    album_cover()
+    album_pages()

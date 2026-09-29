@@ -357,55 +357,94 @@ func build_polaroid() -> Control:
 
 
 func build_scrapbook() -> Control:
+	## The album: a dim over the game, the book centred (spine at its origin),
+	## its boards, spine and two pages, and the two turning leaves on top.
 	var root := ScrapbookPanel.new()
 	root.name = "Scrapbook"
 	_owner = root
 	full(root)
-	var dim := add(root, ColorRect.new()) as ColorRect
+	root.mouse_filter = Control.MOUSE_FILTER_STOP
+	var dim := add(root, ColorRect.new(), true) as ColorRect
 	dim.name = "Dim"
-	dim.color = Color(0.03, 0.035, 0.043, 0.78)
+	dim.color = Color(0.03, 0.035, 0.043, 0.8)
 	full(dim)
-	var center := add(root, CenterContainer.new()) as CenterContainer
-	center.name = "Center"
-	full(center)
-	var page := add(center, PanelContainer.new()) as PanelContainer
-	page.name = "Page"
-	page.custom_minimum_size = Vector2(860, 480)
-	var paper := StyleBoxTexture.new()
-	paper.texture = load("res://assets/textures/props/paper.png")
-	paper.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_TILE
-	paper.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_TILE
-	paper.content_margin_left = 44
-	paper.content_margin_right = 44
-	paper.content_margin_top = 28
-	paper.content_margin_bottom = 40
-	page.add_theme_stylebox_override("panel", paper)
-	var col := add(page, VBoxContainer.new()) as VBoxContainer
-	col.name = "Column"
-	col.add_theme_constant_override("separation", 22)
-	var head := add(col, HBoxContainer.new()) as HBoxContainer
-	head.name = "Header"
-	var title := label("PROJECT KOWLOON", spaced(S.FONT_UI_BOLD, 4), 13, S.INK_SOFT)
-	title.name = "Title"
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add(head, title)
-	var close := rich(13, S.INK_SOFT)
-	close.name = "Close"
-	close.text = "[font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=12][color=#2a2420] TAB [/color][/font_size][/font] close"
-	add(head, close)
-	var rule := add(col, ColorRect.new()) as ColorRect
-	rule.name = "Rule"
-	rule.color = S.PAPER_EDGE
-	rule.custom_minimum_size = Vector2(0, 1)
-	var empty := label("Empty pages. Grandfather's camera is still full of film.", S.FONT_HAND, 26, S.INK_SOFT)
-	empty.name = "Empty"
-	empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	add(col, empty, true)
-	var grid := add(col, GridContainer.new(), true) as GridContainer
-	grid.name = "Entries"
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 36)
-	grid.add_theme_constant_override("v_separation", 40)
+	var book := add(root, Control.new(), true) as Control
+	book.name = "Book"
+	book.set_anchors_preset(Control.PRESET_CENTER)
+	book.position = Vector2(0, -10)
+	book.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var P := ScrapbookPanel.PAGE
+	var B := ScrapbookPanel.BOARD
+	var cloth: Texture2D = load("res://assets/textures/props/album_cloth.png")
+	# soft shadows the boards cast on the table
+	for side in [-1.0, 1.0]:
+		var sh := add(book, Panel.new()) as Panel
+		sh.name = "ShadowLeft" if side < 0 else "ShadowRight"
+		var sb := S.panel(Color(0.12, 0.03, 0.04), Color(0, 0, 0, 0), 0, 6)
+		sb.shadow_color = Color(0, 0, 0, 0.55)
+		sb.shadow_size = 28
+		sb.shadow_offset = Vector2(0, 12)
+		sh.add_theme_stylebox_override("panel", sb)
+		sh.position = Vector2(-B.x if side < 0 else 0.0, -B.y * 0.5)
+		sh.size = B
+		sh.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var left := add(book, Control.new(), true) as Control
+	left.name = "BoardLeft"
+	left.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for spec in [["ClothLeft", -B.x, left], ["ClothRight", 0.0, book]]:
+		var c := add(spec[2], TextureRect.new()) as TextureRect
+		c.name = spec[0]
+		c.texture = cloth
+		c.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		c.position = Vector2(spec[1], -B.y * 0.5)
+		c.size = B
+		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# the ShadowLeft panel belongs with the left board: shown only when open
+	var shl := book.get_node("ShadowLeft")
+	book.remove_child(shl)
+	left.add_child(shl)
+	shl.owner = root
+	left.move_child(shl, 0)
+	var spine := add(book, ColorRect.new()) as ColorRect
+	spine.name = "Spine"
+	spine.color = Color(0.2, 0.05, 0.06)
+	spine.position = Vector2(-4, -B.y * 0.5)
+	spine.size = Vector2(8, B.y)
+	spine.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for spec in [["PageLeft", -P.x], ["PageRight", 0.0]]:
+		var pg := add(book, TextureRect.new(), true) as TextureRect
+		pg.name = spec[0]
+		pg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pg.position = Vector2(spec[1], -P.y * 0.5)
+		pg.size = P
+		pg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var leaf_shader: Shader = load("res://assets/shaders/page_leaf.gdshader")
+	for spec in [["PageLeaf", P], ["CoverLeaf", B]]:
+		var size: Vector2 = spec[1]
+		var rect := Vector2(size.x * 3.0, size.y * 1.6)
+		var leaf := add(book, ColorRect.new(), true) as ColorRect
+		leaf.name = spec[0]
+		leaf.position = -rect * 0.5
+		leaf.size = rect
+		leaf.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var m := ShaderMaterial.new()
+		m.shader = leaf_shader
+		m.set_shader_parameter("leaf_px", size)
+		m.set_shader_parameter("rect_px", rect)
+		leaf.material = m
+		leaf.visible = false
+	var vps := add(root, Node.new(), true) as Node
+	vps.name = "Viewports"
+	var hint := rich(14, S.CONCRETE_DIM)
+	hint.name = "Hint"
+	hint.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	hint.position = Vector2(-360, -52)
+	hint.custom_minimum_size = Vector2(720, 0)
+	hint.size = Vector2(720, 24)
+	add(root, hint, true)
+	var rustle := add(root, AudioStreamPlayer.new(), true) as AudioStreamPlayer
+	rustle.name = "Rustle"
+	rustle.volume_db = -4.0
 	return root
 
 

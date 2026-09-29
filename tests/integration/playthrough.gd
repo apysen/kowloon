@@ -88,9 +88,16 @@ func photograph(id: String, from: Vector3) -> void:
 		tries += 1
 	expect(not slice.photography.subject.is_empty(), "framed %s in the viewfinder" % id)
 	slice.photography.capture()
-	await secs(7.0)
-	expect(slice.photography.dismiss(), "kept the Polaroid of " + id)
-	await frames(4)
+	var w8 := 0.0
+	while not slice.scrapbook.open and w8 < 12.0:
+		await secs(0.1)
+		w8 += 0.1
+	expect(slice.scrapbook.open and slice.scrapbook.panel.visible, "the Polaroid of %s goes into the album by itself" % id)
+	var t := 0.0
+	while slice.scrapbook.open and t < 20.0:
+		await secs(0.25)
+		t += 0.25
+	expect(not slice.scrapbook.open, "the album shuts again after filing %s" % id)
 	await read_through()
 
 
@@ -202,6 +209,23 @@ func _run() -> void:
 		await secs(0.55)
 	await photograph("ng", Vector3(3.6, R, -18.0))
 	expect(q.plane_flown, "the jet came over for Mr. Ng's photograph")
+	print("-- the scrapbook")
+	var lk := 0.0
+	while (slice.locks.is_locked() or slice.dialogue.is_open()) and lk < 20.0:
+		await read_through()
+		await secs(0.25)
+		lk += 0.25
+	await slice.scrapbook.toggle(true)
+	var book := slice.scrapbook.panel
+	expect(book.visible and not book.busy and book.spread == 0, "the album opens on the title page")
+	expect(book.spreads() == 2, "one page per photograph, after the title page")
+	await book.turn(1)
+	expect(book.spread == 1, "a page turns to the next spread")
+	await book.turn(1)
+	expect(book.spread == 1, "the last spread doesn't turn further")
+	await slice.scrapbook.toggle(false)
+	expect(not book.visible and not slice.locks.is_locked(), "the album closes and hands back control")
+
 	expect(q.stage == S.FABRIC_MOVED, "Mr. Ng's photo; the Chan boy goes for the washing")
 
 	print("-- the washing moves")

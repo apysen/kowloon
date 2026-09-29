@@ -41,6 +41,7 @@ func shoot(id: String) -> Texture2D:
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	var img := get_texture().get_image()
+	img.convert(Image.FORMAT_RGB8)      # a print is opaque: the sky renders with zero alpha
 	world.sprite_yaw_override = NAN
 	world.view_from = null
 	return ImageTexture.create_from_image(img)
