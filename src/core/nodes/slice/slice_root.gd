@@ -15,6 +15,8 @@ const TITLE_SCENE := "res://scenes/app/title_screen.tscn"
 @export var locks: ControlLocks
 ## Graphics quality toggle and its persistence.
 @export var display: DisplaySettings
+## Master volume and its persistence.
+@export var audio_settings: AudioSettings
 ## The story: stages, conversations, discoveries, the washing, the ending.
 @export var quests: QuestDirector
 ## Runs conversations through the dialogue box.
@@ -38,6 +40,7 @@ const TITLE_SCENE := "res://scenes/app/title_screen.tscn"
 @export var fade: ScreenFade
 @export var ending: EndingScreen
 @export var debug: DebugOverlay
+@export var pause: PauseMenu
 @export var screen_fx: ColorRect
 
 var started := false
@@ -52,6 +55,7 @@ func _ready() -> void:
 	cam.follow(player.position)
 	fade.set_black(true)
 	audio.start()
+	pause.quit_requested.connect(_quit_to_title)
 	begin()
 
 
@@ -109,10 +113,17 @@ func _unhandled_input(event: InputEvent) -> void:
 			scrapbook.toggle(false)
 		elif photography.active:
 			photography.exit()
+		elif not photography.showing_photo:
+			pause.show_menu()
 	elif event.is_action("graphics"):
 		display.toggle()
 		hud.notice("Graphics: full (shadows, bloom, depth of field)" if display.high else "Graphics: fast", 2.2)
 	get_viewport().set_input_as_handled()
+
+
+func _quit_to_title() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file(TITLE_SCENE)
 
 
 func _debug_key(event: InputEvent) -> bool:

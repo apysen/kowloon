@@ -30,6 +30,7 @@ var _path: Array[Vector3] = []
 var _path_speed := 2.6
 var _on_path_done: Callable
 var _climbing := false
+var _climb_facing := Vector3.ZERO
 var moving := false
 ## Set for a frame by a scripted move (pushing the crate) so the walk plays.
 var moving_override := false
@@ -51,13 +52,16 @@ func on_path() -> bool:
 
 
 ## Walk or climb along authored points with the controls locked.
-func traverse(points: Array, speed := 2.6, on_done := Callable(), climbing := true) -> void:
+## `climb_facing` is the way the ladder's wall lies: Mei faces it on the
+## vertical legs, so the view shows her back, side or front accordingly.
+func traverse(points: Array, speed := 2.6, on_done := Callable(), climbing := true, climb_facing := Vector3.ZERO) -> void:
 	_path.clear()
 	for p in points:
 		_path.append(p)
 	_path_speed = speed
 	_on_path_done = on_done
 	_climbing = climbing
+	_climb_facing = climb_facing
 	locks.lock("traverse")
 
 
@@ -98,7 +102,8 @@ func _process(delta: float) -> void:
 	if pose != "":
 		sprite.play(pose)
 	elif _climbing and not _path.is_empty() and absf((_path[0] - position).y) > 0.05:
-		sprite.facing = -cam.back_vector()        # climbing faces the wall: we see her back
+		# climbing faces the ladder's wall (or, with none given, away from the camera)
+		sprite.facing = _climb_facing if _climb_facing != Vector3.ZERO else -cam.back_vector()
 		sprite.play("climb")
 	elif moving or moving_override:
 		sprite.play("walk")

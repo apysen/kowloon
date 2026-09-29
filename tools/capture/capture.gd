@@ -80,6 +80,8 @@ func _run() -> void:
 			_slice.hud.tutorial_your_turn()
 			_slice.hud.tutorial_press(1)
 			await _frames(30)
+		elif action == "pause":
+			_slice.pause.show_menu()
 		elif action == "camera":
 			_slice.photography.enter()
 		elif action.begins_with("photo="):
@@ -98,4 +100,6 @@ func _run() -> void:
 		var path := _out.path_join(name + ".png")
 		img.save_png(path)
 		print("captured ", path)
+		if _slice.pause.open:
+			_slice.pause.close()
 	quit(0)

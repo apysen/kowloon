@@ -17,7 +17,7 @@ spacing_glyph = 8
 base_font = ExtResource("4_vojy4")
 spacing_glyph = 5
 
-[node name="Ending" type="Control" unique_id=951663809]
+[node name="Ending" type="Control" unique_id=934939315]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
@@ -25,25 +25,25 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_7fnhb")
 
-[node name="Black" type="ColorRect" parent="." unique_id=149097811]
+[node name="Black" type="ColorRect" parent="." unique_id=2077665702]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Center" type="CenterContainer" parent="." unique_id=1258659583]
+[node name="Center" type="CenterContainer" parent="." unique_id=1091418185]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="Lines" type="VBoxContainer" parent="Center" unique_id=1945805417]
+[node name="Lines" type="VBoxContainer" parent="Center" unique_id=755858903]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="Days" type="Label" parent="Center/Lines" unique_id=1528988720]
+[node name="Days" type="Label" parent="Center/Lines" unique_id=562284454]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_jiohm")
 theme_override_font_sizes/font_size = 15
@@ -51,7 +51,7 @@ theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 text = "30 DAYS UNTIL WE LEAVE"
 horizontal_alignment = 1
 
-[node name="Title" type="Label" parent="Center/Lines" unique_id=14945991]
+[node name="Title" type="Label" parent="Center/Lines" unique_id=1591528355]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_fg610")
 theme_override_font_sizes/font_size = 44
@@ -59,7 +59,7 @@ theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
 text = "PROJECT KOWLOON"
 horizontal_alignment = 1
 
-[node name="Sub" type="Label" parent="Center/Lines" unique_id=1753366870]
+[node name="Sub" type="Label" parent="Center/Lines" unique_id=1691180561]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_yojxy")
 theme_override_font_sizes/font_size = 14
@@ -67,7 +67,7 @@ theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 text = "VERTICAL SLICE COMPLETE"
 horizontal_alignment = 1
 
-[node name="Replay" type="RichTextLabel" parent="Center/Lines" unique_id=656888372]
+[node name="Replay" type="RichTextLabel" parent="Center/Lines" unique_id=599309483]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 mouse_filter = 2

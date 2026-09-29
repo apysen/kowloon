@@ -378,7 +378,7 @@ func _register_interactions() -> void:
 				return
 			once("shaft_climb", func() -> void:
 				audio.creak()
-				player.traverse(w.level_data.climb_nodes, 2.0, on_enter_roof))})
+				player.traverse(w.level_data.climb_nodes, 2.0, on_enter_roof, true, Vector3(-1, 0, 0)))})
 	I.add({"id": "shaftTop", "position": refs.shaftTop, "radius": 1.2, "priority": InteractionDirector.Priority.QUEST,
 		"verb": func() -> String: return "Climb down" if crate_placed else "Look down",
 		"interact": func() -> void:
@@ -389,7 +389,7 @@ func _register_interactions() -> void:
 			var nodes := w.level_data.climb_nodes.duplicate()
 			nodes.reverse()
 			nodes.append(Vector3(-5, LevelBuilder.LEVEL_B, -17.6))
-			player.traverse(nodes, 2.2, _sync_world)})
+			player.traverse(nodes, 2.2, _sync_world, true, Vector3(-1, 0, 0))})
 
 	# the lost pigeon: find her first (the tank hides her from most sides),
 	# then work out why she won't come down
@@ -494,7 +494,7 @@ func _errand_on_roof() -> void:
 	son.fade("in")
 	errand.step = "to_line"
 	# along the roof, clear of the pots and the line poles
-	son.walk([Vector3(4, R, -11), Vector3(-3, R, -11), Vector3(-5.4, R, -9.6)], _errand_done)
+	son.walk([Vector3(4, R, -11), Vector3(-3, R, -11), Vector3(-4.4, R, -9.6)], _errand_done)
 
 
 func _errand_done() -> void:

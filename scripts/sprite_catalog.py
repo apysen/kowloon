@@ -189,6 +189,32 @@ PROPS = {
                      "colors": {"1": "#e9d9b8", "2": "#d6c29c", "3": "#b8a27c", "4": "#8e7a58"}},
     "cloth_fold_side": {"part": (18, 24, ["1112", "2223", "3334"]),
                         "colors": {"1": "#e9d9b8", "2": "#d6c29c", "3": "#b8a27c", "4": "#8e7a58"}},
+    # Mrs. Chan wringing out a blue cloth over her basin: the twisted rope held
+    # between both hands, the wet end hanging from the middle, water dripping
+    "wring_front_a": {"part": (12, 24, [
+        "112211221",
+        "221122112",
+        "...123...",
+        "...123...",
+        "....23...",
+        "....3....",
+    ]), "colors": {"1": "#7aa2d0", "2": "#3f6fa8", "3": "#294f7c"}},
+    "wring_front_b": {"part": (12, 24, [
+        "211221122",
+        "122112211",
+        "...123...",
+        "....123..",
+        "....123..",
+        ".....3...",
+    ]), "colors": {"1": "#7aa2d0", "2": "#3f6fa8", "3": "#294f7c"}},
+    "wring_side_a": {"part": (18, 24, ["1221", "2112", ".12.", ".23.", "..3."]),
+                     "colors": {"1": "#7aa2d0", "2": "#3f6fa8", "3": "#294f7c"}},
+    "wring_side_b": {"part": (18, 24, ["2112", "1221", ".12.", "..23", "..3."]),
+                     "colors": {"1": "#7aa2d0", "2": "#3f6fa8", "3": "#294f7c"}},
+    "drip_front_a": {"part": (16, 32, ["4", ".", "4"]), "colors": {"4": "#cfe4f0"}},
+    "drip_front_b": {"part": (17, 34, ["4"]), "colors": {"4": "#cfe4f0"}},
+    "drip_side_a": {"part": (20, 31, ["4", ".", "4"]), "colors": {"4": "#cfe4f0"}},
+    "drip_side_b": {"part": (20, 33, ["4"]), "colors": {"4": "#cfe4f0"}},
     "birdcage_front": {"part": (21, 29, [
         "..44..",
         ".1111.",
@@ -668,13 +694,18 @@ def specials(name, look, view, bp):
             fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=tray, blink=True, duration=300),
         ]))
     if name == "chan":
-        a = {"front": ["cloth_fold_a"], "back": [], "side": ["cloth_fold_side"]}[view]
-        b = {"front": ["cloth_fold_b"], "back": [], "side": ["cloth_fold_side"]}[view]
+        # wringing out the washing over the basin: the twist turns one way, then
+        # the other, and water runs out of the hanging end
+        if view == "back":
+            wa, wb, da, db = [], [], [], []
+        else:
+            wa, wb = ["wring_%s_a" % view], ["wring_%s_b" % view]
+            da, db = ["drip_%s_a" % view], ["drip_%s_b" % view]
         out.append(("work", [
-            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=a, duration=380),
-            fr_with(arms=("_up", "_up") if view != "side" else ("", ""), side_arm="side_fwd2", far="side_fwd2", props=b, duration=300),
-            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=a, bob=1, duration=380),
-            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=a, blink=True, duration=300),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wa, duration=280),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wb + da, bob=1, duration=280),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wa + db, duration=280),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wb, bob=1, blink=True, duration=320),
         ]))
     if name == "ng":
         out.append(("work", [

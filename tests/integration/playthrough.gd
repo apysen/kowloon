@@ -247,6 +247,19 @@ func _run() -> void:
 	expect(w.fabric_state == "roof", "the washing ends up on the roof line")
 	expect(son.position.y > 12.0, "the Chan boy is back on the roof")
 
+	print("-- pause")
+	var before := AudioSettings.saved_volume()
+	slice.pause.show_menu()
+	await frames(5)
+	expect(paused and slice.pause.visible, "Esc pauses the game")
+	slice.pause.volume_slider.value = 40
+	expect(absf(AudioServer.get_bus_volume_db(0) - linear_to_db(0.16)) < 0.1, "the volume slider sets the master volume")
+	expect(absf(AudioSettings.saved_volume() - 0.4) < 0.01, "the volume is remembered")
+	slice.audio_settings.set_volume(before)
+	slice.pause.close()
+	await frames(5)
+	expect(not paused and not slice.pause.visible, "resume carries on")
+
 	print("")
 	print("playthrough: %s (%d failures)" % ["PASS" if failures == 0 else "FAIL", failures])
 	quit(0 if failures == 0 else 1)

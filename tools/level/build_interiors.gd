@@ -480,8 +480,8 @@ static func airshaft(b: LevelBuilder) -> void:
 	b.data.climb_nodes = [
 		Vector3(-5.7, Y, -19.95),
 		Vector3(-6.25, Y + 0.7, -19.95),
-		Vector3(-6.55, Y + 0.7, -19.95),
-		Vector3(-6.55, R + 0.4, -19.95),
+		Vector3(-6.68, Y + 0.7, -19.95),
+		Vector3(-6.68, R + 0.4, -19.95),
 		Vector3(-7.3, R + 0.45, -19.95),
 		Vector3(-7.8, R, -19.95),
 	]
@@ -587,8 +587,11 @@ static func roof(b: LevelBuilder) -> void:
 	# laundry lines (the washing arrives here later)
 	for x in [-9.2, -2.2]:
 		b.box(x, x + 0.12, Y, Y + 2.6, -8.6, -8.48, c8(0x5a5a55), {"band": 2.0, "surface": "metal", "parent": P, "name": "LinePost"})
-	laundry_line(b, -9.2, -2.2, Y + 2.5, -8.54, "x", [c8(0xe8e2d4), c8(0x5a7ab0), c8(0xe8e2d4)], "Structure/Roof/Laundry")
-	b.ref("roofFabricPos", Vector3(-5.2, Y + 2.5, -8.54))
+	# the neighbours' washing fills only the west end: the east end is left
+	# clear for the Chan boy's sheets, so nothing hangs in the same place
+	b.box(-6.6, -2.2, Y + 2.5, Y + 2.53, -8.555, -8.525, c8(0x222222), {"surface": "grain", "parent": "Structure/Roof/Laundry", "name": "Line", "cast_shadow": false})
+	laundry_line(b, -9.2, -6.6, Y + 2.5, -8.54, "x", [c8(0xe8e2d4), c8(0x5a7ab0)], "Structure/Roof/Laundry")
+	b.ref("roofFabricPos", Vector3(-4.3, Y + 2.5, -8.54))
 
 	# roof clutter: a bench, pots of herbs and chillies, the AC housing, a
 	# forest of TV aerials (every flat had its own)

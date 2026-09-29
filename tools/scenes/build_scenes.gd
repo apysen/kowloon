@@ -23,6 +23,7 @@ func _initialize() -> void:
 	_save_scene(build_polaroid(), "res://scenes/ui/photo/polaroid.tscn")
 	_save_scene(build_scrapbook(), "res://scenes/ui/scrapbook/scrapbook.tscn")
 	_save_scene(build_ending(), "res://scenes/ui/menus/ending.tscn")
+	_save_scene(build_pause(), "res://scenes/ui/menus/pause.tscn")
 	_save_scene(build_debug(), "res://scenes/ui/debug/debug_overlay.tscn")
 	_save_scene(build_title(), "res://scenes/app/title_screen.tscn")
 	_save_scene(build_slice(), "res://scenes/slice/slice.tscn")
@@ -133,7 +134,26 @@ func build_theme() -> Theme:
 	t.set_color("font_focus_color", "Button", Color("f3d38e"))
 	t.set_font("font", "Button", spaced(S.FONT_UI_BOLD, 3))
 	t.set_font_size("font_size", "Button", 15)
+	# sliders: a thin concrete track that fills sodium yellow, a small square grabber
+	var track := S.panel(Color(S.CONCRETE, 0.18), Color(0, 0, 0, 0), 0, 2, Vector4(0, 3, 0, 3))
+	var fill := S.panel(S.SODIUM, Color(0, 0, 0, 0), 0, 2, Vector4(0, 3, 0, 3))
+	var fill_focus := S.panel(Color("f3d38e"), Color(0, 0, 0, 0), 0, 2, Vector4(0, 3, 0, 3))
+	t.set_stylebox("slider", "HSlider", track)
+	t.set_stylebox("grabber_area", "HSlider", fill)
+	t.set_stylebox("grabber_area_highlight", "HSlider", fill_focus)
+	t.set_stylebox("focus", "HSlider", StyleBoxEmpty.new())
+	t.set_icon("grabber", "HSlider", _grabber(S.CONCRETE))
+	t.set_icon("grabber_highlight", "HSlider", _grabber(Color("f3d38e")))
 	return t
+
+
+func _grabber(col: Color) -> ImageTexture:
+	var img := Image.create(14, 14, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	for y in range(1, 13):
+		for x in range(3, 11):
+			img.set_pixel(x, y, col)
+	return ImageTexture.create_from_image(img)
 
 
 # ----------------------------------------------------------------------------- HUD
@@ -422,6 +442,81 @@ func build_ending() -> Control:
 	return root
 
 
+func build_pause() -> Control:
+	var root := PauseMenu.new()
+	root.name = "PauseMenu"
+	_owner = root
+	full(root)
+	root.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.theme = load("res://assets/ui/kowloon_theme.tres")
+	var dim := add(root, ColorRect.new()) as ColorRect
+	dim.name = "Dim"
+	dim.color = Color(0.03, 0.035, 0.043, 0.72)
+	full(dim)
+	var center := add(root, CenterContainer.new()) as CenterContainer
+	center.name = "Center"
+	full(center)
+	var card := add(center, PanelContainer.new()) as PanelContainer
+	card.name = "Card"
+	card.custom_minimum_size = Vector2(380, 0)
+	card.add_theme_stylebox_override("panel", S.panel(Color(S.SOOT, 0.94), Color(S.CONCRETE, 0.16), 1, 4, Vector4(36, 28, 36, 30)))
+	var col := add(card, VBoxContainer.new()) as VBoxContainer
+	col.name = "Column"
+	col.add_theme_constant_override("separation", 14)
+	var head := add(col, HBoxContainer.new()) as HBoxContainer
+	head.name = "Header"
+	head.add_theme_constant_override("separation", 12)
+	var rule := add(head, ColorRect.new()) as ColorRect
+	rule.name = "PipeRule"
+	rule.color = S.PIPE
+	rule.custom_minimum_size = Vector2(3, 0)
+	var title := label("PAUSED", spaced(S.FONT_UI_BOLD, 6), 22, S.CONCRETE)
+	title.name = "Title"
+	add(head, title)
+	var gap := add(col, Control.new()) as Control
+	gap.name = "Gap"
+	gap.custom_minimum_size = Vector2(0, 4)
+	var resume := add(col, Button.new(), true) as Button
+	resume.name = "Resume"
+	resume.text = "RESUME"
+	# the volume: a label, the slider, and its number
+	var vrow := add(col, HBoxContainer.new()) as HBoxContainer
+	vrow.name = "VolumeRow"
+	vrow.add_theme_constant_override("separation", 14)
+	var vl := label("VOLUME", spaced(S.FONT_UI_BOLD, 3), 14, S.CONCRETE_DIM)
+	vl.name = "VolumeLabel"
+	vl.custom_minimum_size = Vector2(76, 0)
+	add(vrow, vl)
+	var slider := add(vrow, HSlider.new(), true) as HSlider
+	slider.name = "Volume"
+	slider.min_value = 0
+	slider.max_value = 100
+	slider.step = 5
+	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	slider.custom_minimum_size = Vector2(160, 20)
+	var vv := label("80", S.FONT_MONO, 13, S.CONCRETE)
+	vv.name = "VolumeValue"
+	vv.custom_minimum_size = Vector2(30, 0)
+	vv.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add(vrow, vv, true)
+	var gfx := add(col, Button.new(), true) as Button
+	gfx.name = "Graphics"
+	gfx.text = "GRAPHICS: FULL"
+	var quit := add(col, Button.new(), true) as Button
+	quit.name = "Quit"
+	quit.text = "QUIT TO TITLE"
+	var hint := rich(13, S.CONCRETE_DIM)
+	hint.name = "Hint"
+	hint.text = "[center]" + S.keycaps("[Esc] resume") + "[/center]"
+	add(col, hint)
+	var tick := add(root, AudioStreamPlayer.new(), true) as AudioStreamPlayer
+	tick.name = "Tick"
+	tick.stream = load("res://assets/audio/blip.wav")
+	tick.volume_db = -8.0
+	return root
+
+
 func build_debug() -> Control:
 	var root := DebugOverlay.new()
 	root.name = "DebugOverlay"
@@ -593,6 +688,7 @@ func build_slice() -> Node3D:
 	comps.name = "GameplayComponents"
 	var locks := _comp(comps, ControlLocks.new(), "ControlLocks") as ControlLocks
 	var display := _comp(comps, DisplaySettings.new(), "DisplaySettings") as DisplaySettings
+	var audio_settings := _comp(comps, AudioSettings.new(), "AudioSettings") as AudioSettings
 	var quests := _comp(comps, QuestDirector.new(), "QuestDirector") as QuestDirector
 	var dialogue := _comp(comps, DialogueDirector.new(), "DialogueDirector") as DialogueDirector
 	var interaction := _comp(comps, InteractionDirector.new(), "InteractionDirector") as InteractionDirector
@@ -679,6 +775,7 @@ func build_slice() -> Node3D:
 	add(ui, fade)
 	full(fade)
 	var ending := instance(ui, "res://scenes/ui/menus/ending.tscn", "Ending") as EndingScreen
+	var pause := instance(ui, "res://scenes/ui/menus/pause.tscn", "PauseMenu") as PauseMenu
 	var debug := instance(ui, "res://scenes/ui/debug/debug_overlay.tscn", "DebugOverlay") as DebugOverlay
 
 	# wiring
@@ -719,6 +816,10 @@ func build_slice() -> Node3D:
 	root.fade = fade
 	root.ending = ending
 	root.debug = debug
+	root.pause = pause
+	root.audio_settings = audio_settings
+	pause.audio_settings = audio_settings
+	pause.display = display
 	root.screen_fx = fx
 	return root
 
