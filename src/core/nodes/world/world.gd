@@ -54,7 +54,7 @@ var _dust: GPUParticles3D
 func _ready() -> void:
 	walk_space = level_data.build_walk_space()
 	refs = level_data.refs
-	for name in ["Fabric", "Bundle", "Sheet", "LostPigeon", "Tank", "Plane", "Fan", "Crate", "Ladder"]:
+	for name in ["Fabric", "Bundle", "Sheet", "LostPigeon", "Tank", "Plane", "Fan", "Crate", "Ladder", "CoopFlap"]:
 		var n := level.get_node_or_null("Special/" + name)
 		if n:
 			special[name] = n

@@ -736,6 +736,28 @@ func _guide_pigeon() -> void:
 	_pigeon_anim = {"t": 0.0, "curve": curve, "duration": 3.2}
 
 
+## The trap in the coop roof: it lifts as the bird comes down onto it, and
+## drops shut with a clack once she is through.
+func _tick_flap(delta: float) -> void:
+	var flap: Node3D = world.special.get("CoopFlap")
+	if flap == null:
+		return
+	var want := 0.0
+	if not _pigeon_anim.is_empty():
+		var bird: Node3D = world.special.LostPigeon
+		var hole: Vector3 = world.refs.coopHole
+		var d := Vector2(bird.position.x - hole.x, bird.position.z - hole.z).length()
+		if d < 1.1 and bird.position.y > hole.y - 0.55 and bird.position.y < hole.y + 0.9:
+			want = 1.25
+	var cur := flap.rotation.z
+	if is_equal_approx(cur, want):
+		return
+	var next := move_toward(cur, want, delta * (9.0 if want > cur else 6.5))
+	if next <= 0.0 and cur > 0.0:
+		audio.clack()
+	flap.rotation.z = next
+
+
 func _on_pigeon_home() -> void:
 	_pigeon_anim = {}
 	var bird: CharacterSprite = world.special.LostPigeon
@@ -847,6 +869,7 @@ func tick(delta: float, paused: bool) -> void:
 		(bird as CharacterSprite).facing = (ahead - pos).normalized()
 		if t >= 1.0:
 			_on_pigeon_home()
+	_tick_flap(delta)
 
 	if _hints.move and stage >= S.MEDICINE_RECEIVED:
 		_moved += p.distance_to(_last_pos)

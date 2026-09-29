@@ -171,6 +171,11 @@ func flutter() -> void:
 	_shot("coo_1", 0.6, 1.0, 0.9)
 
 
+## A small wooden flap falling shut.
+func clack() -> void:
+	_shot("step_1", 0.7, 1.7)
+
+
 func coo() -> void:
 	_shot("coo_%d" % (randi() % 3), 0.7)
 

@@ -109,6 +109,10 @@ func _run() -> void:
 			await _frames(30)
 			_slice.scrapbook.file_photo(fid)
 			await _frames(int(spec[1]))
+		elif action.begins_with("pigeon/"):
+			# pigeon/<frames>: the lost pigeon partway through flying home
+			_slice.quests._guide_pigeon()
+			await _frames(int(action.substr(7)))
 		elif action.begins_with("book_open/"):
 			# book_open/<frames>: the album partway through opening
 			_slice.scrapbook.add("lau")
