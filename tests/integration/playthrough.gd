@@ -6,7 +6,7 @@ extends SceneTree
 ##
 ## Drives the real slice scene: places Mei beside each person and object,
 ## triggers the interaction she would, reads every conversation through,
-## takes both photographs, and waits out the Chan boy's errand. Checks the
+## takes both photographs, and waits out Wai's errand. Checks the
 ## story stage after every beat and exits non-zero on the first failure.
 
 const S := preload("res://src/core/models/quests/quest_stage.gd")
@@ -127,6 +127,8 @@ func _run() -> void:
 	slice.cam.rotate_view(-1)
 	await secs(1.4)
 	expect(not q._tutorial, "the tutorial clears after turning both ways")
+	await use("oldPhoto", w.refs.oldPhoto)
+	expect(q.flags.setup_old_photo_seen, "Grandfather's old photograph is looked at")
 
 	print("-- the dead end and the service door")
 	await place(Vector3(1.0, A, 0.0))
@@ -148,6 +150,8 @@ func _run() -> void:
 	await photograph("lau", Vector3(4.0, A, -10.4))
 	expect(q.stage == S.LAU_PHOTO, "Lau's photo is in the scrapbook")
 	expect(slice.scrapbook.entries.has("lau"), "scrapbook has Lau")
+	await use("lau", Vector3(3.6, A, -10.4))
+	expect(q.flags.setup_lau_windows, "Lau goes on about the windows again")
 
 	print("-- upstairs and the washing")
 	await use("stairsUp", w.refs.stairsUpA)
@@ -190,9 +194,9 @@ func _run() -> void:
 	expect(slice.player.position.y > 12.0, "Mei climbs out onto the roof")
 	await secs(1.0)
 
-	print("-- the roof: the Chan boy and Mr. Ng")
+	print("-- the roof: Wai and Mr. Ng")
 	await use("son", Vector3(0.2, R, -18.3))
-	expect(q.stage == S.FOUND_SON, "found Chan's son")
+	expect(q.stage == S.FOUND_SON, "found Wai")
 	await use("ng", Vector3(3.4, R, -19.5))
 	expect(q.ng_briefed, "Mr. Ng explains the lost pigeon")
 	expect(not (w.special.Plane as Node3D).visible, "no jet before the photograph")
@@ -234,7 +238,7 @@ func _run() -> void:
 	await slice.scrapbook.toggle(false)
 	expect(not book.visible and not slice.locks.is_locked(), "the album closes and hands back control")
 
-	expect(q.stage == S.FABRIC_MOVED, "Mr. Ng's photo; the Chan boy goes for the washing")
+	expect(q.stage == S.FABRIC_MOVED, "Mr. Ng's photo; Wai goes for the washing")
 
 	print("-- the washing moves")
 	var son: Resident = w.residents.son
@@ -242,7 +246,7 @@ func _run() -> void:
 	while q.errand.get("step", "") in ["to_door", "downstairs"] and t < 25.0:
 		await secs(0.25)
 		t += 0.25
-	expect(q.flags.roof_door_open, "the Chan boy opens the stuck roof door")
+	expect(q.flags.roof_door_open, "Wai opens the stuck roof door")
 	await use("roofDoorTop", w.refs.roofDoorTop)
 	await secs(1.5)
 	expect(slice.player.position.y > 4.0 and slice.player.position.y < 12.0, "Mei takes the stairs down")
@@ -261,6 +265,7 @@ func _run() -> void:
 	print("-- Mrs. Wong")
 	await use("wong", Vector3(27.4, B, -12.6))
 	expect(q.stage == S.MEDICINE_DELIVERED, "the medicine is delivered")
+	expect(q.flags.setup_wong_bet and q.flags.setup_ng_home_line, "Mrs. Wong's bet and Mr. Ng's line are set up for later")
 
 	print("-- home")
 	await use("stairsDown", w.refs.stairsDownB)
@@ -277,7 +282,7 @@ func _run() -> void:
 		await secs(0.5)
 		t += 0.5
 	expect(w.fabric_state == "roof", "the washing ends up on the roof line")
-	expect(son.position.y > 12.0, "the Chan boy is back on the roof")
+	expect(son.position.y > 12.0, "Wai is back on the roof")
 	await secs(2.5)
 	expect(not son.sprite.anim.begins_with("carry"), "his arms are empty once the sheets are hung")
 

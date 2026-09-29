@@ -92,8 +92,18 @@ static func level_a(b: LevelBuilder) -> void:
 	PropKit.cardboard(b, -12.6, -11.5, Y, Y + 0.7, -3.95, -3.2, c8(0x9c7a48), P)
 	b.add_obstacle(-12.6, -11.5, -3.95, -3.2, Y, "boxes2")
 	PropKit.cardboard(b, -13.7, -12.9, Y + 0.8, Y + 1.4, -3.9, -3.2, c8(0xb08c58), P)
+	# one more by the door, its label on the side you only see once you turn round
+	PropKit.cardboard(b, -6.7, -6.05, Y, Y + 0.6, 1.3, 2.2, c8(0xa07d4a), P, "")
+	b.add_obstacle(-6.7, -6.05, 1.3, 2.2, Y, "boxes3")
+	b.card("res://assets/textures/props/carton_new_flat.png", Vector3(-6.7, Y + 0.32, 1.75), Vector2(0.8, 0.4), Vector3(-1, 0, 0),
+		{"parent": P, "name": "NewFlatLabel", "band": 0.0})
+	# Grandfather's old photograph, framed on the back wall
+	b.box(-10.76, -10.34, Y + 1.44, Y + 1.76, -3.99, -3.96, c8(0x4a3322), {"surface": "wood", "parent": P, "name": "PhotoFrame"})
+	b.card("res://assets/textures/props/old_photo.png", Vector3(-10.55, Y + 1.6, -3.96), Vector2(0.34, 0.262), Vector3(0, 0, 1),
+		{"parent": P, "name": "OldPhoto", "band": 0.0})
 	b.ref("boxes", Vector3(-12.3, 0, -2.6))
 	b.ref("radio", Vector3(-13.2, 0, -1.3))
+	b.ref("oldPhoto", Vector3(-10.55, 0, -3.3))
 	# Grandfather's chair
 	PropKit.stool(b, -12.8, -0.45, Y, c8(0x6b4a30), P, 0.42)
 

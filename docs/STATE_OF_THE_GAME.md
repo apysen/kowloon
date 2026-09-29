@@ -43,17 +43,17 @@ Open the project in Godot 4.7 and press Play. The main scene is the title screen
 
 The slice follows the Three.js prototype's routes, puzzles and timing, plus the changes asked for since.
 
-1. **Grandfather's flat (Level A).** Grandfather hands over the medicine and the camera. A near-wordless tutorial follows: the view turns once by itself, then key hints wait for the player to turn both ways (Q and E), then show WASD.
+1. **Grandfather's flat (Level A).** Grandfather hands over the medicine and the camera. A near-wordless tutorial follows: the view turns once by itself, then key hints wait for the player to turn both ways (Q and E), then show WASD. Grandfather's old photograph hangs on the back wall, and one packing box is labelled NEW FLAT on the side you only see once the view turns.
 2. **The dead end.** The corridor stops at a wall. Turning the view reveals a service door (閒人免進) that can't be seen from the starting angle.
-3. **Mr. Lau's clinic.** An unlicensed dentist packing up for the move. He asks for a photograph, and it goes into the scrapbook.
+3. **Mr. Lau's clinic.** An unlicensed dentist packing up for the move. He asks for a photograph, and it goes into the scrapbook. Talk to him again and he's back on about his new clinic's windows.
 4. **Up to Level B.** Once Lau's photo is taken, the stairs open. The catwalk across the light well is blocked by wet washing.
-5. **Mrs. Chan.** She is wringing out washing over her basin. Her son was meant to carry the sheets up to dry, and she sends Mei to find him on the roof.
+5. **Mrs. Chan.** She is wringing out washing over her basin. Her son Wai was meant to carry the sheets up to dry, and she sends Mei to find him on the roof.
 6. **The airshaft puzzle.** The only way up is a rusted ladder whose bottom rungs have fallen away. An old crate is hidden behind a broken fridge and only shows when the view turns. Mei pushes it under the ladder and climbs, facing the ladder's wall.
-7. **The roof.** Mei finds the Chan boy. Mr. Ng's lost pigeon is tucked in behind the water tank, so the player turns the view to find her and works out why she won't come down.
+7. **The roof.** Mei finds Wai. Mr. Ng's lost pigeon is tucked in behind the water tank, so the player turns the view to find her and works out why she won't come down.
 8. **Mr. Ng's photograph.** When he's framed in the viewfinder, a jet comes in low on the Kai Tak approach. The shutter waits ("Wait for it...") until the jet is in the picture.
-9. **The washing moves.** The Chan boy unpins the sheets, carries them up through the stuck roof door and pegs them out on the roof line. His arms are empty once they're hung.
+9. **The washing moves.** Wai unpins the sheets, carries them up through the stuck roof door and pegs them out on the roof line. His arms are empty once they're hung.
 10. **Mrs. Wong.** With the catwalk clear, Mei delivers the medicine.
-11. **Home.** Back at the flat, the packing boxes, and the ending card: *30 DAYS UNTIL WE LEAVE*.
+11. **Home.** Back at the flat, Grandfather notices two photographs taken already. Then the packing boxes, and the ending card: *30 DAYS UNTIL WE LEAVE*.
 
 Supporting systems: story stages with named teleports for debugging, a dialogue director with speaker "voice" blips, an interaction director with a single prompt, and small talk/look/use icons (pixelled in Aseprite) over whatever can be used.
 
@@ -71,8 +71,8 @@ Supporting systems: story stages with named teleports for debugging, a dialogue 
   - Mr. Lau: his instrument tray.
   - Mr. Ng: feeding his pigeons, and holding one up.
   - Mr. Kwok: reading the paper.
-  - The fan repairman: working with a screwdriver.
-  - The Chan boy: carrying the bundle.
+  - Mr. Ho, the fan repairman: working with a screwdriver.
+  - Wai, the Chan boy: carrying the bundle.
   - Grandfather: sitting.
   - Rooftop extras: laundry, birdcage, smoking, watering, pointing at planes.
 - Rules held throughout: no jaggies, constant-width strokes in the side views (no notched knees), consistent proportions across the cast, and back views whose arms and props sit where they would really be.
@@ -204,6 +204,6 @@ tests/                 integration playthrough, performance probe
 
 - **The camera never sees most of the City's layout.** The zoomed diorama camera shows the surrounding blocks and nearby alleys from the roof. The yamen and the far streets are there, and are drawn cheaply, but are rarely in frame. A viewpoint on the roof, or an establishing shot on the title, would show them off.
 - **Building footprints are generated** between the mapped streets, not traced from the survey.
-- **The roof cutaway:** while Mei climbs the airshaft, the Chan boy on the roof can appear above the shaft with the roof floor in front of him cut away.
+- **The roof cutaway:** while Mei climbs the airshaft, Wai on the roof can appear above the shaft with the roof floor in front of him cut away.
 - **Content:** this is one vertical slice. The wider game (more families, the clearance timeline, other districts of the City) is designed in the guide but not built.
 - **Platform:** tested on Windows with Direct3D 12 only.

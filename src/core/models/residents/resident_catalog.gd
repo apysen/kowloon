@@ -22,8 +22,8 @@ const ENTRIES := {
 
 ## Speaking voices: the pitch of each speaker's dialogue blip.
 const VOICE_PITCH := {
-	"Mei": 1.35, "Grandfather": 0.65, "Mr. Lau": 0.92, "Mrs. Chan": 1.13, "Chan's son": 1.52,
-	"Mr. Ng": 0.74, "Mrs. Wong": 1.04,
+	"Mei": 1.35, "Grandfather": 0.65, "Mr. Lau": 0.92, "Mrs. Chan": 1.13, "Wai": 1.52,
+	"Mr. Ng": 0.74, "Mrs. Wong": 1.04, "Mr. Ho": 0.82,
 }
 
 

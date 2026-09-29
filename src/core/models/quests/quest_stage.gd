@@ -32,11 +32,11 @@ const OBJECTIVES := {
 	REACHED_LAU: ["Mr. Lau wants a photograph.", "Press C to raise the camera."],
 	LAU_PHOTO: ["Find a way upstairs.", "“When you reach Lau's place, go up.”"],
 	CATWALK_BLOCKED: ["Someone's washing is blocking the catwalk.", "It's still dripping. Whoever hung it lives close by."],
-	MET_CHAN: ["Find Mrs. Chan's son.", "“He's probably gone up to the roof again.”"],
-	SEARCHING_FOR_SON: ["Find Mrs. Chan's son.", "“He's probably gone up to the roof again.”"],
+	MET_CHAN: ["Find Wai.", "“He's probably gone up to the roof again.”"],
+	SEARCHING_FOR_SON: ["Find Wai.", "“He's probably gone up to the roof again.”"],
 	FOUND_SON: ["One of Mr. Ng's pigeons won't come down.", "“She won't come down unless she can see the way.”"],
 	HELPED_NG: ["Take Mr. Ng's photograph.", "“Get the birds in it.”"],
-	FABRIC_MOVED: ["Bring Grandfather's medicine to Mrs. Wong.", "The Chan boy went to fetch the washing."],
+	FABRIC_MOVED: ["Bring Grandfather's medicine to Mrs. Wong.", "Wai went to fetch the washing."],
 	MEDICINE_DELIVERED: ["Return home.", ""],
 	RETURNED_HOME: ["", ""],
 	COMPLETE: ["", ""],
@@ -58,6 +58,8 @@ static func flags_for(stage: int) -> Dictionary:
 		"delivered_medicine": stage >= MEDICINE_DELIVERED,
 		"returned_home": stage >= RETURNED_HOME,
 		"roof_door_open": stage >= FABRIC_MOVED,
+		"setup_ng_home_line": stage >= FABRIC_MOVED,
+		"setup_wong_bet": stage >= MEDICINE_DELIVERED,
 	}
 
 

@@ -5,7 +5,7 @@ extends Node
 ##
 ## Owns the story stage and its flags, every conversation branch, the
 ## perspective discoveries (the service door, the airshaft handholds, the lost
-## pigeon), the Chan boy's errand with the washing, and the ending. Timed
+## pigeon), Wai's errand with the washing, and the ending. Timed
 ## beats run on game time and pause while the player reads.
 
 signal stage_changed(stage: int)
@@ -22,6 +22,8 @@ var flags := {
 	"received_camera": false, "photographed_lau": false, "met_chan": false, "found_chan_son": false,
 	"helped_ng": false, "fabric_moved": false, "delivered_medicine": false, "returned_home": false,
 	"rooftop_visited": false, "roof_door_open": false, "pigeon_found": false,
+	# setups the later chapters pay off
+	"setup_old_photo_seen": false, "setup_lau_windows": false, "setup_ng_home_line": false, "setup_wong_bet": false,
 }
 var timings: Dictionary = {}
 var start_time := 0.0
@@ -76,7 +78,7 @@ func setup() -> void:
 	dialogue.event_fired.connect(_on_dialogue_event)
 	world.resident_blocked.connect(func(id: String) -> void:
 		if id == "son":
-			hud.notice("Chan's son: “Excuse me, Mei, coming through!”", 2.4))
+			hud.notice("Wai: “Excuse me, Mei, coming through!”", 2.4))
 	_register_interactions()
 	_register_photo_targets()
 	start_time = Time.get_ticks_msec() / 1000.0
@@ -252,6 +254,8 @@ func _register_interactions() -> void:
 			say("lau_waiting")
 		elif stage >= S.MEDICINE_DELIVERED:
 			say("lau_return")
+		elif not flags.setup_lau_windows:
+			say("lau_windows", func() -> void: flags.setup_lau_windows = true)
 		else:
 			say("lau_idle"))
 
@@ -406,6 +410,14 @@ func _register_interactions() -> void:
 		"verb": "Look", "can_interact": func() -> bool: return stage == S.RETURNED_HOME,
 		"interact": func() -> void: say("boxes_end", _ending)})
 
+	# the old photograph on the wall: Grandfather has something to say about it once
+	I.add({"id": "oldPhoto", "position": refs.oldPhoto, "radius": 1.1, "priority": InteractionDirector.Priority.ENV,
+		"verb": "Look", "interact": func() -> void:
+			if flags.setup_old_photo_seen:
+				say("old_photo_again")
+			else:
+				say("old_photo", func() -> void: flags.setup_old_photo_seen = true)})
+
 	var env := func(id: String, pos: Vector3, text: String, radius := 1.3, pri := InteractionDirector.Priority.ENV) -> void:
 		I.add({"id": id, "position": pos, "radius": radius, "priority": pri, "verb": "Look",
 			"interact": func() -> void: say([{"speaker": "", "text": text}])})
@@ -425,7 +437,7 @@ func _register_photo_targets() -> void:
 
 # ----------------------------------------------------------------------------- the washing
 #
-# After Mr. Ng's photo the Chan boy opens the stuck stair door and goes down
+# After Mr. Ng's photo Wai opens the stuck stair door and goes down
 # to the catwalk. He waits there until Mei arrives, takes the washing down in
 # front of her, carries it back upstairs and hangs it on the roof line. The
 # catwalk is on the only route to Mrs. Wong, so everyone sees the washing move.
@@ -467,7 +479,7 @@ func _errand_unpin() -> void:
 	son.face_toward(Vector3(16, LevelBuilder.LEVEL_B, -12), 3.5)
 	son.idle_anim = "work"
 	son.sprite.play("work")
-	hud.notice("Chan's son: “Hold on, they're still wet!”", 3.2)
+	hud.notice("Wai: “Hold on, they're still wet!”", 3.2)
 	later(_errand_carry, 3.5)
 
 

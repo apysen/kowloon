@@ -20,7 +20,7 @@ signal resident_blocked(resident_id: String)
 var walk_space: WalkSpace
 var roof_mix := 0.0
 var current_room := ""
-var fabric_state := "catwalk"     # "catwalk" -> "bundle" (in the Chan boy's arms) -> "roof"
+var fabric_state := "catwalk"     # "catwalk" -> "bundle" (in Wai's arms) -> "roof"
 var residents: Dictionary = {}    # id -> Resident (story and neighbours)
 var doors: Array[Dictionary] = []
 var holds: Array[Dictionary] = []
@@ -315,7 +315,7 @@ func open_door(d: Dictionary) -> void:
 # ----------------------------------------------------------------------------- story changes
 
 
-## The washing is moved, not deleted: the Chan boy takes it down from the
+## The washing is moved, not deleted: Wai takes it down from the
 ## catwalk, carries it upstairs and hangs it on the roof line.
 func set_fabric_state(state: String) -> void:
 	fabric_state = state
@@ -483,7 +483,7 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 	for r in residents.values():
 		(r as Resident).sprite.sun_direction = sun_dir
 
-	# the folded washing rides in the Chan boy's arms (drawn on his sprite)
+	# the folded washing rides in Wai's arms (drawn on his sprite)
 	if _plane_t >= 0.0:
 		_plane_t += delta
 		var pl: Node3D = special.Plane

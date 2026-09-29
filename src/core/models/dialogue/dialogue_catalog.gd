@@ -32,7 +32,21 @@ const LINES := {
 		{"speaker": "Grandfather", "text": "Did she."},
 		{"speaker": "Mei", "text": "What does that mean?"},
 		{"speaker": "", "text": "He turns the radio up a little."},
-		{"speaker": "Grandfather", "text": "Your mother saved you some rice."},
+		{"speaker": "", "text": "He nods at the camera."},
+		{"speaker": "Grandfather", "text": "Two already?"},
+		{"speaker": "Mei", "text": "You gave me a camera."},
+		{"speaker": "Grandfather", "text": "I didn't tell you to use it."},
+		{"speaker": "Mei", "text": "That's generally what cameras are for."},
+		{"speaker": "Grandfather", "text": "Your mother saved you some rice. Kit came by and ate half of it."},
+	],
+	"old_photo": [
+		{"speaker": "", "text": "An old photograph."},
+		{"speaker": "Mei", "text": "You look weird."},
+		{"speaker": "Grandfather", "text": "I was young."},
+		{"speaker": "Mei", "text": "That's what I said."},
+	],
+	"old_photo_again": [
+		{"speaker": "", "text": "Grandfather, young, in a crowd of people you don't know."},
 	],
 	"grandfather_end": [
 		{"speaker": "Grandfather", "text": "Eat. It's getting cold."},
@@ -61,6 +75,11 @@ const LINES := {
 		{"speaker": "Mr. Lau", "text": "Hah. Don't show anyone."},
 		{"speaker": "Mr. Lau", "text": "Wong's upstairs from here, isn't she? The stairs are through the back."},
 	],
+	"lau_windows": [
+		{"speaker": "Mr. Lau", "text": "New place has windows."},
+		{"speaker": "Mei", "text": "You keep saying that."},
+		{"speaker": "Mr. Lau", "text": "You don't work under fluorescent tubes all day."},
+	],
 	"lau_idle": [
 		{"speaker": "Mr. Lau", "text": "Go on. Mrs. Wong won't wait forever."},
 	],
@@ -80,21 +99,21 @@ const LINES := {
 	"chan_quest": [
 		{"speaker": "Mei", "text": "Mrs. Chan, can you move the washing? I need to get to Mrs. Wong's."},
 		{"speaker": "Mrs. Chan", "text": "And let them mildew?"},
-		{"speaker": "Mrs. Chan", "text": "My boy was supposed to carry them upstairs to dry. I haven't seen him all afternoon."},
+		{"speaker": "Mrs. Chan", "text": "Wai was supposed to carry them upstairs to dry. I haven't seen him all afternoon."},
 		{"speaker": "Mrs. Chan", "text": "He's probably gone up to the roof again. With that pigeon man."},
 		{"speaker": "Mei", "text": "How do I get up there?"},
-		{"speaker": "Mrs. Chan", "text": "Not by the stairs. That roof door's been stuck for years. Only my boy knows the trick to it."},
+		{"speaker": "Mrs. Chan", "text": "Not by the stairs. That roof door's been stuck for years. Only Wai knows the trick to it."},
 		{"speaker": "Mrs. Chan", "text": "He goes up the shaft behind my kitchen. Like a monkey. Don't tell me about it."},
 	],
 	"chan_waiting": [
 		{"speaker": "Mrs. Chan", "text": "If you find him, tell him his mother has a wooden spoon."},
 	],
 	"chan_told": [
-		{"speaker": "Mei", "text": "Your son's up on the roof, helping Mr. Ng."},
+		{"speaker": "Mei", "text": "Wai's up on the roof, helping Mr. Ng."},
 		{"speaker": "Mrs. Chan", "text": "Of course he is. Tell him his mother has a wooden spoon."},
 	],
 	"chan_coming": [
-		{"speaker": "Mei", "text": "Your son's coming for the washing."},
+		{"speaker": "Mei", "text": "Wai's coming for the washing."},
 		{"speaker": "Mrs. Chan", "text": "I'll believe it when I see it."},
 	],
 	"chan_after": [
@@ -110,7 +129,7 @@ const LINES := {
 	],
 	"shaft_climb": [
 		{"speaker": "", "text": "Onto the crate, up to the first rung."},
-		{"speaker": "", "text": "Then straight up, the way Mrs. Chan's boy must go."},
+		{"speaker": "", "text": "Then straight up, the way Wai must go."},
 	],
 	"shaft_down_unknown": [
 		{"speaker": "", "text": "A long drop down the airshaft. You can't see a way down from here."},
@@ -122,43 +141,43 @@ const LINES := {
 		{"speaker": "", "text": "The stairwell door is swollen stuck in its frame. It won't budge."},
 	],
 	"son_found": [
-		{"speaker": "Chan's son", "text": "Mei? What are you doing up here?"},
+		{"speaker": "Wai", "text": "Mei? What are you doing up here?"},
 		{"speaker": "Mei", "text": "Your mother's looking for you. The washing."},
-		{"speaker": "Chan's son", "text": "The washing! I was supposed to bring it up hours ago."},
-		{"speaker": "Chan's son", "text": "I can't yet. Mr. Ng needs me. One of the birds won't come down."},
-		{"speaker": "Chan's son", "text": "If she flies off now she might not find the new place."},
+		{"speaker": "Wai", "text": "The washing! I was supposed to bring it up hours ago."},
+		{"speaker": "Wai", "text": "I can't yet. Mr. Ng needs me. One of the birds won't come down."},
+		{"speaker": "Wai", "text": "If she flies off now she might not find the new place."},
 	],
 	"son_found_nochan": [
-		{"speaker": "Chan's son", "text": "Mei? What are you doing up here?"},
+		{"speaker": "Wai", "text": "Mei? What are you doing up here?"},
 		{"speaker": "Mei", "text": "Is that your family's washing on the catwalk? I can't get past it."},
-		{"speaker": "Chan's son", "text": "Ma's washing! I was supposed to bring it up hours ago."},
-		{"speaker": "Chan's son", "text": "I can't yet. Mr. Ng needs me. One of the birds won't come down."},
-		{"speaker": "Chan's son", "text": "If she flies off now she might not find the new place."},
+		{"speaker": "Wai", "text": "Ma's washing! I was supposed to bring it up hours ago."},
+		{"speaker": "Wai", "text": "I can't yet. Mr. Ng needs me. One of the birds won't come down."},
+		{"speaker": "Wai", "text": "If she flies off now she might not find the new place."},
 	],
 	"son_shh": [
-		{"speaker": "Chan's son", "text": "Shh. You'll scare the birds."},
+		{"speaker": "Wai", "text": "Shh. You'll scare the birds."},
 	],
 	"son_photo": [
-		{"speaker": "Chan's son", "text": "Go on, take it. He never lets anyone."},
+		{"speaker": "Wai", "text": "Go on, take it. He never lets anyone."},
 	],
 	"son_catwalk": [
-		{"speaker": "Chan's son", "text": "Don't touch, they're still wet. I'm taking them up to the roof."},
+		{"speaker": "Wai", "text": "Don't touch, they're still wet. I'm taking them up to the roof."},
 	],
 	"son_waiting": [
-		{"speaker": "Chan's son", "text": "She's somewhere up by the water tank. She's scared."},
+		{"speaker": "Wai", "text": "She's somewhere up by the water tank. She's scared."},
 	],
 	"son_leaves": [
-		{"speaker": "Chan's son", "text": "Ma's washing! I forgot again. She's going to kill me."},
-		{"speaker": "Chan's son", "text": "I'll bring it up here to dry. And I'll get the stair door open for you. There's a trick to it."},
+		{"speaker": "Wai", "text": "Ma's washing! I forgot again. She's going to kill me."},
+		{"speaker": "Wai", "text": "I'll bring it up here to dry. And I'll get the stair door open for you. There's a trick to it."},
 	],
 	"son_after": [
-		{"speaker": "Chan's son", "text": "Don't tell Ma how long it took."},
+		{"speaker": "Wai", "text": "Don't tell Ma how long it took."},
 	],
 	"ng_stranger": [
 		{"speaker": "Mr. Ng", "text": "Mind the birds. They don't like strangers."},
 	],
 	"ng_early": [
-		{"speaker": "Mei", "text": "Have you seen Mrs. Chan's son?"},
+		{"speaker": "Mei", "text": "Have you seen Wai?"},
 		{"speaker": "Mr. Ng", "text": "Over by the coop, pretending to work."},
 	],
 	"ng_quest": [
@@ -204,13 +223,13 @@ const LINES := {
 		{"speaker": "Mrs. Wong", "text": "Go home, Mei."},
 	],
 	"chopper": [
-		{"speaker": "Auntie Ho", "text": "Watch the pipe. And tell your grandfather the soup is for him."},
+		{"speaker": "Auntie Yip", "text": "Watch the pipe. And tell your grandfather the soup is for him."},
 	],
 	"mahjong": [
-		{"speaker": "Mr. Fung", "text": "Your grandfather looking for you? He owes me forty dollars."},
+		{"speaker": "Mr. Tsang", "text": "Your grandfather looking for you? He owes me forty dollars."},
 	],
 	"fanman": [
-		{"speaker": "Repairman", "text": "Fifty years this fan's been going. Might as well fix it one more time."},
+		{"speaker": "Mr. Ho", "text": "Fifty years this fan's been going. Might as well fix it one more time."},
 	],
 	"shopkeeper": [
 		{"speaker": "Mr. Kwok", "text": "Says here they're setting a date."},
@@ -220,7 +239,7 @@ const LINES := {
 		{"speaker": "Worker", "text": "Excuse me. These are heavy."},
 	],
 	"child": [
-		{"speaker": "Little Wai", "text": "Don't run on the stairs. My ma says."},
+		{"speaker": "Ah Lok", "text": "Don't run on the stairs. My ma says."},
 	],
 	"stairs_blocked": [
 		{"speaker": "Mei", "text": "Mr. Lau wanted his picture first."},

@@ -6,7 +6,7 @@ extends Node3D
 ##
 ## Story residents stand where they live, breathe, work at whatever they are
 ## doing, turn to face Mei when she talks to them, and can be walked along a
-## path by the quest (the Chan boy's errand). Scripted walks pause while the
+## path by the quest (Wai's errand). Scripted walks pause while the
 ## player is reading, so nothing happens behind a menu. If Mei stands in a
 ## corridor in the way, a resident waits, says excuse me, then squeezes past
 ## (the corridors are two metres wide).

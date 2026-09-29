@@ -317,6 +317,48 @@ def mailboxes():
     save(weather(img, 95, 0.5), "mailboxes")
 
 
+def carton_new_flat():
+    """Mum's marker on one side of a packing box: where it's going, not what's in it."""
+    w, h = 256, 128
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    # thick strokes: the side of a box is only a few dozen pixels across on screen
+    d.text((w / 2, h / 2), "NEW FLAT", font=ImageFont.truetype(os.path.join(FONTS, "Caveat.ttf"), 60),
+           fill=(34, 26, 20, 255), anchor="mm", stroke_width=4, stroke_fill=(34, 26, 20, 255))
+    save(img.rotate(-4, resample=Image.BICUBIC), "carton_new_flat")
+
+
+def old_photo():
+    """Grandfather's old photograph: a crowd posed in a corridor, decades ago, a pipe behind them."""
+    w, h = 256, 192
+    g = rng(112)
+    a = np.zeros((h, w))
+    a[:] = 0.62 + 0.08 * np.linspace(0, 1, h)[:, None]          # the corridor wall
+    a[34:44, :] = 0.38                                            # the pipe along it
+    a[44:46, :] = 0.3
+    img = Image.fromarray((a * 255).astype(np.uint8), "L")
+    d = ImageDraw.Draw(img)
+    # eight people in a row, one of them a child at the front
+    for i in range(8):
+        x = 24 + i * 29 + int(g.integers(-4, 5))
+        top = 60 + int(g.integers(-6, 7))
+        shade = int(40 + g.integers(0, 60))
+        d.ellipse([x - 8, top, x + 8, top + 18], fill=shade + 15)
+        d.polygon([(x - 4, top + 17), (x + 4, top + 17), (x + 11, top + 24), (x + 10, h), (x - 10, h), (x - 11, top + 24)],
+                  fill=shade)
+    d.ellipse([118, 118, 132, 133], fill=80)
+    d.polygon([(121, 132), (129, 132), (134, 139), (133, h), (117, h), (116, 139)], fill=205)
+    img = img.filter(ImageFilter.GaussianBlur(1.6))
+    t = np.asarray(img).astype(float) / 255
+    t += g.normal(0, 0.035, t.shape)
+    sepia = np.stack([t * 1.0, t * 0.88, t * 0.7, np.ones_like(t)], -1)
+    photo = Image.fromarray((np.clip(sepia, 0, 1) * 255).astype(np.uint8), "RGBA")
+    # the white border, yellowed
+    framed = Image.new("RGBA", (w + 24, h + 24), (226, 216, 190, 255))
+    framed.paste(photo, (12, 12))
+    save(weather(framed, 113, 0.45, streaks=False), "old_photo")
+
+
 # ----------------------------------------------------------------------------- sky
 
 
@@ -569,6 +611,8 @@ if __name__ == "__main__":
     certificate()
     posters()
     mailboxes()
+    carton_new_flat()
+    old_photo()
     sky_panorama()
     lion_rock()
     checkerboard_hill()
