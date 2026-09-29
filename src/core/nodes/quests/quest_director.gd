@@ -747,12 +747,12 @@ func _tick_flap(delta: float) -> void:
 		var bird: Node3D = world.special.LostPigeon
 		var hole: Vector3 = world.refs.coopHole
 		var d := Vector2(bird.position.x - hole.x, bird.position.z - hole.z).length()
-		if d < 1.1 and bird.position.y > hole.y - 0.55 and bird.position.y < hole.y + 0.9:
-			want = 1.25
+		if d < 1.6 and bird.position.y > hole.y - 0.6 and bird.position.y < hole.y + 1.3:
+			want = 1.9      # thrown right back, past upright, well clear of her
 	var cur := flap.rotation.z
 	if is_equal_approx(cur, want):
 		return
-	var next := move_toward(cur, want, delta * (9.0 if want > cur else 6.5))
+	var next := move_toward(cur, want, delta * (11.0 if want > cur else 7.5))
 	if next <= 0.0 and cur > 0.0:
 		audio.clack()
 	flap.rotation.z = next

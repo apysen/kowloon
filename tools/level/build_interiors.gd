@@ -526,24 +526,24 @@ static func roof(b: LevelBuilder) -> void:
 	var roof_col := c8(0x6b4a30)
 	var ro := {"band": 2.0, "surface": "wood", "parent": PC, "name": "CoopRoof"}
 	b.box(0.9, 3.85, Y + 2.2, Y + 2.35, -23.7, -21.5, roof_col, ro)
-	b.box(4.45, 5.1, Y + 2.2, Y + 2.35, -23.7, -21.5, roof_col, ro)
-	b.box(3.85, 4.45, Y + 2.2, Y + 2.35, -23.7, -22.75, roof_col, ro)
-	b.box(3.85, 4.45, Y + 2.2, Y + 2.35, -22.2, -21.5, roof_col, ro)
+	b.box(4.65, 5.1, Y + 2.2, Y + 2.35, -23.7, -21.5, roof_col, ro)
+	b.box(3.85, 4.65, Y + 2.2, Y + 2.35, -23.7, -22.8, roof_col, ro)
+	b.box(3.85, 4.65, Y + 2.2, Y + 2.35, -22.1, -21.5, roof_col, ro)
 	# the flap: hinged along its west edge, lifted by a bird pushing up under it
 	# or dropping onto it, and falling shut again with a clack
 	var flap := Node3D.new()
 	flap.name = "CoopFlap"
-	flap.position = Vector3(3.85, Y + 2.35, -22.475)
+	flap.position = Vector3(3.85, Y + 2.35, -22.45)
 	b.attach(flap, b.group("Special"))
 	b.tag(flap, 2.0)
-	var board := b.box(0.0, 0.6, -0.12, 0.0, -0.27, 0.27, c8(0x7a5638), {"surface": "wood", "parent_node": flap, "name": "FlapBoard"})
+	var board := b.box(0.0, 0.8, -0.12, 0.0, -0.345, 0.345, c8(0x7a5638), {"surface": "wood", "parent_node": flap, "name": "FlapBoard"})
 	board.remove_meta("band")
-	for hz in [-0.2, 0.2]:
+	for hz in [-0.24, 0.24]:
 		var hinge := b.box(-0.03, 0.08, -0.01, 0.02, hz - 0.04, hz + 0.04, c8(0x5a5a55), {"surface": "metal", "parent_node": flap, "name": "Hinge", "cast_shadow": false})
 		hinge.remove_meta("band")
-	var knob := b.box(0.5, 0.56, 0.0, 0.04, -0.03, 0.03, c8(0x3a3a3a), {"surface": "metal", "parent_node": flap, "name": "Pull", "cast_shadow": false})
+	var knob := b.box(0.7, 0.76, 0.0, 0.04, -0.03, 0.03, c8(0x3a3a3a), {"surface": "metal", "parent_node": flap, "name": "Pull", "cast_shadow": false})
 	knob.remove_meta("band")
-	b.ref("coopHole", Vector3(4.15, Y + 2.35, -22.475))
+	b.ref("coopHole", Vector3(4.25, Y + 2.35, -22.45))
 	b.box(0.9, 5.1, Y, Y + 0.2, -23.7, -21.5, c8(0x6b4a30), {"band": 2.0, "surface": "wood", "parent": PC, "name": "CoopFloor"})
 	for x in [0.95, 5.0]:
 		for z in [-23.65, -21.55]:
@@ -605,10 +605,10 @@ static func roof(b: LevelBuilder) -> void:
 		Vector3(9.2, Y + 2.56, -22.6),
 		Vector3(8.2, Y + 3.4, -22.9),
 		Vector3(6.5, Y + 3.6, -22.6),
-		Vector3(5.1, Y + 3.05, -22.5),
-		Vector3(4.2, Y + 2.72, -22.475),
-		Vector3(4.15, Y + 1.85, -22.45),
-		Vector3(3.5, Y + 0.7, -22.35),
+		Vector3(5.3, Y + 3.2, -22.5),
+		Vector3(4.3, Y + 2.95, -22.45),
+		Vector3(4.25, Y + 1.8, -22.45),
+		Vector3(3.6, Y + 0.7, -22.35),
 		Vector3(3.2, Y + 0.25, -22.3),
 	]
 
