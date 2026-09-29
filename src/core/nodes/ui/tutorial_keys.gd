@@ -52,6 +52,7 @@ func _draw() -> void:
 		draw_arc(ac, 22.0, a0, a1, 24, col, 2.5, true)
 		var tip_a := a0 if dir == -1 else a1
 		var tip := ac + Vector2(cos(tip_a), sin(tip_a)) * 22.0
-		var tangent := Vector2(-sin(tip_a), cos(tip_a)) * (1.0 if dir == -1 else -1.0)
+		# along the arc and off its end: outward, the way the view turns
+		var tangent := Vector2(-sin(tip_a), cos(tip_a)) * (-1.0 if dir == -1 else 1.0)
 		var normal := Vector2(cos(tip_a), sin(tip_a))
 		draw_colored_polygon(PackedVector2Array([tip + tangent * 8.0, tip + normal * 6.0, tip - normal * 6.0]), col)

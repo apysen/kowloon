@@ -219,6 +219,11 @@ func _run() -> void:
 	var book := slice.scrapbook.panel
 	expect(book.visible and not book.busy and book.spread == 0, "the album opens on the title page")
 	expect(book.spreads() == 2, "one page per photograph, after the title page")
+	book.zoom(1)
+	await secs(0.5)
+	expect(book.zoomed(), "clicking a print lifts it up to look at")
+	await book.unzoom()
+	expect(not book.zoomed(), "and it goes back on its page")
 	await book.turn(1)
 	expect(book.spread == 1, "a page turns to the next spread")
 	await book.turn(1)

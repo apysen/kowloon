@@ -54,6 +54,11 @@ var _home := Vector2.ZERO
 var _fresh := {}
 var _filing := false
 var _speed := 1.0
+## Each photograph's page parts, by page index: {polaroid, pic, glass}.
+var _photos := {}
+var _hover := -1
+## The photograph lifted off the page to look at: {page, dim, card}.
+var _zoom := {}
 
 
 func _ready() -> void:
@@ -111,6 +116,9 @@ func open_book(ids: Array, photos: Dictionary, fresh := "") -> void:
 
 
 func close_book() -> void:
+	if not _zoom.is_empty():
+		await unzoom()
+	_set_hover(-1)
 	busy = true
 	create_tween().tween_property(hint, "modulate:a", 0.0, 0.15)
 	# the left-hand pages and the cover fold back over as one
@@ -197,6 +205,7 @@ func _turn(dir: int, secs := 0.6) -> void:
 		page_right.texture = _pages[target * 2 + 1].get_texture()
 	page_leaf.visible = false
 	spread = target
+	_set_hover(-1)
 	_update_hint()
 	if not _filing:
 		create_tween().tween_property(hint, "modulate:a", 1.0, 0.15)
@@ -212,9 +221,25 @@ func _unhandled_input(event: InputEvent) -> void:
 			_speed = 3.0
 		get_viewport().set_input_as_handled()
 		return
+	if not _zoom.is_empty():
+		# looking at a print: a click, or any of the usual keys, puts it back
+		var click := event is InputEventMouseButton and (event as InputEventMouseButton).pressed
+		var key := event.is_pressed() and not event.is_echo() and (event.is_action("cancel") or event.is_action("scrapbook")
+			or event.is_action("advance") or event.is_action("interact"))
+		if click or key:
+			unzoom()
+		get_viewport().set_input_as_handled()
+		return
+	if event is InputEventMouseMotion:
+		_set_hover(-1 if busy else _photo_at(get_global_mouse_position()))
+		return
 	if event is InputEventMouseButton and event.pressed and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-		var x := (event as InputEventMouseButton).position.x - book.global_position.x
-		turn(1 if x > 0.0 else -1)
+		var hit := _photo_at(get_global_mouse_position())
+		if hit >= 0 and not busy:
+			zoom(hit)
+		else:
+			var x := get_global_mouse_position().x - book.global_position.x
+			turn(1 if x > 0.0 else -1)
 		get_viewport().set_input_as_handled()
 		return
 	if not event.is_pressed() or event.is_echo():
@@ -245,6 +270,8 @@ func _build_pages(ids: Array, photos: Dictionary, fresh := "") -> void:
 		c.queue_free()
 	_pages.clear()
 	_fresh = {}
+	_photos = {}
+	_hover = -1
 	var kinds: Array[Dictionary] = [{"kind": "title"}]
 	for id in ids:
 		kinds.append({"kind": "entry", "id": String(id)})
@@ -355,6 +382,13 @@ func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Di
 	polaroid.position = Vector2((PAGE.x - polaroid.size.x) * 0.5, POLAROID_TOP)
 	polaroid.rotation_degrees = tilt
 	parts.polaroid = polaroid
+	var glass := Magnifier.new()
+	glass.size = Vector2(48, 48)
+	# on the print itself: the card is a container and would stretch it to fill
+	glass.position = Vector2(POLAROID_PIC, POLAROID_PIC) * 0.5 - glass.size * 0.5
+	glass.visible = false
+	(polaroid.get_meta("pic") as Control).add_child(glass)
+	_photos[index] = {"polaroid": polaroid, "pic": polaroid.get_meta("pic"), "glass": glass}
 	for k in 2:
 		var tape := TextureRect.new()
 		tape.texture = TAPE
@@ -460,9 +494,10 @@ func _flyer(tex: Texture2D, caption: String) -> Control:
 ## A Polaroid: the print on its white card, her caption on the strip. Sized
 ## to exactly what it holds, so the page's copy and the one that flies onto
 ## it are the same, and the notes can be laid out below it.
-func _polaroid_card(parent: Control, tex: Texture2D, caption: String, lifted: bool) -> PanelContainer:
+func _polaroid_card(parent: Control, tex: Texture2D, caption: String, lifted: bool, pic_px := POLAROID_PIC) -> PanelContainer:
+	var k := pic_px / POLAROID_PIC
 	var card := PanelContainer.new()
-	var sb := UIStyle.panel(Color("fbf8f1"), Color(0, 0, 0, 0), 0, 1, Vector4(10, 10, 10, 6))
+	var sb := UIStyle.panel(Color("fbf8f1"), Color(0, 0, 0, 0), 0, 1, Vector4(10, 10, 10, 6) * k)
 	sb.shadow_color = Color(0, 0, 0, 0.4) if lifted else Color(0.2, 0.14, 0.08, 0.28)
 	sb.shadow_size = 18 if lifted else 7
 	sb.shadow_offset = Vector2(6, 16) if lifted else Vector2(2, 4)
@@ -472,7 +507,7 @@ func _polaroid_card(parent: Control, tex: Texture2D, caption: String, lifted: bo
 	card.add_child(col)
 	var pic := TextureRect.new()
 	pic.texture = tex
-	pic.custom_minimum_size = Vector2(POLAROID_PIC, POLAROID_PIC)
+	pic.custom_minimum_size = Vector2(pic_px, pic_px)
 	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	col.add_child(pic)
@@ -480,10 +515,137 @@ func _polaroid_card(parent: Control, tex: Texture2D, caption: String, lifted: bo
 	cap.text = caption
 	cap.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	cap.add_theme_font_override("font", UIStyle.FONT_HAND)
-	cap.add_theme_font_size_override("font_size", 24)
+	cap.add_theme_font_size_override("font_size", roundi(24 * k))
 	cap.add_theme_color_override("font_color", UIStyle.INK)
 	col.add_child(cap)
+	card.set_meta("pic", pic)
 	parent.add_child(card)
 	card.size = card.get_combined_minimum_size()
 	card.pivot_offset = card.size * 0.5
 	return card
+
+
+# ----------------------------------------------------------------------------- looking closer
+
+
+## Which page's photograph is under this screen point (-1 for none). The pages
+## are drawn from sub-viewports, so this is worked out in page space, allowing
+## for each Polaroid's tilt.
+func _photo_at(p: Vector2) -> int:
+	if busy or cover_leaf.visible or page_leaf.visible:
+		return -1
+	for i in [spread * 2, spread * 2 + 1]:
+		if not _photos.has(i):
+			continue
+		var pol: Control = _photos[i].polaroid
+		var origin := book.global_position + Vector2(-PAGE.x if i % 2 == 0 else 0.0, -PAGE.y * 0.5)
+		var local := (p - origin - pol.position - pol.pivot_offset).rotated(-pol.rotation) + pol.pivot_offset
+		if Rect2(Vector2.ZERO, pol.size).has_point(local):
+			return i
+	return -1
+
+
+## Hovering a print dims it a little and shows the magnifying glass.
+func _set_hover(i: int) -> void:
+	if i == _hover:
+		return
+	if _photos.has(_hover):
+		var old: Dictionary = _photos[_hover]
+		(old.pic as CanvasItem).self_modulate = Color.WHITE
+		(old.glass as CanvasItem).visible = false
+	_hover = i
+	mouse_default_cursor_shape = Control.CURSOR_ARROW
+	if _photos.has(i):
+		var cur: Dictionary = _photos[i]
+		(cur.pic as CanvasItem).self_modulate = Color(0.78, 0.78, 0.78)
+		var glass := cur.glass as CanvasItem
+		glass.visible = true
+		glass.modulate.a = 0.0
+		create_tween().tween_property(glass, "modulate:a", 0.5, 0.12)
+		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+
+
+## Lift a print off the page and hold it up, straightened, filling the view.
+func zoom(i: int) -> void:
+	if not _photos.has(i) or not _zoom.is_empty():
+		return
+	var parts: Dictionary = _photos[i]
+	var pol: Control = parts.polaroid
+	var pic: TextureRect = parts.pic
+	_set_hover(-1)
+	var dim := ColorRect.new()
+	dim.color = Color(0.02, 0.02, 0.03, 0.0)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(dim)
+	var caption := ""
+	for c in (pic.get_parent() as Node).get_children():
+		if c is Label:
+			caption = (c as Label).text
+	var card := _polaroid_card(self, pic.texture, caption, true, 520.0)
+	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# start exactly over the print on the page
+	var origin := book.global_position + Vector2(-PAGE.x if i % 2 == 0 else 0.0, -PAGE.y * 0.5)
+	var from_center := origin + pol.position + pol.pivot_offset
+	var small := pol.size.x / card.size.x
+	card.scale = Vector2.ONE * small
+	card.rotation = pol.rotation
+	card.global_position = from_center - card.size * 0.5
+	pol.modulate.a = 0.0
+	_zoom = {"page": i, "dim": dim, "card": card, "from": from_center, "small": small, "rot": pol.rotation}
+	_play(SND_FLIP)
+	var view := get_viewport_rect().size
+	var fit := minf(1.0, (view.y - 90.0) / card.size.y)
+	var t := create_tween().set_parallel()
+	t.tween_property(dim, "color:a", 0.62, 0.3)
+	t.tween_property(card, "global_position", view * 0.5 - card.size * 0.5, 0.38).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_property(card, "scale", Vector2.ONE * fit, 0.38).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_property(card, "rotation", 0.0, 0.38).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	hint.visible = false
+
+
+## Put the print back where it was stuck.
+func unzoom() -> void:
+	if _zoom.is_empty() or _zoom.has("closing"):
+		return
+	_zoom["closing"] = true
+	var card: Control = _zoom.card
+	var dim: ColorRect = _zoom.dim
+	var t := create_tween().set_parallel()
+	t.tween_property(dim, "color:a", 0.0, 0.25)
+	t.tween_property(card, "global_position", (_zoom.from as Vector2) - card.size * 0.5, 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(card, "scale", Vector2.ONE * float(_zoom.small), 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(card, "rotation", float(_zoom.rot), 0.3)
+	await t.finished
+	var parts: Dictionary = _photos.get(int(_zoom.page), {})
+	if parts.has("polaroid"):
+		(parts.polaroid as CanvasItem).modulate.a = 1.0
+	card.queue_free()
+	dim.queue_free()
+	_zoom = {}
+	hint.visible = true
+	_set_hover(_photo_at(get_global_mouse_position()))
+
+
+func zoomed() -> bool:
+	return not _zoom.is_empty()
+
+
+## The magnifying glass shown over a print under the pointer: a lens ring with
+## a plus in it and a handle, white with a soft shadow, drawn crisp at any size.
+class Magnifier extends Control:
+	func _init() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		var c := size * Vector2(0.42, 0.42)
+		var r := size.x * 0.28
+		draw_circle(c, r * 0.95, Color(0.05, 0.05, 0.06, 0.45))
+		for pass_i in 2:
+			var off := Vector2(2, 3) if pass_i == 0 else Vector2.ZERO
+			var col := Color(0, 0, 0, 0.35) if pass_i == 0 else Color(0.98, 0.97, 0.94)
+			draw_line(c + off + Vector2(r, r) * 0.74, c + off + Vector2(r, r) * 1.6, col, size.x * 0.16, true)
+			draw_arc(c + off, r, 0.0, TAU, 40, col, size.x * 0.11, true)
+			var arm := r * 0.5
+			draw_line(c + off - Vector2(arm, 0), c + off + Vector2(arm, 0), col, size.x * 0.09, true)
+			draw_line(c + off - Vector2(0, arm), c + off + Vector2(0, arm), col, size.x * 0.09, true)

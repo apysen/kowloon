@@ -113,6 +113,16 @@ func _run() -> void:
 			# pigeon/<frames>: the lost pigeon partway through flying home
 			_slice.quests._guide_pigeon()
 			await _frames(int(action.substr(7)))
+		elif action == "book_hover" or action == "book_zoom":
+			_slice.scrapbook.add("lau")
+			_slice.scrapbook.add("ng")
+			await _slice.scrapbook.toggle(true)
+			if action == "book_hover":
+				_slice.scrapbook.panel._set_hover(1)
+				await _frames(20)
+			else:
+				_slice.scrapbook.panel.zoom(1)
+				await _frames(40)
 		elif action.begins_with("book_open/"):
 			# book_open/<frames>: the album partway through opening
 			_slice.scrapbook.add("lau")
@@ -144,6 +154,8 @@ func _run() -> void:
 			_slice.pause.close()
 		while _slice.scrapbook.panel.busy or _slice.scrapbook.panel._filing:
 			await _frames(1)
+		if _slice.scrapbook.panel.zoomed():
+			await _slice.scrapbook.panel.unzoom()
 		if _slice.scrapbook.open:
 			await _slice.scrapbook.toggle(false)
 	quit(0)
