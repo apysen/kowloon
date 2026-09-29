@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Project Kowloon</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+TC:wght@700&display=swap">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+
+<body>
+<!-- BODY:START -->
+    <div id="game-container"></div>
+
+    <div id="hud">
+        <div id="objective"></div>
+        <div id="tutorial-hint"></div>
+        <div id="interaction-prompt"></div>
+    </div>
+    <div id="notice"></div>
+
+    <div id="dialogue-box" class="hidden">
+        <div id="speaker-name"></div>
+        <div id="dialogue-text"></div>
+    </div>
+
+    <div id="photo-overlay" class="hidden">
+        <div id="viewfinder">
+            <span class="corner tl"></span><span class="corner tr"></span>
+            <span class="corner bl"></span><span class="corner br"></span>
+            <span class="reticle"></span>
+        </div>
+        <div class="film-label">INSTANT FILM</div>
+        <div id="viewfinder-status"></div>
+    </div>
+    <div id="flash"></div>
+
+    <div id="polaroid" class="hidden">
+        <img id="polaroid-img" alt="Developing photograph">
+        <div id="polaroid-caption"></div>
+        <div id="polaroid-prompt"><kbd>SPACE</kbd> Keep it</div>
+    </div>
+
+    <div id="scrapbook" class="hidden"></div>
+
+    <div id="fade-screen" class="black"></div>
+
+    <div id="title">
+        <div class="title-inner">
+            <div class="title-cjk" aria-hidden="true"><span>九</span><span>龍</span><span>城</span><span>寨</span></div>
+            <div>
+                <h1 class="title-name">Project Kowloon</h1>
+                <p class="title-slice">The Blue Pipe</p>
+                <p class="title-copy">Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help.</p>
+                <button id="begin" disabled>Loading…</button>
+                <ul class="controls-list">
+                    <li><kbd>WASD</kbd> move</li>
+                    <li><kbd>Q</kbd><kbd>E</kbd> rotate</li>
+                    <li><kbd>F</kbd> interact</li>
+                    <li><kbd>C</kbd> camera</li>
+                    <li><kbd>TAB</kbd> scrapbook</li>
+                    <li><kbd>G</kbd> graphics</li>
+                    <li><kbd>F1</kbd> debug</li>
+                </ul>
+                <p class="touch-note">This prototype needs a keyboard. Open it on a computer to play.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="ending" class="hidden">
+        <div class="end-line end-days">30 DAYS UNTIL WE LEAVE</div>
+        <div class="end-line end-title">PROJECT KOWLOON</div>
+        <div class="end-line end-sub">VERTICAL SLICE COMPLETE</div>
+        <div class="end-line end-replay">Press <kbd>R</kbd> to play again</div>
+    </div>
+
+    <pre id="debug" class="hidden"></pre>
+
+    <script type="module" src="./js/main.js"></script>
+<!-- BODY:END -->
+</body>
+</html>

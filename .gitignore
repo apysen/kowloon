@@ -1,0 +1,9 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Machine-local Claude Code settings
+.claude/settings.local.json
+
+# Scratch files
+/blank_64x64.aseprite
