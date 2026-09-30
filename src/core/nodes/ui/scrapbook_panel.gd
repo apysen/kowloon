@@ -427,13 +427,19 @@ func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Di
 	text.add_theme_constant_override("separation", 0)
 	root.add_child(text)
 	# all in her hand: name and details in pen, her note, and the history in pencil
-	var specs := [[String(r.name), 30, UIStyle.NOTE_INK, -8],
-			[tr("scrapbook.byline").format({"occupation": r.occupation, "location": r.location}), 19, UIStyle.NOTE_INK, -6]]
+	var specs := [[String(r.name), 30, UIStyle.NOTE_INK, -8]]
+	# a place has no occupation: no byline under its name
+	if String(r.occupation) != "":
+		specs.append([tr("scrapbook.byline").format({"occupation": r.occupation, "location": r.location}), 19, UIStyle.NOTE_INK, -6])
 	# added later, in blue: where they went
 	if String(r.get("after", "")) != "":
 		specs.append([tr("scrapbook.after").format({"after": r.after}), 19, UIStyle.PIPE.darkened(0.25), -6])
-	specs.append([String(r.note), 23, UIStyle.NOTE_INK, -8])
-	specs.append([String(r.context), 18, PENCIL, -8])
+	# her note, then anything she wrote under it on a later day; either may be blank for now
+	for extra in [[String(r.note), 23], [String(r.get("later", "")), 20]]:
+		if extra[0] != "":
+			specs.append([extra[0], extra[1], UIStyle.NOTE_INK, -8])
+	if String(r.context) != "":
+		specs.append([String(r.context), 18, PENCIL, -8])
 	for spec in specs:
 		var l := Label.new()
 		l.text = spec[0]

@@ -88,7 +88,7 @@ func _check_used_keys() -> void:
 			if String(k) != "":
 				used[String(k)] = "objectives"
 	for id in ResidentCatalog.ENTRIES:
-		for field in ResidentCatalog.FIELDS:
+		for field in ResidentCatalog.fields_of(id):
 			used["res.%s.%s" % [id, field]] = "resident catalog"
 	var re := RegEx.create_from_string("\"((?:%s)\\.[a-z0-9_.]+)\"" % KEY_PREFIXES)
 	for path in _scripts():

@@ -529,6 +529,42 @@ def yamen():
     save("cabinet_down", thud[:n2] * env(n2, 0.002, 0.3), 0.75)
 
 
+# ----------------------------------------------------------------------------- chapter 5: rooms going quiet
+
+
+def quiet_rooms():
+    """What is left to hear. Water in the pipes: a low steady hum with a slow
+    swell, faint trickle over it (the building's pipes still full everywhere
+    but one wing). A wooden peg falling on steel grating. A mahjong tile let
+    fall into a biscuit tin. An envelope opened and a note unfolded."""
+    secs = 10
+    t = t_axis(secs)
+    hum = fast_lowpass(brown(len(t)), 120) * 0.9
+    hum += 0.05 * np.sin(2 * np.pi * 61 * t) + 0.02 * np.sin(2 * np.pi * 122 * t + 0.4)
+    trickle = biquad(biquad(rng.standard_normal(len(t)), "high", 1400), "low", 4200)
+    trickle *= 0.08 * (0.6 + 0.4 * np.sin(2 * np.pi * 0.31 * t) * np.sin(2 * np.pi * 0.07 * t + 1.3))
+    save("pipe_hum", loop_crossfade((hum + trickle) * (1 + 0.1 * np.sin(2 * np.pi * 0.13 * t)), 1.0), 0.5)
+    # the peg: a small hard tick, then a second, smaller bounce
+    n = int(0.5 * SR)
+    x = np.zeros(n)
+    for at, g in [(0.0, 1.0), (0.13, 0.45), (0.21, 0.18)]:
+        c = click(2600, 0.05, 3) * g + click(900, 0.05, 2) * g * 0.5
+        i = int(at * SR)
+        x[i:i + len(c)] += c[:n - i]
+    save("peg_drop", x, 0.5)
+    # a tile into a tin: a bright clink with a tinny ring
+    n = int(0.6 * SR)
+    ring = sum(tone(f, 0.6, "sine", attack=0.001) * a for f, a in [(1860, 0.5), (2710, 0.35), (4130, 0.2)])
+    ring = ring[:n] * np.exp(-np.linspace(0, 9, n))
+    tick = np.pad(click(3200, 0.03, 3), (0, n))[:n]
+    save("tile_tin", tick + ring, 0.55)
+    # paper: an envelope torn along its flap, a sheet unfolded
+    tt = t_axis(0.9)
+    tear = rng.standard_normal(len(tt)) * (0.5 + 0.5 * (rng.random(len(tt)) > 0.97))
+    tear = biquad(tear, "band", 3200, 0.9) * env(len(tt), 0.02, 0.3)
+    save("paper", tear, 0.35)
+
+
 if __name__ == "__main__":
     interior_hum()
     roof_wind()
@@ -555,3 +591,4 @@ if __name__ == "__main__":
     water()
     workshop()
     yamen()
+    quiet_rooms()

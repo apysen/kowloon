@@ -726,3 +726,139 @@ dlg.c4_chopper.01,Twelve days. Then I chop somewhere else.,仲有十二日。之
 dlg.c4_mahjong.01,Last game at this table is on the ninth. You're invited to lose.,九號係呢張枱最後一局。歡迎你嚟輸。
 dlg.c4_worker.01,"Labels, labels. My hands smell of glue.",標籤、標籤。我對手成陣膠水味。
 dlg.c4_child.01,Did you see the cannons? You can sit on them. They're warm.,你見唔見到啲大炮？可以坐㗎。暖㗎。
+dlg.c5_open.01,Mum has a small box open on the floor. Nothing in it is theirs.,媽媽在地上打開了一個小紙箱，裡面的東西都不是他們家的。
+dlg.c5_open.02,These need to go back.,呢啲要還返畀人。
+dlg.c5_open.03,Now?,而家？
+dlg.c5_open.04,When were you planning to do it?,咁你諗住幾時還？
+dlg.c5_open.05,What are they?,係啲咩嚟㗎？
+dlg.c5_open.06,Things that aren't ours.,唔係我哋嘅嘢。
+dlg.c5_open.07,A folding stool. A screwdriver. A tin of birdseed. A bowl. One mahjong tile.,一張摺凳、一把螺絲批、一罐雀粟、一隻碗、一隻麻雀牌。
+dlg.c5_open.08,And this was under your bed.,仲有呢樣，喺你張床底下搵到嘅。
+dlg.c5_open.09,"Mr. Ng's rope, still coiled the way he coils it.",吳伯的繩，仍然照他的方法圈好。
+dlg.c5_open.10,I was going to give it back.,我本來都諗住還㗎。
+dlg.c5_open.11,Now you are.,而家就還。
+dlg.c5_mum.01,"The stool is Mrs. Fong's, across the well. The bowl is Mrs. Wong's.",張凳係方太嘅，喺天井對面。隻碗係黃婆婆嘅。
+dlg.c5_mum.02,The tile came out of your grandfather's drawer. Don't ask me.,隻牌係喺你公公個櫃桶度搵到嘅。唔好問我。
+dlg.c5_mum_after.01,"Mum is still sitting at the table, a bowl half-wrapped in front of her.",媽媽仍然坐在桌旁，面前一隻碗包了一半。
+dlg.c5_grandfather.01,Take Mrs. Wong her bowl.,攞隻碗還畀黃婆婆。
+dlg.c5_grandfather.02,And tell her...,同埋同佢講⋯⋯
+dlg.c5_grandfather.03,No. Just the bowl.,算。還碗就得。
+dlg.c5_grandfather_after.01,"He pats his shirt pocket, once, as if to check it's still there.",他拍了拍襯衫口袋，好像要確定東西還在。
+dlg.c5_grandfather_after.02,What?,做咩？
+dlg.c5_ho.01,Mum says this is yours.,媽媽話呢把係你嘅。
+dlg.c5_ho.02,Was.,以前係。
+dlg.c5_ho.03,You don't want it?,你唔要咩？
+dlg.c5_ho.04,Bought another one.,買咗第二把。
+dlg.c5_ho.05,Then why did we have it for three years?,咁點解我哋攞咗佢三年？
+dlg.c5_ho.06,Your grandfather borrows permanently.,你公公借嘢，係永久咁借。
+dlg.c5_ho.07,"Mr. Ho takes it anyway, and puts it in the box with the others.",何師傅還是接了過來，放進箱裡和其他工具一起。
+dlg.c5_ho_after.01,Forty years of screws. I'm counting them. Don't talk to me.,四十年嘅螺絲，我數緊。唔好同我講嘢。
+dlg.c5_ng.01,This yours?,呢罐係咪你嘅？
+dlg.c5_ng.02,Probably.,應該係。
+dlg.c5_ng.03,That's confidence.,好有信心喎。
+dlg.c5_ng.04,Birdseed is birdseed.,雀粟就係雀粟。
+dlg.c5_ng.05,Mei hands over the coiled rope.,阿美把圈好的繩遞過去。
+dlg.c5_ng.06,I said quickly.,我話咗要快啲還。
+dlg.c5_ng.07,Twelve days is quickly.,十二日好快㗎喇。
+dlg.c5_ng.08,Mr. Ng takes it without a word.,吳伯一句話也沒說，接了過去。
+dlg.c5_ng.09,You still have that picture?,張相你仲留住？
+dlg.c5_ng.10,Yeah.,留住。
+dlg.c5_ng.11,Good.,好。
+dlg.c5_ng_after.01,They go in boxes on Thursday. They won't like it. Neither will I.,佢哋星期四入箱。佢哋唔會鍾意。我都唔會。
+dlg.c5_mahjong.01,Where did you find that?,你喺邊度搵到㗎？
+dlg.c5_mahjong.02,Grandpa's drawer.,公公個櫃桶。
+dlg.c5_mahjong.03,Another one?,又一隻？
+dlg.c5_mahjong.04,"What do you mean, another one?",咩叫又一隻？
+dlg.c5_mahjong.05,Mr. Tsang looks over toward Grandfather's end of the building.,曾伯朝公公那邊望了一眼。
+dlg.c5_mahjong.06,Nothing.,冇嘢。
+dlg.c5_mahjong.07,The other one drops it into a biscuit tin with the rest.,另一個把它丟進餅罐，和其餘的放在一起。
+dlg.c5_mahjong_after.01,Two of us left. You can't play with two. We tried.,得返我哋兩個。兩個人打唔到。我哋試過。
+dlg.c5_kwok.01,Shut. First time in thirty-one years.,閂咗。三十一年嚟第一次。
+dlg.c5_kwok.02,It feels like a holiday nobody wanted.,好似放咗個冇人想要嘅假。
+dlg.c5_fong.01,The door is open. Nobody is here.,門開著。裡面沒有人。
+dlg.c5_fong.02,"Mei folds the stool and leaves it against the wall, inside the door.",阿美把凳摺好，靠在門內的牆邊。
+dlg.c5_fong_again.01,Nobody is here.,裡面沒有人。
+dlg.c5_wong.01,Mrs. Wong's room is open. The bed has been stripped; her chair is gone.,黃婆婆的房門開著。床已經拆清，她的椅子也不見了。
+dlg.c5_wong.02,Her daughter came for her early.,她的女兒提早來接了她。
+dlg.c5_wong.03,"On the table, an envelope, in her writing: FOR THE OLD FOOL.",桌上有個信封，是她的字：「老懵懂收」。
+dlg.c5_wong.04,"Mei puts the bowl down beside it, and takes the envelope.",阿美把碗放在旁邊，拿起信封。
+dlg.c5_wong_again.01,"The bowl on the small table, in the empty room.",空房裡，小桌上放著那隻碗。
+dlg.c5_note.01,Mrs. Wong left this. For you.,黃婆婆留低嘅。畀你嘅。
+dlg.c5_note.02,"He opens it, and reads.",他拆開信，讀著。
+dlg.c5_note.03,You lose.,你輸咗。
+dlg.c5_note.04,I left first.,我走先。
+dlg.c5_note.05,It counts even if my daughter dragged me.,就算係我個女拉我走，都計數。
+dlg.c5_note.06,Don't argue.,唔好駁嘴。
+dlg.c5_note.07,I'll send the new address.,新地址我會寄畀你。
+dlg.c5_note.08,A long pause.,很長的一陣沉默。
+dlg.c5_note.09,Cheat.,出貓。
+dlg.c5_note.10,You said you didn't know what she meant.,你話過你唔知佢講咩。
+dlg.c5_note.11,I didn't say that.,我冇咁講過。
+dlg.c5_note.12,You absolutely did.,你實講過。
+dlg.c5_note.13,Memory is unreliable.,記性呢樣嘢，靠唔住。
+dlg.c5_note.14,"He folds the note, and puts it in his shirt pocket. Not into a box.",他把信摺好，放進襯衫口袋裡。不是放進箱裡。
+dlg.c5_stair.01,"Behind the pegboard, where the shop's old sign always leaned: a narrow stair, going up.",洞洞板後面，舊招牌一直靠著的地方：一條窄樓梯，往上走。
+dlg.c5_argument.01,The red bowl isn't on the shelf.,架上的紅碗不見了。
+dlg.c5_argument.02,Where's the red bowl?,隻紅碗呢？
+dlg.c5_argument.03,Packed.,執咗入箱。
+dlg.c5_argument.04,I was using it.,我用緊㗎。
+dlg.c5_argument.05,For what?,用嚟做咩？
+dlg.c5_argument.06,It was there.,佢一直喺度。
+dlg.c5_argument.07,It is still there. In a box.,佢仲喺度。喺箱入面。
+dlg.c5_argument.08,"Every time I come back, something's gone.",我每次返嚟，都有啲嘢唔見咗。
+dlg.c5_argument.09,Mei.,阿美。
+dlg.c5_argument.10,Can you stop for one day?,你可唔可以停一日？
+dlg.c5_argument.11,We have six days.,我哋得六日。
+dlg.c5_argument.12,I know.,我知。
+dlg.c5_argument.13,Then what are you asking me to do?,咁你想我點？
+dlg.c5_argument.14,Stop making it disappear before it disappears.,唔好喺啲嘢未消失之前，就令佢消失。
+dlg.c5_argument.15,I'm putting bowls in newspaper.,我係用報紙包緊啲碗。
+dlg.c5_argument.16,I know what you're doing.,我知你做緊咩。
+dlg.c5_argument.17,I don't think you do.,我唔覺得你知。
+dlg.c5_argument.18,Neither of them says anything.,兩個人都沒有說話。
+dlg.c5_argument.19,Mum sits down.,媽媽坐了下來。
+dlg.c5_argument.20,I lived here too.,我都喺度住過㗎。
+c5.card.number,CHAPTER 5,第五章
+c5.card.title,ROOMS GOING QUIET,靜下來的房間
+ending.ch5,CHAPTER 5 · ROOMS GOING QUIET,第五章・靜下來的房間
+c5.obj.return,Return what we borrowed.,把借來的東西還回去。
+c5.need.ho,"The screwdriver: Mr. Ho's, in the hall.",螺絲批：何師傅的，在走廊。
+c5.need.ng,"The birdseed and the rope: Mr. Ng's, on the roof.",雀粟和繩：吳伯的，在天台。
+c5.need.tile,The mahjong tile: back to the mahjong table.,麻雀牌：還給麻雀枱那邊。
+c5.need.wong,"The bowl: Mrs. Wong's, past the end of the catwalk.",碗：黃婆婆的，過了天橋就是。
+c5.need.fong,"The stool: Mrs. Fong's, across the light well.",摺凳：方太的，在天井對面。
+c5.need.fong_gone,The stool: Mrs. Fong's. The footbridge is gone. Find a way round from below: the shop at the foot of the stairs by Lau's stands open.,摺凳：方太的。木板橋沒了。從下面找路繞過去：劉醫生那邊樓梯腳的舖頭開著。
+c5.need.fong_shop,The stool: the old metal shop is empty. Turn the view inside it.,摺凳：舊五金舖已經空了。在裡面轉換視角。
+c5.need.fong_stair,"The stool: up the narrow stair behind the pegboard, to Mrs. Fong's door.",摺凳：從洞洞板後的窄樓梯上去，到方太門口。
+c5.need.note,Mrs. Wong's envelope: to Grandfather.,黃婆婆的信封：交給公公。
+c5.obj.photo,Photograph the Chans' clothesline.,為陳家的晾衫繩拍照。
+c5.obj.photo.hint,Over the catwalk. The washing's gone; the pegs are still there.,在天橋上方。衫已經收走，衣夾還在。
+c5.obj.home,Go home.,回家。
+c5.obj.home.hint,Everything's back where it belongs.,東西都還回去了。
+verb.leave,Leave it,放低
+notice.c5_footbridge,The footbridge is gone.,木板橋不見了。
+notice.c5_ho,The screwdriver: back with Mr. Ho.,螺絲批：還給何師傅了。
+notice.c5_ng,The birdseed and the rope: back with Mr. Ng.,雀粟和繩：還給吳伯了。
+notice.c5_tile,The tile: in the tin with the rest.,麻雀牌：和其餘的放進罐裡了。
+notice.c5_stool,The stool: left for Mrs. Fong.,摺凳：留給方太了。
+notice.c5_note,Mrs. Wong's envelope. For Grandfather.,黃婆婆的信封。給公公的。
+env.c5_chalk,"Chalked by the door, the way people leave word now: 方, an arrow, Lok Fu Estate, Block 3, 812.",門邊用粉筆寫著，現在大家都是這樣留話的：方，一個箭嘴，樂富邨，三座，812。
+env.c5_pegboard,"A pegboard with every tool's outline painted round it, so each one went back in its place. Every place is empty.",一塊洞洞板，每件工具的形狀都用油漆描了出來，好讓每件都放回原位。現在每個位置都空了。
+env.c5_pale,A pale square marks where something used to hang.,牆上一個淺色的方印，是從前掛東西的地方。
+env.c5_bracket,"The bracket Mr. Lau's sign hung from. Without it, his stairs look like anybody's stairs.",劉醫生那塊招牌的鐵架。沒了招牌，他的樓梯看起來就跟別處的樓梯一樣。
+env.c5_stall,"Mr. Kwok's shutter, down in the middle of the day.",郭伯的鐵閘，大白天拉了下來。
+env.c5_tap,"Mrs. Fong's tap. Mei turns it: nothing, not even a cough. They've shut the riser for this side.",方太的水喉。阿美扭開：甚麼也沒有，連咳一聲也沒有。這一邊的總喉已經關了。
+env.c5_sink,The tap over the old sink gives nothing. On this side the pipes have gone quiet.,舊洗碗盆上的水喉甚麼也流不出來。這一邊的水管都靜了。
+env.c5_folded_table,"The mahjong table, folded flat against the wall. You can see how small it is now.",麻雀枱摺平了靠在牆邊。現在才看得出它原來那麼細。
+env.c5_line,"The Chans' line. Pegs, and no washing.",陳家的晾衫繩。只有衣夾，沒有衫。
+env.c5_footbridge,"Where the footbridge was: two cut stubs, and a batten nailed across the gap.",從前木板橋的位置：兩截切斷的鐵，缺口釘了一條木條。
+res.line.name,The Chans' Clothesline,陳家的晾衫繩
+res.line.note,It looks bigger without anything on it.,上面甚麼都沒有，看起來反而大了。
+res.line.context,"With no room to dry anything indoors, washing went wherever there was air: across catwalks and light wells, on bamboo poles out of windows, over the roofs.",屋裡沒有地方晾乾東西，衣服就掛在任何通風的地方：天橋上、天井裡、窗外伸出去的竹竿上、天台上。
+res.lau_clinic.name,Lau's Old Clinic,劉醫生的舊診所
+res.lau_clinic.note,I walked past the old stairs twice before I remembered he wasn't there.,我在舊樓梯前走過了兩次，才記起他已經不在了。
+res.lau_clinic.context,"When a clinic closed, a landmark went with it: people in the City gave directions by the dentists' signs.",一間診所關了，一個地標也跟著沒了：城寨裡的人指路，靠的就是牙醫的招牌。
+res.wong_room.name,Mrs. Wong's Room,黃婆婆的房間
+res.wong_room.note,She wasn't there.\nShe still found a way to argue with him.,她已經不在了。\n她還是找到辦法跟他鬥嘴。
+res.wong_room.context,"Old people often left first: a son or daughter living outside the City came and took them, weeks before the clearance reached their floor.",老人家往往最先走：住在城外的兒女來接他們，比清拆到他們那一層早好幾個星期。
+res.ho.later,The pipes were still there after the water stopped.,水停了以後，水管還在。

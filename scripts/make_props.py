@@ -737,6 +737,30 @@ def c4_props():
     save(weather(img, 133, 0.3, streaks=False), "label_c714")
 
 
+def c5_props():
+    # chalked beside Mrs. Fong's open door, the way people left word: her
+    # name, an arrow, the estate, the block and the flat (full source font:
+    # the subset in assets/fonts/cjk only has the string table's characters)
+    w, h = 400, 200
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    hand = ImageFont.truetype(os.path.join(ROOT, "tools", "fonts", "src", "LXGWWenKaiTC-Regular.ttf"), 54)
+    chalk = (232, 232, 222, 235)
+    d.text((24, 58), "方 →", font=hand, fill=chalk, anchor="lm", stroke_width=1, stroke_fill=chalk)
+    d.text((150, 58), "樂富邨", font=hand, fill=chalk, anchor="lm", stroke_width=1, stroke_fill=chalk)
+    d.text((70, 140), "三座 812", font=hand, fill=chalk, anchor="lm", stroke_width=1, stroke_fill=chalk)
+    d.line([(60, 176), (330, 170)], fill=chalk, width=3)
+    img = img.filter(ImageFilter.GaussianBlur(0.6))
+    # chalk is powdery: knock holes in the strokes
+    r = rng(151)
+    px = img.load()
+    for _ in range(9000):
+        x, y = int(r.random() * w), int(r.random() * h)
+        if px[x, y][3] > 0:
+            px[x, y] = (px[x, y][0], px[x, y][1], px[x, y][2], int(px[x, y][3] * r.random()))
+    save(img.rotate(-3, resample=Image.BICUBIC), "chalk_fong")
+
+
 if __name__ == "__main__":
     contact_shadow()
     soft_dot()
@@ -765,3 +789,4 @@ if __name__ == "__main__":
     album_pages()
     album_page_stack()
     c4_props()
+    c5_props()

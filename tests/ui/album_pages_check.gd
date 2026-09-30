@@ -4,9 +4,9 @@ extends SceneTree
 ##
 ##   godot --headless --path . --script res://tests/ui/album_pages_check.gd
 ##
-## Lays out each resident's page in every language, before and after the album
-## learns where people went, and fails if the notes run past the bottom margin
-## into the page number.
+## Lays out each page in every language, before and after the album learns
+## where people went and has its later notes, and fails if the writing runs
+## past the bottom margin into the page number.
 
 const BOTTOM := 540.0 - 44.0
 
@@ -24,7 +24,9 @@ func _run() -> void:
 	for loc in ["en", "zh_HK"]:
 		TranslationServer.set_locale(loc)
 		for after in [false, true]:
+			# later on, every note written in too
 			Progress.after_unlocked = after
+			Progress.late_notes = {"ho": true, "wong_room": true, "lau_clinic": true} if after else {}
 			book._build_pages(ResidentCatalog.ENTRIES, {}, "")
 			await process_frame
 			await process_frame

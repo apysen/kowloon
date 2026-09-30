@@ -820,6 +820,9 @@ def specials(name, look, view, bp):
         ]))
     if name == "grandfather":
         out.append(("sit", [fr_with(legs="seated", seated_dy=5, blink=(i == 3), bob=(1 if i in (1, 2) else 0), duration=420) for i in range(4)]))
+    if name == "mum":
+        # sat down at the table at last, hands in her lap (Chapter 5)
+        out.append(("sit", [fr_with(legs="seated", seated_dy=5, blink=(i == 3), bob=(1 if i in (1, 2) else 0), duration=480) for i in range(4)]))
     if name == "fanman":
         # up on a stool, the screwdriver's blade to the pipe overhead: listening to the water in it
         sd = {"front": ["screwdriver_up_front"], "back": [], "side": ["screwdriver_up_side"]}[view]

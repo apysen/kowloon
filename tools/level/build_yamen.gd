@@ -368,7 +368,7 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	# elsewhere on the route, Chapter 4's moving
 	var R := LevelBuilder.LEVEL_ROOF
 	# Lau's clinic: the chair gone, a pale shape where it stood, the tools in boxes, his card inside the door
-	b.box(4.3, 5.8, A, A + 0.004, -13.3, -11.7, c8(0xdfe6dc), {"surface": "floor", "parent": C4, "name": "ChairMark", "cast_shadow": false, "band": 0.0})
+	b.box(4.3, 5.8, A, A + 0.004, -13.3, -11.7, c8(0xdfe6dc), {"surface": "floor", "parent": "ChapterProps/Ch4-7", "name": "ChairMark", "cast_shadow": false, "band": 0.0})
 	PropKit.cardboard(b, 5.0, 5.8, A, A + 0.55, -14.7, -14.05, c8(0xa8834f), C4)
 	PropKit.cardboard(b, 5.05, 5.75, A + 0.55, A + 0.95, -14.65, -14.1, c8(0x9c7a48), C4)
 	b.add_obstacle(5.0, 5.8, -14.7, -14.05, A, "lauToolBoxes")

@@ -9,12 +9,15 @@ extends RefCounted
 ## ChapterProps/Ch<first>-<last> and is taken out on the other days.
 ## KOWLOON_CHAPTER picks the chapter for tests and captures.
 
-const LAST := 4
+const LAST := 5
 
 static var chapter := 1
 static var carried_photos: Dictionary = {}     # id -> Texture2D
 ## Mrs. Cheung's book, Chapter 4: from then on the album keeps where people went
 static var after_unlocked := false
+## Notes Mei writes into a page later on (Mr. Ho's addendum, the empty rooms'
+## captions): the ids whose later note is in
+static var late_notes: Dictionary = {}
 static var _forced_read := false
 
 
@@ -27,6 +30,9 @@ static func resolve() -> int:
 			chapter = clampi(int(forced), 1, LAST)
 	if chapter > 4:
 		after_unlocked = true
+	if chapter > 5:
+		for id in ["ho", "wong_room", "lau_clinic"]:
+			late_notes[id] = true
 	return chapter
 
 

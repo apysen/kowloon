@@ -11,6 +11,10 @@ extends Node
 ## frame finds the subject; only someone who matters, at the right moment, can
 ## be taken. The print is what she framed: flash, shutter, the camera comes
 ## down, the Polaroid develops, and it goes into the scrapbook.
+##
+## Not every subject is a person. A thing (the Chans' empty line) is framed
+## like one, the viewfinder going yellow. A place (an empty room) never locks:
+## there is nothing to frame, but while Mei stands in it the shutter works.
 
 signal photo_kept(id: String)
 ## The reticle has just found someone who can be photographed now.
@@ -43,6 +47,7 @@ var subject: Dictionary = {}
 ## id -> Texture2D, the prints Mei has kept
 var photos: Dictionary = {}
 var _targets: Array[Dictionary] = []
+var _places: Array[Dictionary] = []
 var _pending := ""
 var _locked_id := ""
 var _waiting := false
@@ -54,6 +59,17 @@ var shutter_ready: Callable
 ## A photo target: a resident and when a picture of them counts.
 func add_target(id: String, resident: Resident, valid: Callable) -> void:
 	_targets.append({"id": id, "resident": resident, "valid": valid})
+
+
+## A thing to frame, not a person: `box` is where it is in the world.
+func add_thing(id: String, box: AABB, valid: Callable) -> void:
+	_targets.append({"id": id, "resident": null, "box": box, "valid": valid})
+
+
+## A place: no lock and no yellow, but the shutter fires while `valid` holds
+## (Mei is standing in it), and the print is of whatever she has framed.
+func add_place(id: String, valid: Callable) -> void:
+	_places.append({"id": id, "resident": null, "valid": valid, "quiet": true})
 
 
 func enter() -> bool:
@@ -210,11 +226,15 @@ func _process(delta: float) -> void:
 	var hit: Dictionary = {}
 	var best := INF
 	for t in _targets:
+		var box: AABB
 		var r: Resident = t.resident
-		if not r.visible or r.gone:
-			continue
-		var c := r.global_position + Vector3(0, 1.0, 0)
-		var box := AABB(c - Vector3(0.6, 1.1, 0.6), Vector3(1.2, 2.2, 1.2))
+		if r:
+			if not r.visible or r.gone:
+				continue
+			var c := r.global_position + Vector3(0, 1.0, 0)
+			box = AABB(c - Vector3(0.6, 1.1, 0.6), Vector3(1.2, 2.2, 1.2))
+		else:
+			box = t.box
 		var d: Variant = box.intersects_ray(origin, dir)
 		if d != null:
 			var dist := origin.distance_to(d as Vector3)
@@ -223,6 +243,12 @@ func _process(delta: float) -> void:
 				hit = t
 	subject = hit if not hit.is_empty() and (hit.valid as Callable).call() else {}
 	viewfinder.locked_on = not subject.is_empty()
+	# nobody to frame: a place she is standing in will still take
+	if subject.is_empty() and hit.is_empty():
+		for pl in _places:
+			if (pl.valid as Callable).call():
+				subject = pl
+				break
 	var sid: String = subject.get("id", "")
 	if sid != _locked_id:
 		_locked_id = sid

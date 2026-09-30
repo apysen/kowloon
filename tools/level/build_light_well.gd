@@ -13,7 +13,8 @@ extends RefCounted
 ## the north wall behind three air-conditioners, past Mrs. Fong's tap, into the
 ## empty flat, fading from blue to bare grey as it goes. Inside, three valves.
 ##
-## Permanent: it is there on every day. Only the people change.
+## Permanent, except for two things Chapter 5 changes: the footbridge is taken
+## away (ChapterProps/Ch1-4), and Mrs. Fong, gone, has left her door open.
 
 const Y := LevelBuilder.LEVEL_B
 const BLUE := Color("2f74c0")
@@ -23,6 +24,7 @@ const PU := "Furniture/Unit"
 
 # the rooms: Mrs. Fong's, and the empty flat
 const FONG := [12.0, 17.6, -21.5, -17.6]
+const FONG_DOOR := [14.3, 15.3]
 const UNIT := [18.0, 24.0, -21.5, -17.6]
 const LEDGE_Z := [-17.3, -16.3]            # between the rooms' south walls and the well
 const BRIDGE_X := [17.2, 18.2]
@@ -67,7 +69,8 @@ static func _ledge(b: LevelBuilder) -> void:
 	for span in [[12.0, BRIDGE_X[0]], [BRIDGE_X[1], 23.7]]:
 		_rail_x(b, span[0], span[1], LEDGE_Z[1] - 0.03, P)
 	# and across its west end, past Mrs. Fong's door, where it stops over the well's corner
-	_rail_z(b, LEDGE_Z[0], LEDGE_Z[1], 12.03, P)
+	# (until Chapter 5, when the back stair's door stands open there: BuildQuietRooms)
+	_rail_z(b, LEDGE_Z[0], LEDGE_Z[1], 12.03, "ChapterProps/Ch1-4/LedgeEnd")
 	# the service ledge round the side of the empty flat, to the back of its kitchen
 	b.add_floor(SERVICE[0], SERVICE[1], SERVICE[2], SERVICE[3], Y, "serviceLedge")
 	b.box(SERVICE[0], SERVICE[1], Y - 0.25, Y, SERVICE[2], SERVICE[3], c8(0x7e7a70), {"band": 1.0, "surface": "concrete", "parent": P, "name": "LedgeSlab"})
@@ -87,7 +90,9 @@ static func _footbridge(b: LevelBuilder) -> void:
 	var z0: float = LEDGE_Z[1]
 	var z1 := -13.0
 	b.add_floor(x0, x1, z0, z1, Y, "footbridge")
-	var PB := P + "/Footbridge"
+	# taken away before Chapter 5 (the crossing that fails in CH05_P01)
+	b.add_obstacle(x0, x1, z0, z1, Y, "footbridgeGone", "chapter:Ch5-7")
+	var PB := "ChapterProps/Ch1-4/Footbridge"
 	for sx in [x0 + 0.08, x1 - 0.16]:
 		b.box(sx, sx + 0.08, Y - 0.22, Y - 0.06, z0 - 0.2, z1 + 0.2, c8(0x4a4a48), {"band": 1.0, "surface": "rust", "parent": PB, "name": "Stringer"})
 	var z := z0
@@ -129,13 +134,16 @@ static func _rail_z(b: LevelBuilder, z0: float, z1: float, x: float, parent: Str
 
 static func _rooms(b: LevelBuilder) -> void:
 	b.room({"x0": FONG[0], "x1": FONG[1], "z0": FONG[2], "z1": FONG[3], "y": Y, "name": "Fong", "id": "fong",
-		"wall": c8(0x9a8e7a), "floor": c8(0x5a4c3c), "parent": "Structure/LevelB"})
+		"wall": c8(0x9a8e7a), "floor": c8(0x5a4c3c), "open": {"s": [FONG_DOOR]}, "parent": "Structure/LevelB"})
+	# the step through her doorway, shut until she has gone (Chapter 5)
+	b.add_floor(FONG_DOOR[0], FONG_DOOR[1], FONG[3], LEDGE_Z[0], Y, "fongDoorway")
+	b.add_obstacle(FONG_DOOR[0], FONG_DOOR[1], FONG[3] - 0.1, LEDGE_Z[0] + 0.05, Y, "fongDoorShut", "chapter:Ch1-4")
 	# the flat next door: its back kitchen window a gap in the east wall
 	b.room({"x0": UNIT[0], "x1": UNIT[1], "z0": UNIT[2], "z1": UNIT[3], "y": Y, "name": "Unit", "id": "unit",
 		"wall": c8(0x8c8878), "floor": c8(0x4e4840), "open": {"e": [WINDOW_Z]}, "lintel": false, "parent": "Structure/LevelB"})
 	var face: float = LEDGE_Z[0]        # the outer face of both flats' south walls
-	# Mrs. Fong's door: shut, a radio playing low behind it
-	BuildInteriors.panel_door(b, 14.3, 15.3, Y, 2.2, face, c8(0x8a4a3a), P, 1.0, "FongDoor", true)
+	# Mrs. Fong's door: shut, a radio playing low behind it (open on an empty room in Chapter 5)
+	BuildInteriors.panel_door(b, FONG_DOOR[0], FONG_DOOR[1], Y, 2.2, face, c8(0x8a4a3a), "ChapterProps/Ch1-4/FongDoor", 1.0, "FongDoor", true)
 	b.card("res://assets/textures/props/poster_1.png", Vector3(16.2, Y + 1.55, face), Vector2(0.36, 0.5), Vector3(0, 0, 1), {"parent": P, "name": "FongDoorGod", "band": 1.0, "fadeable": true})
 	b.box(15.45, 15.75, Y + 1.3, Y + 1.5, face, face + 0.06, c8(0xc9463a), {"band": 1.0, "fadeable": true, "surface": "grain", "parent": P, "name": "FongMailSlot"})
 	# the empty flat's door: a chain through the handle to a staple in the wall, a padlock, and the notice

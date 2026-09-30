@@ -124,6 +124,13 @@ floors = Array[Dictionary]([{
 "z0": -21.5,
 "z1": -17.6
 }, {
+"name": "fongDoorway",
+"x0": 14.3,
+"x1": 15.3,
+"y": 5.0,
+"z0": -17.6,
+"z1": -17.3
+}, {
 "name": "Unit",
 "x0": 18.0,
 "x1": 24.0,
@@ -292,6 +299,34 @@ floors = Array[Dictionary]([{
 "z0": -21.0,
 "z1": -16.0
 }, {
+"name": "BackShop",
+"x0": 8.0,
+"x1": 11.0,
+"y": 0.0,
+"z0": -17.3,
+"z1": -15.3
+}, {
+"name": "backShopDoor",
+"x0": 8.15,
+"x1": 9.35,
+"y": 0.0,
+"z0": -15.3,
+"z1": -15.0
+}, {
+"name": "StairHead",
+"x0": 10.4,
+"x1": 11.7,
+"y": 5.0,
+"z0": -17.3,
+"z1": -15.3
+}, {
+"name": "stairHeadDoor",
+"x0": 11.7,
+"x1": 12.0,
+"y": 5.0,
+"z0": -17.3,
+"z1": -16.3
+}, {
 "name": "roof",
 "x0": -10.0,
 "x1": 12.0,
@@ -433,7 +468,7 @@ obstacles = Array[Dictionary]([{
 "z0": -0.75,
 "z1": 0.75
 }, {
-"key": "",
+"key": "chapter:Ch1-4",
 "name": "mahjong",
 "x0": -2.8,
 "x1": -1.2,
@@ -441,7 +476,7 @@ obstacles = Array[Dictionary]([{
 "z0": 2.0,
 "z1": 3.3
 }, {
-"key": "",
+"key": "chapter:Ch1-4",
 "name": "chopping",
 "x0": -3.95,
 "x1": -3.3,
@@ -473,7 +508,7 @@ obstacles = Array[Dictionary]([{
 "z0": -14.9,
 "z1": -14.3
 }, {
-"key": "",
+"key": "chapter:Ch1-4",
 "name": "cabinet",
 "x0": 6.6,
 "x1": 8.0,
@@ -489,7 +524,7 @@ obstacles = Array[Dictionary]([{
 "z0": -14.8,
 "z1": -13.4
 }, {
-"key": "",
+"key": "chapter:Ch1-4",
 "name": "clinicBoxes2",
 "x0": 0.2,
 "x1": 1.3,
@@ -513,7 +548,7 @@ obstacles = Array[Dictionary]([{
 "z0": -14.45,
 "z1": -14.15
 }, {
-"key": "",
+"key": "chapter:Ch1-4",
 "name": "stackedBoxes",
 "x0": 6.2,
 "x1": 7.6,
@@ -529,7 +564,7 @@ obstacles = Array[Dictionary]([{
 "z0": -11.5,
 "z1": -9.2
 }, {
-"key": "",
+"key": "chapter:Ch1-4",
 "name": "basin",
 "x0": -4.2,
 "x1": -3.2,
@@ -585,7 +620,7 @@ obstacles = Array[Dictionary]([{
 "z0": -9.8,
 "z1": -8.0
 }, {
-"key": "",
+"key": "chapter:Ch1-4",
 "name": "wongAltar",
 "x0": 29.8,
 "x1": 31.0,
@@ -624,6 +659,22 @@ obstacles = Array[Dictionary]([{
 "y": 5.0,
 "z0": -15.854999694824219,
 "z1": -15.534999694824219
+}, {
+"key": "chapter:Ch5-7",
+"name": "footbridgeGone",
+"x0": 17.2,
+"x1": 18.2,
+"y": 5.0,
+"z0": -16.3,
+"z1": -13.0
+}, {
+"key": "chapter:Ch1-4",
+"name": "fongDoorShut",
+"x0": 14.3,
+"x1": 15.3,
+"y": 5.0,
+"z0": -17.700000000000003,
+"z1": -17.25
 }, {
 "key": "",
 "name": "unitCounter",
@@ -1018,6 +1069,86 @@ obstacles = Array[Dictionary]([{
 "z1": -2.75
 }, {
 "key": "",
+"name": "backStair",
+"x0": 8.450000000000001,
+"x1": 11.0,
+"y": 0.0,
+"z0": -17.3,
+"z1": -16.599999999999998
+}, {
+"key": "",
+"name": "pegboard",
+"x0": 8.0,
+"x1": 10.3,
+"y": 0.0,
+"z0": -16.650000000000002,
+"z1": -16.520000000000003
+}, {
+"key": "chapter:Ch1-4",
+"name": "oldSign",
+"x0": 10.3,
+"x1": 11.0,
+"y": 0.0,
+"z0": -16.900000000000002,
+"z1": -16.5
+}, {
+"key": "chapter:Ch1-4",
+"name": "backShopShut",
+"x0": 8.15,
+"x1": 9.35,
+"y": 0.0,
+"z0": -15.3,
+"z1": -14.9
+}, {
+"key": "",
+"name": "stairHeadHole",
+"x0": 10.4,
+"x1": 11.0,
+"y": 5.0,
+"z0": -17.3,
+"z1": -16.599999999999998
+}, {
+"key": "chapter:Ch1-4",
+"name": "stairHeadShut",
+"x0": 11.7,
+"x1": 12.0,
+"y": 5.0,
+"z0": -17.3,
+"z1": -16.3
+}, {
+"key": "chapter:Ch5-7",
+"name": "foldedTable",
+"x0": -4.0,
+"x1": -3.75,
+"y": 0.0,
+"z0": 1.55,
+"z1": 2.95
+}, {
+"key": "chapter:Ch5-7",
+"name": "alcoveBox",
+"x0": -1.3,
+"x1": -0.7,
+"y": 0.0,
+"z0": 3.2,
+"z1": 3.8
+}, {
+"key": "chapter:Ch5-7",
+"name": "stallShut",
+"x0": 1.9,
+"x1": 2.05,
+"y": 0.0,
+"z0": -6.0,
+"z1": -4.0
+}, {
+"key": "chapter:Ch5",
+"name": "borrowedBox",
+"x0": -10.9,
+"x1": -10.35,
+"y": 0.0,
+"z0": -1.95,
+"z1": -1.45
+}, {
+"key": "",
 "name": "StairHut",
 "x0": 8.8,
 "x1": 11.6,
@@ -1109,6 +1240,14 @@ closed_rooms = Array[Dictionary]([{
 "id": "classroom",
 "rects": [[11.0, 15.7, 0.8, 4.3]],
 "y": 5.0
+}, {
+"id": "backshop",
+"rects": [[8.0, 11.0, -17.3, -15.3]],
+"y": 0.0
+}, {
+"id": "stairhead",
+"rects": [[10.4, 11.7, -17.3, -15.3]],
+"y": 5.0
 }])
 doors = Array[Dictionary]([{
 "base_yaw": 1.5707963267948966,
@@ -1121,8 +1260,13 @@ doors = Array[Dictionary]([{
 "width": 1.4
 }])
 refs = {
+"backShop": Vector3(9.3, 0, -15.9),
+"backShopDoor": Vector3(8.75, 0, -14.6),
+"backStairFoot": Vector3(10.6, 0, -16.35),
+"backStairTop": Vector3(11.25, 5, -16.75),
 "balcony": Vector3(-2.65, 9.25, 6.5),
 "blackboard": Vector3(11.8, 5, 2.6),
+"borrowedBox": Vector3(-10.6, 0, -1.1),
 "boxes": Vector3(-12.3, 0, -2.6),
 "branchCrossing": Vector3(13, 5, -12.2),
 "brochure": Vector3(-11.8, 0, -0.85),
@@ -1130,6 +1274,7 @@ refs = {
 "cannons": Vector3(7.4, 0, -1.6),
 "chainedDoor": Vector3(20.9, 5, -16.8),
 "chanRoof": Vector3(-4.4, 13, -9.4),
+"chansLine": Vector3(16, 5, -12),
 "chiu": Vector3(-4.9, 5, 1.95),
 "classroom": Vector3(13.3, 5, 2.2),
 "coop": Vector3(3, 13, -21),
@@ -1139,8 +1284,11 @@ refs = {
 "crateStart": Vector3(-3.55, 5, -19.95),
 "fabricPos": Vector3(15.3, 5, -12),
 "foldPanel": Vector3(13.45, 5, 0.1),
+"fongChalk": Vector3(13.45, 5, -16.8),
 "fongDoor": Vector3(14.8, 5, -16.8),
+"fongInside": Vector3(14.8, 5, -18.4),
 "footbridge": Vector3(17.7, 5, -14.65),
+"footbridgeGap": Vector3(17.7, 5, -12.55),
 "fridgeMax": Vector3(-3.15, 6.7, -18.75),
 "fridgeMin": Vector3(-3.95, 5, -19.45),
 "hallDoor": Vector3(10.1, 0, -3.2),
@@ -1150,14 +1298,17 @@ refs = {
 "hoist": Vector3(-1, 5, 0.62),
 "kitWorkshop": Vector3(-3.4, 5, 2.2),
 "knock": Vector3(13, 7.45, -14.5),
+"kwokPacking": Vector3(3.2, 0, -6.5),
 "ladderBase": Vector3(-1.8, 5, 0.7),
 "landingC": Vector3(1, 5, 1.8),
 "lane": Vector3(-1, 0, 5.1),
 "laneGate": Vector3(1.5, 0, 5.1),
 "lauCard": Vector3(2.35, 0, -9.5),
 "lauPacking": Vector3(4.8, 0, -12.6),
+"lauPale": Vector3(0.9, 0, -12),
 "lauSign": Vector3(3, 0, -8.2),
 "loadingArea": Vector3(7.4, 0, 3.4),
+"mahjongTin": Vector3(-1, 0, 3),
 "northLedge": Vector3(15, 5, -16.8),
 "oldPhoto": Vector3(-10.55, 0, -3.3),
 "plankGap": Vector3(-2.65, 9.25, 3.6),
@@ -1190,6 +1341,7 @@ refs = {
 "unitWindowOutside": Vector3(24.75, 5, -19.2),
 "winch": Vector3(-5.85, 9.25, 6.5),
 "wongPacking": Vector3(11.3, 5, -12.5),
+"wongTable": Vector3(25.6, 5, -14),
 "workshopDoor": Vector3(-0.5, 5, 2.2),
 "workshopRoof": Vector3(-3.5, 9.25, 2),
 "workshopTable": Vector3(-4.9, 5, 1.3),

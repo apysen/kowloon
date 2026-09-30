@@ -22,6 +22,7 @@ static func build(b: LevelBuilder) -> void:
 	BuildYamen.build(b)
 	airshaft(b)
 	chapter_props(b)
+	BuildQuietRooms.build(b)
 	roof(b)
 	pipes(b)
 	characters(b)
@@ -173,22 +174,24 @@ static func level_a(b: LevelBuilder) -> void:
 	b.room({"x0": -4, "x1": 0, "z0": 1, "z1": 4, "y": Y, "name": "Alcove", "wall": c8(0x8a7a62), "floor": c8(0x5a4c3c),
 		"skip": ["n"], "open": {"s": [[-1.1, -0.2]]}, "parent": "Structure/LevelA"})
 	var PA := "Furniture/Alcove"
-	b.box(-2.8, -1.2, Y + 0.7, Y + 0.75, 2.0, 3.3, c8(0x2e5a3a), {"surface": "fabric", "parent": PA, "name": "MahjongCloth"})
-	PropKit.table(b, -2.8, -1.2, 2.0, 3.3, Y, 0.7, c8(0x5a3a26), PA)
-	b.add_obstacle(-2.8, -1.2, 2.0, 3.3, Y, "mahjong")
+	# the game and the chopping block are packed away by Chapter 5 (BuildQuietRooms)
+	var PA4 := "ChapterProps/Ch1-4/Alcove"
+	b.box(-2.8, -1.2, Y + 0.7, Y + 0.75, 2.0, 3.3, c8(0x2e5a3a), {"surface": "fabric", "parent": PA4, "name": "MahjongCloth"})
+	PropKit.table(b, -2.8, -1.2, 2.0, 3.3, Y, 0.7, c8(0x5a3a26), PA4)
+	b.add_obstacle(-2.8, -1.2, 2.0, 3.3, Y, "mahjong", "chapter:Ch1-4")
 	for i in 16:
 		var x := -2.6 + (i % 8) * 0.16
 		var z: float = 2.15 + floor(i / 8.0) * 0.95
 		# the green back under the ivory face: stacked, never overlapping, so
 		# the two never fight over the same surface
-		b.box(x, x + 0.12, Y + 0.752, Y + 0.77, z, z + 0.08, c8(0x3a7a4a), {"surface": "grain", "parent": PA, "name": "TileBack", "cast_shadow": false})
-		b.box(x, x + 0.12, Y + 0.77, Y + 0.84, z, z + 0.08, c8(0xece6d4), {"surface": "grain", "parent": PA, "name": "Tile", "cast_shadow": false})
-	b.box(-2.1, -1.9, Y + 0.75, Y + 0.95, 2.55, 2.75, c8(0xf2eee4), {"surface": "grain", "parent": PA, "name": "TeaCup"})
-	PropKit.table(b, -3.95, -3.3, 2.5, 3.5, Y, 0.8, c8(0x6b4a30), PA)
-	b.add_obstacle(-3.95, -3.3, 2.5, 3.5, Y, "chopping")
-	b.box(-3.9, -3.4, Y + 0.8, Y + 0.87, 2.7, 3.2, c8(0xc9a270), {"surface": "wood", "parent": PA, "name": "ChoppingBlock"})
-	b.box(-3.85, -3.6, Y + 0.87, Y + 0.95, 3.25, 3.45, c8(0x6f9a4a), {"surface": "grain", "parent": PA, "name": "Greens"})
-	b.box(-3.7, -3.5, Y + 0.87, Y + 0.89, 2.8, 3.05, c8(0xd8dcd8), {"surface": "metal", "parent": PA, "name": "Cleaver", "cast_shadow": false})
+		b.box(x, x + 0.12, Y + 0.752, Y + 0.77, z, z + 0.08, c8(0x3a7a4a), {"surface": "grain", "parent": PA4, "name": "TileBack", "cast_shadow": false})
+		b.box(x, x + 0.12, Y + 0.77, Y + 0.84, z, z + 0.08, c8(0xece6d4), {"surface": "grain", "parent": PA4, "name": "Tile", "cast_shadow": false})
+	b.box(-2.1, -1.9, Y + 0.75, Y + 0.95, 2.55, 2.75, c8(0xf2eee4), {"surface": "grain", "parent": PA4, "name": "TeaCup"})
+	PropKit.table(b, -3.95, -3.3, 2.5, 3.5, Y, 0.8, c8(0x6b4a30), PA4)
+	b.add_obstacle(-3.95, -3.3, 2.5, 3.5, Y, "chopping", "chapter:Ch1-4")
+	b.box(-3.9, -3.4, Y + 0.8, Y + 0.87, 2.7, 3.2, c8(0xc9a270), {"surface": "wood", "parent": PA4, "name": "ChoppingBlock"})
+	b.box(-3.85, -3.6, Y + 0.87, Y + 0.95, 3.25, 3.45, c8(0x6f9a4a), {"surface": "grain", "parent": PA4, "name": "Greens"})
+	b.box(-3.7, -3.5, Y + 0.87, Y + 0.89, 2.8, 3.05, c8(0xd8dcd8), {"surface": "metal", "parent": PA4, "name": "Cleaver", "cast_shadow": false})
 	b.card("res://assets/textures/props/poster_1.png", Vector3(-2.0, Y + 1.9, 3.85), Vector2(0.5, 0.7), Vector3(0, 0, -1), {"parent": PA, "name": "MahjongPoster", "band": 0.0})
 	PropKit.bulb(b, Vector3(-2, Y + 2.9, 2.6), Y + 4.2, PA)
 
@@ -221,6 +224,8 @@ static func level_a(b: LevelBuilder) -> void:
 	var PC := "Furniture/Clinic"
 	# (the chair, its lamp and the trolley are gone by Chapter 4)
 	var PC3 := "ChapterProps/Ch1-3/Clinic"
+	# (his certificate, calendar, drawers and most of the boxes: gone by Chapter 5)
+	var PC4 := "ChapterProps/Ch1-4/Clinic"
 	# the dental chair: base, seat, back, arms, footrest
 	b.box(4.6, 5.5, Y, Y + 0.35, -12.9, -12.1, c8(0xb8b6ac), {"surface": "metal", "parent": PC3, "name": "ChairBase"})
 	b.box(4.3, 5.8, Y + 0.35, Y + 0.6, -13.3, -11.7, c8(0xd8d6cc), {"surface": "metal", "parent": PC3, "name": "ChairPlinth"})
@@ -239,33 +244,35 @@ static func level_a(b: LevelBuilder) -> void:
 	b.add_obstacle(6.4, 7.2, -14.9, -14.3, Y, "trolley", "chapter:Ch1-3")
 	for i in 5:
 		b.box(6.5 + i * 0.13, 6.53 + i * 0.13, Y + 0.9, Y + 0.91, -14.8, -14.5, c8(0xd8dce0), {"surface": "metal", "parent": PC3, "name": "Instrument", "cast_shadow": false})
-	b.box(6.6, 8, Y, Y + 1.3, -15, -14.4, c8(0xe0e4de), {"surface": "metal", "parent": PC, "name": "Cabinet"})
-	b.add_obstacle(6.6, 8, -15, -14.4, Y, "cabinet")
+	b.box(6.6, 8, Y, Y + 1.3, -15, -14.4, c8(0xe0e4de), {"surface": "metal", "parent": PC4, "name": "Cabinet"})
+	b.add_obstacle(6.6, 8, -15, -14.4, Y, "cabinet", "chapter:Ch1-4")
 	for i in 4:
-		b.box(6.7, 7.9, Y + 0.12 + i * 0.3, Y + 0.14 + i * 0.3, -14.39, -14.37, c8(0x8a9090), {"surface": "metal", "parent": PC, "name": "Drawer", "cast_shadow": false})
+		b.box(6.7, 7.9, Y + 0.12 + i * 0.3, Y + 0.14 + i * 0.3, -14.39, -14.37, c8(0x8a9090), {"surface": "metal", "parent": PC4, "name": "Drawer", "cast_shadow": false})
 	b.box(5.9, 6.2, Y, Y + 0.75, -11.6, -11.3, c8(0xe8ece8), {"surface": "tiles", "parent": PC3, "name": "Spittoon"})
 	PropKit.cardboard(b, 0.2, 1.6, Y, Y + 0.7, -14.8, -13.4, c8(0xa8834f), PC)
 	b.add_obstacle(0.2, 1.6, -14.8, -13.4, Y, "clinicBoxes")
-	PropKit.cardboard(b, 0.3, 1.4, Y + 0.7, Y + 1.2, -14.6, -13.7, c8(0x9c7a48), PC)
-	PropKit.cardboard(b, 0.2, 1.3, Y, Y + 0.6, -10.8, -9.3, c8(0xa8834f), PC)
-	b.add_obstacle(0.2, 1.3, -10.8, -9.3, Y, "clinicBoxes2")
-	b.card("res://assets/textures/props/certificate.png", Vector3(0.05, Y + 1.7, -12.0), Vector2(0.9, 0.68), Vector3(1, 0, 0), {"parent": PC, "name": "Certificate", "band": 0.0})
-	b.card("res://assets/textures/props/calendar_1992.png", Vector3(7.95, Y + 1.8, -10.4), Vector2(0.4, 0.6), Vector3(-1, 0, 0), {"parent": PC, "name": "Calendar", "band": 0.0})
+	PropKit.cardboard(b, 0.3, 1.4, Y + 0.7, Y + 1.2, -14.6, -13.7, c8(0x9c7a48), PC4)
+	PropKit.cardboard(b, 0.2, 1.3, Y, Y + 0.6, -10.8, -9.3, c8(0xa8834f), PC4)
+	b.add_obstacle(0.2, 1.3, -10.8, -9.3, Y, "clinicBoxes2", "chapter:Ch1-4")
+	b.card("res://assets/textures/props/certificate.png", Vector3(0.05, Y + 1.7, -12.0), Vector2(0.9, 0.68), Vector3(1, 0, 0), {"parent": PC4, "name": "Certificate", "band": 0.0})
+	b.card("res://assets/textures/props/calendar_1992.png", Vector3(7.95, Y + 1.8, -10.4), Vector2(0.4, 0.6), Vector3(-1, 0, 0), {"parent": PC4, "name": "Calendar", "band": 0.0})
 	PropKit.tube_light(b, Vector3(3.2, Y + 3.9, -12), Vector3(4.8, Y + 3.9, -12), PC)
 	PropKit.tube_light(b, Vector3(3.2, Y + 3.9, -10.6), Vector3(4.8, Y + 3.9, -10.6), PC)
 
-	# The hanging vertical sign: a landmark over the rooftops of Level A.
+	# The hanging vertical sign: a landmark over the rooftops of Level A (taken down
+	# with him by Chapter 5; its bracket stays).
 	var sign := b.card("res://assets/textures/props/sign_lau_dental.png", Vector3(3, Y + 5.3, -8.6), Vector2(2.4, 1.2), Vector3(0, 0, 1),
-		{"parent": "Dressing/LauSign", "name": "LauSign", "band": 0.0, "emission": 0.25, "fadeable": true})
+		{"parent": "ChapterProps/Ch1-4/LauSign", "name": "LauSign", "band": 0.0, "emission": 0.25, "fadeable": true})
 	sign.name = "LauSign"
 	# it hangs right over the clinic door: once Mei is inside, it fades like a wall
-	b.box(1.75, 4.25, Y + 4.65, Y + 5.95, -8.8, -8.66, c8(0x5a2a22), {"band": 0.0, "surface": "wood", "parent": "Dressing/LauSign", "name": "SignBoard", "fadeable": true})
+	b.box(1.75, 4.25, Y + 4.65, Y + 5.95, -8.8, -8.66, c8(0x5a2a22), {"band": 0.0, "surface": "wood", "parent": "ChapterProps/Ch1-4/LauSign", "name": "SignBoard", "fadeable": true})
 	b.box(2.9, 3.1, Y + 4.2, Y + 4.7, -8.8, -8.7, c8(0x333333), {"band": 0.0, "surface": "metal", "parent": "Dressing/LauSign", "name": "SignBracket", "fadeable": true})
 	b.ref("lauSign", Vector3(3, 0, -8.2))
 
 	# Stairwell
 	b.room({"x0": 8, "x1": 10.5, "z0": -15, "z1": -12, "y": Y, "name": "Stairwell", "id": "clinic",
-		"wall": c8(0x6d6a60), "floor": c8(0x4a463e), "skip": ["w"], "parent": "Structure/LevelA", "wall_surface": "concrete"})
+		"wall": c8(0x6d6a60), "floor": c8(0x4a463e), "skip": ["w"], "open": {"n": [BuildQuietRooms.SHOP_DOOR]},
+		"parent": "Structure/LevelA", "wall_surface": "concrete"})
 	for i in 6:
 		b.box(9.9, 10.5, Y, Y + 0.35 * (i + 1), -12.3 - i * 0.45, -12.75 - i * 0.45, c8(0x5d5a52), {"surface": "concrete", "parent": "Structure/LevelA/Stairwell", "name": "Step"})
 		b.box(9.88, 10.5, Y + 0.35 * (i + 1) - 0.03, Y + 0.35 * (i + 1), -12.3 - i * 0.45, -12.36 - i * 0.45, c8(0x8a8a80), {"surface": "metal", "parent": "Structure/LevelA/Stairwell", "name": "Nosing", "cast_shadow": false})
@@ -346,9 +353,9 @@ static func level_b(b: LevelBuilder) -> void:
 	knob.remove_meta("band")
 	b.card("res://assets/textures/props/sign_toilet.png", Vector3(3.35, Y + 1.85, -13.14), Vector2(0.34, 0.24), Vector3(0, 0, 1), {"parent": "Furniture/CorridorB", "name": "ToiletSign", "band": 1.0})
 	var PB := "Furniture/CorridorB"
-	PropKit.cardboard(b, 6.2, 7.6, Y, Y + 0.9, -12.95, -12.45, c8(0xa8834f), PB, "n")
-	b.add_obstacle(6.2, 7.6, -12.95, -12.45, Y, "stackedBoxes")
-	PropKit.cardboard(b, 6.4, 7.4, Y + 0.9, Y + 1.5, -12.9, -12.5, c8(0x9c7a48), PB, "n")
+	PropKit.cardboard(b, 6.2, 7.6, Y, Y + 0.9, -12.95, -12.45, c8(0xa8834f), "ChapterProps/Ch1-4/CorridorB", "n")
+	b.add_obstacle(6.2, 7.6, -12.95, -12.45, Y, "stackedBoxes", "chapter:Ch1-4")
+	PropKit.cardboard(b, 6.4, 7.4, Y + 0.9, Y + 1.5, -12.9, -12.5, c8(0x9c7a48), "ChapterProps/Ch1-4/CorridorB", "n")
 	b.card("res://assets/textures/props/sign_tailor.png", Vector3(-0.8, Y + 3.1, -13.14), Vector2(1.4, 0.7), Vector3(0, 0, 1), {"parent": PB, "name": "TailorSign", "band": 1.0})
 	b.card("res://assets/textures/props/poster_0.png", Vector3(1.8, Y + 1.8, -13.14), Vector2(0.5, 0.7), Vector3(0, 0, 1), {"parent": PB, "name": "OperaPoster", "band": 1.0})
 	PropKit.bulb(b, Vector3(3, Y + 3.3, -12), Y + 4.2, PB)
@@ -368,9 +375,9 @@ static func level_b(b: LevelBuilder) -> void:
 	for i in 3:
 		var z := -10.2 + i * 0.3
 		b.cylinder(Vector3(-7.9, Y + 0.95, z), Vector3(-7.1, Y + 0.95, z), 0.1, b.surface("fabric"), {"parent": PCh, "name": "ClothBolt", "tint": [c8(0xa8534a), c8(0x3f6fa8), c8(0xe8d8b0)][i]})
-	b.box(-4.2, -3.2, Y, Y + 0.5, -10.2, -9.2, c8(0x5f7a88), {"surface": "metal", "parent": PCh, "name": "Basin"})
-	b.add_obstacle(-4.2, -3.2, -10.2, -9.2, Y, "basin")
-	b.box(-4.1, -3.3, Y + 0.45, Y + 0.48, -10.1, -9.3, c8(0x7fa0b8), {"surface": "metal", "parent": PCh, "name": "Water", "cast_shadow": false})
+	b.box(-4.2, -3.2, Y, Y + 0.5, -10.2, -9.2, c8(0x5f7a88), {"surface": "metal", "parent": "ChapterProps/Ch1-4/Chan", "name": "Basin"})
+	b.add_obstacle(-4.2, -3.2, -10.2, -9.2, Y, "basin", "chapter:Ch1-4")
+	b.box(-4.1, -3.3, Y + 0.45, Y + 0.48, -10.1, -9.3, c8(0x7fa0b8), {"surface": "metal", "parent": "ChapterProps/Ch1-4/Chan", "name": "Water", "cast_shadow": false})
 	b.box(-8, -7.2, Y, Y + 1.8, -15.9, -14.2, c8(0x5d4632), {"surface": "wood", "parent": PCh, "name": "Cabinet"})
 	b.add_obstacle(-8, -7.2, -15.9, -14.2, Y, "chanCabinet")
 	# a bunk along the west wall: Mrs. Chan below, Wai on top
@@ -389,7 +396,7 @@ static func level_b(b: LevelBuilder) -> void:
 	PropKit.shelf(b, -3.9, -2.2, -15.9, -15.5, Y + 1.4, 1.2, c8(0x6b4a30), PCh, 2)
 	b.card("res://assets/textures/props/calendar_1992.png", Vector3(-2.05, Y + 1.9, -10.5), Vector2(0.4, 0.6), Vector3(-1, 0, 0), {"parent": PCh, "name": "Calendar", "band": 1.0})
 	# the line runs wall to wall; the washing starts past the cabinet (x -8 to -7.2), so nothing hangs through it
-	laundry_line(b, -7.0, -2.4, Y + 2.8, -14.6, "x", [c8(0xd8c4a0), c8(0x5a7ab0), c8(0xe8e2d4), c8(0xb0504a)], PCh, [-8.0, -2.0])
+	laundry_line(b, -7.0, -2.4, Y + 2.8, -14.6, "x", [c8(0xd8c4a0), c8(0x5a7ab0), c8(0xe8e2d4), c8(0xb0504a)], "ChapterProps/Ch1-4/Chan", [-8.0, -2.0])
 	PropKit.bulb(b, Vector3(-5, Y + 3.2, -12.5), Y + 4.2, PCh)
 
 	# The catwalk: open-air, over the light well
@@ -450,23 +457,25 @@ static func level_b(b: LevelBuilder) -> void:
 	b.room({"x0": 24, "x1": 31, "z0": -16, "z1": -8, "y": Y, "name": "Wong", "id": "wong", "floor_surface": "wood",
 		"wall": c8(0xa38a86), "floor": c8(0x6b5244), "open": {"w": [[-13, -11]]}, "parent": "Structure/LevelB"})
 	var PWo := "Furniture/Wong"
-	PropKit.bed(b, 28.6, 31, -9.8, -8, Y, c8(0x8a6f5a), c8(0xe8dcc8), PWo, false)
+	# what her daughter takes when she comes for her early (Chapter 5)
+	var PWo4 := "ChapterProps/Ch1-4/Wong"
+	PropKit.bed(b, 28.6, 31, -9.8, -8, Y, c8(0x8a6f5a), c8(0xe8dcc8), PWo4, false)
 	b.add_obstacle(28.6, 31, -9.8, -8, Y, "wongBed")
-	PropKit.altar(b, 29.8, 31, Y, Y + 1.3, -16, -15, PWo, -1.0)
-	b.add_obstacle(29.8, 31, -16, -15, Y, "wongAltar")
+	PropKit.altar(b, 29.8, 31, Y, Y + 1.3, -16, -15, PWo4, -1.0)
+	b.add_obstacle(29.8, 31, -16, -15, Y, "wongAltar", "chapter:Ch1-4")
 	PropKit.table(b, 25, 26.2, -15.6, -14.4, Y, 0.5, c8(0x6b4a30), PWo)
 	b.add_obstacle(25, 26.2, -15.6, -14.4, Y, "wongTable")
-	b.box(25.3, 25.6, Y + 0.5, Y + 0.8, -15.2, -14.9, c8(0x4f7f70), {"surface": "metal", "parent": PWo, "name": "Thermos"})
-	b.box(25.7, 25.9, Y + 0.5, Y + 0.6, -15.0, -14.8, c8(0xf2eee4), {"surface": "grain", "parent": PWo, "name": "Cup"})
+	b.box(25.3, 25.6, Y + 0.5, Y + 0.8, -15.2, -14.9, c8(0x4f7f70), {"surface": "metal", "parent": PWo4, "name": "Thermos"})
+	b.box(25.7, 25.9, Y + 0.5, Y + 0.6, -15.0, -14.8, c8(0xf2eee4), {"surface": "grain", "parent": PWo4, "name": "Cup"})
 	b.box(24.1, 24.9, Y, Y + 2.0, -9.5, -8.1, c8(0x5d4632), {"surface": "wood", "parent": PWo, "name": "Wardrobe"})
 	b.add_obstacle(24.1, 24.9, -9.5, -8.1, Y, "wardrobe")
 	b.box(24.9, 24.92, Y + 0.2, Y + 1.8, -8.82, -8.78, c8(0x3a2a1a), {"surface": "wood", "parent": PWo, "name": "WardrobeSeam", "cast_shadow": false})
-	PropKit.stool(b, 27.2, -14.3, Y, c8(0xc9463a), PWo)
+	PropKit.stool(b, 27.2, -14.3, Y, c8(0xc9463a), PWo4)
 	b.card("res://assets/textures/props/calendar_1992.png", Vector3(27.5, Y + 1.9, -15.95), Vector2(0.4, 0.6), Vector3(0, 0, 1), {"parent": PWo, "name": "Calendar", "band": 1.0})
 	PropKit.bulb(b, Vector3(27.5, Y + 3.2, -12), Y + 4.2, PWo)
 	# her cooking corner under the calendar; the fan turned on her
 	PropKit.kitchen_counter(b, 26.6, 28.5, -15.99, -15.4, Y, PWo, "n")
-	PropKit.fan(b, 30.3, -11.5, Y, PWo, Vector3(28.6, Y, -12.6) - Vector3(30.3, Y, -11.5))
+	PropKit.fan(b, 30.3, -11.5, Y, PWo4, Vector3(28.6, Y, -12.6) - Vector3(30.3, Y, -11.5))
 
 
 static func _decal_mat(b: LevelBuilder, tex: String) -> StandardMaterial3D:

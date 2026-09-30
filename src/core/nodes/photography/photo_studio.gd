@@ -20,6 +20,15 @@ const SHOTS := {
 	# Mrs. Cheung at her table in the yamen, the address book open
 	"cheung": {"eye": Vector3(9.6, 1.35, 1.0), "look": Vector3(9.6, 0.8, -1.5), "fov": 52.0, "face": Vector3(9.6, 0, 1.0),
 		"stand": Vector3(9.6, 0, 1.0)},
+	# the Chans' line over the catwalk, empty but for its pegs
+	"line": {"eye": Vector3(19.2, 6.45, -12.3), "look": Vector3(16.0, 7.1, -12.0), "fov": 58.0, "face": Vector3(19.2, 5, -12.3),
+		"stand": Vector3(19.2, 5, -12.3)},
+	# Lau's clinic with nothing in it: the pale square on the wall
+	"lau_clinic": {"eye": Vector3(6.8, 1.5, -9.8), "look": Vector3(0.2, 1.4, -12.2), "fov": 60.0, "face": Vector3(6.8, 0, -9.8),
+		"stand": Vector3(6.8, 0, -9.8)},
+	# Mrs. Wong's room: the stripped bed, the one small table
+	"wong_room": {"eye": Vector3(24.8, 6.5, -11.6), "look": Vector3(27.5, 5.6, -13.8), "fov": 62.0, "face": Vector3(24.8, 5, -11.6),
+		"stand": Vector3(24.8, 5, -11.6)},
 }
 
 @export var world: World

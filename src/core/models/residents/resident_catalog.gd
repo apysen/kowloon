@@ -3,10 +3,17 @@ extends RefCounted
 
 ## Scrapbook entries. The personal note matters more than the facts.
 ##
-## Each field is read from data/i18n/strings.csv as res.<id>.<field>.
+## Each field is read from data/i18n/strings.csv as res.<id>.<field>. From
+## Chapter 5 some pages are of places, which have no occupation or location,
+## and some notes are written in later.
 
-const ENTRIES: Array[String] = ["lau", "ng", "ho", "chiu", "cheung"]
+const ENTRIES: Array[String] = ["lau", "ng", "ho", "chiu", "cheung", "line", "lau_clinic", "wong_room"]
+## Pages whose note is only written in later (Progress.late_notes): until then, none.
+const NOTE_LATER: Array[String] = ["lau_clinic", "wong_room"]
 const FIELDS: Array[String] = ["name", "occupation", "location", "context", "note"]
+## Pages of places, not people: a name, a note and the history, no byline.
+const PLACES: Array[String] = ["line", "lau_clinic", "wong_room"]
+const PLACE_FIELDS: Array[String] = ["name", "context", "note"]
 
 ## Speaking voices: the pitch of each speaker's dialogue blip, by speaker id.
 const VOICE_PITCH := {
@@ -22,7 +29,11 @@ static func entry(id: String) -> Dictionary:
 		return {}
 	var out := {}
 	for f in FIELDS:
-		out[f] = TranslationServer.translate("res.%s.%s" % [id, f])
+		out[f] = _field("res.%s.%s" % [id, f]) if fields_of(id).has(f) else ""
+	if NOTE_LATER.has(id) and not Progress.late_notes.has(id):
+		out["note"] = ""
+	# an addendum, in the same hand, added on a later day
+	out["later"] = _field("res.%s.later" % id) if Progress.late_notes.has(id) and not NOTE_LATER.has(id) else ""
 	# where they went, once Mrs. Cheung's book has taught the album to ask
 	out["after"] = ""
 	if Progress.after_unlocked:
@@ -31,3 +42,13 @@ static func entry(id: String) -> Dictionary:
 		if after != key:
 			out["after"] = after
 	return out
+
+
+## The fields a page has in the string table.
+static func fields_of(id: String) -> Array[String]:
+	return PLACE_FIELDS if PLACES.has(id) else FIELDS
+
+
+static func _field(key: String) -> String:
+	var s := TranslationServer.translate(key)
+	return "" if s == key else s
