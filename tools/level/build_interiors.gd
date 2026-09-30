@@ -24,6 +24,7 @@ static func build(b: LevelBuilder) -> void:
 	chapter_props(b)
 	BuildQuietRooms.build(b)
 	BuildSideQuests.build(b)
+	BuildLastRoof.build(b)
 	roof(b)
 	pipes(b)
 	characters(b)

@@ -397,32 +397,51 @@ func _title_page(root: Control) -> void:
 func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Dictionary:
 	var parts := {"polaroid": null, "tapes": [], "labels": []}
 	var tilt := -2.4 if index % 2 == 1 else 2.0
-	# the Polaroid, with its shadow on the page, taped at the top corners
-	var polaroid := _polaroid_card(root, tex, String(r.name), false)
-	polaroid.position = Vector2((PAGE.x - polaroid.size.x) * 0.5, POLAROID_TOP)
-	polaroid.rotation_degrees = tilt
-	parts.polaroid = polaroid
-	var glass := Magnifier.new()
-	glass.size = Vector2(48, 48)
-	# on the print itself: the card is a container and would stretch it to fill
-	glass.position = Vector2(POLAROID_PIC, POLAROID_PIC) * 0.5 - glass.size * 0.5
-	glass.visible = false
-	(polaroid.get_meta("pic") as Control).add_child(glass)
-	_photos[index] = {"polaroid": polaroid, "pic": polaroid.get_meta("pic"), "glass": glass}
+	var text := VBoxContainer.new()
+	var corners: Array[Vector2] = []
+	if ResidentCatalog.NOTE_PAGES.has(String(r.get("id", ""))):
+		# no print: a sheet of notepaper taped in, her notes written on it
+		var sheet := ColorRect.new()
+		sheet.color = Color(0.97, 0.95, 0.88)
+		sheet.size = Vector2(PAGE.x - 56.0, 330.0)
+		sheet.position = Vector2(28.0, POLAROID_TOP + 14.0)
+		sheet.pivot_offset = sheet.size * 0.5
+		sheet.rotation_degrees = tilt * 0.5
+		root.add_child(sheet)
+		for k in 9:
+			var rule := ColorRect.new()
+			rule.color = Color(0.55, 0.7, 0.85, 0.35)
+			rule.size = Vector2(sheet.size.x - 24.0, 1.0)
+			rule.position = Vector2(12.0, 58.0 + k * 30.0)
+			sheet.add_child(rule)
+		corners = [sheet.position + Vector2(18.0, 4.0), sheet.position + Vector2(sheet.size.x - 18.0, 4.0)]
+		text.position = Vector2(40, sheet.position.y + 30.0)
+	else:
+		# the Polaroid, with its shadow on the page, taped at the top corners
+		var polaroid := _polaroid_card(root, tex, String(r.name), false)
+		polaroid.position = Vector2((PAGE.x - polaroid.size.x) * 0.5, POLAROID_TOP)
+		polaroid.rotation_degrees = tilt
+		parts.polaroid = polaroid
+		var glass := Magnifier.new()
+		glass.size = Vector2(48, 48)
+		# on the print itself: the card is a container and would stretch it to fill
+		glass.position = Vector2(POLAROID_PIC, POLAROID_PIC) * 0.5 - glass.size * 0.5
+		glass.visible = false
+		(polaroid.get_meta("pic") as Control).add_child(glass)
+		_photos[index] = {"polaroid": polaroid, "pic": polaroid.get_meta("pic"), "glass": glass}
+		corners = [polaroid.position + Vector2(14.0, 6.0), polaroid.position + Vector2(polaroid.size.x - 14.0, 6.0)]
+		# the facts, then her note, then what it was about
+		var reach := polaroid.size.x * 0.5 * absf(sin(deg_to_rad(tilt)))
+		text.position = Vector2(40, polaroid.position.y + polaroid.size.y + reach + 16.0)
 	for k in 2:
 		var tape := TextureRect.new()
 		tape.texture = TAPE
 		tape.size = Vector2(70, 22)
 		tape.pivot_offset = tape.size * 0.5
-		var corner := polaroid.position + Vector2(14.0 if k == 0 else polaroid.size.x - 14.0, 6.0)
-		tape.position = corner - tape.size * 0.5
+		tape.position = corners[k] - tape.size * 0.5
 		tape.rotation_degrees = -38.0 if k == 0 else 36.0
 		root.add_child(tape)
 		(parts.tapes as Array).append(tape)
-	# the facts, then her note, then what it was about
-	var text := VBoxContainer.new()
-	var reach := polaroid.size.x * 0.5 * absf(sin(deg_to_rad(tilt)))
-	text.position = Vector2(40, polaroid.position.y + polaroid.size.y + reach + 16.0)
 	text.size = Vector2(320, PAGE.y - 44.0 - text.position.y)
 	text.add_theme_constant_override("separation", 0)
 	root.add_child(text)

@@ -38,6 +38,9 @@ var view_from: Variant = null
 ## Looking through Mei's eyes: nothing is cut away. Every floor shows, every
 ## wall and ceiling stays solid, and people in other rooms are there to be seen.
 var first_person := false
+## How far into the evening it is (0 afternoon, 1 dusk): the sun lower, redder
+## and weaker, the sky dimmer (Chapter 6's last evening).
+var dusk := 0.0
 
 var _items: Array[Dictionary] = []
 ## Pieces that fade, move or belong to a room: looked at every frame.
@@ -551,8 +554,13 @@ func _apply_light_mix(p: Vector3, pb: int) -> void:
 	var sky_mat := env.sky.sky_material as ShaderMaterial
 	if sky_mat:
 		sky_mat.set_shader_parameter("roof_mix", t)
-	sun.light_energy = lerpf(0.45, 2.4, t)
-	sun.light_color = Color(1.0, 0.94, 0.85).lerp(Color(1.0, 0.8, 0.58), t)
+	sun.light_energy = lerpf(0.45, 2.4, t) * (1.0 - 0.72 * dusk)
+	sun.light_color = Color(1.0, 0.94, 0.85).lerp(Color(1.0, 0.8, 0.58), t).lerp(Color(1.0, 0.52, 0.32), dusk)
+	if dusk > 0.0:
+		env.ambient_light_energy *= 1.0 - 0.45 * dusk
+		env.ambient_light_color = env.ambient_light_color.lerp(Color(0.46, 0.44, 0.62), dusk * 0.8)
+		env.background_energy_multiplier *= 1.0 - 0.6 * dusk
+		env.fog_light_color = env.fog_light_color.lerp(Color(0.5, 0.38, 0.42), dusk * t)
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = lerpf(34.0, 60.0, t)
 	for l in _lights:

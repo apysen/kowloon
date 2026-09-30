@@ -20,6 +20,9 @@ const SHOTS := {
 	# Mrs. Cheung at her table in the yamen, the address book open
 	"cheung": {"eye": Vector3(9.6, 1.35, 1.0), "look": Vector3(9.6, 0.8, -1.5), "fov": 52.0, "face": Vector3(9.6, 0, 1.0),
 		"stand": Vector3(9.6, 0, 1.0)},
+	# Mr. Ng packing his birds, the last evening
+	"ng_birds": {"eye": Vector3(4.9, 13.75, -17.4), "look": Vector3(3.2, 13.9, -21.4), "fov": 58.0, "face": Vector3(4.9, 13, -17.4),
+		"stand": Vector3(4.6, 13, -18.4), "resident": "ng"},
 	# the Chans' line over the catwalk, empty but for its pegs
 	"line": {"eye": Vector3(19.2, 6.45, -12.3), "look": Vector3(16.0, 7.1, -12.0), "fov": 58.0, "face": Vector3(19.2, 5, -12.3),
 		"stand": Vector3(19.2, 5, -12.3)},

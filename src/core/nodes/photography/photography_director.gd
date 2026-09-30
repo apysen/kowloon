@@ -19,6 +19,8 @@ extends Node
 signal photo_kept(id: String)
 ## The reticle has just found someone who can be photographed now.
 signal subject_locked(id: String)
+## Mei began to raise the camera, or reached for it, and let it go (Chapter 6).
+signal refused
 
 const LOOK_SENSITIVITY := 0.0022
 const PAD_LOOK_SPEED := 2.2          # radians a second, the right stick held over
@@ -54,6 +56,9 @@ var _waiting := false
 var _moving := false
 ## Whether the shutter may fire yet for a subject (the jet for Mr. Ng).
 var shutter_ready: Callable
+## The one moment she doesn't take: raising the camera gets as far as her
+## chest, and she lowers it again herself. The shutter can't fire.
+var refusing := false
 
 
 ## A photo target: a resident and when a picture of them counts.
@@ -73,6 +78,9 @@ func add_place(id: String, valid: Callable) -> void:
 
 
 func enter() -> bool:
+	if refusing and not active and has_camera and not locks.is_locked():
+		_lower_it_herself()
+		return false
 	if active or locks.is_locked() or not has_camera:
 		return false
 	active = true
@@ -82,6 +90,33 @@ func enter() -> bool:
 	audio.click()
 	_raise()
 	return true
+
+
+## She starts to lift it, stops before it reaches her eye, and lets it down.
+func _lower_it_herself() -> void:
+	locks.lock("camera")
+	audio.click()
+	player.pose = "camera"
+	await get_tree().create_timer(0.7).timeout
+	player.pose = ""
+	await get_tree().create_timer(0.5).timeout
+	locks.unlock("camera")
+	refusing = false
+	refused.emit()
+
+
+## Nobody raised it: she reaches for it on her own, pauses, and lets her hand fall.
+func reach_and_let_go() -> void:
+	if not refusing:
+		return
+	refusing = false
+	locks.lock("camera")
+	player.pose = "camera"
+	await get_tree().create_timer(1.1).timeout
+	player.pose = ""
+	await get_tree().create_timer(0.4).timeout
+	locks.unlock("camera")
+	refused.emit()
 
 
 func exit() -> void:

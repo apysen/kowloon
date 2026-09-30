@@ -989,3 +989,149 @@ dlg.c3_wai_race_after.01,Don't tell Mum about the planks.,唔好同阿媽講嗰�
 c3.need.wai,"Wai's shortcut: from Chiu's roof to the Chans' roof, somehow.",阿偉的捷徑：由趙記天台去陳家天台，不知怎樣走。
 verb.cross,Cross,過去
 env.c5_wai_bridge,"Where Wai's planks went up to the roof: two nail holes in the balcony rail, and a drop.",阿偉的木板以前搭上天台的地方：露台欄杆上兩個釘孔，下面一道空。
+dlg.c6_open.01,"The roof, the last evening. Nobody planned anything. People came up anyway, with what they had left.",天台，最後一個黃昏。沒有人安排甚麼，大家還是帶著剩下的東西上來了。
+dlg.c6_open.02,"Mr. Ng's packing up his birds. Go and see, before it's dark.",吳伯執緊啲雀。趁未黑，過去睇下。
+dlg.c6_ng_packing.01,"One at a time. They don't like it, but they like it better one at a time.",一隻一隻嚟。佢哋唔鍾意，但係一隻一隻就冇咁唔鍾意。
+dlg.c6_ng_packing.02,Can I take one? A picture.,我可唔可以影一張？
+dlg.c6_ng_packing.03,Of the birds or of me?,影雀定影我？
+dlg.c6_ng_packing.04,Both.,兩樣都影。
+dlg.c6_ng_packing.05,Then be quick. The birds won't wait.,咁快啲。啲雀唔會等你。
+dlg.c6_ng_photo.01,That's the last one of them up here.,呢張係佢哋喺呢度最後一張。
+dlg.c6_pigeon_escapes.01,"As Mr. Ng lifts the next basket, one bird slips out and is gone over the tank.",吳伯提起下一個籃時，一隻鴿子溜了出來，飛過水缸不見了。
+dlg.c6_pigeon_escapes.02,The fat one. She'll come back when she's hungry. Or she won't.,肥嗰隻。肚餓就會返嚟。或者唔會。
+dlg.c6_wong_card.01,This came for you.,有張卡寄畀你。
+dlg.c6_wong_card.02,"A small card. Grandfather reads it, and turns it over. There's nothing on the back.",一張小卡片。公公讀了，又翻過來看。背面甚麼都沒有。
+dlg.c6_wong_card.03,What does it say?,寫咩㗎？
+dlg.c6_wong_card.04,Where she is.,佢喺邊。
+dlg.c6_wong_card.05,He puts it in the same pocket as her note.,他把卡片放進放著她那張字條的同一個口袋。
+dlg.c6_lights_fail.01,"The bulbs over the roof go out, all together.",天台上的燈泡一齊熄了。
+dlg.c6_lights_fail.02,Ho!,何師傅！
+dlg.c6_lights_fail.03,I took the line down.,我拆咗條線。
+dlg.c6_lights_fail.04,Put it back.,裝返佢。
+dlg.c6_lights_fail.05,We're leaving.,我哋要走㗎喇。
+dlg.c6_lights_fail.06,We haven't left.,我哋未走。
+dlg.c6_lights_fail.07,Apparently electricity observes technicalities.,睇嚟電都要講手續。
+dlg.c6_lights_fail.08,Mr. Ho looks at Mei.,何師傅望向阿美。
+dlg.c6_lights_fail.09,You remember how to follow a wire?,你仲記唔記得點樣跟條線？
+dlg.c6_lights_fail.10,Unfortunately.,可惜記得。
+dlg.c6_lights_fail.11,"Unplugged leads only. Anything live, you call me.",淨係搞啲冇插電嘅拖板線。有電嘅，叫我。
+dlg.c6_hut_lead.01,The lead from the bulbs goes into the stair hut through a hole low in its wall.,燈泡那條線從樓梯屋牆腳的一個洞鑽了進去。
+dlg.c6_hut_through.01,"From the side: it comes out again through the back of the hut, and runs north.",從側面看：它從樓梯屋後面又鑽了出來，一直往北走。
+dlg.c6_leads_tangle.01,"Two leads cross here, one over the other. From this side there's no telling which is which.",兩條線在這裡交叉，一條疊著一條。從這邊根本分不出哪條是哪條。
+dlg.c6_leads_seen.01,From the north: the one from the hut climbs a pole and goes over to the mast. The other drops over the parapet.,從北面看：從樓梯屋來的那條爬上一條杆，跨到天線杆那邊。另一條垂過了矮牆。
+dlg.c6_board_wrong.01,"Not that one. That goes down to the Szetos'. They've gone, but still.",唔係嗰條。嗰條落司徒屋企㗎。佢哋走咗，但係都唔好。
+dlg.c6_board_mast.01,Mei pushes the plug into the board at the foot of the mast. Nothing yet: the board's own lead runs off behind the tank.,阿美把插頭插進天線杆腳的拖板。還是沒有反應：拖板自己那條線拖到水缸後面去了。
+dlg.c6_tank_loop.01,"Round the tank, and round again: the lead loops under the coop's frame, to a last board by Mr. Ng's old spot.",繞著水缸走一圈，再走一圈：那條線從雀籠架底下繞過去，接到吳伯舊時那個位置旁邊的最後一個拖板。
+dlg.c6_lights_on.01,"The bulbs come on over Mr. Ng's corner, then along to the tank, then over everyone.",燈泡先在吳伯那邊亮起，接著一路亮到水缸，再亮到大家頭上。
+dlg.c6_lights_on.02,About time.,係時候啦。
+dlg.c6_lights_on.03,She's better at it than you are.,佢搞得好過你喎。
+dlg.c6_lights_on.04,Don't encourage her.,唔好鼓勵佢。
+dlg.c6_ng_talk.01,Will they know the new roof?,佢哋會唔會認得新天台？
+dlg.c6_ng_talk.02,No.,唔會。
+dlg.c6_ng_talk.03,You said they know their way home.,你話過佢哋認得返屋企嘅路。
+dlg.c6_ng_talk.04,They know this one.,佢哋認得呢個。
+dlg.c6_ng_talk.05,Mr. Ng checks a cage.,吳伯檢查一個籠。
+dlg.c6_ng_talk.06,We'll teach them another.,我哋再教佢哋認過第二個。
+dlg.c6_ho_talk.01,New building has management.,新樓有管理處。
+dlg.c6_ho_talk.02,Good.,好呀。
+dlg.c6_ho_talk.03,Terrible.,慘。
+dlg.c6_ho_talk.04,You won't have to fix everything.,你唔使乜都要整。
+dlg.c6_ho_talk.05,Exactly.,就係囉。
+dlg.c6_mum_grandfather.01,The lift works.,部𨋢得㗎。
+dlg.c6_mum_grandfather.02,So I've heard.,聽講係。
+dlg.c6_mum_grandfather.03,You'll like it.,你會鍾意。
+dlg.c6_mum_grandfather.04,I don't like things because they're convenient.,我唔會因為方便就鍾意啲嘢。
+dlg.c6_mum_grandfather.05,You like television.,你鍾意睇電視。
+dlg.c6_mum_grandfather.06,That's different.,嗰個唔同。
+dlg.c6_mei_mum.01,Are you going to miss it?,你會唔會掛住呢度？
+dlg.c6_mei_mum.02,Yes.,會。
+dlg.c6_mei_mum.03,Mei waits for more.,阿美等她說下去。
+dlg.c6_mei_mum.04,But you still want to leave.,但係你都想走。
+dlg.c6_mei_mum.05,Yes.,係。
+dlg.c6_mei_mum.06,A pause.,一陣沉默。
+dlg.c6_mei_mum.07,I can miss it and still want to leave.,我可以掛住佢，又想走。
+dlg.c6_kit_talk.01,I got lost going home yesterday.,我尋日返屋企蕩失路。
+dlg.c6_kit_talk.02,Already?,咁快？
+dlg.c6_kit_talk.03,Everything looks the same.,啲嘢個個樣都一樣。
+dlg.c6_kit_talk.04,Good.,好。
+dlg.c6_kit_talk.05,You're enjoying this.,你好似好開心。
+dlg.c6_kit_talk.06,A little.,有少少。
+dlg.c6_kit_talk.07,You're going to forget this place.,你會唔記得呢度。
+dlg.c6_kit_talk.08,"No, I'm not.",我唔會。
+dlg.c6_kit_talk.09,You don't know that.,你點知。
+dlg.c6_kit_talk.10,Neither do you.,你都唔知。
+dlg.c6_kit_talk.11,Nobody interrupts them.,沒有人打擾她們。
+dlg.c6_kit_talk.12,But I'm not going to forget you.,但係我唔會唔記得你。
+dlg.c6_kit_talk.13,I know.,我知。
+dlg.c6_kit_talk.14,Good.,好。
+dlg.c6_kwok_talk.01,Newspaper delivery starts at seven.,送報紙七點開始。
+dlg.c6_kwok_talk.02,You already arranged it?,你已經搞掂咗？
+dlg.c6_kwok_talk.03,Of course.,梗係。
+dlg.c6_kwok_talk.04,You don't even know the new neighbours.,你連新鄰居都未識。
+dlg.c6_kwok_talk.05,"They read, don't they?",佢哋都睇報紙㗎嘛？
+dlg.c6_ng_after.01,Two more to box. The fat one's last. She knows why.,仲有兩隻未入箱。肥嗰隻最後。佢知點解。
+dlg.c6_ho_after.01,The lights stay up till we go. Then somebody else can take them down.,啲燈掛到我哋走為止。之後由第二個拆。
+dlg.c6_mum_after.01,Eat something. Kit brought too much.,食啲嘢啦。阿潔帶得太多。
+dlg.c6_kit_after.01,Block Seven. Fourteenth floor. You'll get lost.,七座。十四樓。你實蕩失路。
+dlg.c6_kwok_after.01,Seven o'clock. Don't be late for your own paper.,七點。唔好遲過你份報紙。
+dlg.c6_grandfather_idle.01,Sit. The chair won't be here tomorrow.,坐啦。聽日呢張櫈都唔喺度。
+dlg.c6_dark.01,Can't see my own tea.,連自己杯茶都睇唔到。
+dlg.c6_old_photo.01,Grandfather takes the old photograph out of his jacket and holds it out.,公公從外套裡拿出那張舊照片，遞了過來。
+dlg.c6_old_photo.02,You had a camera?,你以前有部相機？
+dlg.c6_old_photo.03,For a while.,有過一排。
+dlg.c6_old_photo.04,What happened to it?,部相機去咗邊？
+dlg.c6_old_photo.05,Mei looks at the camera around her neck.,阿美低頭看著掛在頸上的相機。
+dlg.c6_old_photo.06,Oh.,哦。
+dlg.c6_old_photo.07,She studies the photograph.,她細看那張照片。
+dlg.c6_old_photo.08,Who took this?,呢張邊個影㗎？
+dlg.c6_old_photo.09,Someone who left.,一個走咗嘅人。
+dlg.c6_old_photo.10,Who?,邊個？
+dlg.c6_old_photo.11,I don't remember.,我唔記得。
+dlg.c6_old_photo.12,Does that bother you?,你會唔會介意？
+dlg.c6_old_photo.13,Yes.,會。
+dlg.c6_leaving.01,See you.,遲啲見。
+dlg.c6_leaving.02,See you.,遲啲見。
+dlg.c6_leaving.03,"See you, Mei.",遲啲見，阿美。
+dlg.c6_leaving.04,"One by one, they go down the stairs.",他們一個接一個走下樓梯。
+dlg.c6_leaving.05,See you.,遲啲見。
+dlg.c6_pigeon_found.01,"Behind the tank, on the same bracket as before: the fat one.",水缸後面，還是上次那個鐵架上：肥嗰隻。
+dlg.c6_pigeon_back.01,Mei holds out a hand. She comes home the way she came before.,阿美伸出手。她飛回家，就像上次一樣。
+dlg.c6_ng_pigeon_back.01,You're getting good at this.,你越嚟越熟手喎。
+dlg.c6_ng_pigeon_back.02,She's predictable.,佢好易估。
+dlg.c6_ng_pigeon_back.03,So are you.,你都係。
+c6.card.number,CHAPTER 6,第六章
+c6.card.title,THE LAST ROOF,最後的天台
+ending.ch6,CHAPTER 6 · THE LAST ROOF,第六章・最後的天台
+c6.obj.ng,Photograph Mr. Ng packing his birds.,為吳伯和他正在收拾的鴿子拍照。
+c6.obj.ng.hint,"At the coop, before it's dark.",在雀籠那邊，趁天還未黑。
+c6.obj.lights,Reconnect the roof lights.,把天台的燈接回去。
+c6.need.hut,The lead from the bulbs goes into the stair hut. Where does it come out?,燈泡那條線鑽進了樓梯屋。它從哪裡出來？
+c6.need.cross,"North of the hut, two leads cross. Which one goes on?",樓梯屋北面，兩條線交叉。哪一條才是接下去的？
+c6.need.board,Plug the lead into the board at the foot of the mast.,把線插進天線杆腳的拖板。
+c6.need.tank,The board's lead goes behind the water tank. Walk round it.,拖板那條線拖到水缸後面。繞著它走。
+c6.need.last,"The last board, by Mr. Ng's old spot.",最後一個拖板，在吳伯舊時的位置旁。
+c6.obj.evening,The evening.,這個黃昏。
+c6.obj.evening.hint,Talk to whoever you like.,想跟誰聊就跟誰聊。
+c6.need.pigeon,Mr. Ng's fat one: somewhere she has hidden before.,吳伯那隻肥鴿子：躲在她以前躲過的地方。
+notice.c6_lights,The roof lights are on.,天台的燈亮了。
+notice.c6_old_photo,"The old photograph goes into the album, on a page of its own.",那張舊照片放進了相簿，自己佔一頁。
+notice.c6_wong_after,Mrs. Wong's page has a new line: AFTER.,黃婆婆那一頁多了一行：之後。
+hint.c6_camera,[C] Camera,[C] 相機
+hint.c6_camera_pad,[Y] Camera,[Y] 相機
+verb.plug_lead,Plug in,插上
+verb.call,Call her,叫她
+res.ng_birds.name,Mr. Ng's Birds,吳伯的鴿子
+res.ng_birds.note,One basket each. He talks to them while he packs.,一籃一隻。他一邊收拾，一邊跟牠們說話。
+res.ng_birds.context,"Pigeon lofts crowded the City's roofs. Keepers raced and traded their birds, and flew them in circles over the rooftops at dusk.",城寨的天台上擠滿了鴿棚。養鴿的人會賽鴿、買賣鴿子，黃昏時放牠們在屋頂上空繞圈飛。
+res.old_photo.name,The Old Photograph,那張舊照片
+res.old_photo.note,"Grandpa, Mrs. Wong, Mum, and people he says I should know.\nHe does not remember who took it.",公公、黃婆婆、媽媽，還有公公說我應該認識的人。\n他不記得是誰拍的。
+res.old_photo.context,"Few families in the City owned a camera. Whoever had one took the pictures for everyone: New Year, weddings, a roof on a summer evening.",城寨裡很少人家有相機。有相機的人就替大家拍：新年、婚禮、夏夜的天台。
+res.kit.name,Kit,阿潔
+res.kit.note,Block 7.\nLift.\nOwn toilet.\nApparently these are all reasons to abandon me.,七座。\n有𨋢。\n自己有廁所。\n原來這些都是丟下我的理由。
+res.kit.later,She got lost in the new estate before I did.,她在新屋邨比我先蕩失路。
+res.wong.name,Mrs. Wong,黃婆婆
+res.wong.note,She left before Grandpa.\nHe says it was cheating.,她比公公先走。\n公公說她出貓。
+res.wong.after,"Her card, in her own hand: Tai Po, near her daughter.",她親手寫的卡片：大埔，她女兒家附近。
+res.ng.later,He says the pigeons know this roof.\nThey will have to learn another.,他說鴿子認得這個天台。\n牠們要重新認識另一個。
+dlg.c6_ho_wait.01,"From the bulbs. Unplugged ones only, remember.",由燈泡跟起。記住，淨係冇插電嗰啲。
+env.c6_not_yet,Not yet. Everyone's up here.,還未。大家都在上面。

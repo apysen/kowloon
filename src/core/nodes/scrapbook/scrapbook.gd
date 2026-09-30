@@ -46,9 +46,14 @@ func toggle(force: Variant = null) -> void:
 	open = next
 	if next:
 		locks.lock("scrapbook")
-		# prints made by a debug stage jump are taken now
+		# prints made by a debug stage jump are taken now (not the note-only
+		# pages, and not the prints that are pictures in themselves)
 		for id in entries:
-			if not photography.photos.has(id):
+			if photography.photos.has(id) or ResidentCatalog.NOTE_PAGES.has(id):
+				continue
+			if ResidentCatalog.FIXED_PRINTS.has(id):
+				photography.photos[id] = load(ResidentCatalog.FIXED_PRINTS[id])
+			else:
 				photography.photos[id] = await studio.shoot(id)
 		panel.visible = true
 		await panel.open_book(entries, photography.photos)

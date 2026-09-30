@@ -1186,6 +1186,183 @@ const LINES := {
 	"c3_wai_race_after": [
 		{"speaker": "wai", "text": "dlg.c3_wai_race_after.01"},
 	],
+	"c6_open": [
+		{"speaker": "", "text": "dlg.c6_open.01"},
+		{"speaker": "mum", "text": "dlg.c6_open.02"},
+	],
+	"c6_ng_packing": [
+		{"speaker": "ng", "text": "dlg.c6_ng_packing.01"},
+		{"speaker": "mei", "text": "dlg.c6_ng_packing.02"},
+		{"speaker": "ng", "text": "dlg.c6_ng_packing.03"},
+		{"speaker": "mei", "text": "dlg.c6_ng_packing.04"},
+		{"speaker": "ng", "text": "dlg.c6_ng_packing.05"},
+	],
+	"c6_ng_photo": [
+		{"speaker": "ng", "text": "dlg.c6_ng_photo.01"},
+	],
+	"c6_pigeon_escapes": [
+		{"speaker": "", "text": "dlg.c6_pigeon_escapes.01"},
+		{"speaker": "ng", "text": "dlg.c6_pigeon_escapes.02"},
+	],
+	"c6_wong_card": [
+		{"speaker": "mum", "text": "dlg.c6_wong_card.01"},
+		{"speaker": "", "text": "dlg.c6_wong_card.02"},
+		{"speaker": "mei", "text": "dlg.c6_wong_card.03"},
+		{"speaker": "grandfather", "text": "dlg.c6_wong_card.04"},
+		{"speaker": "", "text": "dlg.c6_wong_card.05"},
+	],
+	"c6_lights_fail": [
+		{"speaker": "", "text": "dlg.c6_lights_fail.01"},
+		{"speaker": "kwok", "text": "dlg.c6_lights_fail.02"},
+		{"speaker": "ho", "text": "dlg.c6_lights_fail.03"},
+		{"speaker": "grandfather", "text": "dlg.c6_lights_fail.04"},
+		{"speaker": "ho", "text": "dlg.c6_lights_fail.05"},
+		{"speaker": "grandfather", "text": "dlg.c6_lights_fail.06"},
+		{"speaker": "ho", "text": "dlg.c6_lights_fail.07"},
+		{"speaker": "", "text": "dlg.c6_lights_fail.08"},
+		{"speaker": "ho", "text": "dlg.c6_lights_fail.09"},
+		{"speaker": "mei", "text": "dlg.c6_lights_fail.10"},
+		{"speaker": "ho", "text": "dlg.c6_lights_fail.11"},
+	],
+	"c6_hut_lead": [
+		{"speaker": "", "text": "dlg.c6_hut_lead.01"},
+	],
+	"c6_hut_through": [
+		{"speaker": "", "text": "dlg.c6_hut_through.01"},
+	],
+	"c6_leads_tangle": [
+		{"speaker": "", "text": "dlg.c6_leads_tangle.01"},
+	],
+	"c6_leads_seen": [
+		{"speaker": "", "text": "dlg.c6_leads_seen.01"},
+	],
+	"c6_board_wrong": [
+		{"speaker": "ho", "text": "dlg.c6_board_wrong.01"},
+	],
+	"c6_board_mast": [
+		{"speaker": "", "text": "dlg.c6_board_mast.01"},
+	],
+	"c6_tank_loop": [
+		{"speaker": "", "text": "dlg.c6_tank_loop.01"},
+	],
+	"c6_lights_on": [
+		{"speaker": "", "text": "dlg.c6_lights_on.01"},
+		{"speaker": "grandfather", "text": "dlg.c6_lights_on.02"},
+		{"speaker": "kit", "text": "dlg.c6_lights_on.03"},
+		{"speaker": "ho", "text": "dlg.c6_lights_on.04"},
+	],
+	"c6_ng_talk": [
+		{"speaker": "mei", "text": "dlg.c6_ng_talk.01"},
+		{"speaker": "ng", "text": "dlg.c6_ng_talk.02"},
+		{"speaker": "mei", "text": "dlg.c6_ng_talk.03"},
+		{"speaker": "ng", "text": "dlg.c6_ng_talk.04"},
+		{"speaker": "", "text": "dlg.c6_ng_talk.05"},
+		{"speaker": "ng", "text": "dlg.c6_ng_talk.06"},
+	],
+	"c6_ho_talk": [
+		{"speaker": "ho", "text": "dlg.c6_ho_talk.01"},
+		{"speaker": "mei", "text": "dlg.c6_ho_talk.02"},
+		{"speaker": "ho", "text": "dlg.c6_ho_talk.03"},
+		{"speaker": "mei", "text": "dlg.c6_ho_talk.04"},
+		{"speaker": "ho", "text": "dlg.c6_ho_talk.05"},
+	],
+	"c6_mum_grandfather": [
+		{"speaker": "mum", "text": "dlg.c6_mum_grandfather.01"},
+		{"speaker": "grandfather", "text": "dlg.c6_mum_grandfather.02"},
+		{"speaker": "mum", "text": "dlg.c6_mum_grandfather.03"},
+		{"speaker": "grandfather", "text": "dlg.c6_mum_grandfather.04"},
+		{"speaker": "mum", "text": "dlg.c6_mum_grandfather.05"},
+		{"speaker": "grandfather", "text": "dlg.c6_mum_grandfather.06"},
+	],
+	"c6_mei_mum": [
+		{"speaker": "mei", "text": "dlg.c6_mei_mum.01"},
+		{"speaker": "mum", "text": "dlg.c6_mei_mum.02"},
+		{"speaker": "", "text": "dlg.c6_mei_mum.03"},
+		{"speaker": "mei", "text": "dlg.c6_mei_mum.04"},
+		{"speaker": "mum", "text": "dlg.c6_mei_mum.05"},
+		{"speaker": "", "text": "dlg.c6_mei_mum.06"},
+		{"speaker": "mum", "text": "dlg.c6_mei_mum.07"},
+	],
+	"c6_kit_talk": [
+		{"speaker": "kit", "text": "dlg.c6_kit_talk.01"},
+		{"speaker": "mei", "text": "dlg.c6_kit_talk.02"},
+		{"speaker": "kit", "text": "dlg.c6_kit_talk.03"},
+		{"speaker": "mei", "text": "dlg.c6_kit_talk.04"},
+		{"speaker": "kit", "text": "dlg.c6_kit_talk.05"},
+		{"speaker": "mei", "text": "dlg.c6_kit_talk.06"},
+		{"speaker": "mei", "text": "dlg.c6_kit_talk.07"},
+		{"speaker": "kit", "text": "dlg.c6_kit_talk.08"},
+		{"speaker": "mei", "text": "dlg.c6_kit_talk.09"},
+		{"speaker": "kit", "text": "dlg.c6_kit_talk.10"},
+		{"speaker": "", "text": "dlg.c6_kit_talk.11"},
+		{"speaker": "kit", "text": "dlg.c6_kit_talk.12"},
+		{"speaker": "mei", "text": "dlg.c6_kit_talk.13"},
+		{"speaker": "kit", "text": "dlg.c6_kit_talk.14"},
+	],
+	"c6_kwok_talk": [
+		{"speaker": "kwok", "text": "dlg.c6_kwok_talk.01"},
+		{"speaker": "mei", "text": "dlg.c6_kwok_talk.02"},
+		{"speaker": "kwok", "text": "dlg.c6_kwok_talk.03"},
+		{"speaker": "mei", "text": "dlg.c6_kwok_talk.04"},
+		{"speaker": "kwok", "text": "dlg.c6_kwok_talk.05"},
+	],
+	"c6_ng_after": [
+		{"speaker": "ng", "text": "dlg.c6_ng_after.01"},
+	],
+	"c6_ho_after": [
+		{"speaker": "ho", "text": "dlg.c6_ho_after.01"},
+	],
+	"c6_mum_after": [
+		{"speaker": "mum", "text": "dlg.c6_mum_after.01"},
+	],
+	"c6_kit_after": [
+		{"speaker": "kit", "text": "dlg.c6_kit_after.01"},
+	],
+	"c6_kwok_after": [
+		{"speaker": "kwok", "text": "dlg.c6_kwok_after.01"},
+	],
+	"c6_grandfather_idle": [
+		{"speaker": "grandfather", "text": "dlg.c6_grandfather_idle.01"},
+	],
+	"c6_dark": [
+		{"speaker": "grandfather", "text": "dlg.c6_dark.01"},
+	],
+	"c6_old_photo": [
+		{"speaker": "", "text": "dlg.c6_old_photo.01"},
+		{"speaker": "mei", "text": "dlg.c6_old_photo.02"},
+		{"speaker": "grandfather", "text": "dlg.c6_old_photo.03"},
+		{"speaker": "mei", "text": "dlg.c6_old_photo.04"},
+		{"speaker": "", "text": "dlg.c6_old_photo.05"},
+		{"speaker": "mei", "text": "dlg.c6_old_photo.06"},
+		{"speaker": "", "text": "dlg.c6_old_photo.07"},
+		{"speaker": "mei", "text": "dlg.c6_old_photo.08"},
+		{"speaker": "grandfather", "text": "dlg.c6_old_photo.09"},
+		{"speaker": "mei", "text": "dlg.c6_old_photo.10"},
+		{"speaker": "grandfather", "text": "dlg.c6_old_photo.11"},
+		{"speaker": "mei", "text": "dlg.c6_old_photo.12"},
+		{"speaker": "grandfather", "text": "dlg.c6_old_photo.13"},
+	],
+	"c6_leaving": [
+		{"speaker": "ho", "text": "dlg.c6_leaving.01"},
+		{"speaker": "kwok", "text": "dlg.c6_leaving.02"},
+		{"speaker": "ng", "text": "dlg.c6_leaving.03"},
+		{"speaker": "", "text": "dlg.c6_leaving.04"},
+		{"speaker": "kit", "text": "dlg.c6_leaving.05"},
+	],
+	"c6_pigeon_found": [
+		{"speaker": "", "text": "dlg.c6_pigeon_found.01"},
+	],
+	"c6_pigeon_back": [
+		{"speaker": "", "text": "dlg.c6_pigeon_back.01"},
+	],
+	"c6_ng_pigeon_back": [
+		{"speaker": "ng", "text": "dlg.c6_ng_pigeon_back.01"},
+		{"speaker": "mei", "text": "dlg.c6_ng_pigeon_back.02"},
+		{"speaker": "ng", "text": "dlg.c6_ng_pigeon_back.03"},
+	],
+	"c6_ho_wait": [
+		{"speaker": "ho", "text": "dlg.c6_ho_wait.01"},
+	],
 }
 
 
