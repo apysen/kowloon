@@ -17,7 +17,7 @@ spacing_glyph = 8
 base_font = ExtResource("4_vojy4")
 spacing_glyph = 5
 
-[node name="Ending" type="Control" unique_id=2007898790]
+[node name="Ending" type="Control" unique_id=265947771]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
@@ -25,49 +25,49 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_7fnhb")
 
-[node name="Black" type="ColorRect" parent="." unique_id=1521770786]
+[node name="Black" type="ColorRect" parent="." unique_id=75031979]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Center" type="CenterContainer" parent="." unique_id=1953692566]
+[node name="Center" type="CenterContainer" parent="." unique_id=440218624]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="Lines" type="VBoxContainer" parent="Center" unique_id=1577925961]
+[node name="Lines" type="VBoxContainer" parent="Center" unique_id=1487530593]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="Days" type="Label" parent="Center/Lines" unique_id=1400447775]
+[node name="Days" type="Label" parent="Center/Lines" unique_id=742766528]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_jiohm")
 theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
-text = "30 DAYS UNTIL WE LEAVE"
 horizontal_alignment = 1
 
-[node name="Title" type="Label" parent="Center/Lines" unique_id=1652310719]
+[node name="Title" type="Label" parent="Center/Lines" unique_id=1066046405]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_fg610")
 theme_override_font_sizes/font_size = 44
 theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
-text = "PROJECT KOWLOON"
+text = "ending.title"
 horizontal_alignment = 1
 
-[node name="Sub" type="Label" parent="Center/Lines" unique_id=905846145]
+[node name="Sub" type="Label" parent="Center/Lines" unique_id=2091510376]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_yojxy")
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
-text = "VERTICAL SLICE COMPLETE"
+text = "ending.sub"
 horizontal_alignment = 1
 
-[node name="Replay" type="RichTextLabel" parent="Center/Lines" unique_id=464196083]
+[node name="Replay" type="RichTextLabel" parent="Center/Lines" unique_id=330340455]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -75,7 +75,6 @@ theme_override_fonts/normal_font = ExtResource("4_vojy4")
 theme_override_font_sizes/normal_font_size = 14
 theme_override_colors/default_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 bbcode_enabled = true
-text = "[center]Press [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] R [/color][/outline_size][/bgcolor][/font_size][/font]  to play again[/center]"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0

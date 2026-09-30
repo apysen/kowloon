@@ -42,21 +42,21 @@ spacing_glyph = 5
 base_font = ExtResource("4_qyrho")
 spacing_glyph = 4
 
-[node name="TitleScreen" type="Control" unique_id=1925772496]
+[node name="TitleScreen" type="Control" unique_id=1219999269]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_lcxjy")
 
-[node name="Soot" type="ColorRect" parent="." unique_id=1362186992]
+[node name="Soot" type="ColorRect" parent="." unique_id=1566901013]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.07058824, 0.078431375, 0.09019608, 1)
 
-[node name="Rooftops" type="TextureRect" parent="." unique_id=887416648]
+[node name="Rooftops" type="TextureRect" parent="." unique_id=968111725]
 modulate = Color(1, 1, 1, 0.55)
 layout_mode = 0
 anchor_right = 1.0
@@ -66,7 +66,7 @@ texture = ExtResource("2_6gu6j")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="SodiumGlow" type="TextureRect" parent="." unique_id=1088845457]
+[node name="SodiumGlow" type="TextureRect" parent="." unique_id=117942977]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -74,25 +74,25 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_yf5ak")
 expand_mode = 1
 
-[node name="Center" type="CenterContainer" parent="." unique_id=680003442]
+[node name="Center" type="CenterContainer" parent="." unique_id=2132570340]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Row" type="HBoxContainer" parent="Center" unique_id=1999002812]
+[node name="Row" type="HBoxContainer" parent="Center" unique_id=1815561251]
 layout_mode = 2
 theme_override_constants/separation = 34
 
-[node name="Seal" type="PanelContainer" parent="Center/Row" unique_id=2036252932]
+[node name="Seal" type="PanelContainer" parent="Center/Row" unique_id=582337773]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_y6rpc")
 
-[node name="Characters" type="VBoxContainer" parent="Center/Row/Seal" unique_id=159401632]
+[node name="Characters" type="VBoxContainer" parent="Center/Row/Seal" unique_id=955541203]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="Char" type="Label" parent="Center/Row/Seal/Characters" unique_id=1703046001]
+[node name="Char" type="Label" parent="Center/Row/Seal/Characters" unique_id=198651187]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -100,7 +100,7 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "九"
 horizontal_alignment = 1
 
-[node name="Char2" type="Label" parent="Center/Row/Seal/Characters" unique_id=1534810014]
+[node name="Char2" type="Label" parent="Center/Row/Seal/Characters" unique_id=864790111]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -108,7 +108,7 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "龍"
 horizontal_alignment = 1
 
-[node name="Char3" type="Label" parent="Center/Row/Seal/Characters" unique_id=704572614]
+[node name="Char3" type="Label" parent="Center/Row/Seal/Characters" unique_id=503217360]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -116,7 +116,7 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "城"
 horizontal_alignment = 1
 
-[node name="Char4" type="Label" parent="Center/Row/Seal/Characters" unique_id=292660507]
+[node name="Char4" type="Label" parent="Center/Row/Seal/Characters" unique_id=610367416]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_0tssm")
 theme_override_font_sizes/font_size = 54
@@ -124,60 +124,86 @@ theme_override_colors/font_color = Color(0.65882355, 0.27058825, 0.22745098, 1)
 text = "寨"
 horizontal_alignment = 1
 
-[node name="Copy" type="VBoxContainer" parent="Center/Row" unique_id=2021943914]
+[node name="Copy" type="VBoxContainer" parent="Center/Row" unique_id=307311961]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 14
 
-[node name="Name" type="Label" parent="Center/Row/Copy" unique_id=1112888535]
+[node name="Name" type="Label" parent="Center/Row/Copy" unique_id=268886352]
 layout_mode = 2
 theme_override_constants/line_spacing = -12
 theme_override_fonts/font = SubResource("FontVariation_4dnjc")
 theme_override_font_sizes/font_size = 60
 theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
-text = "PROJECT
-KOWLOON"
+text = "title.name"
 
-[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=1430172783]
+[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=835465299]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=1586294477]
+[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=722792384]
 custom_minimum_size = Vector2(38, 6)
 layout_mode = 2
 size_flags_vertical = 4
 color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 
-[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=1384947798]
+[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=300551102]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_na7ja")
 theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
-text = "THE BLUE PIPE"
+text = "title.slice"
 
-[node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=494866307]
+[node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=795869290]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_83its")
 theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
-text = "Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help."
+text = "title.blurb"
 autowrap_mode = 3
 
-[node name="Begin" type="Button" parent="Center/Row/Copy" unique_id=706987739]
+[node name="Buttons" type="HBoxContainer" parent="Center/Row/Copy" unique_id=147378269]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Continue" type="Button" parent="Center/Row/Copy/Buttons" unique_id=1493258412]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-text = "BEGIN"
+text = "title.continue"
 
-[node name="Controls" type="RichTextLabel" parent="Center/Row/Copy" unique_id=149615589]
-custom_minimum_size = Vector2(440, 0)
+[node name="Begin" type="Button" parent="Center/Row/Copy/Buttons" unique_id=1330980832]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "title.begin"
+
+[node name="Fullscreen" type="Button" parent="Center/Row/Copy/Buttons" unique_id=898027392]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "ui.fullscreen_off"
+
+[node name="Language" type="Button" parent="Center/Row/Copy/Buttons" unique_id=10723979]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "ui.language"
+
+[node name="Chapters" type="HBoxContainer" parent="Center/Row/Copy" unique_id=1770481670]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Controls" type="RichTextLabel" parent="Center/Row/Copy" unique_id=824614085]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("6_pm3ky")
 theme_override_font_sizes/normal_font_size = 13
 theme_override_colors/default_color = Color(0.6117647, 0.5921569, 0.54509807, 1)
 bbcode_enabled = true
-text = "[font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] WASD [/color][/outline_size][/bgcolor][/font_size][/font]  move   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] Q [/color][/outline_size][/bgcolor][/font_size][/font] [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] E [/color][/outline_size][/bgcolor][/font_size][/font]  rotate   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] F [/color][/outline_size][/bgcolor][/font_size][/font]  interact   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] C [/color][/outline_size][/bgcolor][/font_size][/font]  camera   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] TAB [/color][/outline_size][/bgcolor][/font_size][/font]  scrapbook   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] G [/color][/outline_size][/bgcolor][/font_size][/font]  graphics   [font=res://assets/fonts/IBMPlexMono-Regular.ttf][font_size=13][bgcolor=#12141799][outline_size=0][color=#d9d4c7] F1 [/color][/outline_size][/bgcolor][/font_size][/font]  debug"
 fit_content = true
 scroll_active = false

@@ -1,0 +1,728 @@
+keys,en,zh_HK
+dlg.grandfather_intro.01,Mei. Take this to Mrs. Wong.,阿美，攞呢包藥去畀黃婆婆。
+dlg.grandfather_intro.02,Again?,又係我去？
+dlg.grandfather_intro.03,She won't come down for it herself. Stubborn woman.,佢唔肯自己落嚟攞。硬頸婆。
+dlg.grandfather_intro.04,And take this.,仲有，攞埋呢個。
+dlg.grandfather_intro.05,He puts his old instant camera in your hands.,他把那部舊即影即有相機放到你手上。
+dlg.grandfather_intro.06,Your camera? What for?,你部相機？攞嚟做咩？
+dlg.grandfather_intro.07,You'll forget what things looked like.,你會唔記得啲嘢以前係咩樣。
+dlg.grandfather_intro.08,"Follow the blue pipe. When you reach Lau's place, go up.",跟住條藍色水喉行。去到劉醫生嗰度，就上樓。
+dlg.grandfather_idle.01,Blue pipe. Lau's. Up. Go on.,藍色水喉。劉醫生。上樓。去啦。
+dlg.grandfather_late.01,Did she take it?,佢收咗未？
+dlg.grandfather_late.02,Not yet.,未。
+dlg.grandfather_late.03,Then why are you standing here?,咁你企喺度做咩？
+dlg.grandfather_return.01,I gave it to her.,畀咗佢喇。
+dlg.grandfather_return.02,Good.,好。
+dlg.grandfather_return.03,She said to tell you she's not leaving before you do.,佢叫我同你講，你未走，佢唔會走先。
+dlg.grandfather_return.04,Did she.,係咩。
+dlg.grandfather_return.05,What does that mean?,咩意思㗎？
+dlg.grandfather_return.06,He turns the radio up a little.,他把收音機調大了一點。
+dlg.grandfather_return.07,He nods at the camera.,他朝相機點點頭。
+dlg.grandfather_return.08,You've been using it.,你有用佢喎。
+dlg.grandfather_return.09,You gave me a camera.,你畀咗部相機我吖嘛。
+dlg.grandfather_return.10,I noticed.,我睇到。
+dlg.grandfather_return.11,Your mother saved you some rice. Kit came back and ate half of it.,你阿媽留咗飯畀你。阿潔又嚟過，食咗一半。
+dlg.mum_kit.01,Kit came by earlier.,阿潔頭先嚟過。
+dlg.mum_kit.02,What did she want?,佢搵我咩事？
+dlg.mum_kit.03,She said she'd tell you herself.,佢話自己同你講。
+dlg.mum_kit.04,Mum goes back to wrapping.,媽媽繼續包東西。
+dlg.mum_idle.01,Medicine first. Then you can help me with these.,送咗藥先。返嚟幫我執埋呢啲。
+dlg.old_photo.01,An old photograph.,一張舊照片。
+dlg.old_photo.02,You look weird.,你個樣好怪。
+dlg.old_photo.03,I was young.,我嗰陣後生吖嘛。
+dlg.old_photo.04,That's what I said.,我咪係咁講囉。
+dlg.old_photo_again.01,"Grandfather, young, in a crowd of people you don't know.",年輕的公公，站在一群你不認識的人中間。
+dlg.grandfather_end.01,Eat. It's getting cold.,食飯啦。凍㗎喇。
+dlg.boxes_end.01,"Cardboard boxes, taped shut. Your mother's handwriting on the sides.",一個個用膠紙封好的紙皮箱，側面寫著媽媽的字。
+dlg.boxes_end.02,KITCHEN.  WINTER CLOTHES.  RADIO.,廚房。　冬衣。　收音機。
+dlg.boxes_end.03,They were here this morning.,今朝已經喺度㗎喇。
+dlg.lau_intro.01,"Mei! Mind the tray, those are clean.",阿美！小心個盤，嗰啲啱啱洗乾淨㗎。
+dlg.lau_intro.02,You're packing already?,你已經執緊嘢喇？
+dlg.lau_intro.03,Your mother hasn't started?,你阿媽仲未執？
+dlg.lau_intro.04,She says she has.,佢話執緊。
+dlg.lau_intro.05,Then she hasn't.,咁即係未。
+dlg.lau_intro.06,Apparently I'm getting a real office after this. With windows.,聽講搬咗之後，我會有間正式嘅醫務所。有窗㗎。
+dlg.lau_intro.07,Thirty-one years in this room and I've never once seen the weather.,喺呢間房做咗三十一年，一次都未見過出面係咩天氣。
+dlg.lau_intro.08,Is that your grandfather's camera?,嗰部係咪你公公部相機？
+dlg.lau_intro.09,"Take one of me. With the old chair, before they haul it off.",同我影張啦。連埋張舊椅，趁佢哋未搬走。
+dlg.lau_intro.10,"Go on, before I change my mind.",快啲啦，陣間我改變主意。
+dlg.lau_waiting.01,Well? I'm not getting any younger.,點呀？我唔會越嚟越後生㗎。
+dlg.lau_after_photo.01,Hah. Don't show anyone.,哈。唔好畀人睇。
+dlg.lau_after_photo.02,"Wong's upstairs from here, isn't she? The stairs are through the back.",黃婆婆住喺上面，係咪？樓梯喺後面。
+dlg.lau_windows.01,New place has windows.,新地方有窗。
+dlg.lau_windows.02,You keep saying that.,你講咗好多次喇。
+dlg.lau_windows.03,You don't work under fluorescent tubes all day.,你又唔使成日喺光管底下做嘢。
+dlg.lau_idle.01,Go on. Mrs. Wong won't wait forever.,去啦。黃婆婆唔會等你一世。
+dlg.lau_return.01,Back already? Tell your mother to start packing.,咁快返嚟？叫你阿媽快啲執嘢。
+dlg.fabric_first.01,Wet fabric blocks the walkway.,濕衣服擋住了天橋。
+dlg.fabric_first.02,It's still dripping. You can't get past without soaking yourself.,還在滴水。要過去就一定會弄濕自己。
+dlg.fabric_again.01,Someone's washing. Still wet.,不知誰家晾的衣服，還是濕的。
+dlg.chan_early.01,"Mind the washing on the catwalk, Mei.",阿美，小心天橋上面啲衫。
+dlg.chan_quest.01,"Mrs. Chan, can you move the washing? I need to get to Mrs. Wong's.",陳太，可唔可以收咗啲衫先？我要過去黃婆婆度。
+dlg.chan_quest.02,And let them mildew?,收咗佢等佢發霉咩？
+dlg.chan_quest.03,Wai was supposed to carry them upstairs to dry. I haven't seen him all afternoon.,阿偉應該攞上去晾乾㗎。成個下晝都唔見佢。
+dlg.chan_quest.04,He's probably gone up to the roof again. With that pigeon man.,實係又走咗上天台。同嗰個養白鴿嘅阿伯一齊。
+dlg.chan_quest.05,How do I get up there?,點上去？
+dlg.chan_quest.06,Not by the stairs. That roof door's been stuck for years. Only Wai knows the trick to it.,唔係行樓梯。天台道門卡死咗好多年，得阿偉識開。
+dlg.chan_quest.07,He goes up the shaft behind my kitchen. Like a monkey. I don't want to know.,佢成日喺我廚房後面條天井爬上去。似隻馬騮咁。我唔想知。
+dlg.chan_waiting.01,"If you find him, tell him his mother has a wooden spoon.",搵到佢就同佢講，佢阿媽揸住雞毛掃等緊佢。
+dlg.chan_told.01,"Wai's up on the roof, helping Mr. Ng.",阿偉喺天台，幫緊吳伯。
+dlg.chan_told.02,Of course he is. Tell him his mother has a wooden spoon.,梗係啦。同佢講，佢阿媽揸住雞毛掃等緊佢。
+dlg.chan_coming.01,Wai's coming for the washing.,阿偉嚟緊收衫喇。
+dlg.chan_coming.02,I'll believe it when I see it.,見到先信。
+dlg.chan_after.01,"He finally came for them. Go on, it's clear.",佢終於嚟收咗。過去啦，冇嘢擋喇。
+dlg.shaft_look.01,The airshaft. A rusted ladder climbs the west wall all the way to the roof.,天井。一道生鏽的鐵梯沿著西牆，一直通上天台。
+dlg.shaft_look.02,Its bottom rungs have rusted clean away. The first one is out of reach.,最下面幾級早已鏽斷，第一級夠不著。
+dlg.shaft_look_found.01,The ladder's bottom rungs are gone.,鐵梯最下面幾級沒有了。
+dlg.shaft_look_found.02,That old crate behind the fridge would get you up to them.,雪櫃後面那個舊木箱，墊著就夠得著。
+dlg.shaft_climb.01,"Onto the crate, up to the first rung.",踩上木箱，抓住第一級。
+dlg.shaft_climb.02,"Then straight up, the way Wai must go.",然後一直爬上去，阿偉一定也是這樣走的。
+dlg.shaft_down_unknown.01,A long drop down the airshaft. You can't see a way down from here.,天井很深。從這裡看不到下去的路。
+dlg.roofdoor_latched.01,The roof door is swollen stuck in its frame. It won't budge.,天台門受潮發脹，卡死在門框裡，推不動。
+dlg.roofdoor_top_stuck.01,The stairwell door is swollen stuck in its frame. It won't budge.,樓梯間的門受潮發脹，卡死在門框裡，推不動。
+dlg.son_found.01,Mei? What are you doing up here?,阿美？你上嚟做咩？
+dlg.son_found.02,Your mother's looking for you. The washing.,你阿媽搵緊你。啲衫呀。
+dlg.son_found.03,The washing! I was supposed to bring it up hours ago.,啲衫！我幾個鐘頭前就應該攞上嚟㗎喇。
+dlg.son_found.04,I can't yet. Mr. Ng needs me. One of the birds won't come down.,但係未得住。吳伯要我幫手，有隻白鴿唔肯落嚟。
+dlg.son_found.05,If she flies off now she might not find the new place.,佢而家飛走，可能搵唔到新屋。
+dlg.son_found_nochan.01,Mei? What are you doing up here?,阿美？你上嚟做咩？
+dlg.son_found_nochan.02,Is that your family's washing on the catwalk? I can't get past it.,天橋上面啲衫係咪你屋企㗎？我過唔到。
+dlg.son_found_nochan.03,Ma's washing! I was supposed to bring it up hours ago.,阿媽啲衫！我幾個鐘頭前就應該攞上嚟㗎喇。
+dlg.son_found_nochan.04,I can't yet. Mr. Ng needs me. One of the birds won't come down.,但係未得住。吳伯要我幫手，有隻白鴿唔肯落嚟。
+dlg.son_found_nochan.05,If she flies off now she might not find the new place.,佢而家飛走，可能搵唔到新屋。
+dlg.son_shh.01,Shh. You'll scare the birds.,噓。你會嚇親啲雀㗎。
+dlg.son_photo.01,"Go on, take it. He never lets anyone.",快啲影啦。佢平時唔畀人影㗎。
+dlg.son_catwalk.01,"Don't touch, they're still wet. I'm taking them up to the roof.",唔好掂，仲未乾。我攞上天台晾。
+dlg.son_waiting.01,She's somewhere up by the water tank. She's scared.,佢喺水缸附近。佢好驚。
+dlg.son_leaves.01,Ma's washing! I forgot again. She's going to kill me.,阿媽啲衫！我又唔記得咗。佢實劈死我。
+dlg.son_leaves.02,I'll bring it up here to dry. And I'll get the stair door open for you. There's a trick to it.,我攞上嚟呢度晾。順便幫你開樓梯道門，有竅門㗎。
+dlg.son_after.01,Don't tell Ma how long it took.,唔好同阿媽講搞咗幾耐。
+dlg.ng_stranger.01,Mind the birds. They don't like strangers.,小心啲雀。佢哋唔鍾意生人。
+dlg.ng_early.01,Have you seen Wai?,有冇見過阿偉？
+dlg.ng_early.02,"Over by the coop, pretending to work.",喺雀籠嗰邊，扮做嘢。
+dlg.ng_quest.01,Hm. Lee's girl. Or is it Leung's.,唔。李家個女。定係梁家嘅。
+dlg.ng_quest.02,Grandfather's.,我公公嘅。
+dlg.ng_quest.03,Ah. Then you're patient.,啊。咁你有耐性。
+dlg.ng_quest.04,One of mine's hiding up by the water tank. She won't come down unless she can see the way home.,我有隻匿咗喺水缸上面。佢睇唔到返屋企嘅路，唔肯落嚟。
+dlg.ng_quest.05,Find her. Then look at it the way she does.,搵到佢。然後用佢嘅角度睇吓。
+dlg.ng_waiting.01,Find her first. Then look at it the way she does.,搵到佢先。然後用佢嘅角度睇吓。
+dlg.sheet_plain.01,"A bedsheet, pegged out to dry between the tank and the coop.",一張床單，用衣夾晾在水缸和雀籠之間。
+dlg.sheet_unpin.01,"From where she's perched, this sheet hangs right across her view of the coop.",從牠停著的地方看，這張床單正好擋住了雀籠。
+dlg.sheet_unpin.02,Mei unpins one corner and lets it swing aside.,阿美鬆開一角的衣夾，讓床單擺到一邊。
+dlg.ng_helped.01,There. See? She knew the way. She only needed to see it.,係囉。見到未？佢識路嘅，只係要睇得到。
+dlg.ng_helped.02,They know the way home better than people do.,佢哋認得返屋企嘅路，仲叻過人。
+dlg.ng_helped.03,Can I take one?,我可唔可以影張？
+dlg.ng_helped.04,Of me?,影我？
+dlg.ng_helped.05,A roar builds somewhere over the rooftops.,屋頂上空，轟鳴聲越來越近。
+dlg.ng_helped.06,Get the birds in it.,影埋啲雀。
+dlg.ng_waiting_photo.01,Well? The birds won't hold still forever.,點呀？啲雀唔會一直企定定㗎。
+dlg.ng_after.01,Tell your grandfather the birds miss him.,同你公公講，啲雀掛住佢。
+dlg.wong_deliver.01,Your grandfather sent this?,你公公叫你攞嚟㗎？
+dlg.wong_deliver.02,Yeah.,係。
+dlg.wong_deliver.03,Tell him I'm not leaving before he does.,同佢講，佢未走，我唔會走先。
+dlg.wong_deliver.04,What does that mean?,咩意思？
+dlg.wong_deliver.05,He'll know.,佢會明。
+dlg.wong_deliver.06,"Go home, it's getting late.",返屋企啦，夜喇。
+dlg.wong_after.01,"Go home, Mei.",返去啦，阿美。
+dlg.chopper.01,Watch the pipe. And tell your grandfather the soup is for him.,小心條水喉。仲有，同你公公講，啲湯係煲畀佢㗎。
+dlg.mahjong.01,Your grandfather looking for you? He owes me forty dollars.,你公公搵你呀？佢仲欠我四十蚊。
+dlg.fanman.01,Fifty years this fan's been going. Might as well fix it one more time.,呢把風扇轉咗五十年。都係幫佢整多次啦。
+dlg.shopkeeper.01,Says here they're setting a date.,報紙話佢哋定緊日子。
+dlg.shopkeeper.02,They've been setting a date since I was your age.,我好似你咁大個嗰陣，佢哋已經話緊定日子。
+dlg.worker.01,Excuse me. These are heavy.,唔該借借。好重㗎。
+dlg.child.01,Don't run on the stairs. My ma says.,唔好喺樓梯度跑。我阿媽話㗎。
+dlg.stairs_blocked.01,Mr. Lau wanted his picture first.,劉醫生想我先同佢影相。
+dlg.camera_no_subject.01,Film is precious. Mei lowers the camera.,菲林很珍貴。阿美放下相機。
+speaker.mei,Mei,阿美
+speaker.grandfather,Grandfather,公公
+speaker.mum,Mum,媽媽
+speaker.lau,Mr. Lau,劉醫生
+speaker.chan,Mrs. Chan,陳太
+speaker.wai,Wai,阿偉
+speaker.ng,Mr. Ng,吳伯
+speaker.wong,Mrs. Wong,黃婆婆
+speaker.yip,Auntie Yip,葉嬸
+speaker.tsang,Mr. Tsang,曾伯
+speaker.ho,Mr. Ho,何師傅
+speaker.kwok,Mr. Kwok,郭伯
+speaker.worker,Worker,工人
+speaker.lok,Ah Lok,阿樂
+env.radio,"Grandfather's radio. Something cheerful, half lost in static.",公公的收音機。播著輕快的歌，一半淹沒在雜音裡。
+env.chair,The old dental chair. The vinyl is patched with tape in three places.,舊牙醫椅。膠皮上有三處用膠布補過。
+env.sign,劉牙科. Lau Dental. The paint on the sign is older than you are.,「劉牙科」。招牌上的油漆比你還老。
+env.notice,The Housing Department's notice. Everyone has read it. Nobody talks about it.,房屋署的通告。人人都看過，卻沒有人提起。
+env.coop,Mr. Ng's coop. Every bird has a name written on a strip of tape.,吳伯的雀籠。每隻鴿子都有名字，寫在一小條膠布上。
+env.dead_end,The blue pipe runs straight into the wall.,藍色水喉直直鑽進了牆裡。
+env.well,"Far below, the alley is full of other people's rubbish.",下面遠處的後巷，堆滿了別人扔下的垃圾。
+env.kitchen,"A counter, a gas ring and a wok: the whole kitchen. The tap comes off the blue pipe. Every drop of water in the flat runs through it.",一個灶台、一個煤氣爐、一個鑊，就是整個廚房。水龍頭從那條藍色水喉分出來，屋裡每一滴水都經過它。
+env.toilet_nook,"A squat toilet behind a curtain, its cistern fed from the same pipe. Most families here share one down the corridor.",布簾後面是一個蹲廁，水箱也是從同一條水喉接水。這裡大多數人家，都要跟整層人共用走廊上的廁所。
+env.bunk,"Grandfather sleeps below, you sleep on top. Three generations, one room.",公公睡下格，你睡上格。三代人，一個房間。
+env.cockloft,"The cockloft: a platform built up under the ceiling. Mum sleeps up there, beside the cases she has already packed.",閣樓：在天花板下搭出來的木架。媽媽就睡在上面，旁邊是已經收拾好的行李箱。
+env.chan_kitchen,Mrs. Chan's stove. Above it the Kitchen God keeps watch; at New Year he reports on the family to Heaven.,陳太的灶頭。上面供著灶君，每到年尾，他要上天稟報這一家人的事。
+env.chan_bunk,"Mrs. Chan sleeps below, Wai on top, when he comes home.",陳太睡下格，阿偉睡上格，如果他肯回家的話。
+env.shared_toilet,The floor's toilet. Every family along this corridor shares it. The bucket is for when the water stops.,這層樓的廁所，整條走廊的人家共用。停水的時候，就靠旁邊那桶水。
+env.wong_kitchen,"One ring, one pot. Cooking for one.",一個爐頭，一個煲。一個人的飯。
+verb.talk,Talk,交談
+verb.look,Look,查看
+verb.upstairs,Go upstairs,上樓
+verb.downstairs,Go downstairs,下樓
+verb.roof_door,Roof door,天台門
+verb.stairwell_door,Stairwell door,樓梯間門
+verb.door,Door,門
+verb.push,Push,推
+verb.climb,Climb,爬上去
+verb.look_up,Look up,抬頭看
+verb.climb_down,Climb down,爬下去
+verb.look_down,Look down,往下看
+prompt.interact,[F] {verb},[F] {verb}
+notice.wai_coming_through,"Wai: “Excuse me, Mei, coming through!”",阿偉：「唔該借借，阿美！」
+notice.wai_still_wet,"Wai: “Hold on, they're still wet!”",阿偉：「等陣，仲未乾㗎！」
+notice.crate_found,"An old crate, hidden behind the broken fridge.",壞雪櫃後面，藏著一個舊木箱。
+notice.pigeon_found,"A pigeon, tucked in behind the water tank.",有隻白鴿縮在水缸後面。
+notice.pigeon_found_known,"There she is, tucked in behind the water tank.",找到了，牠縮在水缸後面。
+notice.film_precious,Film is precious. Frame someone who matters.,菲林很珍貴。拍一個對你重要的人吧。
+notice.graphics_full,"Graphics: full (shadows, bloom, depth of field)",畫質：高（陰影、光暈、景深）
+notice.graphics_fast,Graphics: fast,畫質：流暢
+hint.move_interact,[WASD] Move    [F] Interact,[WASD] 移動    [F] 互動
+hint.move_interact_pad,[LS] Move    [A] Interact,[LS] 移動    [A] 互動
+hint.raise_camera,[C] Raise the camera,[C] 舉起相機
+hint.scrapbook,[TAB] Scrapbook,[TAB] 相簿
+hint.turn_view,[Q] [E] Turn the view,[Q] [E] 轉換視角
+obj.medicine.main,Bring Grandfather's medicine to Mrs. Wong.,把公公的藥送去給黃婆婆。
+obj.medicine.hint,Grandfather said to follow the blue pipe.,公公說，跟著藍色水喉走。
+obj.reached_lau.main,Mr. Lau wants a photograph.,劉醫生想拍一張照片。
+obj.reached_lau.hint,Press C to raise the camera.,按 C 舉起相機。
+obj.lau_photo.main,Find a way upstairs.,找路上樓。
+obj.lau_photo.hint,"“When you reach Lau's place, go up.”",「去到劉醫生嗰度，就上樓。」
+obj.catwalk.main,Someone's washing is blocking the catwalk.,有人晾的衣服擋住了天橋。
+obj.catwalk.hint,It's still dripping. Whoever hung it lives close by.,還在滴水。晾衣服的人應該就住在附近。
+obj.find_wai.main,Find Wai.,找阿偉。
+obj.find_wai.hint,“He's probably gone up to the roof again.”,「實係又走咗上天台。」
+obj.pigeon.main,One of Mr. Ng's pigeons won't come down.,吳伯有隻白鴿不肯下來。
+obj.pigeon.hint,“She won't come down unless she can see the way.”,「佢睇唔到路，唔肯落嚟。」
+obj.ng_photo.main,Take Mr. Ng's photograph.,給吳伯拍一張照片。
+obj.ng_photo.hint,“Get the birds in it.”,「影埋啲雀。」
+obj.fabric_moved.hint,Wai went to fetch the washing.,阿偉去收衣服了。
+obj.return_home.main,Return home.,回家。
+res.lau.name,Mr. Lau,劉醫生
+res.lau.occupation,dentist,牙醫
+res.lau.location,"Third Floor, Lung Chun Road",龍津路三樓
+res.lau.context,"Unlicensed dentists and doctors practised inside the Walled City for decades, charging a fraction of Hong Kong prices.",數十年來，城寨裡有不少無牌牙醫和醫生執業，收費只是城外的零頭。
+res.lau.note,His new clinic will have windows.,他的新診所會有窗。
+res.ng.name,Mr. Ng,吳伯
+res.ng.occupation,pigeon keeper,養鴿人
+res.ng.location,"Rooftop, above the airshaft",天台，天井上方
+res.ng.context,"The rooftops were the only open space in the city. Residents kept birds, dried laundry and watched planes land at Kai Tak.",天台是城寨裡唯一的空曠地方。居民在這裡養鳥、晾衫，看飛機降落啟德。
+res.ng.note,Mr. Ng says they know the way home better than people do.,吳伯說，牠們比人更認得回家的路。
+scrapbook.byline,{occupation} — {location},{occupation}・{location}
+scrapbook.title,Mei's scrapbook,阿美的相簿
+scrapbook.place,Kowloon Walled City,Kowloon Walled City
+scrapbook.quote,“You'll forget what things looked like.”,「你會唔記得\n啲嘢以前係咩樣。」
+scrapbook.quote_by,— Grandfather,——公公
+scrapbook.doodle,follow the blue pipe,跟住藍色水喉行
+scrapbook.empty,Empty pages.\nGrandfather's camera is still full of film.,空白的頁。\n公公的相機裡，還有很多菲林。
+scrapbook.pages,pages {from}–{to} of {total},第 {from}–{to} 頁，共 {total} 頁
+scrapbook.close,[Tab] close,[Tab] 合上
+camera.film,●  INSTANT FILM,●  即影即有
+camera.wait,Wait for it...,等一等⋯⋯
+camera.take,[SPACE] Take photo,[SPACE] 拍照
+camera.not_now,Not now.,現在不行。
+camera.controls,[MOUSE] look    [WASD] walk    [C] lower camera,[MOUSE] 環顧    [WASD] 走動    [C] 放下相機
+camera.controls_pad,[RS] look    [LS] walk    [Y] lower camera,[RS] 環顧    [LS] 走動    [Y] 放下相機
+dialogue.next,SPACE,SPACE
+ending.days,{days} DAYS UNTIL WE LEAVE,距離搬走，還有 {days} 日
+ending.day,{days} DAY UNTIL WE LEAVE,距離搬走，還有 {days} 日
+ending.title,PROJECT KOWLOON,PROJECT KOWLOON
+ending.sub,VERTICAL SLICE COMPLETE,試玩版完
+ending.replay,Press [R] to play again,按 [R] 重新開始
+pause.title,PAUSED,暫停
+pause.resume,RESUME,繼續
+pause.volume,VOLUME,音量
+pause.graphics_full,GRAPHICS: FULL,畫質：高
+pause.graphics_fast,GRAPHICS: FAST,畫質：流暢
+pause.quit,QUIT TO TITLE,返回標題畫面
+pause.hint,[Esc] resume,[Esc] 繼續
+ui.language,LANGUAGE: ENGLISH,語言：繁體中文
+ui.fullscreen_on,FULLSCREEN: ON,全螢幕：開
+ui.fullscreen_off,FULLSCREEN: OFF,全螢幕：關
+title.name,PROJECT\nKOWLOON,PROJECT\nKOWLOON
+title.slice,THE BLUE PIPE,藍色水喉
+title.blurb,"Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help.",九龍城寨，搬遷前的最後幾個星期。公公要你把藥送去給黃婆婆。試玩版，約十五分鐘。建議戴上耳機。
+title.begin,BEGIN,開始
+title.controls,[WASD] move   [Q][E] rotate   [F] interact   [C] camera   [TAB] scrapbook   [G] graphics   [F1] debug,[WASD] 移動   [Q][E] 轉視角   [F] 互動   [C] 相機   [TAB] 相簿   [G] 畫質   [F1] 除錯
+title.controls_pad,[LS] move   [LB][RB] rotate   [A] interact   [Y] camera   [X] scrapbook   [START] pause,[LS] 移動   [LB][RB] 轉視角   [A] 互動   [Y] 相機   [X] 相簿   [START] 暫停
+dlg.c2_cold_open.01,"Somewhere below, the pump starts up.",樓下某處，水泵開動了。
+dlg.c2_cold_open.02,It stops.,又停了。
+dlg.c2_cold_open.03,That's not right.,唔啱喎。
+dlg.c2_cold_open.04,Wonderful.,真係好嘢。
+dlg.c2_cold_open.05,What?,咩呀？
+dlg.c2_cold_open.06,No water.,冇水。
+dlg.c2_cold_open.07,Pump's trying.,個泵喺度試緊。
+dlg.c2_cold_open.08,Very considerate of it.,佢真係有心。
+dlg.c2_cold_open.09,"Go and find Ho. He'll be in the hall, talking to a pipe.",去搵何師傅。佢應該喺走廊，同條水喉傾緊偈。
+dlg.c2_grandfather_idle.01,Ho. The hall. Go on.,何師傅。走廊。去啦。
+dlg.c2_grandfather_after.01,Hear that? Water. Now someone can make tea.,聽到未？有水喇。而家終於有人可以沖茶喇。
+dlg.c2_mum_idle.01,Go and find Ho. Before your grandfather tries to fix it himself.,快啲去搵何師傅，趁你公公未自己郁手整。
+dlg.c2_mum_water.01,"It's back. Go and tell Ho, before he takes the whole pump apart.",有水喇。快啲去話畀何師傅知，唔係佢成個泵拆晒。
+dlg.c2_ho_find.01,Grandpa says the pump sounds wrong.,公公話個泵把聲唔對。
+dlg.c2_ho_find.02,Pump sounds fine.,個泵把聲冇問題。
+dlg.c2_ho_find.03,We don't have water.,我哋冇水喎。
+dlg.c2_ho_find.04,Exactly.,咪係囉。
+dlg.c2_ho_find.05,That doesn't sound fine.,咁都叫冇問題？
+dlg.c2_ho_find.06,Pump is working. Water isn't getting where it's going.,泵冇壞。係啲水去唔到佢要去嘅地方。
+dlg.c2_ho_find.07,Why?,點解？
+dlg.c2_ho_find.08,Someone shut something.,有人閂咗啲嘢。
+dlg.c2_ho_find.09,Who?,邊個？
+dlg.c2_ho_find.10,"If I knew that, this would be a shorter conversation.",我知嘅話，呢單嘢一早傾完喇。
+dlg.c2_ho_find.11,He points up with the screwdriver.,他用螺絲批指指上面。
+dlg.c2_ho_find.12,Blue branch. Follow it until it stops being blue.,藍色嗰條支喉。跟住佢行，行到佢唔再係藍色為止。
+dlg.c2_ho_find.13,Why does it stop being blue?,點解會唔再係藍色？
+dlg.c2_ho_find.14,Paint ran out.,油漆用晒囉。
+dlg.c2_ho_find.15,Who painted it?,邊個油嘅？
+dlg.c2_ho_find.16,"Whoever laid it. Nobody built this lot, Mei. Everybody did.",邊個駁就邊個油。呢度啲水喉冇人起過，阿美。係個個一齊起嘅。
+dlg.c2_ho_trace.01,Blue. Until it isn't. Go on.,藍色。跟到佢唔係藍為止。去啦。
+dlg.c2_blue_until.01,Blue until it isn't. Very helpful.,藍到唔係藍為止。真係好有用。
+dlg.c2_branch_seen.01,From the side it's plain: the faded one only goes down the well to a capped end. The blue one crosses it.,從側面看就清楚了：褪色那條只是沿天井落到一個封死的管口，藍色那條則橫過天井。
+dlg.c2_branch_seen.02,And it's the one that knocks when the pump does.,而且個泵一開，就係佢喺度咚咚聲。
+dlg.c2_well_seen.01,"Behind the air-conditioners, Mrs. Fong's tap branches off into her wall. The blue pipe doesn't. It keeps going, to the flat next door.",冷氣機後面，方太的水喉分支鑽進她家牆裡。藍色水喉沒有，它一直伸到隔壁那個單位。
+dlg.c2_well_seen.02,Next door's empty.,隔籬已經冇人住喇。
+dlg.c2_hint_knock.01,The knocking's on this side.,咚咚聲喺呢邊。
+dlg.c2_hint_ho.01,(calling up from below) It crosses the light well!,（喺下面叫上嚟）佢橫過天井㗎！
+dlg.c2_hint_ledge.01,It crosses the well. There's the footbridge.,佢橫過天井。嗰度有條橋。
+dlg.c2_hint_back.01,The front's chained. There might be a way in round the back.,前門鎖住咗。後面可能有路入。
+dlg.c2_chained.01,The door is chained from the outside.,門從外面用鐵鏈鎖住了。
+dlg.c2_chained.02,A Housing Department notice across it: the family has been rehoused. The unit is sealed.,門上貼著房屋署的通告：住戶已獲安置，單位已封閉。
+dlg.c2_climb_in.01,The back kitchen window is off its latch. Mei climbs in over the sill.,後面廚房的窗沒有扣上。阿美從窗台爬了進去。
+dlg.c2_valve_neighbour.01,"Somewhere above, water bursts out of a pipe.",樓上某處，一條水喉噴出水來。
+dlg.c2_valve_neighbour.02,HEY!,喂！
+dlg.c2_valve_neighbour.03,(through the wall) Not that one.,（隔住幅牆）唔係嗰個。
+dlg.c2_valve_neighbour.04,Mei turns it back.,阿美把它扭回去。
+dlg.c2_valve_neighbour_again.01,"Water again, upstairs.",樓上又噴水了。
+dlg.c2_valve_neighbour_again.02,I SAID HEY!,我話喂呀！
+dlg.c2_valve_neighbour_again.03,Mei turns it back.,阿美把它扭回去。
+dlg.c2_valve_sink.01,"The old sink coughs, and coughs, and brings up a gout of brown water.",舊洗碗盆咳了幾聲，吐出一大口黃泥水。
+dlg.c2_valve_sink.02,No.,唔係。
+dlg.c2_valve_sink.03,She turns it back.,她把它扭回去。
+dlg.c2_valve_right.01,"The valve fights her, then gives.",水掣扭得很緊，然後鬆開了。
+dlg.c2_valve_right.02,"The pipe shudders. Far below, the pump catches, and holds.",水喉震了一震。遠遠的樓下，水泵開動，這次沒有再停。
+dlg.c2_valve_right.03,There.,好喇。
+dlg.c2_ho_restored.01,Fixed.,整好喇。
+dlg.c2_ho_restored.02,For now.,暫時啫。
+dlg.c2_ho_restored.03,That's encouraging.,多謝你咁鼓勵我。
+dlg.c2_ho_restored.04,They'll shut this riser when Cheung's floor goes.,張太嗰層搬晒，佢哋就會閂咗呢條總喉。
+dlg.c2_ho_restored.05,When?,幾時？
+dlg.c2_ho_restored.06,Soon.,就快。
+dlg.c2_ho_restored.07,So we'll do this again.,咁我哋又要再嚟過？
+dlg.c2_ho_restored.08,No.,唔使。
+dlg.c2_ho_restored.09,He wipes his hands.,他抹了抹手。
+dlg.c2_ho_restored.10,Won't be anybody here.,到時已經冇人喺度喇。
+dlg.c2_ho_after.01,Go home. Your mother's got water again.,返去啦。你阿媽有水用喇。
+dlg.c2_ho_pose.01,"If you're going to point that at me, get on with it.",你要影就快啲影啦，唔好喺度指住我。
+dlg.c2_ho_photo.01,What?,做咩？
+dlg.c2_ho_photo.02,Nothing.,冇嘢。
+dlg.c2_ho_photo.03,That thing has a flash.,嗰部嘢有閃光燈㗎。
+dlg.c2_ho_photo.04,You didn't blink.,你冇眨眼。
+dlg.c2_mum_after.01,Thank Ho.,多謝何師傅。
+dlg.c2_mum_after.02,I helped.,我都有幫手。
+dlg.c2_mum_after.03,Then thank yourself quietly.,咁你靜靜哋多謝自己啦。
+dlg.c2_mum_after.04,You're welcome.,唔使客氣。
+dlg.c2_mum_after.05,I was talking to the bowl.,我同個碗講嘢。
+dlg.c2_mum_done.01,Go and eat something.,去食啲嘢啦。
+dlg.c2_mum_tea.01,Sit with your grandfather. He's waited all day for that kettle.,陪下你公公啦。佢成日就等住個煲水。
+dlg.c2_tea.01,Sit.,坐低啦。
+dlg.c2_tea.02,You waited all day for that.,你成日就等緊呢杯茶。
+dlg.c2_tea.03,Since Tuesday. The pump's sounded wrong since Tuesday.,由禮拜二等到而家。個泵由禮拜二開始就唔妥。
+dlg.c2_tea.04,You could have said.,你可以早啲講㗎嘛。
+dlg.c2_tea.05,I did. To the pump.,有講呀。同個泵講。
+dlg.c2_tea.06,Mr. Ho says they'll shut it off soon anyway.,何師傅話，遲早都會截咗佢。
+dlg.c2_tea.07,Then we'll drink this one slowly.,咁呢杯就飲慢啲啦。
+dlg.c2_tea.08,"The fan turns. Somewhere below, someone is filling a bucket.",風扇轉着。樓下某處，有人在裝水。
+dlg.c2_brochure.01,"A brochure for the new estate. Clean towers, a playground, a family smiling on a balcony.",新屋邨的宣傳單張。整齊的大廈、遊樂場，一家人在露台上笑。
+dlg.c2_brochure.02,“Reliable running water.”,「全日供應自來水。」
+dlg.c2_brochure.03,Luxury.,奢侈。
+dlg.c2_brochure.04,Marketing.,賣廣告啫。
+dlg.c2_tap_dry.01,"The tap coughs air, then nothing.",水龍頭咳出一口氣，然後甚麼也沒有。
+dlg.c2_tap_wet.01,"Water: cloudy for a moment, then clear.",有水了：先是有點混濁，一會兒就清了。
+dlg.c2_chan_dry.01,Three days of washing in a basin and not a drop to rinse it. Tell Ho I'm counting.,三日嘅衫浸喺盆度，一滴過水嘅水都冇。同何師傅講，我數緊日子。
+dlg.c2_chan_wet.01,It's back! Where's that boy with the buckets?,有水喇！嗰個衰仔同啲桶去咗邊？
+dlg.c2_wai.01,Mr. Ng says the birds drink before people do.,吳伯話啲雀要飲先過人飲。
+dlg.c2_ng.01,The birds had the last of the tank this morning.,今朝啲雀飲晒水缸最後嗰啲水。
+dlg.c2_lau.01,"No water, no patients. I can't rinse a mouth with tea.",冇水就冇病人。總唔可以用茶嚟漱口。
+dlg.c2_wong.01,No water? Then I'll have yesterday's tea. Tell your grandfather I'm managing.,冇水？咁我飲尋日嘅茶。同你公公講，我搞得掂。
+dlg.c2_kwok.01,Paper says nothing about the water. Paper never says anything about us.,報紙冇講停水。報紙從來都冇講過我哋。
+dlg.c2_chopper.01,"No water, no soup. I've been chopping for nothing.",冇水就冇湯。我斬咗成朝都係白斬。
+dlg.c2_chopper_wet.01,There. Soup after all. Tell your grandfather.,好喇，有湯飲喇。同你公公講聲。
+dlg.c2_mahjong.01,"No water, no work. So: mahjong.",冇水開唔到工，咪打麻雀囉。
+dlg.c2_worker.01,Water for the teahouse. Carried up from the standpipe in the street.,茶樓嘅水。由街喉度擔上嚟。
+dlg.c2_child.01,Ma says no bath today!,阿媽話今日唔使沖涼！
+dlg.c2_child_wet.01,Ma says bath today after all.,阿媽話今日都係要沖涼。
+speaker.neighbour,Neighbour,街坊
+verb.turn,Turn,扭
+verb.climb_in,Climb in,爬入去
+verb.climb_out,Climb out,爬出去
+c2.obj.find_ho,Find Mr. Ho.,找何師傅。
+c2.obj.find_ho.hint,"“He'll be in the hall, talking to a pipe.”",「佢應該喺走廊，同條水喉傾緊偈。」
+c2.obj.trace,Trace the water line.,追查水喉。
+c2.obj.trace.hint,“Blue branch. Follow it until it stops being blue.”,「藍色嗰條支喉。跟住佢行，行到佢唔再係藍色為止。」
+c2.obj.branch.hint,The one that knocks crosses the light well.,會咚咚響的那條，橫過了天井。
+c2.obj.well.hint,"It runs on past Mrs. Fong's, into the empty flat next door.",它經過方太家，一直伸進隔壁的空屋。
+c2.obj.valve,Find the valve.,找出水掣。
+c2.obj.valve.hint,Three valves. Only one is on the line up to the tank.,三個水掣，只有一個接往天台水缸。
+c2.obj.tell_ho,Tell Mr. Ho.,告訴何師傅。
+c2.obj.tell_ho.hint,Listen: the building's filling up.,聽：整座樓都有水了。
+c2.obj.photo_ho,Take Mr. Ho's photograph.,給何師傅拍一張照片。
+c2.obj.photo_ho.hint,While he washes the grease off his hands.,趁他在洗手上的油污。
+c2.obj.home,Go home.,回家。
+c2.obj.tea,Sit with Grandfather.,陪公公坐一會。
+c2.card.number,CHAPTER 2,第二章
+c2.card.title,THE WATER LINE,水喉
+ending.ch1,CHAPTER 1 · THE BLUE PIPE,第一章・藍色水喉
+ending.ch2,CHAPTER 2 · THE WATER LINE,第二章・水喉
+ending.continue,Press [SPACE] to go on to the next day,按 [SPACE] 繼續下一天
+title.continue,CONTINUE,繼續
+notice.window_found,"The back kitchen window, standing open.",後面廚房的窗，開著。
+notice.chan_buckets,Mrs. Chan: “Wai! Buckets! The water's back!”,陳太：「阿偉！啲桶呀！有水喇！」
+env.fong_door,"Mrs. Fong's door. A radio is playing inside, turned low.",方太的門。裡面開著收音機，聲音調得很低。
+env.unit_door,"Chained from the outside, a Housing Department notice across it: the family has been rehoused.",門從外面用鐵鏈鎖住，貼著房屋署的通告：住戶已獲安置。
+env.unit_window,Someone's kitchen window. Not yours to climb through.,別人家的廚房窗。不是你爬的地方。
+env.unit_marks,"Pale shapes on the wall, where a wardrobe and a bed stood for years.",牆上一塊塊淺色的印，是衣櫃和床多年靠過的地方。
+env.unit_calendar,The calendar stayed behind. Nobody turned it past the month they left.,月曆留下了。搬走那個月之後，再沒有人翻過。
+env.unit_stool,"A stool with a leg gone, left where it fell.",一張斷了腳的凳，倒在那裡沒人理。
+env.unit_sink,"The old sink. The whole family washed here: rice, clothes, faces.",舊洗碗盆。一家人都在這裡洗：洗米、洗衫、洗面。
+env.footbridge,Planks across the well. People on this side have crossed it for years; the rail is worn smooth.,橫過天井的木板橋。這邊的人走了很多年，扶手都磨滑了。
+res.ho.name,Mr. Ho,何師傅
+res.ho.occupation,repairs things,修理師傅
+res.ho.location,"The hall, by the fans",走廊，風扇堆旁
+res.ho.note,He says nobody built the water system. Everybody did.,他說這裡的水喉沒有人建過，是大家一起建的。
+res.ho.context,"For years there was no public water supply inside the City. Residents sank wells and pumped water up to tanks on the roofs; the pipes that brought it down were laid, and mended, by whoever needed them.",多年來城寨內沒有公共供水。居民自己打井，把水泵上天台水缸；把水送下來的水喉，都是有需要的人自己鋪、自己修的。
+title.dev_chapters,DEV · CHAPTERS,開發版・章節
+title.chapter,CHAPTER {n},第{n}章
+dlg.c3_open.01,"Upstairs, something heavy hits a table. Again. Again.",樓上有重物一下一下砸在桌上。
+dlg.c3_open.02,There you are.,喺度喇你。
+dlg.c3_open.03,I live here.,我住喺度㗎。
+dlg.c3_open.04,Not for long.,都唔住得耐。
+dlg.c3_open.05,You came all the way over to be annoying?,你專登過嚟搞我？
+dlg.c3_open.06,Uncle needs hands.,我阿叔要人幫手。
+dlg.c3_open.07,He has hands.,佢自己有手。
+dlg.c3_open.08,Useful ones.,有用嗰啲。
+dlg.c3_open.09,Come on. Up the stair by the mahjong table.,嚟啦。麻雀檯隔籬條樓梯上去。
+dlg.c3_kit_come.01,Up the stair. He doesn't like waiting.,上樓梯。佢唔鍾意等人。
+dlg.c3_chiu.01,Don't stand there.,唔好企喺度。
+dlg.c3_chiu.02,Mei moves.,阿美移開。
+dlg.c3_chiu.03,Not there either.,嗰度都唔好。
+dlg.c3_chiu.04,This is how he welcomes people.,佢一向係咁歡迎人㗎。
+dlg.c3_chiu.05,Final shipment. Stair's blocked. Loading route's half gone.,最後一批貨。樓梯塞死咗，落貨嗰條路又冇咗一半。
+dlg.c3_chiu.06,What do you need me to do?,要我點幫？
+dlg.c3_chiu.07,Find me a way from here to the street that does not involve lifting twelve crates down seven flights by hand.,搵條路，由呢度去到街，唔使用手捧十二箱貨落七層樓。
+dlg.c3_chiu.08,He means please.,佢嘅意思係「唔該」。
+dlg.c3_chiu.09,I do not.,我唔係。
+dlg.c3_chiu.10,"He points his chin at the ceiling: a hatch, and a hoist beam under it.",他用下巴指指天花板：一個活門，下面有條吊貨的橫樑。
+dlg.c3_chiu.11,Crates used to go up.,以前啲貨係向上運嘅。
+dlg.c3_chiu.12,Why up if the street is down?,條街喺下面，點解要向上？
+dlg.c3_chiu.13,Because down was worse.,因為向下更差。
+dlg.c3_chiu_up.01,Up the ladder. Look at what's left of the old way.,爬上去。睇吓舊條路剩返啲咩。
+dlg.c3_hint_look_back.01,The crates came up here. So where did they go?,啲貨上咗嚟呢度。咁之後去咗邊？
+dlg.c3_pulley_found.01,"Looking back from the far side: over the neighbours' balcony, a pulley on a gallows arm, and a platform hanging from it over the slot.",從另一邊回頭看：鄰居露台上伸出一枝吊臂，掛著一個滑輪，下面吊著一個木板台，懸在兩座樓中間的窄縫上。
+dlg.c3_pulley_found.02,"Across, along, and down.",過去、行過去，再落去。
+dlg.c3_pulley_found.03,It'll want a rope. And something across the gap.,要條繩。仲要有嘢搭過條罅。
+dlg.c3_kit_parts.01,"A rope, something to bridge that gap, and someone who knows if that pulley's going to kill us.",一條繩，一樣搭得過條罅嘅嘢，仲要有個人話我知個滑輪會唔會整死我哋。
+dlg.c3_kit_parts.02,Mr. Ng's got rope for his birds. Wai's been sat on a plank all week. And Ho's up top already. Ask him.,吳伯養白鴿實有繩。阿偉成個禮拜都坐喺塊板度。何師傅就喺上面，問佢啦。
+dlg.c3_kit_not_yet.01,"Not yet. The plank, the sign, the rope. Then me.",未得。木板、招牌、條繩。之後先到我。
+dlg.c3_kit_idle.01,Twelve crates. I'm counting.,十二箱。我數緊。
+dlg.c3_hint_setup.01,"The plank across, the sign out of the way, the rope on the winch. Then I crank.",搭好木板，推開招牌，穿好條繩。之後我搖。
+dlg.c3_ho_early.01,Kit said there was work. I came for the tea.,阿潔話有嘢做。我係嚟飲茶嘅。
+dlg.c3_ho_pulley.01,Ho leans out over the parapet to look at the pulley.,何師傅探身出女兒牆看那滑輪。
+dlg.c3_ho_pulley.02,It'll hold.,頂得住。
+dlg.c3_ho_pulley.03,How do you know?,你點知？
+dlg.c3_ho_pulley.04,Because it hasn't fallen yet.,因為佢到而家都未跌落嚟。
+dlg.c3_ho_pulley.05,That is not reassuring.,咁講唔係好安心囉。
+dlg.c3_ho_pulley.06,Neither is gravity.,地心吸力都唔安心啦。
+dlg.c3_ho_after.01,It'll hold. Don't lean on it.,頂得住。唔好挨住佢。
+dlg.c3_ng.01,Busy morning upstairs. The birds don't like the pounding.,樓上成朝好嘈。啲雀唔鍾意咁嘅聲。
+dlg.c3_ng_rope.01,Do you have rope?,你有冇繩？
+dlg.c3_ng_rope.02,Everyone has rope.,個個都有繩。
+dlg.c3_ng_rope.03,Can I have yours?,可唔可以畀你條我？
+dlg.c3_ng_rope.04,Then I won't.,咁我就冇囉。
+dlg.c3_ng_rope.05,He hands it over.,他把繩遞過來。
+dlg.c3_ng_rope.06,Bring it back.,記得還。
+dlg.c3_ng_rope.07,We're leaving.,我哋就搬喇。
+dlg.c3_ng_rope.08,Then bring it back quickly.,咁就快啲還。
+dlg.c3_ng_after.01,Quickly.,快啲。
+dlg.c3_chan.01,Every crate in that workshop has walked past my door this week.,呢個禮拜，嗰間工場啲貨箱全部喺我門口經過。
+dlg.c3_wai.01,I'm sitting.,我坐緊。
+dlg.c3_plank.01,Can I borrow that?,借嗰塊板嚟用吓得唔得？
+dlg.c3_plank.02,I'm using it.,我用緊。
+dlg.c3_plank.03,For what?,用嚟做咩？
+dlg.c3_plank.04,Sitting.,坐。
+dlg.c3_plank.05,Get up.,起身。
+dlg.c3_plank.06,Wai gets up. Mrs. Chan hands over the plank.,阿偉站起身。陳太把木板遞過來。
+dlg.c3_plank.07,Bring it back. It's the only shelf I haven't packed.,記得還。我淨係得呢塊板未執落箱。
+dlg.c3_chan_after.01,"Half the laundry's in boxes already. The plank, you bring back.",啲衫有一半已經入晒箱。塊板你記得拎返嚟。
+dlg.c3_wai_after.01,Now I'm standing.,而家我企緊。
+dlg.c3_gap.01,"A drop between the roof and the neighbours' balcony, all the way down to the lane.",天台和鄰居露台之間是一道縫，一直落到下面的後巷。
+dlg.c3_plank_laid.01,"The plank reaches, just. Mei puts her weight on it. It holds.",木板剛好搭到。阿美踩上去試試，頂得住。
+dlg.c3_sign.01,"The neighbours' big signboard stands out from their wall, right across the balcony. No crate is getting past it.",鄰居的大招牌從牆上伸出來，橫過整個露台。貨箱過不去。
+dlg.c3_sign_folded.01,"It swings back against the wall on its hinges, stiff with rust.",招牌沿著鉸位慢慢摺回牆邊，生了鏽，很緊。
+dlg.c3_winch.01,An old hand winch on the gallows post. No rope on the drum.,吊臂柱上一部舊手搖絞盤，轆上沒有繩。
+dlg.c3_rope_rigged.01,"Mr. Ng's rope, over the pulley and onto the drum. Kit takes the handle.",吳伯的繩穿過滑輪，繞上絞盤。阿潔握住搖柄。
+dlg.c3_run.01,Ready?,準備好未？
+dlg.c3_run.02,No.,未。
+dlg.c3_run.03,Good. Uncle! Send it up!,好。阿叔！吊上嚟！
+dlg.c3_crate_down.01,"The platform touches down in the lane. Below, the porter swings the crate onto his shoulder.",木板台落到後巷。下面的咕喱一手把貨箱托上肩。
+dlg.c3_crate_down.02,One down. Eleven to go.,一箱。仲有十一箱。
+dlg.c3_crate_down.03,"By the last crate, nobody is counting out loud any more.",到最後一箱，已經沒有人再數出聲了。
+dlg.c3_final.01,Uncle Chiu writes the new address on the last crate in thick marker.,趙叔用粗墨水筆在最後一箱上寫上新地址。
+dlg.c3_final.02,You're keeping the name?,你會保留個招牌名？
+dlg.c3_final.03,Why wouldn't I?,點解唔會？
+dlg.c3_final.04,Different place.,換咗地方喎。
+dlg.c3_final.05,Same fish balls.,魚蛋一樣。
+dlg.c3_final.06,Better drains.,渠好啲。
+dlg.c3_final.07,Traitor.,反骨。
+dlg.c3_final.08,I'm telling the truth.,我講事實啫。
+dlg.c3_chiu_after.01,Go on. Kit's up on the roof. I've got cleaning.,去啦。阿潔喺天台。我要執嘢。
+dlg.c3_chiu_photo.01,Don't put me in it.,唔好影埋我。
+dlg.c3_chiu_photo.02,Too late.,太遲喇。
+dlg.c3_kit_key.01,Lift goes all the way up.,部𨋢一直上到頂。
+dlg.c3_kit_key.02,Sounds exhausting.,聽落好攰。
+dlg.c3_kit_key.03,You press a button.,你撳個掣咋。
+dlg.c3_kit_key.04,Exactly. What do you do while it's moving?,咪係囉。佢郁緊嗰陣你做咩？
+dlg.c3_kit_key.05,Stand there.,企喺度。
+dlg.c3_kit_key.06,Awful.,慘。
+dlg.c3_kit_key.07,We get our own toilet.,我哋有自己個廁所。
+dlg.c3_kit_key.08,Fine. You win.,好啦。你贏。
+dlg.c3_kit_key.09,Kit turns the key over in her fingers.,阿潔用手指翻弄著那條鎖匙。
+dlg.c3_kit_key.10,You know you can come over.,你知㗎，你隨時可以過嚟。
+dlg.c3_kit_key.11,I know.,我知。
+dlg.c3_kit_key.12,You keep saying that like I'm moving to Canada.,你次次都講到好似我搬去加拿大咁。
+dlg.c3_kit_key.13,Mei doesn't answer straight away.,阿美沒有馬上回答。
+dlg.c3_kit_key.14,What block?,第幾座？
+dlg.c3_kit_key.15,Seven.,七座。
+dlg.c3_kit_key.16,See? Already sounds far away.,你睇？已經聽落好遠。
+dlg.c3_grandfather.01,Chiu's making the whole building shake. Last batch?,趙老闆搞到成座樓震。最後一批？
+dlg.c3_grandfather.02,Last batch.,最後一批。
+dlg.c3_grandfather.03,Bring some back.,拎啲返嚟。
+dlg.c3_mum.01,"If Chiu's paying you in fish balls, I want a bag.",如果趙老闆用魚蛋當人工，我要一袋。
+dlg.c3_hand_a.01,Mind the floor. It's been wet since 1971.,小心地下。由一九七一年濕到而家。
+dlg.c3_hand_b.01,Forty years he's beaten the paste by hand. He says machines make it taste of machines.,佢用手打咗四十年魚漿。佢話機器打出嚟有機器味。
+dlg.c3_porter.01,"Waiting on crates. Paid by the crate, not by the wait.",等緊啲貨。按箱計錢，唔計等。
+dlg.c3_lau.01,Chiu's going too? Then where will my patients get lunch?,趙老闆都走？咁我啲病人去邊度食晏？
+dlg.c3_wong.01,"Tell your grandfather the pounding upstairs is Chiu, not his heart.",同你公公講，樓上咚咚聲係趙老闆，唔係佢個心。
+dlg.c3_kwok.01,"Last batch, is it? Put a bag by for me.",最後一批？留包畀我。
+dlg.c3_chopper.01,Chiu's paste is better than mine. Don't tell him.,趙老闆啲魚漿好過我。唔好話佢知。
+dlg.c3_mahjong.01,"Every thump, I lose a tile.",佢每咚一聲，我就輸一隻牌。
+dlg.c3_worker.01,Chiu's crates are in the way of mine.,趙老闆啲貨箱擋住我啲貨。
+dlg.c3_child.01,I got a fish ball for carrying a bowl!,我幫手拎碗，有粒魚蛋食！
+speaker.kit,Kit,阿潔
+speaker.chiu,Uncle Chiu,趙叔
+speaker.hand_a,Auntie Mui,梅姐
+speaker.hand_b,Keung,阿強
+speaker.porter,Porter,咕喱
+verb.lay_plank,Lay the plank,搭木板
+verb.fold,Fold,摺埋
+verb.rig_rope,Rig the rope,穿繩
+c3.obj.kit,Go with Kit.,跟阿潔去。
+c3.obj.kit.hint,Up the stair beside the mahjong table.,麻雀檯旁邊的樓梯上去。
+c3.obj.route,Rebuild the loading route.,重建落貨路線。
+c3.obj.route.hint,“Crates used to go up.”,「以前啲貨係向上運嘅。」
+c3.obj.parts.hint,"A rope, something to bridge the gap, and someone to vouch for the pulley.",一條繩、一樣搭得過縫的東西，還要有人擔保那滑輪。
+c3.obj.setup,Set up the route.,把路線搭好。
+c3.obj.setup.hint,Lay the plank. Get the sign out of the way. Rig the rope.,搭好木板，移開招牌，穿好繩。
+c3.route.climb,The ladder by the workshop door goes up through the hatch.,工場門邊的梯子，經天窗通上天台。
+c3.route.look,"From the roof, turn the view [Q] [E] and look back across the gap.",在天台上，按 [Q] [E] 轉換視角，回頭望過那道縫。
+c3.need.rope,"Rope: Mr. Ng keeps some for his birds, up on the top roof.",繩：吳伯養鴿要用繩，他在頂樓天台。
+c3.need.plank,A plank: Wai has been sitting on one in the Chans' room.,木板：阿偉在陳太家裏坐着一塊。
+c3.need.pulley,"The pulley: ask Mr. Ho, up on the workshop roof, if it will hold.",滑輪：問問工場天台上的何師傅頂不頂得住。
+c3.do.plank,Lay the plank across the gap from the workshop roof.,在工場天台把木板搭過那道縫。
+c3.do.sign_look,The signboard is in the way. Turn the view to see how it's fixed to the wall.,招牌擋住去路。轉換視角，看看它怎樣釘在牆上。
+c3.do.sign_fold,Fold the signboard back against the wall.,把招牌摺回貼牆。
+c3.do.rope,Rig the rope at the winch by the gallows post.,在吊臂柱旁的絞盤穿好繩。
+c3.do.kit,"Tell Kit, at the winch.",到絞盤告訴阿潔。
+c3.obj.kit_winch,Send the last batch down.,把最後一批貨送下去。
+c3.obj.lane,Go down to the lane.,下去後巷。
+c3.obj.lane.hint,Uncle Chiu is writing on the last crate.,趙叔在最後一箱上寫字。
+c3.obj.photo,Photograph the last batch.,為最後一批貨拍照。
+c3.obj.photo.hint,"Upstairs, Uncle Chiu's hands at the worktable, finishing the last of it.",樓上，趙叔的伙計圍着工作枱，做完最後一批。
+c3.obj.later,Kit's waiting on the roof.,阿潔在天台等你。
+c3.obj.later.hint,Up the ladder in the workshop.,從工場的梯爬上去。
+notice.c3_rope,Mr. Ng's rope.,吳伯的繩。
+notice.c3_plank,The Chans' plank.,陳家的木板。
+notice.c3_pulley_safe,Ho says the pulley will hold.,何師傅說滑輪頂得住。
+notice.c3_hinges,Hinges on the back of the sign: it folds flat to the wall.,招牌背後有鉸：可以摺埋貼牆。
+c3.card.number,CHAPTER 3,第三章
+c3.card.title,LAST BATCH,最後一批
+ending.ch3,CHAPTER 3 · LAST BATCH,第三章・最後一批
+env.lane_gate,"The lane runs out past a steel gate to the street. Deliveries come and go this way, and the rubbish.",後巷穿過一道鐵閘通到街上。送貨進出都走這裡，垃圾也是。
+env.workshop_shut,"The Chius' workshop door, shut. The smell of fish comes through it anyway.",趙家工場的門關著。魚的味道還是從門縫透出來。
+res.chiu.name,Chiu's Workshop,趙記工場
+res.chiu.occupation,food workshop,食品工場
+res.chiu.location,"Up the second stair, over the hall",第二條樓梯上去，走廊樓上
+res.chiu.note,Kit's uncle says the new place has proper drains.\nKit says this is the first sensible thing he has ever said.,阿潔的叔叔說新地方的渠好。\n阿潔說這是他講過最有道理的一句話。
+res.chiu.context,"Small factories filled the City's lower floors: fish balls, noodles, sweets, metalwork. Many supplied restaurants across Hong Kong, unlicensed and cheap.",城寨的低層擠滿了小工場：魚蛋、麵、糖果、五金。很多都供貨給全港的食肆，沒有牌照，但夠便宜。
+c4.card.number,CHAPTER 4,第四章
+c4.card.title,THREE ADDRESSES,三個地址
+ending.ch4,CHAPTER 4 · THREE ADDRESSES,第四章・三個地址
+c4.obj.yamen,Go to the yamen.,去衙門。
+c4.obj.yamen.hint,"Out through the back door by the mahjong table, along the lane, past the open gate.",從麻雀枱旁的後門出去，沿後巷走，穿過打開了的鐵閘。
+c4.obj.addresses,Find three new addresses.,找三個新地址。
+c4.need.lau,"Mr. Lau: in his clinic, packing up.",劉醫生：在診所收拾。
+c4.need.chan,Mrs. Chan and Wai: up on the roof.,陳太和阿偉：在天台。
+c4.need.kit,Kit: at her uncle's old workshop.,阿潔：在她阿叔的舊工場。
+c4.cab.store,Mr. Cheng's cabinet: the storage room's door is too narrow. Look at the room from the side.,鄭先生的櫃：貨倉的門太窄。從側面看看那房間。
+c4.cab.stair,The stair past the gap seems to end at a wall. Turn the view at the top.,縫後面的樓梯好像撞牆就完。到樓梯頂轉換視角。
+c4.cab.panel_look,The classroom's balcony door is too narrow for a cabinet. Look at it from the balcony.,課室通露台的門太窄，櫃搬不出。從露台那邊看看。
+c4.cab.panel_open,Unbolt the balcony door's other leaf.,拉開露台門另一邊的門閂。
+c4.cab.tell,Tell Mr. Cheng the way.,告訴鄭先生怎樣走。
+c4.obj.return,Take the addresses to Mrs. Cheung.,把地址交給張婆婆。
+c4.obj.return.hint,At her table in the yamen.,在衙門她的枱那邊。
+c4.obj.photo,Photograph Mrs. Cheung with her address book.,為張婆婆和她的地址簿拍照。
+c4.obj.photo.hint,"At her table, the book open.",在她的枱前，簿打開着。
+notice.c4_lau,Mr. Lau's new address.,劉醫生的新地址。
+notice.c4_chan,The Chans' new address.,陳太一家的新地址。
+notice.c4_kit,Kit's new address.,阿潔的新地址。
+notice.c4_bolts,Bolts on the outside of the other leaf: it folds back.,另一邊門的門閂在外面：可以摺起來。
+notice.c4_after,The album has a new line under each name: AFTER.,相簿每個名字下面，多了一行：之後。
+verb.unbolt,Unbolt,拉開門閂
+verb.take,Take,拿
+speaker.cheung,Mrs. Cheung,張婆婆
+speaker.cheng,Mr. Cheng,鄭先生
+speaker.mover,Mover,搬運工
+speaker.taichi,Old man,伯伯
+speaker.bird,Bird-keeper,雀友
+scrapbook.after,After: {after},之後：{after}
+env.c4_hall,"The yamen: the old magistrate's office, the one building left from when this was a fort. For years it has been the old people's home.",衙門：從前的衙署，是寨城還是炮台時留下的唯一建築。多年來一直是老人院。
+env.c4_cannons,Two iron cannons from the old fort. Children sit on them. Nobody remembers them ever being fired.,兩尊舊炮台留下的鐵炮。小朋友喜歡坐上去。沒有人記得它們開過炮。
+env.c4_tree,The only tree Mei knows in the City. Someone waters it every morning.,阿美在城寨裏認識的唯一一棵樹。每朝都有人淋水。
+env.c4_blackboard,"Chalk on the blackboard: 1992. THANK YOU, EVERYONE. GOODBYE.",黑板上的粉筆字：一九九二年。謝謝各位。再見。
+res.cheung.name,Mrs. Cheung,張婆婆
+res.cheung.occupation,keeps everyone's address,記下每個人的地址
+res.cheung.location,The yamen,衙門
+res.cheung.note,“Knowing where they went is better.”,「知道他們搬到哪裏，更加好。」
+res.cheung.context,"The yamen, the Qing magistrate's office, was the one building left from the fort the City grew out of. It housed an old people's home, a school and a clinic. When the City was cleared it was the only building kept; it still stands in the park that replaced the rest.",衙門是清朝的衙署，也是寨城由炮台演變而來時唯一留下的建築。它做過老人院、學校和診所。寨城清拆時，只有它被保留下來，今天仍然立在取代寨城的公園裏。
+res.cheung.after,Room C-714. On the plan.,圖則上的C-714室。
+res.lau.after,"2/F, 27 Tak Ku Ling Road. Across the road. Two windows.",德高令道二十七號二樓。對面馬路。兩個窗。
+res.chiu.after,"Kit and her uncle: Block 7, Room 1406. Kit's writing, on a fish-ball label.",阿潔和她阿叔：七座一四零六室。阿潔的字，寫在魚蛋標籤背面。
+dlg.c4_open.01,Mrs. Cheung was asking for you.,張婆婆搵你。
+dlg.c4_open.02,Which one?,邊個張婆婆？
+dlg.c4_open.03,The one at the yamen. With the book.,衙門嗰個。拎住本簿嗰個。
+dlg.c4_open.04,Everyone has a book now.,而家個個都有本簿。
+dlg.c4_open.05,Hers has everyone in it. The lane gate's open now. Go the back way.,佢本簿入面有晒所有人。後巷道閘而家開咗，行後面啦。
+dlg.c4_open.06,Tell her I'm still here.,同佢講，我仲喺度。
+dlg.c4_open.07,She knows.,佢知㗎。
+dlg.c4_open.08,Tell her anyway.,都係講多次。
+dlg.c4_cheung.01,Mei.,阿美。
+dlg.c4_cheung.02,You need something?,你要啲咩呀？
+dlg.c4_cheung.03,Three things.,三樣嘢。
+dlg.c4_cheung.04,That's suspiciously specific.,咁準確，好可疑喎。
+dlg.c4_cheung.05,Lau. Chan. Your friend Kit.,劉醫生。陳太。你個朋友阿潔。
+dlg.c4_cheung.06,What about them?,佢哋點呀？
+dlg.c4_cheung.07,Where they're going.,佢哋搬去邊。
+dlg.c4_cheung.08,You don't know?,你唔知㗎？
+dlg.c4_cheung.09,That is why I am asking.,所以我先問你囉。
+dlg.c4_cheng.01,"By the storage room, two movers stand back from a cabinet that isn't going anywhere.",貨倉門口，兩個搬運工退開兩步，望住一個搬唔郁嘅櫃。
+dlg.c4_cheng.02,Room C-714.,C-714室。
+dlg.c4_cheng.03,Where's that?,喺邊？
+dlg.c4_cheng.04,Seventh floor.,七樓。
+dlg.c4_cheng.05,Of which building?,邊座嘅七樓？
+dlg.c4_cheng.06,Block C.,C座。
+dlg.c4_cheng.07,There isn't a Block C.,冇C座㗎喎。
+dlg.c4_cheng.08,There is on the plan.,圖則上有。
+dlg.c4_cheng.09,Can the plan show me where?,圖則可唔可以話我知喺邊？
+dlg.c4_cheng.10,He looks at it.,鄭先生望住圖則。
+dlg.c4_cheng.11,No.,唔可以。
+dlg.c4_cheng.12,Plan says it goes out the door. Door says no.,圖則話由道門出。道門話唔得。
+dlg.c4_cheng.13,"If you know another way out of there, miss, I would be glad to hear it.",小姐，如果你知道有第二條路出嚟，我好樂意聽。
+dlg.c4_cheng_wait.01,The plan says the door.,圖則寫明係道門。
+dlg.c4_route.01,Not the door. Behind the shelves there's a gap between the walls.,唔係道門。層架後面，兩幅牆中間有條罅。
+dlg.c4_route.02,"Along it to the landing, up the stair, sideways into the old classroom, and out over the balcony.",沿住條罅去樓梯口，上樓梯，打側入舊課室，再由露台出去。
+dlg.c4_route.03,Sideways.,打側。
+dlg.c4_route.04,The balcony door's other half opens. The bolts were on the outside.,露台門另外半邊打得開㗎。門閂喺出面。
+dlg.c4_route.05,Show them.,帶佢哋去。
+dlg.c4_cheng_exit.01,That isn't on the plan.,圖則上冇呢條路。
+dlg.c4_cheng_exit.02,No.,冇。
+dlg.c4_cheng_exit.03,How do people know?,啲人點知㗎？
+dlg.c4_cheng_exit.04,You know once somebody shows you.,有人帶你行過一次，你就知。
+dlg.c4_cheng_after.01,I'm going to draw it on. In pencil.,我會畫落去。用鉛筆。
+dlg.c4_cabinet.01,A heavy camphorwood cabinet. A yellow label on it: C-714.,一個好重嘅樟木櫃。貼住張黃色標籤：C-714。
+dlg.c4_store_door.01,One leaf of the door opens. The other was bricked up years ago. A person fits. A cabinet doesn't.,道門得一邊開到，另一邊好多年前已經封咗。人過得，櫃過唔到。
+dlg.c4_gap_found.01,"From the side: there's a gap between this wall and the next building. And a way into it, behind the shelves.",由側面睇：呢幅牆同隔籬座樓之間有條罅。層架後面有路入去。
+dlg.c4_stair_found.01,"It doesn't end at the wall. It goes on sideways, into the next building.",唔係行到幅牆就冇路。打側仲有得行，入去隔籬座。
+dlg.c4_stair_found.02,"Behind the stacked desks, a doorway.",疊埋嘅書枱後面，有個門口。
+dlg.c4_panel.01,"The classroom's door onto the balcony: one leaf open, the other shut fast.",課室通露台嗰度門：一邊開咗，另一邊閂得實實。
+dlg.c4_panel_open.01,Mei slides the bolts back. The second leaf folds flat against the wall.,阿美拉開門閂。另一邊門摺埋，貼住牆。
+dlg.c4_panel_open.02,Wide enough now.,夠闊喇。
+dlg.c4_lau.01,Mrs. Cheung wants your address.,張婆婆想要你嘅地址。
+dlg.c4_lau.02,Already popular.,咁快就咁受歡迎。
+dlg.c4_lau.03,She wants to know where everyone went.,佢想知個個搬咗去邊。
+dlg.c4_lau.04,Have you seen the new place?,你睇過新舖未？
+dlg.c4_lau.05,Two windows.,兩個窗。
+dlg.c4_lau.06,Two?,兩個？
+dlg.c4_lau.07,I'm moving up in the world.,我步步高升喇。
+dlg.c4_lau.08,Rent's twice as much. Apparently daylight is extra.,租貴一倍。原來日光係要另外收錢嘅。
+dlg.c4_lau.09,There are cards inside the door. Take one. I had five hundred printed.,門後面有卡片，攞一張啦。我印咗五百張。
+dlg.c4_lau_card.01,The card. Inside the door.,卡片。喺門後面。
+dlg.c4_lau_after.01,Tell her the stairs are wider too. She'll ask.,同佢講樓梯都闊啲。佢一定會問。
+dlg.c4_card.01,"LAU DENTAL. NEW ADDRESS: 2/F, 27 Tak Ku Ling Road, Kowloon City.",劉牙科。新址：九龍城德高令道二十七號二樓。
+dlg.c4_card.02,He's only going across the road.,佢咪就係搬去對面馬路。
+dlg.c4_card_again.01,She has one already. He had five hundred printed.,她已經拿了一張。他印了五百張。
+dlg.c4_wong.01,You're packing.,你執緊嘢。
+dlg.c4_wong.02,Very observant. That camera is improving you.,好眼力。部相機令你進步咗。
+dlg.c4_wong.03,Where are you going?,你搬去邊？
+dlg.c4_wong.04,Near my daughter.,我個女附近。
+dlg.c4_wong.05,Is it nice?,好唔好㗎？
+dlg.c4_wong.06,I don't know yet.,未知。
+dlg.c4_wong.07,Mrs. Wong wraps a cup in newspaper.,黃婆婆用報紙包起一隻杯。
+dlg.c4_wong.08,She says there's a lift.,佢話有𨋢。
+dlg.c4_wong.09,Everyone says that.,個個都咁講。
+dlg.c4_wong.10,Then perhaps you should listen to everyone occasionally.,咁你間中都應該聽下人講。
+dlg.c4_wong.11,Grandpa still thinks you're waiting for him.,公公仲以為你等緊佢。
+dlg.c4_wong.12,Your grandfather thinks many things.,你公公諗嘢多。
+dlg.c4_wong.13,Is he wrong?,佢錯咗咩？
+dlg.c4_wong.14,She keeps packing.,她繼續收拾。
+dlg.c4_wong.15,Not about everything.,唔係樣樣都錯。
+dlg.c4_wong_after.01,Mind the boxes. The one with the cups is the one you'll trip on.,小心啲箱。你一定會踢中裝杯嗰個。
+dlg.c4_chan.01,Mrs. Cheung wants your new address.,張婆婆想要你哋嘅新地址。
+dlg.c4_chan.02,Good. Tell her there are lifts.,好。同佢講有𨋢。
+dlg.c4_chan.03,Everyone keeps telling me about lifts.,個個都同我講𨋢。
+dlg.c4_chan.04,You'll understand when you're old.,你老咗就明。
+dlg.c4_chan.05,You say that every time stairs are involved.,你次次一講到樓梯就咁講。
+dlg.c4_chan.06,"Room 1207, Block 3, On Tai Estate. Twelfth floor. With a lift.",安泰邨三座一二零七室。十二樓。有𨋢。
+dlg.c4_chan_after.01,"Hold that end. No, the other end.",揸住嗰頭。唔係，另一頭。
+dlg.c4_kit.01,"Kit writes it on the back of a fish-ball label: Block 7, Room 1406.",阿潔喺一張魚蛋標籤背面寫低地址：七座一四零六室。
+dlg.c4_kit.02,Don't lose it.,唔好整唔見。
+dlg.c4_kit.03,I have a scrapbook.,我有本剪貼簿。
+dlg.c4_kit.04,That's exactly why I'm worried.,就係咁我先擔心。
+dlg.c4_kit.05,What is that supposed to mean?,咩意思呀？
+dlg.c4_kit.06,You put things somewhere safe and then spend twenty minutes looking for the safe place.,你將啲嘢收喺一個安全嘅地方，之後用二十分鐘搵嗰個安全嘅地方。
+dlg.c4_kit_lift.01,How's the lift?,部𨋢點呀？
+dlg.c4_kit_lift.02,Boring.,悶。
+dlg.c4_kit_lift.03,Good.,咁就好。
+dlg.c4_kit_after.01,Uncle wants the keys back by six. The landlord wants them by five.,阿叔要我六點前交返條鎖匙。業主要五點。
+dlg.c4_cheung_wait.01,Three. I can count. So can you.,三個。我識數。你都識。
+dlg.c4_cheung_cabinet.01,"And my cabinet, if Mr. Cheng ever finds the way.",仲有我個櫃，如果鄭先生搵到條路嘅話。
+dlg.c4_return.01,Mrs. Cheung copies all three addresses into her book.,張婆婆把三個地址抄進簿裏。
+dlg.c4_return.02,That's it?,咁就得？
+dlg.c4_return.03,That's three.,三個囉。
+dlg.c4_return.04,What about everyone else?,其他人呢？
+dlg.c4_return.05,I'll get them.,我會攞齊。
+dlg.c4_return.06,She closes the book.,她合上簿。
+dlg.c4_return.07,Knowing where someone lived is useful.,知道人哋以前住喺邊，有用。
+dlg.c4_return.08,Was useful.,以前有用。
+dlg.c4_return.09,Knowing where they went is better.,知道佢哋搬咗去邊，更加好。
+dlg.c4_cheung_pose.01,Get the book in. I'm not important. The book is.,影埋本簿。我唔重要，本簿先重要。
+dlg.c4_cheung_photo.01,Is the book in it?,本簿有冇入鏡？
+dlg.c4_cheung_photo.02,It's the only thing in focus.,佢係唯一清楚嘅嘢。
+dlg.c4_cheung_photo.03,Good.,好。
+dlg.c4_grandfather.01,The yamen was here before any of us. It will be here after.,衙門喺我哋未嚟之前已經喺度。我哋走咗之後佢都會喺度。
+dlg.c4_mum.01,"If Mrs. Cheung gives you tea, drink it. She'll ask.",如果張婆婆請你飲茶，就飲咗佢。佢會問㗎。
+dlg.c4_mover_a.01,It went in. It'll come out. Everything that goes in comes out.,入得嚟，就出得去。入得嚟嘅嘢都出得去。
+dlg.c4_mover_after.01,Sideways. Who'd have thought.,打側。邊個諗到。
+dlg.c4_mover_b.01,C-714. C-714. C-714. I'll be writing it in my sleep.,C-714、C-714、C-714。我瞓覺都寫緊。
+dlg.c4_taichi.01,"Forty years, every morning, here. The new place has a garden. On the roof.",四十年，朝朝都喺度。新地方有個花園，喺天台。
+dlg.c4_bird.01,He sings better out here. So do I.,佢喺出面唱得好聽啲。我都係。
+dlg.c4_ho.01,Everyone wants their fans fixed before they move. Nobody wants to carry a broken fan.,個個都要喺搬之前整好把風扇。冇人想孭住把爛風扇走。
+dlg.c4_ng.01,The birds know something's happening. They keep counting the roofs.,啲雀知道有事發生。佢哋成日數緊啲天台。
+dlg.c4_kwok.01,Open as usual. Somebody has to be.,照常營業。總要有人照常。
+dlg.c4_chopper.01,Twelve days. Then I chop somewhere else.,仲有十二日。之後喺第二度斬。
+dlg.c4_mahjong.01,Last game at this table is on the ninth. You're invited to lose.,九號係呢張枱最後一局。歡迎你嚟輸。
+dlg.c4_worker.01,"Labels, labels. My hands smell of glue.",標籤、標籤。我對手成陣膠水味。
+dlg.c4_child.01,Did you see the cannons? You can sit on them. They're warm.,你見唔見到啲大炮？可以坐㗎。暖㗎。

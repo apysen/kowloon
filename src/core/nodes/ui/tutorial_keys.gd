@@ -38,7 +38,7 @@ func _draw() -> void:
 		draw_rect(r, face)
 		draw_rect(r, Color(edge, 0.75), false, 1.5)
 		draw_rect(Rect2(r.position + Vector2(0, r.size.y - 4), Vector2(r.size.x, 4)), Color(edge, 0.35))
-		var letter := "Q" if dir == -1 else "E"
+		var letter := UIStyle.pad_name("Q" if dir == -1 else "E")
 		var font := UIStyle.FONT_MONO
 		var fs := 22
 		var tw := font.get_string_size(letter, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x

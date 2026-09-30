@@ -32,7 +32,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="Hud" type="Control" unique_id=650758998]
+[node name="Hud" type="Control" unique_id=946325308]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
@@ -40,7 +40,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_as3gr")
 
-[node name="Objective" type="HBoxContainer" parent="." unique_id=1519767341]
+[node name="Objective" type="HBoxContainer" parent="." unique_id=221465661]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 24.0
@@ -50,16 +50,16 @@ offset_bottom = 20.0
 mouse_filter = 2
 theme_override_constants/separation = 14
 
-[node name="PipeRule" type="ColorRect" parent="Objective" unique_id=677429323]
+[node name="PipeRule" type="ColorRect" parent="Objective" unique_id=348427673]
 custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
 color = Color(0.24705882, 0.5254902, 0.81960785, 1)
 
-[node name="Text" type="VBoxContainer" parent="Objective" unique_id=1444473582]
+[node name="Text" type="VBoxContainer" parent="Objective" unique_id=1260726843]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ObjMain" type="Label" parent="Objective/Text" unique_id=1791047324]
+[node name="ObjMain" type="Label" parent="Objective/Text" unique_id=1591463556]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
@@ -71,7 +71,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 3
 autowrap_mode = 3
 
-[node name="ObjHint" type="Label" parent="Objective/Text" unique_id=410920826]
+[node name="ObjHint" type="Label" parent="Objective/Text" unique_id=1430979199]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_2wu1p")
@@ -82,7 +82,7 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 3
 autowrap_mode = 3
 
-[node name="PromptPanelRow" type="CenterContainer" parent="." unique_id=954820329]
+[node name="PromptPanelRow" type="CenterContainer" parent="." unique_id=877898563]
 layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -91,13 +91,13 @@ offset_top = -136.0
 offset_bottom = -96.0
 mouse_filter = 2
 
-[node name="PromptPanel" type="PanelContainer" parent="PromptPanelRow" unique_id=2103606670]
+[node name="PromptPanel" type="PanelContainer" parent="PromptPanelRow" unique_id=1864182147]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4m4yb")
 
-[node name="Prompt" type="RichTextLabel" parent="PromptPanelRow/PromptPanel" unique_id=1429628095]
+[node name="Prompt" type="RichTextLabel" parent="PromptPanelRow/PromptPanel" unique_id=695788544]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
@@ -110,7 +110,7 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="HintPanelRow" type="CenterContainer" parent="." unique_id=78488198]
+[node name="HintPanelRow" type="CenterContainer" parent="." unique_id=293879316]
 layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -119,13 +119,13 @@ offset_top = -188.0
 offset_bottom = -148.0
 mouse_filter = 2
 
-[node name="HintPanel" type="PanelContainer" parent="HintPanelRow" unique_id=854151800]
+[node name="HintPanel" type="PanelContainer" parent="HintPanelRow" unique_id=1547539145]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_todbw")
 
-[node name="Hint" type="RichTextLabel" parent="HintPanelRow/HintPanel" unique_id=2074673545]
+[node name="Hint" type="RichTextLabel" parent="HintPanelRow/HintPanel" unique_id=31218364]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
@@ -138,7 +138,7 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="Notice" type="Label" parent="." unique_id=1486432020]
+[node name="Notice" type="Label" parent="." unique_id=496935527]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_top = 0.36

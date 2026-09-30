@@ -3,7 +3,7 @@ extends Node
 
 ## Master volume, set from the pause menu. Remembered between sessions.
 
-const PATH := "user://settings.cfg"
+static var PATH := SettingsFile.path()
 
 ## 0..1, applied to the Master bus on a perceptual curve.
 var volume := 0.8

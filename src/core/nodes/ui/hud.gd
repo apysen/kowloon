@@ -5,6 +5,9 @@ extends Control
 ## solution), the one interaction prompt, short tutorial hints that disappear
 ## once used, and italic notices. It fades away entirely for the camera and
 ## for the first seconds on the roof.
+##
+## Everything it is given is a string key (data/i18n/strings.csv). Plain labels
+## translate themselves; the keycap lines are drawn again if the language changes.
 
 @onready var objective: Control = %Objective
 @onready var obj_main: Label = %ObjMain
@@ -25,9 +28,12 @@ var _icons: SpriteSheet
 var _icon_textures: Dictionary = {}
 var _tutorial: TutorialKeys
 var _t := 0.0
+var _hint_key := ""
+var _photo: Control
 
 
 func _ready() -> void:
+	add_to_group("input_glyphs")
 	objective.modulate.a = 0.0
 	prompt_panel.modulate.a = 0.0
 	hint_panel.modulate.a = 0.0
@@ -67,7 +73,8 @@ func _build_marker() -> void:
 	_marker_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_marker.add_child(_marker_icon)
 	var key := Label.new()
-	key.text = "F"
+	key.name = "Key"
+	key.text = UIStyle.pad_name("F")
 	key.add_theme_font_override("font", UIStyle.FONT_MONO)
 	key.add_theme_font_size_override("font_size", 11)
 	key.add_theme_color_override("font_color", UIStyle.CONCRETE)
@@ -128,26 +135,96 @@ func set_objective(main: String, hint: String) -> void:
 	_obj_tween.tween_property(objective, "modulate:a", 1.0 if main != "" else 0.0, 0.35)
 
 
+## text: already in the player's language (InteractionDirector formats it).
 func show_prompt(text: String) -> void:
 	if text != "":
 		prompt_label.text = "[center]" + UIStyle.keycaps(text) + "[/center]"
 	_fade(prompt_panel, text != "", 0.2)
 
 
-func show_hint(text: String) -> void:
-	if text != "":
-		hint_label.text = "[center]" + UIStyle.keycaps(text) + "[/center]"
-	_fade(hint_panel, text != "", 0.25)
+func show_hint(key: String) -> void:
+	_hint_key = key
+	if key != "":
+		hint_label.text = "[center]" + UIStyle.keycaps(tr(UIStyle.control_key(key))) + "[/center]"
+	_fade(hint_panel, key != "", 0.25)
 
 
-func notice(text: String, secs := 2.6) -> void:
-	notice_label.text = text
+func notice(key: String, secs := 2.6) -> void:
+	notice_label.text = key
 	if _notice_tween:
 		_notice_tween.kill()
 	_notice_tween = create_tween()
 	_notice_tween.tween_property(notice_label, "modulate:a", 1.0, 0.4)
 	_notice_tween.tween_interval(secs)
 	_notice_tween.tween_property(notice_label, "modulate:a", 0.0, 0.4)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		refresh_glyphs()
+
+
+## The language or the device in hand changed: say the hint again.
+func refresh_glyphs() -> void:
+	if _hint_key != "":
+		hint_label.text = "[center]" + UIStyle.keycaps(tr(UIStyle.control_key(_hint_key))) + "[/center]"
+	if _marker:
+		(_marker.get_node("Key") as Label).text = UIStyle.pad_name("F")
+
+
+## A photograph held up close (Grandfather's old one): it fades in over a dimmed
+## screen, above the dialogue box, until hide_photo().
+func show_photo(tex: Texture2D) -> void:
+	if _photo == null:
+		_photo = Control.new()
+		_photo.name = "PhotoLook"
+		_photo.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_photo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var dim := ColorRect.new()
+		dim.color = Color(0, 0, 0, 0.5)
+		dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+		dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_photo.add_child(dim)
+		var shadow := ColorRect.new()
+		shadow.name = "Shadow"
+		shadow.color = Color(0, 0, 0, 0.45)
+		shadow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_photo.add_child(shadow)
+		var pic := TextureRect.new()
+		pic.name = "Print"
+		pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pic.stretch_mode = TextureRect.STRETCH_SCALE
+		pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_photo.add_child(pic)
+		add_child(_photo)
+	var pic: TextureRect = _photo.get_node("Print")
+	var shadow: ColorRect = _photo.get_node("Shadow")
+	pic.texture = tex
+	# as large as fits above the dialogue box, keeping the print's shape
+	var view := get_viewport_rect().size
+	var h := view.y * 0.56
+	var sz := Vector2(h * float(tex.get_width()) / tex.get_height(), h)
+	for c: Control in [pic, shadow]:
+		c.size = sz
+		c.pivot_offset = sz * 0.5
+		c.rotation_degrees = -2.0
+		c.position = Vector2(view.x * 0.5, view.y * 0.36) - sz * 0.5
+	shadow.position += Vector2(8, 12)
+	_photo.visible = true
+	_photo.modulate.a = 0.0
+	create_tween().tween_property(_photo, "modulate:a", 1.0, 0.3)
+
+
+func hide_photo() -> void:
+	if _photo == null or not _photo.visible:
+		return
+	var tw := create_tween()
+	tw.tween_property(_photo, "modulate:a", 0.0, 0.25)
+	tw.tween_callback(func() -> void: _photo.visible = false)
+
+
+func photo_showing() -> bool:
+	return _photo != null and _photo.visible
 
 
 func set_quiet(q: bool) -> void:

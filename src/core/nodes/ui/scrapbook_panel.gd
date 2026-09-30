@@ -62,6 +62,7 @@ var _zoom := {}
 
 
 func _ready() -> void:
+	add_to_group("input_glyphs")
 	visible = false
 	_home = book.position
 	_leaf(cover_leaf).set_shader_parameter("front_tex", COVER)
@@ -266,12 +267,17 @@ func _handle(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
+func refresh_glyphs() -> void:
+	if visible:
+		_update_hint()
+
+
 func _update_hint() -> void:
 	# an arrow that can't be used stays, dimmed, so the page count doesn't jump about
 	var back := UIStyle.keycaps("[A] ‹") if spread > 0 else "[color=#5a574f] A  ‹[/color]"
 	var fwd := UIStyle.keycaps("› [D]") if spread < spreads() - 1 else "[color=#5a574f]›  D [/color]"
-	var count := "   pages %d–%d of %d   " % [spread * 2 + 1, spread * 2 + 2, _pages.size()]
-	hint.text = "[center]%s%s%s        %s[/center]" % [back, count, fwd, UIStyle.keycaps("[Tab] close")]
+	var count := "   %s   " % tr("scrapbook.pages").format({"from": spread * 2 + 1, "to": spread * 2 + 2, "total": _pages.size()})
+	hint.text = "[center]%s%s%s        %s[/center]" % [back, count, fwd, UIStyle.keycaps(tr("scrapbook.close"))]
 
 
 # ----------------------------------------------------------------------------- the pages
@@ -317,7 +323,7 @@ func _build_pages(ids: Array, photos: Dictionary, fresh := "") -> void:
 						(l as Label).visible_ratio = 0.0
 					_fresh = parts
 			"empty":
-				_note(root, "Empty pages.\nGrandfather's camera is still full of film.", Vector2(40, 200), 320, 30, UIStyle.NOTE_INK, HORIZONTAL_ALIGNMENT_CENTER)
+				_note(root, "scrapbook.empty", Vector2(40, 200), 320, 30, UIStyle.NOTE_INK, HORIZONTAL_ALIGNMENT_CENTER)
 		if i > 0:
 			var num := _note(root, str(i + 1), Vector2(18 if i % 2 == 0 else PAGE.x - 58, PAGE.y - 36), 40, 20, UIStyle.INK_SOFT,
 				HORIZONTAL_ALIGNMENT_LEFT if i % 2 == 0 else HORIZONTAL_ALIGNMENT_RIGHT)
@@ -370,11 +376,11 @@ func _note(parent: Control, text: String, pos: Vector2, width: float, size_px: i
 
 
 func _title_page(root: Control) -> void:
-	_note(root, "Mei's scrapbook", Vector2(30, 56), 340, 50, UIStyle.NOTE_INK, HORIZONTAL_ALIGNMENT_CENTER)
+	_note(root, "scrapbook.title", Vector2(30, 56), 340, 50, UIStyle.NOTE_INK, HORIZONTAL_ALIGNMENT_CENTER)
 	_note(root, "九龍城寨 · 一九九二", Vector2(30, 128), 340, 20, UIStyle.INK_SOFT, HORIZONTAL_ALIGNMENT_CENTER, UIStyle.FONT_SERIF)
-	_note(root, "Kowloon Walled City", Vector2(30, 154), 340, 22, UIStyle.INK_SOFT, HORIZONTAL_ALIGNMENT_CENTER)
-	_note(root, "“You'll forget what things looked like.”", Vector2(52, 236), 296, 32, UIStyle.INK, HORIZONTAL_ALIGNMENT_CENTER)
-	_note(root, "— Grandfather", Vector2(52, 330), 280, 24, UIStyle.INK_SOFT, HORIZONTAL_ALIGNMENT_RIGHT)
+	_note(root, "scrapbook.place", Vector2(30, 154), 340, 22, UIStyle.INK_SOFT, HORIZONTAL_ALIGNMENT_CENTER)
+	_note(root, "scrapbook.quote", Vector2(52, 236), 296, 32, UIStyle.INK, HORIZONTAL_ALIGNMENT_CENTER)
+	_note(root, "scrapbook.quote_by", Vector2(52, 330), 280, 24, UIStyle.INK_SOFT, HORIZONTAL_ALIGNMENT_RIGHT)
 	# the blue pipe, doodled along the foot of the page
 	var pipe := Line2D.new()
 	pipe.width = 7.0
@@ -385,7 +391,7 @@ func _title_page(root: Control) -> void:
 	for p in [Vector2(40, 482), Vector2(120, 482), Vector2(120, 446), Vector2(250, 446), Vector2(250, 490), Vector2(360, 490)]:
 		pipe.add_point(p)
 	root.add_child(pipe)
-	_note(root, "follow the blue pipe", Vector2(90, 408), 190, 20, UIStyle.PIPE.darkened(0.25), HORIZONTAL_ALIGNMENT_CENTER)
+	_note(root, "scrapbook.doodle", Vector2(90, 408), 190, 20, UIStyle.PIPE.darkened(0.25), HORIZONTAL_ALIGNMENT_CENTER)
 
 
 func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Dictionary:
@@ -421,10 +427,14 @@ func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Di
 	text.add_theme_constant_override("separation", 0)
 	root.add_child(text)
 	# all in her hand: name and details in pen, her note, and the history in pencil
-	for spec in [[String(r.name), 30, UIStyle.NOTE_INK, -8],
-			["%s — %s" % [String(r.occupation).to_lower(), String(r.location)], 19, UIStyle.NOTE_INK, -6],
-			[String(r.note), 23, UIStyle.NOTE_INK, -8],
-			[String(r.context), 18, PENCIL, -8]]:
+	var specs := [[String(r.name), 30, UIStyle.NOTE_INK, -8],
+			[tr("scrapbook.byline").format({"occupation": r.occupation, "location": r.location}), 19, UIStyle.NOTE_INK, -6]]
+	# added later, in blue: where they went
+	if String(r.get("after", "")) != "":
+		specs.append([tr("scrapbook.after").format({"after": r.after}), 19, UIStyle.PIPE.darkened(0.25), -6])
+	specs.append([String(r.note), 23, UIStyle.NOTE_INK, -8])
+	specs.append([String(r.context), 18, PENCIL, -8])
+	for spec in specs:
 		var l := Label.new()
 		l.text = spec[0]
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

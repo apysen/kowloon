@@ -24,13 +24,13 @@ func _process(delta: float) -> void:
 	if not visible or slice == null:
 		return
 	var p := slice.player.position
-	var q := slice.quests
+	var q := slice.director
 	var cur: String = slice.interaction.current.get("id", "none")
 	var t := ""
 	for k in q.timings:
 		var v: float = q.timings[k]
 		t += "\n%-15s %d:%02d" % [k, int(v / 60.0), int(fmod(v, 60.0))]
 	text = "X: %.1f\nY: %.1f\nZ: %.1f\n\nCamera: %s\nQuest: %s\nObjective: %s\nInteractable: %s\nLocks: %s\nFPS: %d\n\n1-6 teleport · F2/] next · F3/[ back%s" % [
-		p.x, p.y, p.z, ViewMath.DIRECTION_NAMES[slice.cam.direction], QuestStage.name_of(q.stage),
+		p.x, p.y, p.z, ViewMath.DIRECTION_NAMES[slice.cam.direction], q.stage_name(),
 		q.objective if q.objective != "" else "-", cur, ", ".join(slice.locks.reasons()) if not slice.locks.reasons().is_empty() else "none",
 		_fps, ("\n\nTimings" + t) if t != "" else ""]

@@ -22,7 +22,7 @@ shader_parameter/cast_color = null
 shader_parameter/cast_amount = null
 shader_parameter/seed = null
 
-[node name="Polaroid" type="Control" unique_id=1852011992]
+[node name="Polaroid" type="Control" unique_id=1524209479]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
@@ -30,26 +30,26 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_3q3it")
 
-[node name="Center" type="CenterContainer" parent="." unique_id=1819731378]
+[node name="Center" type="CenterContainer" parent="." unique_id=732606895]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
-[node name="Column" type="VBoxContainer" parent="Center" unique_id=337163285]
+[node name="Column" type="VBoxContainer" parent="Center" unique_id=99868917]
 layout_mode = 2
 theme_override_constants/separation = 26
 
-[node name="Card" type="PanelContainer" parent="Center/Column" unique_id=2029002002]
+[node name="Card" type="PanelContainer" parent="Center/Column" unique_id=238767243]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_qvk7j")
 
-[node name="Inner" type="VBoxContainer" parent="Center/Column/Card" unique_id=1459091938]
+[node name="Inner" type="VBoxContainer" parent="Center/Column/Card" unique_id=980645077]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Photo" type="TextureRect" parent="Center/Column/Card/Inner" unique_id=1862552870]
+[node name="Photo" type="TextureRect" parent="Center/Column/Card/Inner" unique_id=1287818672]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_8u75r")
 custom_minimum_size = Vector2(308, 308)
@@ -57,7 +57,7 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Caption" type="Label" parent="Center/Column/Card/Inner" unique_id=1684080168]
+[node name="Caption" type="Label" parent="Center/Column/Card/Inner" unique_id=1388310806]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_yqibw")
@@ -65,7 +65,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_colors/font_color = Color(0.16470589, 0.14117648, 0.1254902, 1)
 horizontal_alignment = 1
 
-[node name="Keep" type="RichTextLabel" parent="Center/Column" unique_id=252426272]
+[node name="Keep" type="RichTextLabel" parent="Center/Column" unique_id=1538694038]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2

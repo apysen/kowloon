@@ -35,8 +35,9 @@ func hide_box() -> void:
 	tw.tween_callback(func() -> void: visible = false)
 
 
+## who: the speaker's id ("" for narration); the tag shows their name.
 func set_line(who: String, text: String) -> void:
-	speaker.text = who.to_upper()
+	speaker.text = tr("speaker." + who).to_upper() if who != "" else ""
 	speaker_tag.visible = who != ""
 	panel.add_theme_stylebox_override("panel", _style_speech if who != "" else _style_narration)
 	text_label.add_theme_font_override("font", UIStyle.FONT_UI_REGULAR if who != "" else UIStyle.FONT_UI_ITALIC)
