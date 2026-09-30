@@ -557,7 +557,7 @@ res.chiu.name,Chiu's Workshop,趙記工場
 res.chiu.occupation,food workshop,食品工場
 res.chiu.location,"Up the second stair, over the hall",第二條樓梯上去，走廊樓上
 res.chiu.note,Kit's uncle says the new place has proper drains.\nKit says this is the first sensible thing he has ever said.,阿潔的叔叔說新地方的渠好。\n阿潔說這是他講過最有道理的一句話。
-res.chiu.context,"Small factories filled the City's lower floors: fish balls, noodles, sweets, metalwork. Many supplied restaurants across Hong Kong, unlicensed and cheap.",城寨的低層擠滿了小工場：魚蛋、麵、糖果、五金。很多都供貨給全港的食肆，沒有牌照，但夠便宜。
+res.chiu.context,"Unlicensed workshops filled the lower floors, making fish balls, noodles and sweets for restaurants across Hong Kong.",城寨低層擠滿無牌小工場，做魚蛋、麵和糖果，供貨給全港食肆。
 c4.card.number,CHAPTER 4,第四章
 c4.card.title,THREE ADDRESSES,三個地址
 ending.ch4,CHAPTER 4 · THREE ADDRESSES,第四章・三個地址
@@ -597,10 +597,10 @@ res.cheung.name,Mrs. Cheung,張婆婆
 res.cheung.occupation,keeps everyone's address,記下每個人的地址
 res.cheung.location,The yamen,衙門
 res.cheung.note,“Knowing where they went is better.”,「知道他們搬到哪裏，更加好。」
-res.cheung.context,"The yamen, the Qing magistrate's office, was the one building left from the fort the City grew out of. It housed an old people's home, a school and a clinic. When the City was cleared it was the only building kept; it still stands in the park that replaced the rest.",衙門是清朝的衙署，也是寨城由炮台演變而來時唯一留下的建築。它做過老人院、學校和診所。寨城清拆時，只有它被保留下來，今天仍然立在取代寨城的公園裏。
+res.cheung.context,"The yamen, the Qing magistrate's office, was all that was left of the old fort. It served as an old people's home, a school and a clinic, and was the only building kept when the City was cleared.",衙門是清朝的衙署，也是舊炮台唯一留下的建築，做過老人院、學校和診所。寨城清拆時，只有它被保留下來。
 res.cheung.after,Room C-714. On the plan.,圖則上的C-714室。
 res.lau.after,"2/F, 27 Tak Ku Ling Road. Across the road. Two windows.",德高令道二十七號二樓。對面馬路。兩個窗。
-res.chiu.after,"Kit and her uncle: Block 7, Room 1406. Kit's writing, on a fish-ball label.",阿潔和她阿叔：七座一四零六室。阿潔的字，寫在魚蛋標籤背面。
+res.chiu.after,"Block 7, Room 1406, on a fish-ball label.",七座一四零六室，寫在魚蛋標籤背面。
 dlg.c4_open.01,Mrs. Cheung was asking for you.,張婆婆搵你。
 dlg.c4_open.02,Which one?,邊個張婆婆？
 dlg.c4_open.03,The one at the yamen. With the book.,衙門嗰個。拎住本簿嗰個。

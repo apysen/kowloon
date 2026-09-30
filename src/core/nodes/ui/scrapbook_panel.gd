@@ -439,13 +439,28 @@ func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Di
 		l.text = spec[0]
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size = Vector2(320, 0)
+		l.size = Vector2(320, 0)
 		l.add_theme_font_override("font", UIStyle.FONT_HAND)
 		l.add_theme_font_size_override("font_size", spec[1])
 		l.add_theme_color_override("font_color", spec[2])
 		l.add_theme_constant_override("line_spacing", spec[3])
 		text.add_child(l)
 		(parts.labels as Array).append(l)
+	# a full page: she writes a little smaller rather than run off the bottom
+	var fit := 1.0
+	while fit > 0.8 and _written_height(parts.labels) > text.size.y:
+		fit -= 0.04
+		for i in specs.size():
+			(parts.labels[i] as Label).add_theme_font_size_override("font_size", roundi(specs[i][1] * fit))
 	return parts
+
+
+## How tall the page's writing runs, wrapped as the labels wrap it.
+func _written_height(labels: Array) -> float:
+	var total := 0.0
+	for l in labels:
+		total += (l as Label).get_minimum_size().y
+	return total
 
 
 # ----------------------------------------------------------------------------- filing a new photograph
