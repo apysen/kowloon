@@ -89,18 +89,18 @@ PROPS = {
         "124432",
         "146432",
         "233333",
-    ]), "colors": {"1": "#f1e9d2", "2": "#d8ceb4", "3": "#aa9f88", "4": "#23222a", "5": "#d4503f", "6": "#8fa6c4"}},
+    ]), "colors": {"1": "#6c5a5f", "2": "#383039", "3": "#1a1519", "4": "#0d0a0e", "5": "#d4503f", "6": "#8fa6c4"}},
     "camera_chest_side": {"part": (19, 23, ["125", "234", "234", "333"]),
-                          "colors": {"1": "#f1e9d2", "2": "#d8ceb4", "3": "#aa9f88", "4": "#23222a", "5": "#d4503f"}},
+                          "colors": {"1": "#6c5a5f", "2": "#383039", "3": "#1a1519", "4": "#0d0a0e", "5": "#d4503f"}},
     "camera_face": {"part": (12, 9, [
         "1111125",
         "1244432",
         "1246432",
         "1244432",
         "2333333",
-    ]), "colors": {"1": "#f1e9d2", "2": "#d8ceb4", "3": "#aa9f88", "4": "#23222a", "5": "#d4503f", "6": "#8fa6c4"}},
+    ]), "colors": {"1": "#6c5a5f", "2": "#383039", "3": "#1a1519", "4": "#0d0a0e", "5": "#d4503f", "6": "#8fa6c4"}},
     "camera_face_side": {"part": (19, 10, ["1125", "2344", "2364", "3333"]),
-                         "colors": {"1": "#f1e9d2", "2": "#d8ceb4", "3": "#aa9f88", "4": "#23222a", "5": "#d4503f", "6": "#8fa6c4"}},
+                         "colors": {"1": "#6c5a5f", "2": "#383039", "3": "#1a1519", "4": "#0d0a0e", "5": "#d4503f", "6": "#8fa6c4"}},
     "cane_front": {"part": (24, 27, ["22"] + ["1."] * 17 + ["3."]), "colors": {"1": "#7a5431", "2": "#5e3f24", "3": "#3a2818"}},
     "cane_side": {"part": (21, 28, ["22"] + ["1."] * 16 + ["3."]), "colors": {"1": "#7a5431", "2": "#5e3f24", "3": "#3a2818"}},
     "newspaper_front": {"part": (10, 24, [
@@ -126,6 +126,25 @@ PROPS = {
     "newspaper_side": {"part": (20, 23, ["12", "52", "12", "32", "12", "32", "12", "22"]),
                        "colors": {"1": "#eee7d4", "2": "#cbc2ab", "3": "#8a8478", "5": "#b3443a"}},
     "newspaper_back": {"part": (9, 24, ["2222222222222", "2222222222222", "2222222222222"]), "colors": {"2": "#cbc2ab"}},
+    # Mr. Cheng's plan: a blueprint held open, white lines on blue
+    "plan_front": {"part": (10, 24, [
+        "11111111112",
+        "13331333112",
+        "13111113112",
+        "13331113112",
+        "11131333112",
+        "13331111112",
+        "11111111112",
+        "22222222222",
+    ]), "colors": {"1": "#3f6f9e", "2": "#2a4e74", "3": "#dce6ee"}},
+    "plan_side": {"part": (20, 23, ["12", "32", "12", "32", "12", "32", "12", "22"]),
+                  "colors": {"1": "#3f6f9e", "2": "#2a4e74", "3": "#dce6ee"}},
+    "plan_back": {"part": (9, 24, ["2222222222222", "2222222222222", "2222222222222"]), "colors": {"2": "#2a4e74"}},
+    # Mrs. Cheung's address book, open in her hands
+    "address_book_front": {"part": (13, 25, ["1222221", "1233321", "1222221", "1111111"]), "outline": True,
+                           "colors": {"1": "#8a2a24", "2": "#efe6d0", "3": "#4a4a6a"}},
+    "address_book_side": {"part": (19, 25, ["21", "31", "21"]), "outline": True,
+                          "colors": {"1": "#8a2a24", "2": "#efe6d0", "3": "#4a4a6a"}},
     "box_front": {"part": (10, 23, [
         "111111111112",
         "122222222223",
@@ -183,6 +202,13 @@ PROPS = {
     "tray_front": {"part": (13, 23, ["6.5.6.", "111111", "222222"]),
                    "colors": {"1": "#dfe3e6", "2": "#9aa2a8", "5": "#e9ecf0", "6": "#b8c2ca"}},
     "tray_side": {"part": (19, 23, ["5.6", "111", "222"]), "colors": {"1": "#dfe3e6", "2": "#9aa2a8", "5": "#e9ecf0", "6": "#b8c2ca"}},
+    # Mum wrapping a bowl in newspaper for the boxes: the sheet folded round
+    # it, then one more corner tucked over the top
+    "wrap_front_a": {"part": (12, 24, [".11112.", "1333112", "1111112", ".22222."]),
+                     "colors": {"1": "#eee7d4", "2": "#cbc2ab", "3": "#8a8478"}},
+    "wrap_front_b": {"part": (12, 23, ["...12..", ".11112.", "1133312", "1111112", ".22222."]),
+                     "colors": {"1": "#eee7d4", "2": "#cbc2ab", "3": "#8a8478"}},
+    "wrap_side": {"part": (19, 24, ["112", "332", "222"]), "colors": {"1": "#eee7d4", "2": "#cbc2ab", "3": "#8a8478"}},
     "cloth_fold_a": {"part": (12, 24, ["11111112", "22222223", "33333334"]),
                      "colors": {"1": "#e9d9b8", "2": "#d6c29c", "3": "#b8a27c", "4": "#8e7a58"}},
     "cloth_fold_b": {"part": (13, 22, ["111112", "122223", "122223", "133334"]),
@@ -241,28 +267,127 @@ PROPS = {
                  "colors": {"1": "#a8bcc4", "2": "#8aa0a8", "3": "#5f7680", "5": "#8aa0a8"}},
     "can_pour": {"part": (19, 25, ["1113....", "122235..", "12223.6.", "3333...6"]), "outline": True,
                  "colors": {"1": "#a8bcc4", "2": "#8aa0a8", "3": "#5f7680", "5": "#8aa0a8", "6": "#a8d8ff"}},
-    "can_front": {"part": (20, 26, ["1113", "1223", "3333"]), "colors": {"1": "#a8bcc4", "2": "#8aa0a8", "3": "#5f7680"}},
-    "fan_a": {"part": (20, 12, ["11111", "12221", ".111.", "..3.."]), "colors": {"1": "#eadcae", "2": "#d6c08a", "3": "#8a3a30"}},
-    "fan_b": {"part": (21, 11, [".1111", "11221", "1111.", ".3..."]), "colors": {"1": "#eadcae", "2": "#d6c08a", "3": "#8a3a30"}},
+    # Wai's seat: the plank Mrs. Chan lends, across two bricks
+    "plank_seat_back": {"part": (7, 41, ["111111111111111111", "222222222222222222", ".33............33."]),
+                        "colors": {"1": "#a8845a", "2": "#7a5a3a", "3": "#b8603a"}},
+    "plank_seat_side_back": {"part": (9, 41, ["1111111111", "2222222222", ".33....33."]),
+                             "colors": {"1": "#a8845a", "2": "#7a5a3a", "3": "#b8603a"}},
+    # an empty plastic fish crate carried against the chest
+    "crate_front": {"part": (9, 22, ["11111111111111", "12.2.2.2.2.2.1", "12.2.2.2.2.2.1", "11111111111111", "33333333333333"]),
+                    "colors": {"1": "#3f6fa8", "2": "#2f5a8e", "3": "#294f7c"}},
+    "crate_side": {"part": (17, 22, ["111111", "12.2.1", "12.2.1", "111111", "333333"]),
+                   "colors": {"1": "#3f6fa8", "2": "#2f5a8e", "3": "#294f7c"}},
+    "crate_back": {"part": (7, 20, ["111111111111111111", "333333333333333333"]), "colors": {"1": "#3f6fa8", "3": "#294f7c"}},
+    # Uncle Chiu's hands: a ball of paste, and the marker he writes on crates with
+    "paste_ball": {"part": (14, 24, [".11.", "1112", ".22."]), "colors": {"1": "#f0ebe0", "2": "#cfc8b8"}},
+    "marker": {"part": (22, 22, ["11", "12"]), "outline": True, "colors": {"1": "#1c1c1c", "2": "#c9463a"}},
+    # the watering can hanging from her hand by its handle (front view), and
+    # tipped with water running out
+    "can_front": {"part": (15, 25, ["...44.", "..4..4", "111113", "122223", "122223", "333333"]),
+                  "colors": {"1": "#a8bcc4", "2": "#8aa0a8", "3": "#5f7680", "4": "#4a5a60"}},
+    "can_front_pour": {"part": (15, 25, ["...44.", "..4..4", "111113", "122223", "122223", "333333", ".6..6.", "6..6..", ".6...6"]),
+                       "colors": {"1": "#a8bcc4", "2": "#8aa0a8", "3": "#5f7680", "4": "#4a5a60", "6": "#a8d8ff"}},
+    # a paper folding fan, open, held by the cheek and swung to and fro
+    "fan_a": {"part": (17, 9, [".212121", "1212121", ".21212.", "..121..", "..12...", "..3...."]),
+              "colors": {"1": "#f0e6c8", "2": "#b8453a", "3": "#5a3a24"}},
+    "fan_b": {"part": (18, 10, ["...2121", "..12121", ".21212.", ".212...", ".21....", ".3....."]),
+              "colors": {"1": "#f0e6c8", "2": "#b8453a", "3": "#5a3a24"}},
+    "fan_side_a": {"part": (20, 11, ["11", "21", "12", "21", "1.", "3."]), "colors": {"1": "#f0e6c8", "2": "#b8453a", "3": "#5a3a24"}},
+    "fan_side_b": {"part": (20, 11, [".1", ".2", "12", "21", "2.", "3."]), "colors": {"1": "#f0e6c8", "2": "#b8453a", "3": "#5a3a24"}},
+    # the cigarette at the lips (hand up) and held at the chest (hand down)
+    "cig_mouth_front": {"part": (15, 14, ["112"]), "outline": False, "colors": {"1": "#f0ebe0", "2": "#ff8a40"}},
+    "cig_mouth_glow": {"part": (15, 14, ["113"]), "outline": False, "colors": {"1": "#f0ebe0", "3": "#ffcf70"}},
+    "cig_hand_front": {"part": (15, 23, ["211"]), "outline": False, "colors": {"1": "#f0ebe0", "2": "#ff8a40"}},
+    "cig_mouth_side": {"part": (20, 15, ["1112"]), "outline": False, "colors": {"1": "#f0ebe0", "2": "#ff8a40"}},
+    "cig_mouth_side_glow": {"part": (20, 15, ["1113"]), "outline": False, "colors": {"1": "#f0ebe0", "3": "#ffcf70"}},
+    "cig_hand_side": {"part": (21, 22, ["1112"]), "outline": False, "colors": {"1": "#f0ebe0", "2": "#ff8a40"}},
+    "puff_front": {"part": (11, 11, ["..11", ".1.1", "1..."]), "outline": False, "colors": {"1": "#e4e4e0"}},
+    "puff_side": {"part": (23, 13, ["11..", "1.11", "..1."]), "outline": False, "colors": {"1": "#e4e4e0"}},
+    "wisp_front": {"part": (14, 17, [".1", "1.", ".1", "1."]), "outline": False, "colors": {"1": "#d8d8d4"}},
+    "wisp_side": {"part": (25, 17, ["1.", ".1", "1.", ".1"]), "outline": False, "colors": {"1": "#d8d8d4"}},
+    # a rice bowl in the other hand, and chopsticks
+    "bowl_front": {"part": (10, 21, ["..44..", "111111", "222222", ".2222.", "..33.."]),
+                   "colors": {"1": "#5a7aa8", "2": "#eeeae0", "3": "#b8b4a8", "4": "#fbf8f0"}},
+    "bowl_side": {"part": (19, 20, [".44.", "1111", "2222", ".22."]),
+                  "colors": {"1": "#5a7aa8", "2": "#eeeae0", "4": "#fbf8f0"}},
+    "chop_mouth_front": {"part": (15, 13, ["1..", ".1.", "..1"]), "outline": False, "colors": {"1": "#c9a55a"}},
+    "chop_bowl_front": {"part": (13, 20, ["1....", ".1...", "..1..", "...1.", "....1"]), "outline": False, "colors": {"1": "#c9a55a"}},
+    "chop_mouth_side": {"part": (20, 14, ["11", ".1"]), "outline": False, "colors": {"1": "#c9a55a"}},
+    "chop_bowl_side": {"part": (20, 18, ["1.", "11", ".1"]), "outline": False, "colors": {"1": "#c9a55a"}},
     "cleaver_up": {"part": (21, 8, ["1111", "1112", "..3."]), "colors": {"1": "#e0e4e6", "2": "#9aa2a8", "3": "#5a3a24"}},
     "cleaver_down": {"part": (21, 24, ["3...", ".111", ".112"]), "colors": {"1": "#e0e4e6", "2": "#9aa2a8", "3": "#5a3a24"}},
     "cleaver_front": {"part": (14, 22, ["1111", "1112", ".3.."]), "colors": {"1": "#e0e4e6", "2": "#9aa2a8", "3": "#5a3a24"}},
     "screwdriver": {"part": (16, 32, ["1112"]), "outline": True, "colors": {"1": "#c9463a", "2": "#b8c0c8"}},
+    # held up to a pipe overhead, the blade on the pipe, the handle in his fist
+    "screwdriver_up_front": {"part": (22, 1, ["2", "2", "2", "2", "1", "1", "1"]), "outline": True, "colors": {"1": "#c9463a", "2": "#b8c0c8"}},
+    "screwdriver_up_side": {"part": (25, 1, ["2", "2", "2", "2", "1", "1", "1"]), "outline": True, "colors": {"1": "#c9463a", "2": "#b8c0c8"}},
+    # water off wet hands, and a bowl being washed
+    "wash_drops_a": {"part": (13, 26, ["1...1", "..1..", "1...."]), "outline": False, "colors": {"1": "#a8d8ff"}},
+    "wash_drops_b": {"part": (13, 26, [".1...", "1..1.", "....1"]), "outline": False, "colors": {"1": "#a8d8ff"}},
+    "wash_drops_side": {"part": (19, 26, ["1.", ".1", "1."]), "outline": False, "colors": {"1": "#a8d8ff"}},
+    "red_bowl_front": {"part": (12, 21, ["122221", "122221", ".3333."]), "colors": {"1": "#d8483a", "2": "#f0ebe0", "3": "#9a2a22"}},
+    "red_bowl_tilt": {"part": (12, 21, [".12222", "122221", "33333."]), "colors": {"1": "#d8483a", "2": "#f0ebe0", "3": "#9a2a22"}},
+    "red_bowl_side": {"part": (19, 21, ["122", "333"]), "colors": {"1": "#d8483a", "2": "#f0ebe0", "3": "#9a2a22"}},
     "grains": {"part": (21, 32, ["1...", "..1.", ".1..", "...1"]), "outline": False, "colors": {"1": "#e8d890"}},
     "pigeon_hand": {"part": (22, 3, [".11.", "1112", ".333"]), "colors": {"1": "#9aa0a8", "2": "#d08a60", "3": "#6f747c"}},
-    "stool_front": {"part": (11, 38, ["1111111112", "2222222223", ".3......3.", ".3......3.", ".3......3.",
-                                      ".3......3.", ".3......3."]),
+    # a knee-high wooden stool: the seat right under the thighs of LEGS_SEATED
+    # (rows 35-36), the legs down to the floor row (44), where standing feet end
+    "stool_front": {"part": (9, 37, ["11111111111112", "22222222222223"] + [".3..........3."] * 6),
                     "colors": {"1": "#8a6a48", "2": "#6b4a30", "3": "#4a3222"}},
-    "stool_side": {"part": (10, 38, ["111112", "222223", ".3..3.", ".3..3.", ".3..3.", ".3..3.", ".3..3."]),
+    "stool_side": {"part": (11, 37, ["11111112", "22222223"] + [".3....3."] * 6),
                    "colors": {"1": "#8a6a48", "2": "#6b4a30", "3": "#4a3222"}},
 }
 
 # ============================================================================= looks
 
+def _stick(x0, y0, x1, y1, head_w=6):
+    """A broom: the handle a line from (x0, y0) to (x1, y1), its head at the foot."""
+    n = max(abs(x1 - x0), abs(y1 - y0))
+    pts = {(round(x0 + (x1 - x0) * t / n), round(y0 + (y1 - y0) * t / n)) for t in range(n + 1)}
+    for dx in range(-head_w // 2, head_w - head_w // 2):
+        pts.add((x1 + dx, y1 + 1))
+        pts.add((x1 + dx, y1 + 2))
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    ox, oy = min(xs), min(ys)
+    rows = []
+    for y in range(oy, max(ys) + 1):
+        row = ""
+        for x in range(ox, max(xs) + 1):
+            if (x, y) in pts:
+                row += "2" if y > y1 else "1"
+            else:
+                row += "."
+        rows.append(row)
+    return (ox, oy, rows)
+
+
+BROOM_COLORS = {"1": "#8a6a48", "2": "#c9a55a"}
+PROPS.update({
+    "broom_front_a": {"part": _stick(18, 24, 13, 41), "colors": BROOM_COLORS},
+    "broom_front_b": {"part": _stick(18, 24, 21, 41), "colors": BROOM_COLORS},
+    "broom_side_a": {"part": _stick(21, 23, 25, 41), "colors": BROOM_COLORS},
+    "broom_side_b": {"part": _stick(21, 23, 20, 41), "colors": BROOM_COLORS},
+})
+
+
 LOOKS = {
     # --- the people Mei knows
     "mei": dict(top="#e0823a", bottom="#2e3a4a", shoes="#7a2a24", skin="#e8bc94", hair="#231814", hair_style="bob",
                 accent="#f1e6cf", collar=True, blush="#ea9c82", sleeves=4, prop="camera"),
+    "mum": dict(top="#23706e", bottom="#6b5846", shoes="#2a2420", skin="#e2b48c", hair="#35251f", hair_style="perm",
+                accent="#d8cfb8", collar=True, sleeves=4),
+    # Ah Kit, Mei's closest friend
+    "kit": dict(top="#d8506e", bottom="#34496e", shoes="#e8e4da", skin="#e8bc94", hair="#1c1414", hair_style="ponytail",
+                blush="#ea9c82", sleeves=3, accent="#f1e6cf", collar=True),
+    # the workshop's two hands: a woman in a white cap and a man in a vest, both aproned
+    "ws_hand_a": dict(top="#e8e2d2", bottom="#3a3a44", shoes="#2e4a36", skin="#e2b48c", hair="#e8e4da", hair_style="bun",
+                      apron=True, accent="#7a8a8a", sleeves=4),
+    "ws_hand_b": dict(top="#5a6a5a", bottom="#333333", shoes="#2e4a36", skin="#c89a74", hair="#1a1a1a", hair_style="short",
+                      apron=True, accent="#7a8a8a", sleeves=0),
+    # Uncle Chiu, Kit's uncle: a singlet, a rubber apron, boots
+    "chiu": dict(top="#eeeae0", bottom="#3a3a44", shoes="#2e4a36", skin="#d8a882", hair="#2a2420", hair_style="short",
+                 apron=True, accent="#5a6a72", sleeves=0),
     "grandfather": dict(top="#dccfae", bottom="#4a4436", shoes="#3a3028", skin="#d6a882", hair="#cfccc3", hair_style="bald",
                         build="elder", sleeves=0, prop="cane"),
     "lau": dict(top="#5f9a62", bottom="#33383a", shoes="#2a2420", skin="#e2b48c", hair="#1f1d1c", hair_style="short",
@@ -311,6 +436,25 @@ LOOKS = {
                           hair_style="bob", sleeves=4, pattern="floral", pattern_col="#8fb5cc"),
     "ext_labourer": dict(top="#3d5a78", bottom="#3a3a36", shoes="#2a2420", skin="#c8966e", hair="#1a1a1a",
                          hair_style="short", sleeves=10),
+    "ext_taichi": dict(top="#e8e4da", bottom="#3a3a44", shoes="#2a2420", skin="#d6a882", hair="#cfccc3",
+                       hair_style="grey", build="elder", sleeves=10),
+    "ext_sweeper": dict(top="#8a6a8a", bottom="#2d2d34", shoes="#2a2420", skin="#e2b48c", hair="#1a1414",
+                        hair_style="bun", sleeves=4, apron=True, accent="#cdbd9e"),
+    "ext_eater": dict(top="#e8e2d2", bottom="#3a3530", shoes="#2a2420", skin="#d8a882", hair="#161616",
+                      hair_style="short", sleeves=0),
+    "ext_reader": dict(top="#5a6a5a", bottom="#333333", shoes="#2a2420", skin="#d6a882", hair="#9a968f",
+                       hair_style="grey", glasses=True, sleeves=4, build="elder"),
+    # --- Chapter 4, the yamen
+    # Mrs. Cheung, who has lived in the yamen's old people's home for years
+    "cheung": dict(top="#4a5a7a", bottom="#3a3438", shoes="#2a2026", skin="#dcb08e", hair="#cfcac2", hair_style="bun",
+                   build="elder", glasses=True, sleeves=9, pattern="check", pattern_col="#5f7090"),
+    # Mr. Cheng of the housing department: a pressed shirt, a plan
+    "cheng": dict(top="#e8ecf0", bottom="#4a4e58", shoes="#2a2420", skin="#e2b48c", hair="#1a1414", hair_style="short",
+                  sleeves=4, collar=True, accent="#cfd4da", glasses=True),
+    "mover_a": dict(top="#e8e2d2", bottom="#4a4a44", shoes="#2a2420", skin="#c8966e", hair="#1a1a1a", hair_style="short",
+                    sleeves=0, prop="box"),
+    "mover_b": dict(top="#c9a55a", bottom="#3a3a36", shoes="#2a2420", skin="#c89a74", hair="#222222", hair_style="short",
+                    sleeves=4),
     "ext_grandma_black": dict(top="#2e2e36", bottom="#2a2a30", shoes="#1e1a1a", skin="#dcb08e", hair="#d3cec6",
                               hair_style="bun", build="elder", sleeves=9),
 }
@@ -414,6 +558,7 @@ def add_upper(fr: Frame, look, view, bp, bob=0, arms=("mid", "mid"), blink=False
     if look.get("apron"):
         if view in P.APRON:
             fr.add(shift_part(P.APRON[view], 0, ody), "Body", dx=lean, dy=dy)
+            fr.add(shift_part(P.APRON_STRAPS[view], 0, ody), "Body", dx=lean, dy=dy, outline=False)
     if look.get("coat"):
         if view == "front":
             fr.add(P.COAT["front_l"], "Body", dy=dy, coat=True)
@@ -483,7 +628,17 @@ def _sleeve(arm, length, region, dx, dy):
 
 def add_legs(fr: Frame, look, view, bp, kind="idle", frame=0, swap=False):
     kw = legs_common(look)
+    if kind == "seated_child":
+        # on a plank laid across two bricks, the plank behind the legs
+        plank = PROPS["plank_seat_side_back" if view == "side" else "plank_seat_back"]
+        fr.add(plank["part"], "Prop Back", colors=plank["colors"], outline=True, prop=True)
+        fr.add(P.CHILD_LEGS_SEATED[view], "Legs", **kw)
+        return
     if kind == "seated":
+        # the stool goes in with the legs, behind them: it stays on the floor
+        # while the body breathes, and never shifts with the seated pose
+        stool = PROPS["stool_side" if view == "side" else "stool_front"]
+        fr.add(stool["part"], "Prop Back", colors=stool["colors"], outline=True, prop=True)
         fr.add(P.LEGS_SEATED[view], "Legs", **kw)
         return
     if kind == "crouch":
@@ -656,18 +811,32 @@ def specials(name, look, view, bp):
                 fr_with(arms=("_hold", "_hold"), props=[("cleaver_front", 0, 2)] if view == "front" else [], duration=120, bob=1),
             ]))
     if name.startswith("mahjong"):
-        out.append(("sit", [fr_with(legs="seated", seated_dy=5, blink=(i == 3), bob=(1 if i in (1, 2) else 0),
-                                    props=["stool_front" if view != "side" else "stool_side"], duration=380) for i in range(4)]))
+        out.append(("sit", [fr_with(legs="seated", seated_dy=5, blink=(i == 3), bob=(1 if i in (1, 2) else 0), duration=380) for i in range(4)]))
         out.append(("work", [
-            fr_with(legs="seated", seated_dy=5, arms=("_hold", "_hold"), side_arm="side_hold", props=["stool_front" if view != "side" else "stool_side"], duration=260),
-            fr_with(legs="seated", seated_dy=5, arms=("_hold", ""), side_arm="side_fwd1", props=["stool_front" if view != "side" else "stool_side"], duration=200),
-            fr_with(legs="seated", seated_dy=5, arms=("_hold", "_hold"), side_arm="side_hold", bob=1, props=["stool_front" if view != "side" else "stool_side"], duration=260),
-            fr_with(legs="seated", seated_dy=5, arms=("", "_hold"), side_arm="side_fwd2", blink=True, props=["stool_front" if view != "side" else "stool_side"], duration=200),
+            fr_with(legs="seated", seated_dy=5, arms=("_hold", "_hold"), side_arm="side_hold", duration=260),
+            fr_with(legs="seated", seated_dy=5, arms=("_hold", ""), side_arm="side_fwd1", duration=200),
+            fr_with(legs="seated", seated_dy=5, arms=("_hold", "_hold"), side_arm="side_hold", bob=1, duration=260),
+            fr_with(legs="seated", seated_dy=5, arms=("", "_hold"), side_arm="side_fwd2", blink=True, duration=200),
         ]))
     if name == "grandfather":
-        out.append(("sit", [fr_with(legs="seated", seated_dy=5, blink=(i == 3), bob=(1 if i in (1, 2) else 0),
-                                    props=["stool_front" if view != "side" else "stool_side"], duration=420) for i in range(4)]))
+        out.append(("sit", [fr_with(legs="seated", seated_dy=5, blink=(i == 3), bob=(1 if i in (1, 2) else 0), duration=420) for i in range(4)]))
     if name == "fanman":
+        # up on a stool, the screwdriver's blade to the pipe overhead: listening to the water in it
+        sd = {"front": ["screwdriver_up_front"], "back": [], "side": ["screwdriver_up_side"]}[view]
+        out.append(("listen", [
+            fr_with(arms=("", "_up"), side_arm="side_up_high", props=sd, duration=900),
+            fr_with(arms=("", "_up"), side_arm="side_up_high", props=sd, blink=True, duration=300),
+            fr_with(arms=("", "_up"), side_arm="side_up_high", props=sd, bob=1, duration=1100),
+        ]))
+        # washing the grease off his hands
+        da = {"front": ["wash_drops_a"], "back": [], "side": ["wash_drops_side"]}[view]
+        db = {"front": ["wash_drops_b"], "back": [], "side": []}[view]
+        out.append(("wash", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=da, duration=260),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=db, bob=1, duration=260),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=da, duration=260),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=db, bob=1, blink=True, duration=300),
+        ]))
         out.append(("work", [
             fr_with(legs="crouch", seated_dy=7, arms=("_hold", "_hold"), side_arm="side_hold", props=["screwdriver"] if view == "front" else [], duration=240),
             fr_with(legs="crouch", seated_dy=7, arms=("_hold", ""), side_arm="side_fwd1", duration=200),
@@ -676,7 +845,7 @@ def specials(name, look, view, bp):
         ]))
     if name == "worker":
         out.append(("work", anim_idle(look, view, bp, default_props(look, view), arms=("_hold", "_hold"), side_arm="side_hold")[1]))
-    if name == "shopkeeper":
+    if name in ("shopkeeper", "ext_reader"):
         paper = {"front": "newspaper_front", "back": "newspaper_back", "side": "newspaper_side"}[view]
         turn = {"front": "newspaper_front_turn", "back": "newspaper_back", "side": "newspaper_side"}[view]
         out.append(("work", [
@@ -693,6 +862,54 @@ def specials(name, look, view, bp):
             fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=tray, duration=500),
             fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=tray, blink=True, duration=300),
         ]))
+    if name == "mum":
+        # washing the red bowl under the tap
+        ba = {"front": ["red_bowl_front", "wash_drops_a"], "back": [], "side": ["red_bowl_side", "wash_drops_side"]}[view]
+        bb = {"front": ["red_bowl_tilt", "wash_drops_b"], "back": [], "side": ["red_bowl_side"]}[view]
+        out.append(("wash", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=ba, duration=380),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=bb, bob=1, duration=320),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=ba, duration=380),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=bb, blink=True, duration=320),
+        ]))
+        wa = {"front": ["wrap_front_a"], "back": [], "side": ["wrap_side"]}[view]
+        wb = {"front": ["wrap_front_b"], "back": [], "side": ["wrap_side"]}[view]
+        out.append(("work", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wa, duration=420),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wb, bob=1, duration=320),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wa, duration=420),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wa, blink=True, duration=300),
+        ]))
+    if name == "kit":
+        cr = {"front": ["crate_front"], "back": ["crate_back"], "side": ["crate_side"]}[view]
+        t, frames = anim_walk(look, view, bp, cr, hold=True, tag="carry")
+        out.append((t, frames))
+        t, frames = anim_idle(look, view, bp, cr, arms=("_hold", "_hold"), side_arm="side_hold", tag="carry_idle")
+        out.append((t, frames))
+        # cranking the winch
+        out.append(("work", [
+            fr_with(arms=("_fwd", "_hold"), side_arm="side_fwd2", far="side_hold", duration=220),
+            fr_with(arms=("_hold", "_fwd"), side_arm="side_fwd1", far="side_fwd2", bob=1, duration=220),
+            fr_with(arms=("_fwd", "_hold"), side_arm="side_fwd2", far="side_hold", duration=220),
+            fr_with(arms=("_hold", "_fwd"), side_arm="side_fwd1", far="side_fwd2", bob=1, blink=True, duration=220),
+        ]))
+    if name in ("chiu", "ws_hand_a", "ws_hand_b"):
+        pb = {"front": ["paste_ball"], "back": [], "side": []}[view]
+        # rolling fish balls between his palms, over the bowl
+        out.append(("work", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=pb, duration=200),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=pb, bob=1, duration=180),
+            fr_with(arms=("_hold", ""), side_arm="side_fwd1", far="side_hold", duration=220),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=pb, blink=True, duration=200),
+        ]))
+        mk = {"front": ["marker"], "back": [], "side": []}[view]
+        out.append(("write", [
+            fr_with(arms=("", "_fwd"), side_arm="side_fwd2", props=mk, duration=300),
+            fr_with(arms=("", "_fwd"), side_arm="side_fwd1", props=mk, bob=1, duration=300),
+        ]))
+    if name == "son":
+        # sitting on the plank, not about to get up
+        out.append(("sit", [fr_with(legs="seated_child", seated_dy=3, blink=(i == 3), bob=(1 if i in (1, 2) else 0), duration=400) for i in range(4)]))
     if name == "chan":
         # wringing out the washing over the basin: the twist turns one way, then
         # the other, and water runs out of the hanging end
@@ -733,16 +950,28 @@ def specials(name, look, view, bp):
             fr_with(arms=("", "_fwd"), props=default_props(look, view, 1), blink=True, duration=300),
         ]))
     if name == "ext_smoker":
-        cig = {"front": ["cigarette_front"], "back": [], "side": ["cigarette_side"]}[view]
-        out.append(("work", [
-            fr_with(arms=("", "_hold"), side_arm="side_camera", props=cig, duration=900),
-            fr_with(arms=("", "_hold"), side_arm="side_camera", props=cig + ["smoke_a"], duration=500),
-            fr_with(arms=("", ""), side_arm="side_mid", props=["smoke_b"], bob=1, duration=900),
-            fr_with(arms=("", ""), side_arm="side_mid", blink=True, duration=500),
-        ]))
+        if view == "front":
+            out.append(("work", [
+                fr_with(arms=("", "_mouth"), props=["cig_mouth_front"], duration=700),
+                fr_with(arms=("", "_mouth"), props=["cig_mouth_glow"], duration=500),
+                fr_with(arms=("", "_hold"), props=["cig_hand_front", "puff_front"], bob=1, duration=700),
+                fr_with(arms=("", "_hold"), props=["cig_hand_front", "wisp_front"], blink=True, duration=1100),
+            ]))
+        elif side:
+            out.append(("work", [
+                fr_with(side_arm="side_mouth", props=["cig_mouth_side"], duration=700),
+                fr_with(side_arm="side_mouth", props=["cig_mouth_side_glow"], duration=500),
+                fr_with(side_arm="side_hold", props=["cig_hand_side", "puff_side"], bob=1, duration=700),
+                fr_with(side_arm="side_hold", props=["cig_hand_side", "wisp_side"], blink=True, duration=1100),
+            ]))
+        else:
+            out.append(("work", [
+                fr_with(arms=("", "_mouth"), duration=1200),
+                fr_with(arms=("", "_hold"), props=["smoke_b"], bob=1, duration=1800),
+            ]))
     if name == "ext_plant_lady":
         can = {"front": ["can_front"], "back": [], "side": ["can_side"]}[view]
-        pour = {"front": ["can_front"], "back": [], "side": ["can_pour"]}[view]
+        pour = {"front": ["can_front_pour"], "back": [], "side": ["can_pour"]}[view]
         out.append(("work", [
             fr_with(arms=("", "_hold"), side_arm="side_hold", props=can, duration=400),
             fr_with(arms=("", "_hold"), side_arm="side_hold", props=pour, bob=1, duration=500),
@@ -750,10 +979,49 @@ def specials(name, look, view, bp):
             fr_with(arms=("", "_hold"), side_arm="side_hold", props=can, blink=True, duration=400),
         ]))
     if name == "ext_fan_woman":
+        fa = {"front": ["fan_a"], "back": [], "side": ["fan_side_a"]}[view]
+        fb = {"front": ["fan_b"], "back": [], "side": ["fan_side_b"]}[view]
         out.append(("work", [
-            fr_with(arms=("", "_up"), side_arm="side_camera", props=["fan_a"] if view != "back" else [], duration=160),
-            fr_with(arms=("", "_up"), side_arm="side_camera", props=["fan_b"] if view != "back" else [], duration=160),
+            fr_with(arms=("", "_mouth"), side_arm="side_mouth", props=fa, duration=180),
+            fr_with(arms=("", "_mouth"), side_arm="side_mouth", props=fb, duration=180),
+            fr_with(arms=("", "_mouth"), side_arm="side_mouth", props=fa, duration=180),
+            fr_with(arms=("", "_mouth"), side_arm="side_mouth", props=fb, blink=True, duration=180),
         ]))
+    if name == "ext_taichi":
+        # slow, both arms drifting through the form, the weight shifting
+        out.append(("work", [
+            fr_with(arms=("_fwd", "_fwd"), side_arm="side_fwd2", far="side_fwd2", duration=700),
+            fr_with(arms=("_up", "_fwd"), side_arm="side_up", far="side_fwd1", bob=1, duration=700),
+            fr_with(legs="lift_l1" if not side else "idle", arms=("_fwd", "_up"), side_arm="side_fwd1", far="side_up", duration=700),
+            fr_with(arms=("", "_fwd"), side_arm="side_fwd2", far="side_mid", bob=1, blink=True, duration=700),
+        ]))
+    if name == "ext_sweeper":
+        ba = {"front": ["broom_front_a"], "back": [], "side": ["broom_side_a"]}[view]
+        bb = {"front": ["broom_front_b"], "back": [], "side": ["broom_side_b"]}[view]
+        out.append(("work", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=ba, duration=260),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=bb, bob=1, duration=260),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=ba, duration=260),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=bb, bob=1, blink=True, duration=260),
+        ]))
+    if name == "ext_eater":
+        # the bowl in one hand; the chopsticks go from the bowl to the mouth
+        if view == "front":
+            out.append(("work", [
+                fr_with(arms=("_hold", "_hold"), props=["bowl_front", "chop_bowl_front"], duration=500),
+                fr_with(arms=("_hold", "_mouth"), props=["bowl_front", "chop_mouth_front"], duration=450),
+                fr_with(arms=("_hold", "_mouth"), props=["bowl_front", "chop_mouth_front"], bob=1, duration=350),
+                fr_with(arms=("_hold", "_hold"), props=["bowl_front", "chop_bowl_front"], blink=True, duration=600),
+            ]))
+        elif side:
+            out.append(("work", [
+                fr_with(side_arm="side_hold", far="side_hold", props=["bowl_side", "chop_bowl_side"], duration=500),
+                fr_with(side_arm="side_mouth", far="side_hold", props=["bowl_side", "chop_mouth_side"], duration=450),
+                fr_with(side_arm="side_mouth", far="side_hold", props=["bowl_side", "chop_mouth_side"], bob=1, duration=350),
+                fr_with(side_arm="side_hold", far="side_hold", props=["bowl_side", "chop_bowl_side"], blink=True, duration=600),
+            ]))
+        else:
+            out.append(("work", [fr_with(arms=("_hold", "_hold"), duration=900), fr_with(arms=("_hold", "_mouth"), bob=1, duration=700)]))
     if name in ("ext_kid_red", "ext_kid_yellow"):
         jump = []
         for i, up in enumerate([0, -2, -3, -1]):
@@ -775,6 +1043,56 @@ def specials(name, look, view, bp):
             fr_with(arms=("", "_point"), side_arm="side_up", duration=600),
             fr_with(arms=("", "_point"), side_arm="side_up", bob=1, duration=600),
         ]))
+    if name == "cheung":
+        # at her folding table with the address book: sitting, and writing in it
+        bk = {"front": ["address_book_front"], "back": [], "side": ["address_book_side"]}[view]
+        out.append(("sit", [fr_with(legs="seated", seated_dy=5, arms=("_hold", "_hold"), side_arm="side_hold", props=bk,
+                                    blink=(i == 3), bob=(1 if i in (1, 2) else 0), duration=420) for i in range(4)]))
+        out.append(("write", [
+            fr_with(legs="seated", seated_dy=5, arms=("_hold", "_fwd"), side_arm="side_fwd1", far="side_hold", props=bk, duration=320),
+            fr_with(legs="seated", seated_dy=5, arms=("_hold", "_fwd"), side_arm="side_fwd2", far="side_hold", props=bk, bob=1, duration=320),
+            fr_with(legs="seated", seated_dy=5, arms=("_hold", "_hold"), side_arm="side_hold", props=bk, blink=True, duration=500),
+        ]))
+    if name == "cheng":
+        pl = {"front": "plan_front", "back": "plan_back", "side": "plan_side"}[view]
+        out.append(("work", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=[pl], duration=900),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=[pl], bob=1, duration=700),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=[pl], blink=True, duration=900),
+        ]))
+    if name == "mover_a":
+        out.append(("work", anim_idle(look, view, bp, default_props(look, view), arms=("_hold", "_hold"), side_arm="side_hold")[1]))
+    if name == "mover_b":
+        # labelling the furniture with a marker
+        mk = {"front": ["marker"], "back": [], "side": []}[view]
+        out.append(("work", [
+            fr_with(arms=("", "_fwd"), side_arm="side_fwd2", props=mk, duration=300),
+            fr_with(arms=("", "_fwd"), side_arm="side_fwd1", props=mk, bob=1, duration=300),
+            fr_with(arms=("", "_fwd"), side_arm="side_fwd2", props=mk, blink=True, duration=400),
+        ]))
+    if name == "wong":
+        # wrapping a cup in newspaper
+        wa = {"front": ["wrap_front_a"], "back": [], "side": ["wrap_side"]}[view]
+        wb = {"front": ["wrap_front_b"], "back": [], "side": ["wrap_side"]}[view]
+        out.append(("work", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wa, duration=460),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wb, bob=1, duration=360),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=wa, blink=True, duration=460),
+        ]))
+    if name == "kit":
+        ba = {"front": ["broom_front_a"], "back": [], "side": ["broom_side_a"]}[view]
+        bb = {"front": ["broom_front_b"], "back": [], "side": ["broom_side_b"]}[view]
+        out.append(("sweep", [
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=ba, duration=300),
+            fr_with(arms=("_hold", "_hold"), side_arm="side_hold", far="side_hold", props=bb, bob=1, duration=300),
+        ]))
+    if name == "chan":
+        # up at the drying frame, working the poles loose
+        out.append(("reach", [
+            fr_with(arms=("_up", "_up"), side_arm="side_up", far="side_up", duration=300),
+            fr_with(arms=("_up", "_up"), side_arm="side_up", far="side_up", bob=1, duration=300),
+            fr_with(arms=("_up", ""), side_arm="side_up", far="side_fwd2", duration=300),
+        ]))
     if name in ("ext_student", "ext_labourer", "ext_grandma_black"):
         out.append(("work", anim_idle(look, view, bp)[1]))
     return out
@@ -787,151 +1105,39 @@ PIGEON_FRAMES = {
     # 16 x 16, facing right; tones 1..4 body greys, 5 iridescent neck, 6 beak/feet
     "idle": [
         ["................", "................", "................", "................",
-         "..........1111..", ".........11116..", ".........1115...", "....11111155....",
+         "..........1111..", ".........111748.", ".........1115...", "....11111155....",
          "...1122222225...", "..33122222223...", "..3.1222222333..", ".....33333333...",
          "......6...6.....", "......6...6.....", "................", "................"],
         ["................", "................", "................", "................",
-         "................", "..........1111..", ".........11116..", "....1111111555..",
+         "................", "..........1111..", ".........111748.", "....1111111555..",
          "...1122222225...", "..33122222223...", "..3.1222222333..", ".....33333333...",
          "......6...6.....", "......6...6.....", "................", "................"],
     ],
     "peck": [
         ["................", "................", "................", "................",
          "................", "................", "................", "....1111111.....",
-         "...11222222211..", "..331222222215..", "..3.12222222551.", ".....333333311..",
-         "......6...6..6..", "......6...6.....", "................", "................"],
+         "...11222222211..", "..331222222215..", "..3.12222222557.", ".....333333314..",
+         "......6...6..8..", "......6...6.....", "................", "................"],
     ],
     "fly": [
         ["................", "................", "....3...........", ".....33.........",
-         "......333.......", ".......3311111..", ".....1122221116.", "...3312222225...",
+         "......333.......", ".......3311111..", ".....11222211748", "...3312222225...",
          "..3..33333333...", "................", "................", "................",
          "................", "................", "................", "................"],
         ["................", "................", "................", "................",
-         "................", "..........1111..", ".....1112221116.", "...33122222225..",
+         "................", "..........1111..", ".....11122211748", "...33122222225..",
          "..3.33333333....", "......333.......", "................", "................",
          "................", "................", "................", "................"],
         ["................", "................", "................", "................",
-         "................", "..........1111..", ".....1112221116.", "...33122222225..",
+         "................", "..........1111..", ".....11122211748", "...33122222225..",
          "..3..333333333..", ".........333....", "..........33....", "...........3....",
          "................", "................", "................", "................"],
     ],
 }
-PIGEON_COLORS = {"1": "#a6aab2", "2": "#8d9199", "3": "#5f636b", "4": "#3e4248", "5": "#5d8a7a", "6": "#d08a60"}
+# 4 the pale cere over the beak, 7 the eye, 8 the beak
+PIGEON_COLORS = {"1": "#a6aab2", "2": "#8d9199", "3": "#5f636b", "4": "#e6e2da", "5": "#5d8a7a", "6": "#d08a60",
+                 "7": "#1c1a1e", "8": "#4e4a50"}
 
-
-PLANTS = {
-    # aspidistra (the cast-iron plant) in a terracotta pot
-    "aspidistra": ([
-        "........................",
-        "...........1............",
-        ".....1.....12......1....",
-        ".....12....12.....12....",
-        "......12...122...12.....",
-        "......122..122..123.....",
-        ".......12..123..123.....",
-        ".1.....123.123.123..1...",
-        ".12.....12.123.12..12...",
-        "..12....123123.23.123...",
-        "..123....12223.2.123....",
-        "...123...122233.1233....",
-        "....1233.1223.12333.....",
-        ".....12333223123334.....",
-        "......1223223233344.....",
-        ".......8888888888.......",
-        "......566666666677......",
-        ".......5666666677.......",
-        ".......5666666677.......",
-        "........56666677........",
-        "........56666677........",
-        "........66666777........",
-        "........77777777........",
-        "........................",
-    ], {"1": "#8cc05a", "2": "#5f9a3e", "3": "#3f7a32", "4": "#2c5a28", "5": "#d8875a", "6": "#b8653e",
-        "7": "#8a4a2c", "8": "#4a3424"}),
-    # spring onions and coriander in a polystyrene fish box
-    "onions": ([
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "......1...1....1........",
-        "......1.1.1..1.1..1.....",
-        "......2.1.2..1.2..1.....",
-        ".....12.2.2.12.2.12.....",
-        ".....2..2.2.2..2.2..1...",
-        ".....2.22.2.2.22.2.12...",
-        ".....3.2..3.2.2..3.2....",
-        "....333323332333233.....",
-        "...55555555555555555....",
-        "...56666666666666667....",
-        "...56666666666666667....",
-        "...56666666666666667....",
-        "...66666666666666667....",
-        "...77777777777777777....",
-        "........................",
-        "........................",
-    ], {"1": "#b8e07a", "2": "#7ab84a", "3": "#4f8a36", "5": "#ffffff", "6": "#e6e8e4", "7": "#b8bcb8"}),
-    # a chilli bush in an old enamel basin
-    "chilli": ([
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        ".........1122...........",
-        ".......1122223..........",
-        "......122822233.........",
-        ".....12222223833........",
-        ".....1282222223333......",
-        "....122222822233383.....",
-        "....12222222223333......",
-        ".....12282222333833.....",
-        "......2222223333........",
-        ".......33.33.33.........",
-        "........3..3..3.........",
-        "....5555555555555555....",
-        "....5666666666666667....",
-        ".....56666666666667.....",
-        ".....56666666666667.....",
-        "......666666666667......",
-        "......777777777777......",
-        "........................",
-        "........................",
-    ], {"1": "#8cc05a", "2": "#5f9a3e", "3": "#3f7a32", "5": "#f4f2ec", "6": "#dcdcd4", "7": "#3a5a8a",
-        "8": "#d83a2a"}),
-    # ivy trailing from a biscuit tin
-    "ivy": ([
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        "........................",
-        ".......12.12..12........",
-        "......1223223122........",
-        "......2233233223........",
-        "......55555555557.......",
-        "......56666666667.......",
-        "......56886666667.......",
-        "......56666666667.......",
-        "......77777777777.......",
-        "......2..2...23..2......",
-        "......23.3...3...23.....",
-        "......3..23..2....3.....",
-        ".....23...3..3...23.....",
-        ".....3....2..2...3......",
-        "..........3..3..........",
-        "..............3.........",
-        "........................",
-        "........................",
-    ], {"1": "#8cc05a", "2": "#5f9a3e", "3": "#3f7a32", "5": "#c8b070", "6": "#a88a4a", "7": "#6a5a30",
-        "8": "#c84a3a"}),
-}
 
 
 ICONS = {
@@ -956,7 +1162,7 @@ ICONS = {
         "................",
         "......1111......",
         "....11222211....",
-        "..112224422211..",
+        "..112224442211..",
         ".12222444442223.",
         ".12222445442223.",
         "..322224442223..",
@@ -965,20 +1171,21 @@ ICONS = {
         "................",
         "................",
     ], {"1": "#ffffff", "2": "#f2ead8", "3": "#b8ac94", "4": "#2a3a5a", "5": "#ffffff"}),
-    # use: doors, stairs, the crate, the ladder
+    # use: doors, stairs, the crate, the ladder. A true circle, 12 across and
+    # 12 down (rows 4 8 10 10 12 12 12 12 10 10 8 4), lit rim above, shade below.
     "use": ([
         "......1111......",
         "....11222211....",
         "...1222442221...",
-        "..122244442223..",
+        "...1224444223...",
         "..122444444223..",
-        ".12222244222223.",
-        ".12222244222223.",
         "..122224422223..",
-        "..322224422233..",
-        "...3322222233...",
-        "....33333333....",
-        "................",
+        "..122224422223..",
+        "..322224422223..",
+        "...3222442223...",
+        "...3322442233...",
+        "....33222233....",
+        "......3333......",
     ], {"1": "#f8d890", "2": "#e8b04a", "3": "#a8782a", "4": "#2a2018"}),
 }
 
@@ -993,26 +1200,6 @@ def icons():
         for g in (rows, up):
             fr = Frame(420)
             fr.add((0, 1, g), "Body", colors=colors, prop=True)
-            frames.append(fr)
-        tags.append(("front", name, frames))
-    return tags
-
-
-def plants():
-    """Potted plants, each with a two-frame sway in the breeze."""
-    tags = []
-    for name, (grid, colors) in PLANTS.items():
-        sway = []
-        for r, row in enumerate(grid):
-            # the upper leaves lean a pixel; the pot stays put
-            if r < 12 and "1" in row or r < 12 and "2" in row:
-                sway.append("." + row[:-1])
-            else:
-                sway.append(row)
-        frames = []
-        for g in (grid, sway):
-            fr = Frame(700)
-            fr.add((0, 0, g), "Body", colors=colors, prop=True)
             frames.append(fr)
         tags.append(("front", name, frames))
     return tags
@@ -1060,14 +1247,6 @@ def export():
                   "frames": [{"duration": f.duration, "placements": f.placements} for f in frames]}
                  for (v, t, frames) in pigeon()],
     }
-    chars["plants"] = {
-        "size": [24, 24],
-        "palette": {},
-        "look": {},
-        "tags": [{"name": f"{t}_{v}", "anim": t, "view": v,
-                  "frames": [{"duration": f.duration, "placements": f.placements} for f in frames]}
-                 for (v, t, frames) in plants()],
-    }
     chars["icons"] = {
         "size": [16, 16],
         "palette": {},
@@ -1108,8 +1287,6 @@ def validate():
     for k, frames in PIGEON_FRAMES.items():
         for i, g in enumerate(frames):
             check(f"pigeon {k}{i}", g)
-    for k, (g, _) in PLANTS.items():
-        check(f"plant {k}", g)
     return problems
 
 

@@ -3,20 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://tjm12dxa4pje"
-path.s3tc="res://.godot/imported/shopkeeper.png-a58ff4f65a684fddbb53d0278952db93.s3tc.ctex"
+path="res://.godot/imported/shopkeeper.png-a58ff4f65a684fddbb53d0278952db93.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://assets/sprites/characters/shopkeeper.png"
-dest_files=["res://.godot/imported/shopkeeper.png-a58ff4f65a684fddbb53d0278952db93.s3tc.ctex"]
+dest_files=["res://.godot/imported/shopkeeper.png-a58ff4f65a684fddbb53d0278952db93.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -24,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

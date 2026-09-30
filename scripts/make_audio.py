@@ -388,6 +388,147 @@ def plane():
     save("plane", x, 0.9)
 
 
+# ----------------------------------------------------------------------------- the water (Chapter 2)
+
+
+def _motor(secs, f_from, f_to, level_from, level_to):
+    """An electric pump motor: a hum with its harmonics and a whine, the speed
+    and loudness gliding between two settings."""
+    t = t_axis(secs)
+    f = np.interp(t, [0, secs], [f_from, f_to])
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    x = np.sin(ph) + 0.5 * np.sin(2 * ph) + 0.25 * np.sin(3 * ph) + 0.12 * np.sin(7 * ph)
+    x = x + 0.25 * biquad(rng.standard_normal(len(t)), "band", 1200, 3)
+    return x * np.interp(t, [0, secs], [level_from, level_to])
+
+
+def pump():
+    # starting: the motor winding up, catching
+    up = _motor(1.6, 20, 50, 0.0, 1.0)
+    save("pump_start", up * env(len(up), 0.02, 0.1), 0.55)
+    # stalling: it labours, a clunk, and winds down
+    down = _motor(1.8, 50, 12, 1.0, 0.0)
+    down[:int(0.08 * SR)] += click(160, 0.08, 1.5) * 3
+    save("pump_stall", down, 0.55)
+    # running steadily, looped
+    run = _motor(4.0, 50, 50, 1.0, 1.0)
+    save("pump_run", loop_crossfade(run, 0.5), 0.4)
+
+
+def knock():
+    """The pipe knocking as the pump pushes against a shut valve: a dull metal
+    thud with a short ring."""
+    for k in range(3):
+        n = int(0.35 * SR)
+        thud = click(140 + k * 25, 0.35, 1.2) * 2
+        ring = tone(520 + k * 60, 0.35, "sine", attack=0.001) * 0.35
+        save(f"knock_{k}", (thud + ring) * env(n, 0.001, 0.2), 0.7)
+
+
+def valve():
+    """A stiff valve wheel turning: metal squeal and grind."""
+    t = t_axis(0.9)
+    f = 900 + 140 * np.sin(2 * np.pi * 5 * t)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    squeal = np.sin(ph) * (0.4 + 0.6 * (np.sin(2 * np.pi * 3 * t) > 0))
+    grind = biquad(rng.standard_normal(len(t)), "band", 2600, 2) * 0.6
+    save("valve", (squeal * 0.5 + grind) * env(len(t), 0.03, 0.2), 0.45)
+
+
+def _water(secs, lo, hi, gain_curve):
+    x = rng.standard_normal(int(secs * SR))
+    x = biquad(biquad(x, "high", lo), "low", hi)
+    return x * gain_curve(t_axis(secs))
+
+
+def water():
+    # water let loose somewhere upstairs: a burst, then spattering
+    save("splash", _water(1.6, 500, 7000, lambda t: np.exp(-2.2 * t) + 0.25 * (t < 1.2)), 0.7)
+    # the old sink coughing up rust: gulps of air, then a brown spurt
+    gulps = np.zeros(int(1.6 * SR))
+    for k, at in enumerate([0.0, 0.35, 0.62, 0.9]):
+        g = tone(120 + 30 * k, 0.22, "sine", glide=-0.8, attack=0.005) * 1.4
+        i = int(at * SR)
+        gulps[i:i + len(g)] += g[:len(gulps) - i]
+    spurt = _water(1.6, 300, 3000, lambda t: np.clip((t - 1.0) * 3, 0, 1) * np.exp(-2.5 * np.clip(t - 1.0, 0, None)))
+    save("sink_cough", gulps + spurt, 0.6)
+    # water back in the pipes: a rising rush
+    save("water_rush", _water(2.4, 200, 2400, lambda t: np.clip(t / 0.8, 0, 1) * np.exp(-0.6 * np.clip(t - 0.8, 0, None))), 0.6)
+    # a basin filling under a tap, looped
+    fill = _water(3.0, 900, 5000, lambda t: 0.8 + 0.2 * np.sin(2 * np.pi * 0.7 * t))
+    save("tap_run", loop_crossfade(fill, 0.4), 0.35)
+    # a kettle beginning to sing
+    t = t_axis(2.2)
+    sing = np.sin(2 * np.pi * np.cumsum(np.interp(t, [0, 2.2], [1800, 2300])) / SR) * np.clip((t - 0.8) / 1.0, 0, 1)
+    save("kettle", sing * 0.4 + _water(2.2, 1500, 6000, lambda t: 0.3 * np.ones_like(t)), 0.35)
+    # a cistern flushing, and refilling
+    save("flush", _water(2.8, 150, 2000, lambda t: np.exp(-1.5 * t) + 0.3 * np.exp(-0.5 * np.clip(t - 1.2, 0, None)) * (t > 1.2)), 0.6)
+
+
+# ----------------------------------------------------------------------------- the workshop (Chapter 3)
+
+
+def workshop():
+    # fish paste thrown down on a steel table and beaten: a wet, heavy thump
+    for k in range(3):
+        n = int(0.4 * SR)
+        body = click(90 + k * 18, 0.4, 0.9) * 3
+        slap = biquad(rng.standard_normal(n), "band", 1400 + k * 200, 1.5) * np.exp(-np.linspace(0, 30, n)) * 1.2
+        save(f"thump_{k}", (body + slap) * env(n, 0.001, 0.25), 0.8)
+    # the steamer's hiss, looped
+    hiss = biquad(biquad(rng.standard_normal(4 * SR), "high", 3000), "low", 9000)
+    hiss = hiss * (0.8 + 0.2 * np.sin(2 * np.pi * 0.4 * t_axis(4)))
+    save("steam_loop", loop_crossfade(hiss, 0.5), 0.3)
+    # a winch paying out: ratchet clicks, slowing
+    x = np.zeros(int(1.4 * SR))
+    at = 0.0
+    gap = 0.07
+    while at < 1.3:
+        c = click(3200, 0.03, 4) * 1.5 + click(900, 0.03, 2)
+        i = int(at * SR)
+        x[i:i + len(c)] += c[:len(x) - i]
+        at += gap
+        gap *= 1.06
+    save("ratchet", x, 0.6)
+    # a crate set down on boards
+    n = int(0.35 * SR)
+    knock_ = np.pad(click(700, 0.1, 2) * 0.6, (0, n - int(0.1 * SR)))
+    save("crate_down", (click(160, 0.35, 1.0) * 2 + knock_[:n]) * env(n, 0.001, 0.2), 0.7)
+
+
+# ----------------------------------------------------------------------------- chapter 4: the yamen
+
+
+def yamen():
+    """Open ground after the lanes: a wide, soft air with the traffic outside
+    the walls, and sparrows in the one tree. A tape gun and a heavy cabinet
+    set down, for the movers."""
+    secs = 18
+    t = t_axis(secs)
+    n = rng.standard_normal(len(t))
+    air = (fast_lowpass(n, 1400) - fast_lowpass(n, 300)) * (0.7 + 0.3 * np.sin(2 * np.pi * 0.07 * t))
+    x = air * 0.8 + fast_lowpass(brown(len(t)), 160) * 0.45
+    # sparrows: short bright chirps in little runs
+    for k in range(26):
+        at = rng.uniform(0.2, secs - 0.6)
+        for j in range(int(rng.integers(2, 5))):
+            f0 = rng.uniform(3600, 5200)
+            c = tone(f0, 0.05, "sine", glide=rng.uniform(-0.3, 0.3), attack=0.004)
+            i = int((at + j * rng.uniform(0.07, 0.12)) * SR)
+            if i + len(c) < len(x):
+                x[i:i + len(c)] += c * rng.uniform(0.08, 0.18)
+    save("yamen_air", loop_crossfade(x, 1.2), 0.5)
+    # the movers' tape gun
+    tt = t_axis(0.5)
+    rip = rng.standard_normal(len(tt)) * (0.6 + 0.4 * np.sin(2 * np.pi * 90 * tt)) * env(len(tt), 0.01, 0.1)
+    save("tape_gun", biquad(rip, "bandpass", 2400, 1.2), 0.45)
+    # a cabinet set down on flagstones
+    n2 = int(0.5 * SR)
+    knock_ = np.pad(click(420, 0.12, 2) * 0.5, (int(0.03 * SR), n2))[:n2]
+    thud = click(95, 0.5, 0.9)[:n2] * 2.2 + knock_
+    save("cabinet_down", thud[:n2] * env(n2, 0.002, 0.3), 0.75)
+
+
 if __name__ == "__main__":
     interior_hum()
     roof_wind()
@@ -408,3 +549,9 @@ if __name__ == "__main__":
     click_ui()
     plane()
     album()
+    pump()
+    knock()
+    valve()
+    water()
+    workshop()
+    yamen()

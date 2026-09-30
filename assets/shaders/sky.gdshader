@@ -12,6 +12,13 @@ uniform float exposure = 1.0;
 void sky() {
 	vec3 d = EYEDIR;
 	vec2 uv = vec2(atan(d.x, -d.z) / (2.0 * PI) + 0.5, acos(clamp(d.y, -1.0, 1.0)) / PI);
-	vec3 pano = texture(panorama, uv).rgb * exposure;
+	// where u wraps from 1 back to 0 the plain derivative jumps by a whole
+	// turn and the lookup falls to its blurriest mip: a seam from the horizon
+	// to straight overhead. Measure the step the short way round instead.
+	vec2 dx = dFdx(uv);
+	vec2 dy = dFdy(uv);
+	dx.x -= round(dx.x);
+	dy.x -= round(dy.x);
+	vec3 pano = textureGrad(panorama, uv, dx, dy).rgb * exposure;
 	COLOR = mix(interior_color.rgb, pano, roof_mix);
 }

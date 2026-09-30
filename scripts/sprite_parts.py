@@ -431,6 +431,16 @@ ARMS = {
         ".sssk k".replace(" ", ""),
         "sssskK",
     ]), "shoulder": (23, 19)},
+    # one hand up at the mouth (a cigarette, chopsticks, a fan by the cheek)
+    "front_r_mouth": {"part": (17, 13, [
+        "ss.....",
+        "ssk....",
+        ".ssk...",
+        "..ssk..",
+        "...ssk.",
+        "....ssk",
+        ".....sk",
+    ]), "shoulder": (23, 19)},
     # both hands up at the face (the camera to the eye)
     "front_l_camera": {"part": (8, 11, [
         "....Ss",
@@ -527,6 +537,14 @@ ARMS = {
         "sssssss",
         ".kkkkkk",
     ]), "shoulder": (15, 19)},
+    # side: the hand up at the mouth
+    "side_mouth": {"part": (15, 15, [
+        "....ss",
+        "...ssk",
+        "..ssk.",
+        ".ssk..",
+        "ssk...",
+    ]), "shoulder": (15, 19)},
     # side: raised to the face (camera)
     "side_camera": {"part": (15, 12, [
         "....ss",
@@ -554,6 +572,22 @@ ARMS = {
         "sk....",
         "sk....",
         "sk....",
+    ]), "shoulder": (15, 19)},
+    # side: elbow out in front, forearm straight up past the face (the hand
+    # held overhead, clear of the head and any cap brim)
+    "side_up_high": {"part": (15, 8, [
+        "..........ss",
+        "..........sk",
+        "..........sk",
+        "..........sk",
+        "..........sk",
+        "..........sk",
+        "..........sk",
+        "..........sk",
+        ".........ssk",
+        ".....sssssk.",
+        "sssssssskk..",
+        "skkkkkkk....",
     ]), "shoulder": (15, 19)},
     # side: raised overhead with the hand coming down (chopping)
     "side_chop_up": {"part": (15, 12, [
@@ -889,20 +923,22 @@ COLLAR = {
 }
 
 APRON = {
-    "front": (13, 20, [
-        ".aaa.",
-        ".Aaq.",
-        "AAaaq",
-        "Aaaaq",
-        "Aaaaq",
-        "Aaaaq",
-        "Aaaaq",
-        "Aaaaq",
-        "Aaaqq",
-        "Aaaqq",
-        "aqqqQ",
+    # a square bib, the waist tied across, the skirt a little wider below
+    "front": (11, 20, [
+        "..AAaaaq..",
+        "..Aaaaaq..",
+        "..Aaaaaq..",
+        "..Aaaaaq..",
+        "..Aaaaaq..",
+        ".Aaaaaaaq.",
+        ".Aaaaaaaq.",
+        ".Aaaaaaqq.",
+        ".Aaaaaaqq.",
+        ".Aaaaaqqq.",
+        ".aqqqqqqQ.",
     ]),
-    "side": (18, 21, [
+    "side": (18, 20, [
+        "aq",
         "aq",
         "Aq",
         "Aq",
@@ -913,6 +949,31 @@ APRON = {
         "Aq",
         "aQ",
         "qQ",
+    ]),
+}
+
+# the apron's strings, drawn without an outline so they stay one pixel: the
+# neck strap up from the bib's corners, the waist tie across (front) and
+# knotted at the back (side)
+APRON_STRAPS = {
+    "front": (11, 18, [
+        "...q..q...",
+        "..q....q..",
+        "..........",
+        "..........",
+        "..........",
+        "..........",
+        "qq......qq",
+    ]),
+    "side": (11, 18, [
+        ".....q..",
+        "......q.",
+        ".......q",
+        "........",
+        "........",
+        "........",
+        "qqqqqqq.",
+        "q.......",
     ]),
 }
 
@@ -1038,6 +1099,13 @@ CHILD_LEGS_FRONT_IDLE = (12, 37, [
     "fgg..fgg",
     "ggG..ggG",
 ])
+# a child sitting low, on a plank across two bricks: thighs forward, shins down
+CHILD_LEGS_SEATED = {
+    "front": (12, 40, ["BBbbbbnn", "Bbbnbbbn", "Bbn..Bbn", "Bbn..Bbn", "Ffg..Ffg", "ggG..ggG"]),
+    "back": (12, 40, ["BBbbbbnn", "Bbbnbbbn", "bbn..bbn"]),
+    "side": (12, 40, ["BBbbbbn.", "bbnnBbn.", "....Bbn.", "....Bbn.", "....FfgG", "....ggG."]),
+}
+
 CHILD_LEGS_BACK_IDLE = (12, 37, [
     "BBbbbbnn",
     "Bbbnbbbn",

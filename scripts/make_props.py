@@ -196,6 +196,9 @@ def signs():
     save(board("劉牙科", (512, 256), (168, 69, 58, 255), (243, 230, 200, 255), 1, sub="LAU DENTAL"), "sign_lau_dental")
     save(board("閒人免進", (256, 128), (242, 238, 228, 255), (176, 48, 42, 255), 2, sub="STAFF ONLY"), "sign_staff_only")
     save(board("陳記", (256, 128), (74, 90, 58, 255), (240, 226, 190, 255), 3, sub="TAILOR"), "sign_tailor")
+    # Uncle Chiu's workshop door, and the neighbours' dried-seafood board over the slot
+    save(board("趙記魚蛋", (384, 128), (240, 226, 190, 255), (160, 40, 34, 255), 4, sub="CHIU KEE FISH BALLS"), "sign_chiu")
+    save(board("海味雜貨", (192, 400), (36, 70, 120, 255), (246, 226, 160, 255), 5, vertical=True), "sign_seafood")
     # the dentists' wall: the Walled City's street face was famous for them
     dent = [("牙科", "#f3e6c8", "#1f4f8a"), ("鑲牙", "#fff2d8", "#a8453a"), ("牙醫", "#1c1c1c", "#f0d040"),
             ("脫牙", "#f3f3f0", "#2a6a4a"), ("口腔", "#fff0e0", "#7a2a5a"), ("牙科醫生", "#f3e6c8", "#a8453a")]
@@ -223,6 +226,41 @@ def stair_sign():
                (w / 2, 222), (w / 2 - 50, 168), (w / 2 - 22, 168)], fill=red)
     d.text((w / 2, 240), "1/F", font=latin(22, True), fill=(40, 36, 32, 255), anchor="mm")
     return weather(img, 44, 0.4)
+
+
+def toilet_sign():
+    """The enamel plate by the shared toilet on the landing: 廁所, and WC."""
+    w, h = 192, 136
+    img = Image.new("RGBA", (w, h), (236, 234, 226, 255))
+    d = ImageDraw.Draw(img)
+    blue = (40, 72, 128, 255)
+    d.rounded_rectangle([5, 5, w - 6, h - 6], radius=10, outline=blue, width=5)
+    d.text((w / 2, 56), "廁所", font=cjk(60), fill=blue, anchor="mm")
+    d.text((w / 2, 108), "W.C.", font=latin(26, True), fill=(178, 44, 38, 255), anchor="mm")
+    return weather(img, 71, 0.35, streaks=False)
+
+
+def rehoused_notice():
+    """Pasted across the door of a flat whose family has gone: the Housing
+    Department's notice that the unit is vacated and sealed."""
+    w, h = 320, 410
+    img = Image.new("RGBA", (w, h), (232, 226, 206, 255))
+    d = ImageDraw.Draw(img)
+    ink = (30, 28, 26, 255)
+    red = (170, 40, 34, 255)
+    d.text((w / 2, 46), "房屋署", font=cjk(34), fill=ink, anchor="mm")
+    d.text((w / 2, 80), "HOUSING DEPARTMENT", font=latin(16, True), fill=ink, anchor="mm")
+    d.line([(24, 102), (w - 24, 102)], fill=ink, width=2)
+    d.text((w / 2, 150), "單位已遷出", font=cjk(40), fill=red, anchor="mm")
+    d.text((w / 2, 192), "UNIT VACATED", font=latin(22, True), fill=red, anchor="mm")
+    body = ["住戶已獲安置", "此單位現予封閉", "不得擅自進入"]
+    for i, ln in enumerate(body):
+        d.text((w / 2, 240 + i * 34), ln, font=cjk(22, 500), fill=ink, anchor="mm")
+    d.text((w / 2, h - 44), "一九九二年", font=cjk(18, 500), fill=ink, anchor="mm")
+    # the official chop, in red
+    d.ellipse([w - 96, h - 110, w - 34, h - 48], outline=red, width=4)
+    d.text((w - 65, h - 79), "印", font=cjk(26), fill=red, anchor="mm")
+    return weather(img, 88, 0.45)
 
 
 def clearance_notice():
@@ -276,14 +314,26 @@ def calendar():
 
 
 def certificate():
+    """Mr. Lau's certificate to practise, framed on his clinic wall since 1961
+    (thirty-one years in the room). Fictional, as he is."""
     w, h = 256, 192
     img = Image.new("RGBA", (w, h), (106, 74, 42, 255))
     d = ImageDraw.Draw(img)
     d.rectangle([12, 12, w - 13, h - 13], fill=(242, 236, 216, 255))
-    d.text((w / 2, 50), "執業證書", font=cjk(28), fill=(60, 40, 30, 255), anchor="mm")
-    for k in range(4):
-        d.line([40, 90 + k * 18, w - 40, 90 + k * 18], fill=(150, 140, 120, 255), width=2)
-    d.ellipse([w - 70, h - 70, w - 34, h - 34], fill=(180, 50, 40, 255))
+    d.rectangle([18, 18, w - 19, h - 19], outline=(170, 130, 70, 255), width=1)
+    ink = (52, 36, 28, 255)
+    faded = (96, 78, 62, 255)
+    d.text((w / 2, 36), "執業證書", font=cjk(24), fill=ink, anchor="mm")
+    d.text((w / 2, 56), "CERTIFICATE OF PRACTICE", font=latin(10, True), fill=faded, anchor="mm")
+    d.line([48, 66, w - 48, 66], fill=(170, 130, 70, 255), width=1)
+    body = cjk(14, 600)
+    d.text((w / 2, 84), "茲證明 劉志明 醫生", font=body, fill=ink, anchor="mm")
+    d.text((w / 2, 104), "修畢牙科課程 成績及格", font=body, fill=ink, anchor="mm")
+    d.text((w / 2, 124), "特發此證 以資證明", font=body, fill=ink, anchor="mm")
+    d.text((34, h - 36), "一九六一年", font=cjk(12, 500), fill=faded, anchor="lm")
+    # the seal, with its character in white
+    d.ellipse([w - 64, h - 58, w - 28, h - 22], fill=(180, 50, 40, 255))
+    d.text((w - 46, h - 40), "印", font=cjk(18), fill=(246, 232, 214, 255), anchor="mm")
     save(weather(img, 80, 0.3, streaks=False), "certificate")
 
 
@@ -326,37 +376,68 @@ def carton_new_flat():
     d.text((w / 2, h / 2), "NEW FLAT", font=ImageFont.truetype(os.path.join(FONTS, "Caveat.ttf"), 60),
            fill=(34, 26, 20, 255), anchor="mm", stroke_width=4, stroke_fill=(34, 26, 20, 255))
     save(img.rotate(-4, resample=Image.BICUBIC), "carton_new_flat")
+    # the Chinese build's box (a translation remap in project.godot): the same
+    # marker, in her Chinese hand
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.text((w / 2, h / 2), "新屋", font=ImageFont.truetype(os.path.join(FONTS, "cjk", "LXGWWenKaiTC-Regular.ttf"), 76),
+           fill=(34, 26, 20, 255), anchor="mm", stroke_width=3, stroke_fill=(34, 26, 20, 255))
+    save(img.rotate(-4, resample=Image.BICUBIC), "carton_new_flat_zh")
+
+
+def _sprite_frame(name, tag="idle_front"):
+    """One frame of a character's exported sheet (assets/sprites/characters)."""
+    import json
+    base = os.path.join(ROOT, "assets", "sprites", "characters", name)
+    meta = json.load(open(base + ".json"))
+    frames = meta["frames"] if isinstance(meta["frames"], list) else list(meta["frames"].values())
+    first = next(t["from"] for t in meta["meta"]["frameTags"] if t["name"] == tag)
+    r = frames[first]["frame"]
+    return Image.open(base + ".png").convert("RGBA").crop((r["x"], r["y"], r["x"] + r["w"], r["y"] + r["h"]))
 
 
 def old_photo():
-    """Grandfather's old photograph: a crowd posed in a corridor, decades ago, a pipe behind them."""
-    w, h = 256, 192
+    """Grandfather's old photograph, decades ago: neighbours posed in the corridor
+    under the blue pipe. Young Grandfather and young Mrs. Wong in the middle,
+    Mum as a small girl at the front; whoever took it isn't in it.
+    Built from the cast's own sprites, printed in faded sepia. It hangs on the
+    flat's wall and is shown full size when Mei looks at it."""
+    w, h, border = 512, 384, 24
     g = rng(112)
-    a = np.zeros((h, w))
-    a[:] = 0.62 + 0.08 * np.linspace(0, 1, h)[:, None]          # the corridor wall
-    a[34:44, :] = 0.38                                            # the pipe along it
-    a[44:46, :] = 0.3
-    img = Image.fromarray((a * 255).astype(np.uint8), "L")
-    d = ImageDraw.Draw(img)
-    # eight people in a row, one of them a child at the front
-    for i in range(8):
-        x = 24 + i * 29 + int(g.integers(-4, 5))
-        top = 60 + int(g.integers(-6, 7))
-        shade = int(40 + g.integers(0, 60))
-        d.ellipse([x - 8, top, x + 8, top + 18], fill=shade + 15)
-        d.polygon([(x - 4, top + 17), (x + 4, top + 17), (x + 11, top + 24), (x + 10, h), (x - 10, h), (x - 11, top + 24)],
-                  fill=shade)
-    d.ellipse([118, 118, 132, 133], fill=80)
-    d.polygon([(121, 132), (129, 132), (134, 139), (133, h), (117, h), (116, 139)], fill=205)
-    img = img.filter(ImageFilter.GaussianBlur(1.6))
-    t = np.asarray(img).astype(float) / 255
-    t += g.normal(0, 0.035, t.shape)
-    sepia = np.stack([t * 1.0, t * 0.88, t * 0.7, np.ones_like(t)], -1)
+    # the corridor: plaster above a tiled dado, the pipe along the wall
+    a = np.zeros((h, w, 3))
+    a[:] = np.array([0.66, 0.66, 0.62]) * (0.92 + 0.08 * np.linspace(0, 1, h))[:, None, None]
+    a[300:, :] = np.array([0.5, 0.56, 0.54])
+    tiles = ((np.arange(w)[None, :] // 12 + np.arange(h)[:, None] // 12) % 2).astype(float)
+    a[300:, :] *= (0.94 + 0.06 * tiles[300:, :, None])
+    a[294:300, :] = np.array([0.38, 0.36, 0.33])
+    a[120:142, :] = np.array([0.2, 0.34, 0.55])     # the blue pipe (grey in the print)
+    a[124:128, :] += 0.12
+    for x in range(40, w, 150):
+        a[114:148, x:x + 8] = np.array([0.3, 0.3, 0.3])  # its brackets
+    scene = Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8), "RGB").convert("RGBA")
+    # everyone squeezed in, feet on the same floor
+    k = 5
+    back = ["ext_smoker", "chopper", "ext_labourer", "ext_fan_woman", "mahjong3"]
+    for i, who in enumerate(back):
+        spr = _sprite_frame(who).resize((32 * k, 48 * k), Image.NEAREST)
+        cx = 56 + i * 100
+        scene.alpha_composite(spr, (cx - 16 * k, h - 44 * k - 6))
+    kid = _sprite_frame("ext_kid_yellow").resize((32 * k, 48 * k), Image.NEAREST)
+    scene.alpha_composite(kid, (232 - 16 * k, h - 44 * k + 40))
+    # printed: soft, sepia, grainy, faded toward the edges
+    t = np.asarray(scene.convert("L").filter(ImageFilter.GaussianBlur(1.1))).astype(float) / 255
+    t = 0.12 + t * 0.8
+    t += g.normal(0, 0.03, t.shape)
+    yy, xx = np.mgrid[0:h, 0:w]
+    vig = 1 - 0.28 * (((xx - w / 2) / (w / 2)) ** 2 + ((yy - h / 2) / (h / 2)) ** 2)
+    t = t * vig + (1 - vig) * 0.55
+    sepia = np.stack([t * 1.0, t * 0.87, t * 0.68, np.ones_like(t)], -1)
     photo = Image.fromarray((np.clip(sepia, 0, 1) * 255).astype(np.uint8), "RGBA")
     # the white border, yellowed
-    framed = Image.new("RGBA", (w + 24, h + 24), (226, 216, 190, 255))
-    framed.paste(photo, (12, 12))
-    save(weather(framed, 113, 0.45, streaks=False), "old_photo")
+    framed = Image.new("RGBA", (w + 2 * border, h + 2 * border), (226, 216, 190, 255))
+    framed.paste(photo, (border, border))
+    save(weather(framed, 113, 0.35, streaks=False), "old_photo")
 
 
 # ----------------------------------------------------------------------------- sky
@@ -401,8 +482,21 @@ def sky_panorama():
     shade = np.clip(pnoise(64, 28, 4) * 1.2 - 0.1, 0, 1)[..., None]
     cloud = cloud_shadow + (cloud_lit - cloud_shadow) * shade
     col = col * (1 - cover[..., None] * 0.85) + cloud * cover[..., None] * 0.85
+    # straight overhead every column meets at one point: settle the top rows to
+    # their average so the zenith is one even blue, not a pinwheel
+    pole = np.clip(1 - y / 0.12, 0, 1)[..., None] ** 1.5
+    col = col * (1 - pole) + col[:1].mean(axis=1, keepdims=True) * pole
     col = np.clip(col, 0, 1)
-    img = Image.fromarray((col * 255).astype(np.uint8), "RGB").filter(ImageFilter.GaussianBlur(2.0))
+    # blur with the image wrapped round, so its left and right edges still meet
+    pad = 16
+    wrapped = np.concatenate([col[:, -pad:], col, col[:, :pad]], 1)
+    img = Image.fromarray((wrapped * 255).astype(np.uint8), "RGB").filter(ImageFilter.GaussianBlur(2.0))
+    img = img.crop((pad, 0, pad + w, h))
+    # dither about one 8-bit step, after the blur (which would smooth it away),
+    # so the long blue gradient overhead doesn't band into rings
+    g = rng(99)
+    arr = np.asarray(img).astype(np.float32) + (g.random((h, w, 3)) + g.random((h, w, 3)) - 1.0) * 1.2
+    img = Image.fromarray(np.clip(np.round(arr), 0, 255).astype(np.uint8), "RGB")
     img.save(os.path.join(OUT, "sky_golden.png"))
     print("wrote sky_golden")
 
@@ -605,6 +699,44 @@ def tape():
     save(Image.fromarray((a * 255).astype(np.uint8), "RGBA"), "tape")
 
 
+# ----------------------------------------------------------------------------- chapter 4: the yamen
+
+
+def c4_props():
+    # the plaque over the yamen hall's door: it was the old people's home
+    save(board("老人院", (512, 160), (58, 36, 28, 255), (214, 178, 96, 255), 21, sub="OLD PEOPLE'S HOME"), "plaque_yamen")
+    # Lau's business card, with the new address
+    w, h = 360, 210
+    img = Image.new("RGBA", (w, h), (244, 240, 228, 255))
+    d = ImageDraw.Draw(img)
+    ink = (30, 28, 26, 255)
+    red = (168, 52, 44, 255)
+    d.text((24, 40), "劉牙科", font=cjk(40), fill=red, anchor="lm")
+    d.text((190, 44), "LAU DENTAL", font=latin(24, True), fill=red, anchor="lm")
+    d.line([(24, 76), (w - 24, 76)], fill=red, width=2)
+    d.text((24, 104), "新址 NEW ADDRESS", font=cjk(20, 500), fill=ink, anchor="lm")
+    d.text((24, 140), "九龍城德高令道二十七號二樓", font=cjk(22, 500), fill=ink, anchor="lm")
+    d.text((24, 176), "2/F, 27 TAK KU LING ROAD", font=latin(18, True), fill=ink, anchor="lm")
+    save(weather(img, 131, 0.25, streaks=False), "card_lau")
+    # the blackboard in the old classroom, the last thing written on it
+    w, h = 512, 256
+    img = Image.new("RGBA", (w, h), (40, 58, 50, 255))
+    d = ImageDraw.Draw(img)
+    chalk = (226, 228, 218, 255)
+    d.rectangle([4, 4, w - 5, h - 5], outline=(92, 70, 48, 255), width=10)
+    d.text((40, 60), "一九九二年", font=cjk(30, 500), fill=chalk, anchor="lm")
+    d.text((w / 2, 128), "謝謝各位", font=cjk(64), fill=chalk, anchor="mm")
+    d.text((w - 40, 200), "再見", font=cjk(36, 500), fill=chalk, anchor="rm")
+    save(weather(img, 132, 0.5, streaks=False), "blackboard")
+    # a mover's label: where the furniture is going
+    w, h = 200, 120
+    img = Image.new("RGBA", (w, h), (238, 226, 150, 255))
+    d = ImageDraw.Draw(img)
+    d.text((w / 2, 44), "C-714", font=latin(46, True), fill=(30, 28, 26, 255), anchor="mm")
+    d.text((w / 2, 92), "張", font=cjk(34), fill=(170, 40, 34, 255), anchor="mm")
+    save(weather(img, 133, 0.3, streaks=False), "label_c714")
+
+
 if __name__ == "__main__":
     contact_shadow()
     soft_dot()
@@ -614,6 +746,8 @@ if __name__ == "__main__":
     stain_decal(52, "stain_b", (40, 50, 40))
     signs()
     save(stair_sign(), "sign_stairs_down")
+    save(toilet_sign(), "sign_toilet")
+    save(rehoused_notice(), "notice_rehoused")
     clearance_notice()
     calendar()
     certificate()
@@ -630,3 +764,4 @@ if __name__ == "__main__":
     album_cover()
     album_pages()
     album_page_stack()
+    c4_props()
