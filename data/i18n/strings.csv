@@ -935,3 +935,39 @@ c4.need.fong,"Auntie Fong's sign: over the slot behind Chiu's workshop. Two bolt
 c4.need.fong_balcony,Auntie Fong's sign: the balcony end. The balcony isn't joined to the roof; find another way up from the lane.,方嬸的招牌：露台那一頭。露台和天台不相連；從後巷找路上去。
 c4.need.fong_tell,Auntie Fong's sign: it's down. Tell her.,方嬸的招牌：拆下來了。告訴她。
 env.c5_fong_posts,"Two steel posts over the slot, with nothing between them.",縫上兩條鐵柱，中間甚麼都沒有。
+dlg.c2_kwok_page.01,Get that.,攞返嚟。
+dlg.c2_kwok_page.02,Yesterday's paper?,尋日啲報紙？
+dlg.c2_kwok_page.03,Still mine.,都係我嘅。
+dlg.c2_kwok_page.04,The wind had the back page up the stairs and out over the light well. It's lying on somebody's awning.,陣風吹咗張底頁上樓梯，飛咗出天井。而家擱咗喺人哋個簷篷度。
+dlg.c2_kwok_page_wait.01,The back page. It's got the crossword.,張底頁。有填字遊戲㗎。
+dlg.c2_page_awning.01,The page is lying on an awning below the catwalk. Nobody could reach it there.,報紙躺在天橋下面的一個簷篷上。沒有人夠得著。
+dlg.c2_page_seen.01,"From the side: it isn't on the awning. It's on the little balcony under it, off the stairs by Lau's.",從側面看：它不在簷篷上，而是在簷篷下面的小露台上，就在劉醫生那邊的樓梯旁。
+dlg.c2_page_got.01,"The back page: the racing results, and half the crossword, done in pencil.",報紙的底頁：賽馬結果，還有做了一半的填字遊戲，是用鉛筆寫的。
+dlg.c2_kwok_page_back.01,You went all that way for yesterday's paper?,你行咁遠路，就為咗張尋日嘅報紙？
+dlg.c2_kwok_page_back.02,You asked me to.,你叫我去㗎。
+dlg.c2_kwok_page_back.03,I was testing you.,我試下你咋。
+dlg.c2_kwok_page_back.04,For what?,試咩？
+dlg.c2_kwok_page_back.05,Poor judgment.,睇你判斷力有幾差。
+dlg.c2_kwok_after.01,Half the crossword was done. Not by me.,填字做咗一半。唔係我做嘅。
+dlg.c2_tile_lost.01,Who's got the white dragon?,邊個攞咗隻白板？
+dlg.c2_tile_lost.02,Nobody's got it. It went down the crack.,冇人攞。跌咗落條罅度。
+dlg.c2_tile_lost.03,Somebody's sitting on it.,一定有人坐住佢。
+dlg.c2_tile_lost.04,Everyone looks at everyone.,大家互相望來望去。
+dlg.c2_tile_lost.05,Mei. You've got young arms.,阿美，你手仔幼。
+dlg.c2_tile_wait.01,We can't play with a hundred and forty-three.,一百四十三隻牌點打呀。
+dlg.c2_tile_crack.01,"Between the floor and the wall, a crack a finger wide. Somewhere down it, a tile. Nobody's arm is that thin.",地板和牆之間有一條一隻手指闊的罅。牌就在下面某處。沒有人的手那麼細。
+dlg.c2_tile_seen.01,"From the side, behind the crates: where the crack comes out at the foot of the wall, a white tile.",從側面看，在木箱後面：那條罅在牆腳露出來的地方，有一隻白色的牌。
+dlg.c2_tile_got.01,"Mei reaches in behind the crates. The white dragon, grey with dust.",阿美把手伸到木箱後面。是白板，沾滿了灰。
+dlg.c2_tile_back.01,White dragon.,白板。
+dlg.c2_tile_back.02,Where was it?,喺邊度搵到？
+dlg.c2_tile_back.03,In the lane.,喺後巷。
+dlg.c2_tile_back.04,The lane.,後巷。
+dlg.c2_tile_back.05,I said it went down the crack.,我都話咗佢跌咗落條罅。
+dlg.c2_tile_back.06,You said the crack. You didn't say the lane.,你話條罅。你冇話後巷。
+dlg.c2_tile_back.07,They count the tiles three times. All there.,他們把牌數了三次。一隻都沒少。
+dlg.c2_tile_after.01,All hundred and forty-four. Don't touch anything.,一百四十四隻齊晒。咩都唔好掂。
+c2.need.page,Mr. Kwok's back page: somewhere over the light well.,郭伯的報紙底頁：在天井上方某處。
+c2.need.page_seen,Mr. Kwok's back page: on the little balcony under the awning. There's a door halfway up the stairs by Lau's.,郭伯的報紙底頁：在簷篷下的小露台上。劉醫生那邊的樓梯中間有道門。
+c2.need.page_back,Mr. Kwok's back page: take it to him.,郭伯的報紙底頁：拿去給他。
+c2.need.tile,The white dragon: down the crack at the foot of the alcove's wall. Where does the crack come out?,白板：跌進了麻雀角落牆腳的罅裡。那條罅通到哪裡？
+c2.need.tile_back,The white dragon: back to the mahjong table.,白板：還給麻雀枱。

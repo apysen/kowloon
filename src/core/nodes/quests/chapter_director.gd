@@ -331,6 +331,18 @@ func _register_shared() -> void:
 	look("workshopDoorShut", refs.workshopDoor + Vector3(0.9, 0, 0), "env.workshop_shut", 0.8, InteractionDirector.Priority.DECOR)
 
 
+## Hide (or show again) a piece of the level and everything under it: the
+## world leaves anything marked gone out of sight.
+func set_gone(n: Node, gone: bool) -> void:
+	if n == null:
+		return
+	if n is Node3D:
+		n.set_meta("gone", gone)
+		(n as Node3D).visible = not gone
+	for c in n.get_children():
+		set_gone(c, gone)
+
+
 ## Nothing else in the way at the foot of the ladder (the crate being pushed).
 func _ladder_free() -> bool:
 	return true

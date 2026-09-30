@@ -327,6 +327,13 @@ floors = Array[Dictionary]([{
 "z0": -17.3,
 "z1": -16.3
 }, {
+"name": "wellBalcony",
+"x0": 10.8,
+"x1": 13.4,
+"y": 1.75,
+"z0": -14.9,
+"z1": -14.15
+}, {
 "name": "roof",
 "x0": -10.0,
 "x1": 12.0,
@@ -1156,6 +1163,14 @@ obstacles = Array[Dictionary]([{
 "z0": -1.95,
 "z1": -1.45
 }, {
+"key": "chapter:Ch2",
+"name": "laneCrates",
+"x0": -3.5,
+"x1": -2.25,
+"y": 0.0,
+"z0": 4.35,
+"z1": 4.9
+}, {
 "key": "",
 "name": "StairHut",
 "x0": 8.8,
@@ -1268,6 +1283,7 @@ doors = Array[Dictionary]([{
 "width": 1.4
 }])
 refs = {
+"awningSeen": Vector3(13.2, 5, -12.7),
 "backShop": Vector3(9.3, 0, -15.9),
 "backShopDoor": Vector3(8.75, 0, -14.6),
 "backStairFoot": Vector3(10.6, 0, -16.35),
@@ -1311,6 +1327,7 @@ refs = {
 "kitWorkshop": Vector3(-3.4, 5, 2.2),
 "knock": Vector3(13, 7.45, -14.5),
 "kwokPacking": Vector3(3.2, 0, -6.5),
+"kwokPage": Vector3(12.8, 1.75, -14.55),
 "ladderBase": Vector3(-1.8, 5, 0.7),
 "ladderTop": Vector3(-0.25, 9.25, 6.45),
 "landingC": Vector3(1, 5, 1.8),
@@ -1350,11 +1367,15 @@ refs = {
 "steamer": Vector3(-6.6, 6.25, 3.57),
 "storeDoor": Vector3(14.65, 0, -2.6),
 "tank": Vector3(9.2, 13, -21.2),
+"tileCrack": Vector3(-2.8, 0, 3.4),
+"tileHole": Vector3(-2.8, 0, 5.2),
 "unitInside": Vector3(23.2, 5, -19.2),
 "unitSink": Vector3(23.68, 5.66, -20.22),
 "unitValves": Vector3(21.4, 5, -20.8),
 "unitWindow": Vector3(24.15, 6.4, -19.2),
 "unitWindowOutside": Vector3(24.75, 5, -19.2),
+"wellBalcony": Vector3(11.3, 1.75, -14.5),
+"wellBalconyDoor": Vector3(9.95, 0, -12.35),
 "winch": Vector3(-5.85, 9.25, 6.5),
 "wongPacking": Vector3(11.3, 5, -12.5),
 "wongTable": Vector3(25.6, 5, -14),

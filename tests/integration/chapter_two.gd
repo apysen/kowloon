@@ -67,6 +67,17 @@ func interact(id: String) -> bool:
 	return false
 
 
+## Turn the view round until `flag` is set; returns the direction that showed it (-1 if none).
+func turn_until(flag: String) -> int:
+	for d in [1, 2, 3, 0]:
+		await turn_to(d)
+		await secs(0.4)
+		await read_through()
+		if q.flags[flag]:
+			return d
+	return -1
+
+
 func turn_to(dir: int) -> void:
 	while slice.cam.direction != dir:
 		slice.cam.rotate_view(1)
@@ -209,6 +220,47 @@ func _run() -> void:
 	await photograph("fanman", Vector3(-3.7, 0, 0.2))
 	expect(slice.scrapbook.entries.has("ho"), "Mr. Ho's print is in the album")
 	expect(q.stage == C.GO_HOME, "'Then don't blink.' Then home")
+
+	print("-- on the side: Mr. Kwok's back page (OQ01)")
+	await place(Vector3(2.9, 0, -5.0))
+	expect(await interact("shopkeeper"), "Mr. Kwok: 'Get that.'")
+	expect(q.flags.oq01_asked, "'Still mine.'")
+	await place(w.refs.awningSeen)
+	await turn_to(0)
+	await secs(0.5)
+	expect(await interact("pageAwning") and not q.flags.oq01_seen, "from the catwalk it lies on an awning, out of reach")
+	expect(not await interact("wellBalconyDoor"), "no way to it yet")
+	var sd := await turn_until("oq01_seen")
+	expect(sd == 1 or sd == 3, "from the side: on a little balcony under the awning")
+	await turn_to(0)
+	await place(w.refs.wellBalconyDoor)
+	expect(await interact("wellBalconyDoor"), "the door halfway up the stairs by Lau's")
+	await secs(1.2)
+	expect(absf(slice.player.position.y - BuildSideQuests.WELL_BALC_Y) < 0.3, "out on the balcony")
+	expect(await interact("kwokPage"), "the back page: racing results, half a crossword")
+	expect(await interact("wellBalconyBack"), "back through the door")
+	await secs(1.2)
+	await place(Vector3(2.9, 0, -5.0))
+	expect(await interact("shopkeeper"), "back to Mr. Kwok")
+	expect(q.flags.oq01_done, "'Poor judgment.'")
+
+	print("-- on the side: the last mahjong tile (OQ04)")
+	await place(Vector3(-2.0, 0, 1.6))
+	expect(await interact("mahjong2"), "'Who's got the white dragon?'")
+	expect(q.flags.oq04_asked, "everyone accuses everyone")
+	await place(w.refs.tileCrack)
+	expect(await interact("tileCrack"), "the crack at the foot of the wall: too thin for anybody's arm")
+	await place(w.refs.tileHole)
+	await turn_to(0)
+	await secs(0.5)
+	expect(not q.flags.oq04_seen and not await interact("tileHole"), "from the front, crates stacked against the lane wall")
+	sd = await turn_until("oq04_seen")
+	expect(sd == 1 or sd == 3, "from the side: the tile, where the crack comes out")
+	await turn_to(0)
+	expect(await interact("tileHole"), "the white dragon, grey with dust")
+	await place(Vector3(-2.0, 0, 1.6))
+	expect(await interact("mahjong2"), "back to the table")
+	expect(q.flags.oq04_done, "they count the tiles three times")
 
 	print("-- home")
 	var mum: Resident = w.residents.mum

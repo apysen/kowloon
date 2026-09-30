@@ -16,6 +16,14 @@ extends ChapterDirector
 ## Grandfather his tea, and Mei sits with him a while before it ends.
 ##
 ## Nothing is solved by the view turning; turning only shows what was there.
+##
+## On the side, two small things. OQ01, Mr. Kwok's Back Page: the wind had it
+## out over the light well; from the catwalk it lies on an awning out of
+## reach, but from the side it's on the little balcony under the awning, off
+## a door halfway up the stairs by Lau's. OQ04, The Last Mahjong Tile: the
+## white dragon went down the crack at the foot of the alcove's wall; out in
+## the lane, only a side view shows it behind the crates, where the crack
+## comes out.
 
 enum {
 	START,
@@ -53,6 +61,8 @@ var flags := {
 	"setup_red_bowl": false, "water_trace_1": false, "water_trace_2": false, "window_found": false,
 	"valve_neighbour": false, "valve_sink": false, "water_restored": false, "ho_restored_talk": false,
 	"mum_after": false, "brochure_seen": false, "tea_served": false,
+	"oq01_asked": false, "oq01_seen": false, "oq01_page": false, "oq01_done": false,
+	"oq04_asked": false, "oq04_seen": false, "oq04_tile": false, "oq04_done": false,
 }
 
 var _stage_t := 0.0
@@ -80,6 +90,7 @@ func setup() -> void:
 	_register_shared()
 	_register_people()
 	_register_puzzle()
+	_register_side()
 	_register_sounds()
 	photography.add_target("ho", world.residents.fanman, func() -> bool: return stage == PHOTO_HO and not scrapbook.entries.has("ho"))
 	photography.photo_kept.connect(_on_photo_kept)
@@ -113,9 +124,27 @@ func set_stage(s: int) -> void:
 	_stage_t = 0.0
 	var o: Array = OBJECTIVES.get(s, ["", ""])
 	objective = o[0]
-	hint = o[1]
+	hint = _with_side(o[1])
 	hud.set_objective(objective, hint)
 	_sync_world()
+
+
+## The stage's hint, and under it whatever Mei has taken on for the neighbours.
+func _with_side(base: String) -> String:
+	var lines: Array[String] = []
+	if base != "":
+		lines.append(tr(base))
+	if flags.oq01_asked and not flags.oq01_done:
+		lines.append(tr("c2.need.page_back" if flags.oq01_page else ("c2.need.page_seen" if flags.oq01_seen else "c2.need.page")))
+	if flags.oq04_asked and not flags.oq04_done:
+		lines.append(tr("c2.need.tile_back" if flags.oq04_tile else "c2.need.tile"))
+	return "\n".join(lines) if lines.size() > 1 else base
+
+
+func _refresh_side() -> void:
+	var o: Array = OBJECTIVES.get(stage, ["", ""])
+	hint = _with_side(o[1])
+	hud.set_objective(objective, hint)
 
 
 func force_stage(s: int) -> void:
@@ -268,11 +297,104 @@ func _register_people() -> void:
 	talk("ng", 1.9, func() -> void: say("c2_ng"))
 	talk("lau", 2.0, func() -> void: say("c2_lau"))
 	talk("wong", 1.9, func() -> void: say("c2_wong"))
-	talk("shopkeeper", 2.2, func() -> void: say("c2_kwok"))
+	talk("shopkeeper", 2.2, _talk_kwok)
 	talk("chopper", 1.8, func() -> void: say("c2_chopper_wet" if flags.water_restored else "c2_chopper"))
-	talk("mahjong2", 1.9, func() -> void: say("c2_mahjong"))
+	talk("mahjong2", 1.9, _talk_mahjong)
 	talk("worker", 1.5, func() -> void: say("c2_worker"))
 	talk("child", 1.5, func() -> void: say("c2_child_wet" if flags.water_restored else "c2_child"))
+
+
+# ----------------------------------------------------------------------------- on the side
+
+
+func _talk_kwok() -> void:
+	if flags.oq01_done:
+		say("c2_kwok_after")
+	elif flags.oq01_page:
+		flags.oq01_done = true
+		mark("oq01Done")
+		say("c2_kwok_page_back", _refresh_side)
+	elif flags.oq01_asked:
+		say("c2_kwok_page_wait")
+	elif stage >= TRACE:
+		flags.oq01_asked = true
+		mark("oq01Asked")
+		say("c2_kwok_page", _refresh_side)
+	else:
+		say("c2_kwok")
+
+
+func _talk_mahjong() -> void:
+	if flags.oq04_done:
+		say("c2_tile_after")
+	elif flags.oq04_tile:
+		flags.oq04_done = true
+		mark("oq04Done")
+		say("c2_tile_back", _refresh_side)
+	elif flags.oq04_asked:
+		say("c2_tile_wait")
+	elif stage >= TRACE:
+		flags.oq04_asked = true
+		mark("oq04Asked")
+		say("c2_tile_lost", _refresh_side)
+	else:
+		say("c2_mahjong")
+
+
+func _register_side() -> void:
+	var I := interaction
+	var refs := world.refs
+	var Q := InteractionDirector.Priority.QUEST
+	# OQ01: from the catwalk, the page on the awning; the door off the stairs; the page itself
+	I.add({"id": "pageAwning", "position": refs.awningSeen, "radius": 1.6, "priority": InteractionDirector.Priority.ENV, "verb": "verb.look",
+		"can_interact": func() -> bool: return flags.oq01_asked and not flags.oq01_seen,
+		"interact": func() -> void: say("c2_page_awning")})
+	I.add({"id": "wellBalconyDoor", "position": refs.wellBalconyDoor, "radius": 0.8, "priority": Q, "verb": "verb.door",
+		"can_interact": func() -> bool: return flags.oq01_seen,
+		"interact": func() -> void:
+			audio.creak()
+			transition(refs.wellBalcony, 5)})
+	I.add({"id": "wellBalconyBack", "position": refs.wellBalcony, "radius": 0.8, "priority": Q, "verb": "verb.door",
+		"interact": func() -> void:
+			audio.creak()
+			transition(refs.wellBalconyDoor + Vector3(-0.2, 0, 0.3), 5)})
+	I.add({"id": "kwokPage", "position": refs.kwokPage, "radius": 0.9, "priority": Q, "verb": "verb.take",
+		"can_interact": func() -> bool: return flags.oq01_asked and not flags.oq01_page,
+		"interact": func() -> void:
+			flags.oq01_page = true
+			mark("oq01Page")
+			set_gone(world.level.get_node_or_null("ChapterProps/Ch2/KwokPage"), true)
+			say("c2_page_got", _refresh_side)})
+	# OQ04: the crack in the alcove, and where it comes out in the lane
+	I.add({"id": "tileCrack", "position": refs.tileCrack, "radius": 1.0, "priority": InteractionDirector.Priority.ENV, "verb": "verb.look",
+		"can_interact": func() -> bool: return flags.oq04_asked and not flags.oq04_tile,
+		"interact": func() -> void: say("c2_tile_crack")})
+	I.add({"id": "tileHole", "position": refs.tileHole, "radius": 1.0, "priority": Q, "verb": "verb.take",
+		"can_interact": func() -> bool: return flags.oq04_seen and not flags.oq04_tile,
+		"interact": func() -> void:
+			flags.oq04_tile = true
+			mark("oq04Tile")
+			set_gone(world.level.get_node_or_null("ChapterProps/Ch2/LostTile"), true)
+			say("c2_tile_got", _refresh_side)})
+
+
+## Only a side view shows where the page really is, and where the crack comes out.
+func _side_discover() -> void:
+	if cam.rotating or locks.is_locked() or dialogue.is_open() or not (cam.direction == 1 or cam.direction == 3):
+		return
+	var at: Vector3 = world.refs.awningSeen
+	if flags.oq01_asked and not flags.oq01_seen and mei_near(at.x, at.y, at.z, 2.6):
+		flags.oq01_seen = true
+		mark("oq01Seen")
+		audio.chime()
+		say("c2_page_seen", _refresh_side)
+		return
+	var p := player.position
+	if flags.oq04_asked and not flags.oq04_seen and p.y < 1.0 and p.x > -4.6 and p.x < -1.0 and p.z > 4.3 and p.z < 6.0:
+		flags.oq04_seen = true
+		mark("oq04Seen")
+		audio.chime()
+		say("c2_tile_seen", _refresh_side)
 
 
 func _talk_ho() -> void:
@@ -623,6 +745,7 @@ func tick(delta: float, paused: bool) -> void:
 	_stage_t += delta
 	_tick_pump(delta)
 	_discover(delta)
+	_side_discover()
 	_tick_dead_end(delta)
 	_tick_hints()
 	_tick_walk_back()

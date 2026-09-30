@@ -1098,6 +1098,65 @@ const LINES := {
 	"c4_fong_after": [
 		{"speaker": "fong", "text": "dlg.c4_fong_after.01"},
 	],
+	"c2_kwok_page": [
+		{"speaker": "kwok", "text": "dlg.c2_kwok_page.01"},
+		{"speaker": "mei", "text": "dlg.c2_kwok_page.02"},
+		{"speaker": "kwok", "text": "dlg.c2_kwok_page.03"},
+		{"speaker": "kwok", "text": "dlg.c2_kwok_page.04"},
+	],
+	"c2_kwok_page_wait": [
+		{"speaker": "kwok", "text": "dlg.c2_kwok_page_wait.01"},
+	],
+	"c2_page_awning": [
+		{"speaker": "", "text": "dlg.c2_page_awning.01"},
+	],
+	"c2_page_seen": [
+		{"speaker": "", "text": "dlg.c2_page_seen.01"},
+	],
+	"c2_page_got": [
+		{"speaker": "", "text": "dlg.c2_page_got.01"},
+	],
+	"c2_kwok_page_back": [
+		{"speaker": "kwok", "text": "dlg.c2_kwok_page_back.01"},
+		{"speaker": "mei", "text": "dlg.c2_kwok_page_back.02"},
+		{"speaker": "kwok", "text": "dlg.c2_kwok_page_back.03"},
+		{"speaker": "mei", "text": "dlg.c2_kwok_page_back.04"},
+		{"speaker": "kwok", "text": "dlg.c2_kwok_page_back.05"},
+	],
+	"c2_kwok_after": [
+		{"speaker": "kwok", "text": "dlg.c2_kwok_after.01"},
+	],
+	"c2_tile_lost": [
+		{"speaker": "tsang", "text": "dlg.c2_tile_lost.01"},
+		{"speaker": "yip", "text": "dlg.c2_tile_lost.02"},
+		{"speaker": "tsang", "text": "dlg.c2_tile_lost.03"},
+		{"speaker": "", "text": "dlg.c2_tile_lost.04"},
+		{"speaker": "tsang", "text": "dlg.c2_tile_lost.05"},
+	],
+	"c2_tile_wait": [
+		{"speaker": "tsang", "text": "dlg.c2_tile_wait.01"},
+	],
+	"c2_tile_crack": [
+		{"speaker": "", "text": "dlg.c2_tile_crack.01"},
+	],
+	"c2_tile_seen": [
+		{"speaker": "", "text": "dlg.c2_tile_seen.01"},
+	],
+	"c2_tile_got": [
+		{"speaker": "", "text": "dlg.c2_tile_got.01"},
+	],
+	"c2_tile_back": [
+		{"speaker": "mei", "text": "dlg.c2_tile_back.01"},
+		{"speaker": "tsang", "text": "dlg.c2_tile_back.02"},
+		{"speaker": "mei", "text": "dlg.c2_tile_back.03"},
+		{"speaker": "tsang", "text": "dlg.c2_tile_back.04"},
+		{"speaker": "yip", "text": "dlg.c2_tile_back.05"},
+		{"speaker": "tsang", "text": "dlg.c2_tile_back.06"},
+		{"speaker": "", "text": "dlg.c2_tile_back.07"},
+	],
+	"c2_tile_after": [
+		{"speaker": "tsang", "text": "dlg.c2_tile_after.01"},
+	],
 }
 
 
