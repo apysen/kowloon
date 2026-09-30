@@ -1000,6 +1000,43 @@ const LINES := {
 		{"speaker": "", "text": "dlg.c5_argument.19", "event": "mumSits"},
 		{"speaker": "mum", "text": "dlg.c5_argument.20"},
 	],
+	"c5_leung": [
+		{"speaker": "leung", "text": "dlg.c5_leung.01"},
+		{"speaker": "mei", "text": "dlg.c5_leung.02"},
+		{"speaker": "leung", "text": "dlg.c5_leung.03"},
+		{"speaker": "mei", "text": "dlg.c5_leung.04"},
+		{"speaker": "leung", "text": "dlg.c5_leung.05"},
+		{"speaker": "mei", "text": "dlg.c5_leung.06"},
+		{"speaker": "leung", "text": "dlg.c5_leung.07"},
+		{"speaker": "leung", "text": "dlg.c5_leung.08"},
+	],
+	"c5_leung_wait": [
+		{"speaker": "leung", "text": "dlg.c5_leung_wait.01"},
+	],
+	"c5_kwok_note": [
+		{"speaker": "mei", "text": "dlg.c5_kwok_note.01"},
+		{"speaker": "kwok", "text": "dlg.c5_kwok_note.02"},
+		{"speaker": "mei", "text": "dlg.c5_kwok_note.03"},
+		{"speaker": "kwok", "text": "dlg.c5_kwok_note.04"},
+		{"speaker": "kwok", "text": "dlg.c5_kwok_note.05"},
+	],
+	"c5_kwok_packing": [
+		{"speaker": "kwok", "text": "dlg.c5_kwok_packing.01"},
+	],
+	"c5_under_shutter": [
+		{"speaker": "", "text": "dlg.c5_under_shutter.01"},
+		{"speaker": "", "text": "dlg.c5_under_shutter.02", "event": "noteTaken"},
+	],
+	"c5_leung_done": [
+		{"speaker": "mei", "text": "dlg.c5_leung_done.01"},
+		{"speaker": "leung", "text": "dlg.c5_leung_done.02"},
+		{"speaker": "leung", "text": "dlg.c5_leung_done.03"},
+		{"speaker": "mei", "text": "dlg.c5_leung_done.04"},
+		{"speaker": "leung", "text": "dlg.c5_leung_done.05"},
+	],
+	"c5_leung_after": [
+		{"speaker": "leung", "text": "dlg.c5_leung_after.01"},
+	],
 }
 
 

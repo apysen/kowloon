@@ -313,15 +313,26 @@ static func _alcove(b: LevelBuilder) -> void:
 
 static func _kwok(b: LevelBuilder) -> void:
 	var G := C57 + "/Stall"
-	# Mr. Kwok's shutter down over the stall's front
-	b.box(1.96, 2.0, A, A + 2.5, -6.0, -4.0, c8(0x7a8078), {"band": 0.0, "surface": "metal", "parent": G, "name": "Shutter"})
-	var sy := 0.2
+	# Mr. Kwok's shutter, pulled halfway down while he packs: under it, a gap
+	# into the stall that only shows from its open front (east)
+	var lo := 1.1
+	b.box(1.96, 2.0, A + lo, A + 2.5, -6.0, -4.0, c8(0x7a8078), {"band": 0.0, "surface": "metal", "parent": G, "name": "Shutter"})
+	var sy := lo + 0.16
 	while sy < 2.45:
 		b.box(2.0, 2.01, A + sy, A + sy + 0.02, -6.0, -4.0, c8(0x5a605a), {"band": 0.0, "surface": "metal", "parent": G, "name": "Slat", "cast_shadow": false})
 		sy += 0.16
-	b.box(2.0, 2.04, A + 0.12, A + 0.26, -5.1, -4.98, c8(0xc9a55a), {"band": 0.0, "surface": "metal", "parent": G, "name": "Padlock"})
+	b.box(1.96, 2.04, A + lo, A + lo + 0.1, -6.0, -4.0, c8(0x4a4e4a), {"band": 0.0, "surface": "metal", "parent": G, "name": "BottomBar"})
 	b.add_obstacle(1.9, 2.05, -6.0, -4.0, A, "stallShut", "chapter:Ch5-7")
 	b.ref("kwokPacking", Vector3(3.2, A, -6.5))
+	b.ref("stallGap", Vector3(2.35, A, -4.85))
+	# today: the forwarding notes he kept for everyone, in a bundle on the floor
+	# behind the shutter, one slipped out of it
+	var N := C5 + "/KwokNote"
+	b.box(1.72, 1.92, A, A + 0.07, -4.98, -4.76, c8(0xe8e0cc), {"band": 0.0, "surface": "grain", "parent": N, "name": "Bundle", "cast_shadow": false})
+	b.box(1.8, 1.84, A + 0.07, A + 0.075, -4.98, -4.76, c8(0xb8392e), {"band": 0.0, "surface": "grain", "parent": N, "name": "String", "cast_shadow": false})
+	b.box(1.6, 1.78, A, A + 0.006, -4.72, -4.58, c8(0xf4f0e4), {"band": 0.0, "surface": "grain", "parent": N, "name": "Note", "cast_shadow": false})
+	# Mrs. Leung, from upstairs, who needs her sister's block number
+	b.resident("leung", "ext_grandma_black", Vector3(3.3, A, -2.6), {"facing": Vector3(-0.4, 0, -1), "parent": C5})
 
 
 static func _flat(b: LevelBuilder) -> void:

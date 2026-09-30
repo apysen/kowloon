@@ -18,6 +18,12 @@ extends ChapterDirector
 ## The day's photograph is the Chans' clothesline over the catwalk, empty but
 ## for its pegs: the first with nobody in it. Mrs. Wong's room and Lau's
 ## clinic can be photographed too, if Mei wants; nothing asks her to.
+##
+## On the side (OQ06, The Lost Address): Mrs. Leung needs her sister's block
+## number. Mrs. Wong knew it, and she's gone; she left it with Mr. Kwok, whose
+## stall kept everyone's post. His shutter is half down while he packs, and the
+## stall only ever shows from its open front: turned to face it, the bundle of
+## notes is there on the floor under the shutter.
 
 enum {
 	START,
@@ -46,6 +52,7 @@ var flags := {
 	"returned_tile": false, "returned_bowl": false, "wong_note": false, "payoff_wong_bet": false,
 	"grandfather_keeps_note": false, "line_photo": false, "peg_fell": false, "dry_tap": false,
 	"mei_mum_argument": false, "mei_understands_mum_partial": false,
+	"oq06_asked": false, "oq06_seen": false, "oq06_note": false, "oq06_done": false,
 }
 
 var _stage_t := 0.0
@@ -147,6 +154,8 @@ func _live_hint() -> String:
 			lines.append(tr("c5.need.fong"))
 	if flags.wong_note:
 		lines.append(tr("c5.need.note"))
+	if flags.oq06_asked and not flags.oq06_done:
+		lines.append(tr("c5.need.leung_give" if flags.oq06_note else "c5.need.leung"))
 	return "\n".join(lines)
 
 
@@ -210,6 +219,7 @@ func _prepare_world() -> void:
 	_show("WongNote", true)
 	_show("WongBowl", false)
 	_show("FongStool", false)
+	_pose(world.residents.leung, world.residents.leung.home, Vector3(-0.4, 0, -1), "idle")
 	_sync_world()
 
 
@@ -322,7 +332,53 @@ func _register_people() -> void:
 	talk("ng", 1.9, _talk_ng)
 	talk("mahjong2", 1.7, _talk_mahjong)
 	talk("mahjong1", 1.7, _talk_mahjong)
-	talk("shopkeeper", 1.8, func() -> void: say("c5_kwok"))
+	talk("shopkeeper", 1.8, _talk_kwok)
+	talk("leung", 1.6, _talk_leung)
+
+
+func _talk_kwok() -> void:
+	if flags.oq06_asked and not flags.oq06_note and not flags.oq06_done:
+		say("c5_kwok_note", _refresh_hint)
+	elif flags.oq06_done:
+		say("c5_kwok_packing")
+	else:
+		say("c5_kwok")
+
+
+func _talk_leung() -> void:
+	if flags.oq06_done:
+		say("c5_leung_after")
+	elif flags.oq06_note:
+		flags.oq06_done = true
+		mark("oq06Done")
+		say("c5_leung_done", _refresh_hint)
+	elif flags.oq06_asked:
+		say("c5_leung_wait")
+	else:
+		flags.oq06_asked = true
+		mark("oq06Asked")
+		say("c5_leung", _refresh_hint)
+
+
+## The stall shows only from its front: with the view turned so the camera is
+## east of it, and Mei near, the bundle is there under the half-down shutter.
+func _sight_stall() -> void:
+	if flags.oq06_seen or not flags.oq06_asked or cam.rotating or dialogue.is_open() or locks.is_locked():
+		return
+	var p := player.position
+	if p.y > 1.0 or p.x < 2.0 or p.x > 4.2 or p.z < -7.0 or p.z > -3.0:
+		return
+	if ViewMath.back(cam.current_yaw).dot(Vector3(1, 0, 0)) > 0.6:
+		flags.oq06_seen = true
+		mark("oq06Seen")
+		audio.chime()
+		hud.notice("notice.c5_note_seen", 3.2)
+
+
+func _take_leung_note() -> void:
+	say("c5_under_shutter", func() -> void:
+		hud.notice("notice.c5_leung_note", 2.8)
+		_refresh_hint())
 
 
 func _talk_grandfather() -> void:
@@ -383,6 +439,9 @@ func _on_dialogue_event(event: String) -> void:
 		"stoolDown":
 			audio.play("crate_down", 0.35, 1.8)
 			_show("FongStool", true)
+		"noteTaken":
+			flags.oq06_note = true
+			_show("KwokNote/Note", false)
 		"mumSits":
 			_mum_sat = true
 			_sync_world()
@@ -470,6 +529,9 @@ func _register_route() -> void:
 	look("paleSquare", refs.lauPale, "env.c5_pale", 1.3)
 	look("lauBracket", refs.lauSign, "env.c5_bracket", 1.0, InteractionDirector.Priority.DECOR)
 	look("stall", Vector3(2.4, 0, -5.0), "env.c5_stall", 1.0, InteractionDirector.Priority.DECOR)
+	I.add({"id": "stallGap", "position": refs.stallGap, "radius": 1.0, "priority": Q, "verb": "verb.reach",
+		"can_interact": func() -> bool: return flags.oq06_seen and not flags.oq06_note,
+		"interact": _take_leung_note})
 	look("fongTap", Vector3(15.9, LevelBuilder.LEVEL_B, -16.8), "env.c5_tap", 0.9)
 	I.add({"id": "unitSinkDry", "position": Vector3(23.2, LevelBuilder.LEVEL_B, -20.2), "radius": 0.8,
 		"priority": InteractionDirector.Priority.ENV, "verb": "verb.turn",
@@ -643,5 +705,6 @@ func tick(delta: float, paused: bool) -> void:
 	_stage_t += delta
 	_refresh_hint()
 	_discover()
+	_sight_stall()
 	_tick_line()
 	_tick_home(delta)

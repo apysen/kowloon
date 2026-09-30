@@ -132,7 +132,7 @@ func _speaker_resident(id: Variant) -> Resident:
 		rest = rest.substr(3)
 	for r in world.residents:
 		if rest.begins_with(String(r) + "_") or rest == String(r):
-			if String(r) in ["hand_a", "hand_b", "kit", "chiu", "porter", "cheung", "cheng", "mover_a", "mover_b", "yamen_taichi", "yamen_bird"]:
+			if String(r) in ["hand_a", "hand_b", "kit", "chiu", "porter", "cheung", "cheng", "mover_a", "mover_b", "yamen_taichi", "yamen_bird", "leung"]:
 				return world.residents.get(r)
 	var key := rest.split("_")[0]
 	var map := {"grandfather": "grandfather", "mum": "mum", "lau": "lau", "chan": "chan", "son": "son", "ng": "ng", "wong": "wong",

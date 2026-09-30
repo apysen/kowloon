@@ -19,7 +19,7 @@ const PLACE_FIELDS: Array[String] = ["name", "context", "note"]
 const VOICE_PITCH := {
 	"mei": 1.35, "grandfather": 0.65, "mum": 1.0, "lau": 0.92, "chan": 1.13, "wai": 1.52,
 	"ng": 0.74, "wong": 1.04, "ho": 0.82, "neighbour": 0.9, "kit": 1.4, "chiu": 0.78, "hand_a": 1.1, "hand_b": 0.88, "porter": 0.85,
-	"cheung": 0.96, "cheng": 1.08, "mover": 0.8, "taichi": 0.7, "bird": 0.72,
+	"cheung": 0.96, "cheng": 1.08, "mover": 0.8, "taichi": 0.7, "bird": 0.72, "leung": 1.18,
 }
 
 

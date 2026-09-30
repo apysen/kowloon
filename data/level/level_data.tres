@@ -1331,6 +1331,7 @@ refs = {
 "stairsCUp": Vector3(1, 0, 1.4),
 "stairsDownB": Vector3(8.5, 5, -13.9),
 "stairsUpA": Vector3(9.4, 0, -14.2),
+"stallGap": Vector3(2.35, 0, -4.85),
 "steamer": Vector3(-6.6, 6.25, 3.57),
 "storeDoor": Vector3(14.65, 0, -2.6),
 "tank": Vector3(9.2, 13, -21.2),
