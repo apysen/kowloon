@@ -27,10 +27,17 @@ var holds: Array[Dictionary] = []
 var refs: Dictionary = {}
 var special: Dictionary = {}      # name -> Node3D ("Fabric", "Bundle", "Sheet", "LostPigeon", "Tank", "Plane", "Fan")
 var sheet_blocking := true
+## Ways the story has opened (World.open_ways["plank"] = true): their obstacles give way.
+var open_ways: Dictionary = {}
+## Open-air floors below the roof: the sky comes in there too.
+const OPEN_AIR := ["workshopRoof", "neighbourBalcony", "plankWay", "platformWay", "yamen", "yamenMouth", "yamenLane", "yamenBalcony"]
 ## While a photograph renders, every card turns to the studio camera instead.
 var sprite_yaw_override := NAN
 ## While a photograph renders, the cutaway shows the world as if Mei stood here.
 var view_from: Variant = null
+## Looking through Mei's eyes: nothing is cut away. Every floor shows, every
+## wall and ceiling stays solid, and people in other rooms are there to be seen.
+var first_person := false
 
 var _items: Array[Dictionary] = []
 ## Pieces that fade, move or belong to a room: looked at every frame.
@@ -62,7 +69,7 @@ func _ready() -> void:
 	_collect(level)
 	_hang_cloths()
 	for it in _items:
-		var live: bool = it.fadeable or it.dynamic or it.content_of != "" or it.node is Resident
+		var live: bool = it.fadeable or it.dynamic or it.content_of != "" or it.node is Resident or it.above != ""
 		(_live if live else _static).append(it)
 	_build_doors()
 	_build_holds()
@@ -85,6 +92,14 @@ func _build_obstacles() -> void:
 			active = func() -> bool: return fabric_state == "catwalk"
 		elif key == "sheet":
 			active = func() -> bool: return sheet_blocking
+		elif key.begins_with("way:"):
+			# a way that opens when the story opens it (the plank laid, the sign folded)
+			var way := key.substr(4)
+			active = func() -> bool: return not open_ways.has(way)
+		elif key.begins_with("chapter:"):
+			# built for only some days (ChapterProps): "chapter:Ch2-4"
+			var span := key.substr(8)
+			active = func() -> bool: return Progress.group_in_chapter(span, Progress.chapter)
 		var ob := walk_space.add_obstacle(o.x0, o.x1, o.z0, o.z1, o.y, o.name, active)
 		if key == "crate":
 			crate_obstacle = ob
@@ -134,6 +149,8 @@ func _item(n: Node3D) -> Dictionary:
 		"band": float(n.get_meta("band")),
 		"fadeable": bool(n.get_meta("fadeable", false)),
 		"room": String(n.get_meta("room", "")),
+		# on top of a closed room: out of sight while Mei is in the room below
+		"above": String(n.get_meta("above_room", "")),
 		"is_lid": n.has_meta("is_lid"),
 		"is_floor": n.has_meta("is_floor"),
 		"filler": n.has_meta("filler"),
@@ -376,6 +393,10 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 		(d.pivot as Node3D).rotation.y = d.base_yaw - d.open_t * PI * 0.55
 
 	var yaw := cam.current_yaw if is_nan(sprite_yaw_override) else sprite_yaw_override
+	if first_person:
+		yaw = cam.fp_yaw
+	# which bands show: all of them from her eye
+	var vb := 2 if first_person else pb
 	for r in residents.values():
 		var res := r as Resident
 		if res.story:
@@ -383,24 +404,34 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 		else:
 			res.sprite.camera_yaw = yaw
 
-	if pb != _static_pb:
-		_static_pb = pb
+	if vb != _static_pb:
+		_static_pb = vb
 		for it in _static:
-			_static_visibility(it, pb)
+			_static_visibility(it, vb)
 	elif not _static.is_empty():
 		var n := ceili(_static.size() / 8.0)
 		for k in n:
-			_static_visibility(_static[_static_at], pb)
+			_static_visibility(_static[_static_at], vb)
 			_static_at = (_static_at + 1) % _static.size()
 
 	for it in _live:
 		var node: Node3D = it.node
 		if it.dynamic:
-			it.band = PerspectiveRules.band_of(node.global_position.y + 0.5)
+			# people are on whichever level they stand on, as Mei is: up on a
+			# low roof between floors they're with her, not with the rooftops
+			if node is Resident:
+				it.band = float(PerspectiveRules.player_band(node.global_position.y))
+			else:
+				it.band = PerspectiveRules.band_of(node.global_position.y + 0.5)
 			if node is Resident:
 				it.content_of = room_at_point(node.global_position + Vector3(0, 0.5, 0))
-		var vis := PerspectiveRules.band_visible(it.band, pb)
-		if it.content_of != "" and it.content_of != current_room:
+		var vis := PerspectiveRules.band_visible(it.band, vb)
+		if it.content_of != "" and it.content_of != current_room and not first_person:
+			vis = false
+		if current_room != "" and it.above == current_room:
+			vis = false
+		elif current_room != "" and node is Resident and room_at_point(node.global_position - Vector3(0, 3.8, 0)) == current_room:
+			# someone up on the roof of the room she's in: through the ceiling
 			vis = false
 		if node.get_meta("gone", false):
 			vis = false
@@ -417,7 +448,9 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 			it.aabb = _aabb_of(it.meshes)
 		var target_op := 1.0
 		var same_band: bool = it.band == pb or (pb == 2 and it.band == 1.5)
-		if it.is_lid and it.room == current_room:
+		if first_person:
+			pass
+		elif it.is_lid and it.room == current_room:
 			target_op = 0.0
 		elif same_band:
 			var b: AABB = it.aabb
@@ -461,7 +494,8 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 					gi.set_instance_shader_parameter("emission_scale", float(gi.get_meta("emission_base")) * it.opacity * it.opacity)
 
 	# interior vs rooftop light
-	var roof_target := 1.0 if pb == 2 else 0.0
+	var under := walk_space.floor_at(p.x, p.z, p.y)
+	var roof_target := 1.0 if pb == 2 or (under != null and OPEN_AIR.has(under.name)) else 0.0
 	roof_mix += (roof_target - roof_mix) * minf(1.0, delta * 1.2)
 	_apply_light_mix(p, pb)
 

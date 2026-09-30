@@ -2,30 +2,32 @@ class_name ResidentCatalog
 extends RefCounted
 
 ## Scrapbook entries. The personal note matters more than the facts.
+##
+## Each field is read from data/i18n/strings.csv as res.<id>.<field>.
 
-const ENTRIES := {
-	"lau": {
-		"name": "Mr. Lau",
-		"occupation": "Dentist",
-		"location": "Third Floor, Lung Chun Road",
-		"context": "Unlicensed dentists and doctors practised inside the Walled City for decades, charging a fraction of Hong Kong prices.",
-		"note": "His new clinic will have windows.",
-	},
-	"ng": {
-		"name": "Mr. Ng",
-		"occupation": "Pigeon Keeper",
-		"location": "Rooftop, above the airshaft",
-		"context": "The rooftops were the only open space in the city. Residents kept birds, dried laundry and watched planes land at Kai Tak.",
-		"note": "Mr. Ng says they know the way home better than people do.",
-	},
-}
+const ENTRIES: Array[String] = ["lau", "ng", "ho", "chiu", "cheung"]
+const FIELDS: Array[String] = ["name", "occupation", "location", "context", "note"]
 
-## Speaking voices: the pitch of each speaker's dialogue blip.
+## Speaking voices: the pitch of each speaker's dialogue blip, by speaker id.
 const VOICE_PITCH := {
-	"Mei": 1.35, "Grandfather": 0.65, "Mr. Lau": 0.92, "Mrs. Chan": 1.13, "Wai": 1.52,
-	"Mr. Ng": 0.74, "Mrs. Wong": 1.04, "Mr. Ho": 0.82,
+	"mei": 1.35, "grandfather": 0.65, "mum": 1.0, "lau": 0.92, "chan": 1.13, "wai": 1.52,
+	"ng": 0.74, "wong": 1.04, "ho": 0.82, "neighbour": 0.9, "kit": 1.4, "chiu": 0.78, "hand_a": 1.1, "hand_b": 0.88, "porter": 0.85,
+	"cheung": 0.96, "cheng": 1.08, "mover": 0.8, "taichi": 0.7, "bird": 0.72,
 }
 
 
+## A person's entry in the current language, or {} if they have none.
 static func entry(id: String) -> Dictionary:
-	return ENTRIES.get(id, {})
+	if not ENTRIES.has(id):
+		return {}
+	var out := {}
+	for f in FIELDS:
+		out[f] = TranslationServer.translate("res.%s.%s" % [id, f])
+	# where they went, once Mrs. Cheung's book has taught the album to ask
+	out["after"] = ""
+	if Progress.after_unlocked:
+		var key := "res.%s.after" % id
+		var after := TranslationServer.translate(key)
+		if after != key:
+			out["after"] = after
+	return out

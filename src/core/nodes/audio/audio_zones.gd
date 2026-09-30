@@ -20,6 +20,7 @@ var _started := false
 var _master := 1.0
 var _silence_t := -1.0
 var _silence_len := 1.0
+var _heard_from := Vector3.ZERO
 
 
 func _stream(name: String, loop := false) -> AudioStreamWAV:
@@ -84,12 +85,18 @@ func _shot_emitter(name: String, files: Array, pos: Vector3, radius: float, leve
 	return e
 
 
+## Places that have gone quiet this day (a chapter sets them: Lau's drill once
+## the chair has gone, a neighbour's TV once they've moved).
+var quiet: Dictionary = {}
+
+
 func update(delta: float, player_pos: Vector3, roof_mix: float, muted: bool) -> void:
 	if not _started:
 		return
 	if _silence_t >= 0.0:
 		_silence_t += delta
 		_master = maxf(0.0, 1.0 - _silence_t / _silence_len)
+	_heard_from = player_pos
 	var m := 0.0 if muted else _master
 	_set_gain(_beds.interior, 0.55 * (1.0 - roof_mix) * m, delta, 0.3)
 	_set_gain(_beds.roof, 0.6 * roof_mix * m, delta, 0.5)
@@ -101,6 +108,8 @@ func update(delta: float, player_pos: Vector3, roof_mix: float, muted: bool) -> 
 		var v := maxf(0.0, 1.0 - d / float(e.radius))
 		v = v * v * level_factor * m * float(e.gain)
 		if e.has("enabled") and not (e.enabled as Callable).call():
+			v = 0.0
+		if quiet.has(e.name):
 			v = 0.0
 		if e.loop:
 			_set_gain(e.player, v, delta, 0.15)
@@ -119,6 +128,39 @@ func update(delta: float, player_pos: Vector3, roof_mix: float, muted: bool) -> 
 					p.volume_db = linear_to_db(v)
 					p.pitch_scale = randf_range(0.94, 1.06)
 					p.play()
+
+
+## A chapter's own places: a looped sound or repeating one-shots at a point,
+## heard like the slice's own (`enabled` may switch it on and off).
+func add_loop(name: String, file: String, pos: Vector3, radius: float, level: float, gain: float, enabled := Callable()) -> Dictionary:
+	var e := _loop_emitter(name, file, pos, radius, level, gain)
+	if enabled.is_valid():
+		e["enabled"] = enabled
+	return e
+
+
+func add_shots(name: String, files: Array, pos: Vector3, radius: float, level: float, every: Array, gain: float, enabled := Callable()) -> Dictionary:
+	var e := _shot_emitter(name, files, pos, radius, level, every, gain)
+	if enabled.is_valid():
+		e["enabled"] = enabled
+	return e
+
+
+## A one-shot at a point in the world, as loud as Mei would hear it from where
+## she stands (the same falloff as the emitters, floors muffling it).
+func play_at(file: String, pos: Vector3, radius: float, gain := 1.0, pitch := 1.0) -> void:
+	var dy := absf(_heard_from.y - pos.y)
+	var level_factor := 1.0 if dy < 3.0 else (0.2 if dy < 9.0 else 0.05)
+	var d := Vector2(_heard_from.x - pos.x, _heard_from.z - pos.z).length()
+	var v := maxf(0.0, 1.0 - d / radius)
+	v = v * v * level_factor * gain
+	if v > 0.01:
+		_shot(file, v, pitch)
+
+
+## Any sound, heard everywhere (a line's event: the pump in the cold open).
+func play(file: String, gain := 1.0, pitch := 1.0, delay := 0.0) -> void:
+	_shot(file, gain, pitch, delay)
 
 
 func _set_gain(p: AudioStreamPlayer, linear: float, delta: float, tc: float) -> void:

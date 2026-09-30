@@ -62,7 +62,8 @@ It establishes:
 - Photography is preservation, not scoring.
 - The scrapbook is personal rather than completionist.
 - The first completed journey is from Grandfather's flat to Mrs. Wong and back.
-- Mr. Lau, Mrs. Chan, Wai, Mr. Ng, Mrs. Wong, Mr. Kwok, and the repairman already exist in the playable world.
+- Mr. Lau, Mrs. Chan, Wai, Mr. Ng, Mrs. Wong, Mr. Kwok, and Mr. Ho already exist in the playable world.
+- Mei's household is Mei, Mum, and Grandfather. Grandfather is Mum's father. Mum grew up in the City.
 - Chapter 1 ends with the packing boxes and the card: **30 DAYS UNTIL WE LEAVE**.
 
 ## 1.2 Historical substrate
@@ -301,6 +302,8 @@ It absolutely will.
 **Need:** to let Mei carry part of the memory he has carried alone  
 **Voice:** practical directions, deliberate understatement, teasing deflection
 
+Grandfather often uses humor to avoid saying what hurts, but that is a relationship trait, not a rule for every scene. Give him two or three moments across the full game where the joke simply does not come. Those plain admissions should carry more weight because he usually deflects.
+
 Navigation language:
 
 - "Follow the blue pipe."
@@ -316,7 +319,13 @@ He should use formal street names less often than younger or official characters
 **Role:** strongest counter-premise  
 **Want:** to complete the move and get the family settled safely  
 **Need:** to let Mei see that readiness to leave is not indifference  
-**Voice:** efficient, tired, funny when annoyed
+**Voice:** efficient, tired, direct, funny when annoyed
+
+Mum is Grandfather's daughter and grew up in the City. She is the child in the old photograph (§26), which is why "I lived here too" is literal.
+
+Mei's father is not part of the household and is not mentioned. Do not add a throwaway explanation for his absence. If he ever matters, that is a deliberate character decision, not a patch.
+
+Mum should be one of the least evasive major characters. She does not make speeches, but when Mei asks her a sincere question, she is capable of giving a sincere answer. Her readiness to leave must never be mistaken for lack of attachment.
 
 She is genuinely pleased by:
 
@@ -336,6 +345,8 @@ The story must respect this.
 **Want:** to move and begin the next part of life  
 **Need:** to maintain connection without pretending nothing changes  
 **Voice:** quick, teasing, less sentimental than Mei
+
+Kit uses humor easily, but she should not hide behind it in every emotional scene. Because she jokes so often, one or two completely straightforward lines about Mei or the move should feel unusually exposed.
 
 Kit moves before Mei and later returns for the last rooftop evening.
 
@@ -377,7 +388,8 @@ Wai should make some of the most emotional environmental changes feel casual.
 
 **Role:** pigeon keeper, recurring metaphor without becoming a metaphor machine  
 **Want:** to relocate his birds safely  
-**Need:** to accept that a new roof has to become familiar
+**Need:** to accept that a new roof has to become familiar  
+**Voice:** sparse, patient, usually sincere. Ng does not need a joke at the end of every exchange.
 
 Key payoff:
 
@@ -400,7 +412,9 @@ We'll teach them another.
 **Want:** to leave on her own terms  
 **Need:** none stated directly
 
-Her relationship with Grandfather is expressed almost entirely through insult, implication, and old habits.
+Her relationship with Grandfather is expressed mostly through insult, implication, and old habits. The exception should be practical care. She may never write "I'll miss you," but she will make sure he knows how to reach her after she leaves.
+
+She is moving to live near her daughter.
 
 ---
 
@@ -455,7 +469,8 @@ Do not claim the specific character is historical.
 
 **Role:** elderly resident associated with the yamen old people's centre  
 **Want:** to collect forwarding addresses  
-**Need:** to preserve connections, not places
+**Need:** to preserve connections, not places  
+**Voice:** gentle, precise, direct. She does not tease Mei into understanding her point.
 
 She introduces the scrapbook's `AFTER` layer.
 
@@ -465,7 +480,8 @@ She introduces the scrapbook's `AFTER` layer.
 
 **Role:** clearance official  
 **Want:** to complete difficult relocation work without becoming a cartoon villain  
-**Need:** to understand resident geography that plans cannot capture
+**Need:** to understand resident geography that plans cannot capture  
+**Voice:** formal, slightly awkward, earnest. He should not adopt the neighborhood's teasing rhythm just because other characters use it.
 
 He must never be the antagonist.
 
@@ -506,12 +522,45 @@ Transition to apartment.
 ## CH01_S01_GRANDFATHER_FLAT
 
 **Objective:** Receive medicine.  
-**NPCs:** Grandfather  
+**NPCs:** Grandfather, Mum (background)  
 **Required props:** medicine, camera, packing boxes, old photograph
 
 Core dialogue remains current.
 
+Flag on apartment load:
+
+```text
+setup_boxes = true
+```
+
+Flag when Grandfather gives the first route ("Follow the blue pipe"):
+
+```text
+setup_blue_pipe = true
+```
+
 Add only these seeds:
+
+### Mum, already packing
+
+Mum is physically present in the background, wrapping things into boxes. She does not have a scene and does not interrupt Grandfather's opening.
+
+While Mei is getting ready to leave:
+
+```text
+Mum:
+Kit came by earlier.
+
+Mei:
+What did she want?
+
+Mum:
+She said she'd tell you herself.
+```
+
+Mum goes back to wrapping.
+
+This establishes Mum before Chapter 2 and Kit before Chapter 3, implies Mei and Kit are already close, and shows packing was happening before Mei began paying attention. The end-of-chapter box reveal should land harder because the player saw Mum packing and may not have understood it.
 
 ### Inspectable old photograph
 
@@ -562,6 +611,12 @@ Design rule:
 
 The first rotation should feel like revelation, not spectacle.
 
+Flag after the tutorial completes:
+
+```text
+theme_rotation = true
+```
+
 ---
 
 ## CH01_S03_SERVICE_DOOR
@@ -581,6 +636,20 @@ The camera reveals the service door.
 ## CH01_S04_LAU_CLINIC
 
 Keep Mr. Lau's scene and photograph.
+
+Flag after Lau's photograph:
+
+```text
+setup_mei_photographs = true
+```
+
+Flag when the scrapbook first opens (it records everyone except Mei):
+
+```text
+setup_mei_not_subject = true
+```
+
+This one is a narrative tracking flag; gameplay does not branch on it.
 
 Add one optional line if the player talks again after the photo:
 
@@ -705,17 +774,16 @@ Add:
 
 ```text
 Grandfather:
-Two already?
+You've been using it.
 
 Mei:
 You gave me a camera.
 
 Grandfather:
-I didn't tell you to use it.
-
-Mei:
-That's generally what cameras are for.
+I noticed.
 ```
+
+This line does not depend on photo count. Do not make Grandfather quote a statistic.
 
 Fade.
 
@@ -879,6 +947,13 @@ At minimum:
 - one service ledge
 - three valves
 - one audible pipe branch
+- the service footbridge (see below)
+
+### Service footbridge
+
+A permanent-looking plank-and-rail crossing over a light-well gap. The Chapter 2 route should send the player across it at least once, and it should stay on ordinary traversal routes through Chapters 3 and 4 so crossing it becomes habit. It is removed before Chapter 5 and is the crossing that fails in `CH05_P01`.
+
+It is not Chan's transfer plank (Ch3) and not Wai's shortcut bridge (OQ05).
 
 ## CH02_P01_PIPE_IDENTIFICATION
 
@@ -918,6 +993,8 @@ The correct pipe crosses behind three AC units.
 From west:
 
 It appears to enter Mrs. Fong's room.
+
+Mrs. Fong is the same person as Auntie Fong in OQ03. Here the player only knows her room; OQ03 introduces the person inside it.
 
 From north:
 
@@ -1033,7 +1110,7 @@ Mei:
 When?
 
 Ho:
-Next week. Maybe.
+Soon.
 
 Mei:
 So we'll do this again.
@@ -1053,13 +1130,15 @@ The player solved the physical problem.
 
 The larger problem remains inevitable.
 
+Payoff: by Chapter 5 the riser serving Cheung's wing has been shut (see §16).
+
 ---
 
 ## CH02_S03_HO_PHOTO
 
-Photo becomes available while Ho washes grease from his hands.
+Chapter 2's required photograph (§46.1). After "Won't be anybody here." the objective becomes *Take Mr. Ho's photograph* (hint: while he washes the grease off his hands); the chapter continues home only once it is kept.
 
-If player frames him:
+When the player frames him:
 
 ```text
 Ho:
@@ -1132,7 +1211,34 @@ Grandfather:
 Marketing.
 ```
 
-End chapter.
+Then the day winds down instead of cutting to black. The first kettle of the day goes on; Mum brings Grandfather his tea (objective: *Sit with Grandfather.*):
+
+```text
+Grandfather:
+Sit.
+
+Mei:
+You waited all day for that.
+
+Grandfather:
+Since Tuesday. The pump's sounded wrong since Tuesday.
+
+Mei:
+You could have said.
+
+Grandfather:
+I did. To the pump.
+
+Mei:
+Mr. Ho says they'll shut it off soon anyway.
+
+Grandfather:
+Then we'll drink this one slowly.
+
+The fan turns. Somewhere below, someone is filling a bucket.
+```
+
+A held moment, then a slow fade. End chapter.
 
 ```text
 24 DAYS UNTIL WE LEAVE
@@ -1394,6 +1500,8 @@ Inventory:
 story_item_plank
 ```
 
+This is the **factory transfer plank**. It is used only for the final shipment and goes back to the Chans afterward (see `CH03_S02_FINAL_CRATE`). It is not the service footbridge and not Wai's shortcut bridge.
+
 World seed:
 
 Some laundry already boxed.
@@ -1498,6 +1606,26 @@ Kit's uncle says the new place has proper drains.
 Kit says this is the first sensible thing he has ever said.
 ```
 
+After the shipment, the transfer plank is returned to the Chans offscreen. It is visible propped beside their door in Chapter 4 and packed by Chapter 5.
+
+The rope is not returned in this chapter. Mei keeps it; Mum finds it in Chapter 5.
+
+---
+
+## CH03_S02b_LAST_BATCH_PHOTO
+
+Chapter 3's required photograph (§46.1): a routine, photographed for the last time. After the lane scene, back upstairs, Chiu's workers are round the final worktable finishing the last of the batch. Objective *Photograph the last batch*; the day goes on to Kit only once the print is kept.
+
+```text
+Chiu:
+Don't put me in it.
+
+Mei:
+Too late.
+```
+
+Scrapbook entry: CHIU'S WORKSHOP (the drains note above).
+
 ---
 
 ## CH03_S03_KIT_KEY
@@ -1576,7 +1704,7 @@ World-state changes:
 - Chiu workshop begins dismantling
 - one neighboring workshop closes completely
 - hammering audio removed next chapter
-- crate route remains physically altered
+- the loading corridor and balcony stair remain usable; the hoist, pulley and transfer plank do not
 
 ---
 
@@ -1826,7 +1954,7 @@ NEW ADDRESS
 [fictional district address to be finalized]
 ```
 
-If Lau is still present:
+Lau is present, packing the last of his tools. This is his final on-screen scene, so the windows payoff happens here, before he moves.
 
 ```text
 Mei:
@@ -1838,9 +1966,23 @@ Already popular.
 Mei:
 She wants to know where everyone went.
 
+Mei:
+Have you seen the new place?
+
 Lau:
-Tell her there are windows.
+Two windows.
+
+Mei:
+Two?
+
+Lau:
+I'm moving up in the world.
+
+Lau:
+Rent's twice as much. Apparently daylight is extra.
 ```
+
+Some things about leaving are genuinely better. Lau is allowed to be pleased and to complain in the same breath.
 
 Inventory:
 
@@ -1851,7 +1993,86 @@ address_lau
 Payoff:
 
 ```text
-payoff_lau_windows_partial = true
+payoff_lau_windows = true
+```
+
+---
+
+## CH04_S03_WONG_PACKING
+
+**Type:** short scene, not a quest  
+**Location:** Mrs. Wong's room, on the mandatory route between address pickups  
+**NPCs:** Mrs. Wong
+
+Purpose: Wong has not been on-screen since Chapter 1. The Chapter 5 note needs her to have existed recently.
+
+Mrs. Wong is sorting things before her daughter collects her.
+
+```text
+Mei:
+You're packing.
+
+Mrs. Wong:
+Very observant. That camera is improving you.
+
+Mei:
+Where are you going?
+
+Mrs. Wong:
+Near my daughter.
+
+Mei:
+Is it nice?
+
+Mrs. Wong:
+I don't know yet.
+```
+
+Mei watches her wrap a cup.
+
+```text
+Mrs. Wong:
+She says there's a lift.
+
+Mei:
+Everyone says that.
+
+Mrs. Wong:
+Then perhaps you should listen to everyone occasionally.
+```
+
+Pause.
+
+```text
+Mei:
+Grandpa still thinks you're waiting for him.
+
+Mrs. Wong:
+Your grandfather thinks many things.
+
+Mei:
+Is he wrong?
+```
+
+Mrs. Wong keeps packing.
+
+```text
+Mrs. Wong:
+Not about everything.
+```
+
+Control returns. No objective update.
+
+Flag:
+
+```text
+wong_packing_seen = true
+```
+
+Resident state:
+
+```text
+wong = PRESENT_PACKING
 ```
 
 ---
@@ -2000,9 +2221,11 @@ End:
 
 World-state transition:
 
-- Kit family = MOVED
-- Lau = MOVING
-- Chan = MOVING
+- Kit = MOVED
+- Lau = PRESENT_MOVING
+- Chan = PRESENT_MOVING
+- Wai = PRESENT_MOVING
+- Wong = PRESENT_PACKING
 - one yamen room emptied
 - more labels and moving activity
 - some corridors visually clearer
@@ -2043,7 +2266,7 @@ Removed:
 
 Retained:
 
-- pipe hum
+- pipe hum (except in Cheung's wing; see §16)
 - distant traffic
 - intermittent footsteps
 - pigeons farther away
@@ -2072,6 +2295,7 @@ Story items:
 - folding stool
 - screwdriver
 - birdseed tin
+- coiled rope (Mr. Ng's, from Chapter 3)
 - bowl
 - single mahjong tile
 
@@ -2094,7 +2318,9 @@ This one is hard because familiar things are missing.
 
 ## Required world changes
 
-- plank bridge removed
+- service footbridge removed (the Chapter 2 crossing; not Chan's plank, not Wai's bridge)
+- water riser for Cheung's wing shut: taps in that wing give nothing, pipe ambience absent there
+- Kwok's stall shuttered
 - one stall shuttered
 - boxes removed from previously blocked hall
 - signboard removed
@@ -2108,12 +2334,12 @@ This one is hard because familiar things are missing.
 
 Player approaches a familiar crossing.
 
-Bridge is gone.
+The service footbridge is gone.
 
 No prompt beyond:
 
 ```text
-The plank is gone.
+The footbridge is gone.
 ```
 
 ### CH05_P02_EMPTY_WORKSHOP
@@ -2168,9 +2394,9 @@ Ho takes it anyway.
 
 ---
 
-## CH05_R02_BIRDSEED_TO_NG
+## CH05_R02_BIRDSEED_AND_ROPE_TO_NG
 
-Ng packing cages.
+Ng packing cages. Mei returns both items in one visit.
 
 ```text
 Mei:
@@ -2186,7 +2412,25 @@ Ng:
 Birdseed is birdseed.
 ```
 
-If Chapter 1 pigeon photo exists:
+Mei hands over the coiled rope.
+
+```text
+Ng:
+I said quickly.
+
+Mei:
+Twelve days is quickly.
+```
+
+Ng takes it without comment.
+
+Flag:
+
+```text
+payoff_ng_rope = true
+```
+
+Then (unconditional; the Chapter 1 Ng photograph is required):
 
 ```text
 Ng:
@@ -2233,6 +2477,8 @@ This should be the first return that cannot be completed socially.
 
 Mahjong group reduced from four to two residents packing.
 
+This is not the tile from OQ04. Grandfather has had a different one in his drawer.
+
 ```text
 Resident:
 Where did you find that?
@@ -2241,12 +2487,22 @@ Mei:
 Grandpa's drawer.
 
 Resident:
-Of course.
+Another one?
+
+Mei:
+What do you mean, another one?
 ```
 
-They laugh.
+The resident looks toward Grandfather's building.
+
+```text
+Resident:
+Nothing.
+```
 
 One puts it into a tin with the rest.
+
+This is a character detail about Grandfather borrowing permanently (compare Ho's screwdriver). It reads the same whether or not the player did OQ04.
 
 ---
 
@@ -2257,8 +2513,10 @@ Required traversal passes near Lau.
 Clinic state:
 
 ```text
-EMPTY_WITH_CARD_MARK
+EMPTY_WITH_BUSINESS_CARD
 ```
+
+If the player took the card in Chapter 4, the tape mark remains where it hung.
 
 Props removed:
 
@@ -2295,7 +2553,7 @@ No caption initially.
 Later Mei note:
 
 ```text
-I walked past the stairs twice before I remembered he wasn't there.
+I walked past the old stairs twice before I remembered he wasn't there.
 ```
 
 ---
@@ -2354,6 +2612,8 @@ I left first.
 It counts even if my daughter dragged me.
 
 Don't argue.
+
+I'll send the new address.
 ```
 
 Quest item:
@@ -2422,8 +2682,8 @@ Caption added later:
 ```text
 MRS. WONG'S ROOM
 
-She told me not to make a fuss when she left.
-She wasn't even there to stop me.
+She wasn't there.
+She still found a way to argue with him.
 ```
 
 If not photographed:
@@ -2533,11 +2793,13 @@ World transitions:
 - Wai = MOVED
 - Lau = MOVED
 - Chiu = MOVED
+- Cheung = MOVED
 - Kwok = PRESENT_PACKING
 - Ng = PRESENT_MOVING
 - Ho = PRESENT_MOVING
-- Cheung = MOVING
 - ambient population reduced significantly
+
+Cheung is `MOVED` by Chapter 5. Her floor emptying is what shuts the riser Ho warned about in Chapter 2, and it matches OQ02's empty room.
 
 ---
 
@@ -2584,6 +2846,41 @@ Residents present:
 Lighting:
 
 Golden hour into evening.
+
+---
+
+## CH06_S00B_WONG_CARD
+
+Early in the evening, before the lights fail.
+
+Mum comes up the roof stairs with a small card.
+
+```text
+Mum:
+This came for you.
+```
+
+Grandfather reads it. It is Mrs. Wong's new address, in her handwriting, and nothing else.
+
+```text
+Mei:
+What does it say?
+
+Grandfather:
+Where she is.
+```
+
+He puts it in the same pocket as her note.
+
+Wong fulfills her own promise; the address does not come through Cheung's book.
+
+Scrapbook: Mrs. Wong's entry gains its `AFTER` field automatically.
+
+Flag:
+
+```text
+payoff_wong_address = true
+```
 
 ---
 
@@ -2790,6 +3087,41 @@ That's different.
 
 ---
 
+## Mei and Mum
+
+This conversation becomes available after the lighter Mum-and-Grandfather exchange.
+
+```text
+Mei:
+Are you going to miss it?
+
+Mum:
+Yes.
+```
+
+Mei waits, expecting more.
+
+```text
+Mei:
+But you still want to leave.
+
+Mum:
+Yes.
+```
+
+Pause.
+
+```text
+Mum:
+I can miss it and still want to leave.
+```
+
+Do not extend the scene into a speech. Mei does not need to answer.
+
+This is a required sincere beat because Mum's position is too important to communicate only through packing, irritation, and jokes.
+
+---
+
 ## Kit
 
 ```text
@@ -2812,27 +3144,36 @@ Mei:
 A little.
 ```
 
-Optional follow-up:
+After the joke, allow the tone to drop.
+
+```text
+Mei:
+You're going to forget this place.
+
+Kit:
+No, I'm not.
+
+Mei:
+You don't know that.
+
+Kit:
+Neither do you.
+```
+
+Pause. No one interrupts them.
 
 ```text
 Kit:
-You still coming over?
+But I'm not going to forget you.
 
 Mei:
-Yeah.
+I know.
 
 Kit:
-That sounded almost convincing.
-
-Mei:
-I'll bring a map.
-
-Kit:
-Of my estate?
-
-Mei:
-For me.
+Good.
 ```
+
+Do not add another joke after this. The sincerity is the point.
 
 ---
 
@@ -2872,7 +3213,7 @@ Photo content:
 - young Grandfather
 - young Mrs. Wong
 - several residents
-- one of Mei's parents as a child
+- Mum as a child
 - recognizable blue pipe in background
 - one unknown photographer absent from image
 
@@ -2908,7 +3249,15 @@ Who?
 
 Grandfather:
 I don't remember.
+
+Mei:
+Does that bother you?
+
+Grandfather:
+Yes.
 ```
+
+Nothing follows. No joke, no explanation. This is the first of Grandfather's two undefended moments; Chapter 7's "Neither do I" is the second.
 
 No score.
 
@@ -2950,11 +3299,12 @@ Kit laughs.
 
 The camera interaction icon appears subtly.
 
-The player raises camera.
+Two paths, same outcome:
 
-For the first time:
+- **Player raises the camera:** Mei begins to raise it, and for the first time lowers it herself before the viewfinder fully settles.
+- **Player does nothing for several seconds:** Mei reaches toward the camera on her own, pauses, then lets her hand fall.
 
-Mei lowers it herself before the viewfinder fully settles.
+Either way, Mei chooses not to take the photograph. The shutter never fires.
 
 No dialogue.
 
@@ -2964,7 +3314,7 @@ Important:
 
 Do not make this a choice prompt.
 
-Mei's arc owns this decision.
+Mei's arc owns this decision. The player cannot take this photograph and cannot skip the beat.
 
 Flag:
 
@@ -3155,8 +3505,8 @@ service corridor
 
 ```text
 lower alley
--> former factory loading path
--> balcony stairs
+-> Chiu's former loading corridor
+-> balcony stair
 -> yamen
 ```
 
@@ -3208,25 +3558,23 @@ No input prompt for several seconds.
 
 Ambient City only.
 
-Then:
+Then Mei says the thing she has been avoiding saying directly.
+
+```text
+Mei:
+I don't want to go.
+```
+
+Grandfather does not answer immediately.
 
 ```text
 Grandfather:
-Ready?
-
-Mei:
-No.
-
-Grandfather:
-Good.
-
-[Mei looks at him]
-
-Grandfather:
-Me neither.
+Neither do I.
 ```
 
-Grandfather stands.
+No joke follows. No reassurance follows.
+
+After another short silence, Grandfather stands.
 
 Objective:
 
@@ -3276,6 +3624,24 @@ payoff_grandfather_navigation = true
 
 This completes the first blue-pipe lesson.
 
+Later on the same walk, at the junction by Kwok's shuttered stall:
+
+```text
+Grandfather:
+After Kwok.
+
+Mei:
+Where Kwok used to be.
+```
+
+She leads him through the turn. No further comment.
+
+Flag:
+
+```text
+payoff_kwok_landmark = true
+```
+
 ---
 
 # 33. CH07 Last Perspective Puzzle
@@ -3306,7 +3672,16 @@ Each direction reveals a different familiar set:
 
 No direction fits all of it.
 
-After player rotates at least three distinct directions, or after a reasonable timeout:
+There is no completion timeout. If the player stands still too long without rotating, Grandfather hints:
+
+```text
+Grandfather:
+Try another angle.
+```
+
+This is a hint, not an auto-complete. It may repeat after a further delay.
+
+After the player has viewed at least three distinct orientations:
 
 ```text
 Mei:
@@ -3551,7 +3926,9 @@ No special dialogue.
 
 Chapter 3 or 4.
 
-Shop owner wants sign removed before move.
+Auntie Fong is Mrs. Fong, whose room the water pipe appeared to enter in `CH02_P02`. The player knew the location first; this quest introduces the person inside it.
+
+She wants her shop sign removed before the move.
 
 ## Puzzle
 
@@ -3601,6 +3978,8 @@ Quest is deliberately elaborate for one tile.
 
 Table folded against wall in Chapter 5.
 
+`CH05_R04` returns a different tile that Grandfather had in his drawer. The "Another one?" line there works whether or not this quest was done.
+
 ---
 
 # OQ05 WAI'S SHORTCUT
@@ -3625,9 +4004,11 @@ Chain three perspective reveals:
 
 ## Payoff
 
-In Chapter 5, bridge has been removed.
+In Chapter 5, Wai's roof bridge has been removed.
 
 Gap remains.
+
+This is not the service footbridge from `CH05_P01`, and not Chan's transfer plank.
 
 No dialogue because Wai has moved.
 
@@ -3637,7 +4018,9 @@ No dialogue because Wai has moved.
 
 ## Availability
 
-Chapter 4.
+Chapter 5.
+
+In Chapter 4 Kwok's stall is still operating normally. By Chapter 5 the shutter is down, and it becomes part of the wider loss of landmarks.
 
 Resident needs sibling's block number.
 
@@ -3645,7 +4028,7 @@ Neighbor who knew has moved.
 
 Kwok kept forwarding note.
 
-His stall is shuttered.
+His stall is shuttered while he packs.
 
 ## Puzzle
 
@@ -3751,31 +4134,55 @@ Example: final City photograph.
 
 # 38. World State Matrix
 
+Resident states use exactly the §4.3 vocabulary. Do not use `MOVING`, `gone`, or other synonyms.
+
 Legend:
 
 ```text
-N = normal
-P = packing
-M = moving
-E = empty
-R = returned visit
+N = PRESENT_NORMAL
+P = PRESENT_PACKING
+M = PRESENT_MOVING
+X = MOVED
+R = RETURNED_VISIT
+A = ABSENT_TEMPORARY
+— = not yet introduced on-screen
 ```
 
-| Character/location | Ch1 | Ch2 | Ch3 | Ch4 | Ch5 | Ch6 | Ch7 |
+## Residents
+
+| Resident | Ch1 | Ch2 | Ch3 | Ch4 | Ch5 | Ch6 | Ch7 |
 |---|---|---|---|---|---|---|---|
-| Mei flat | N | P | P | P | P | P | E |
-| Grandfather | N | N | N | N | N | N | yamen then exit |
-| Mum | offscreen/light | N | N | N | N | N | moving truck |
-| Lau | N | N | N | M | E | gone | gone |
-| Chan | N | N | P | M | E | gone | gone |
-| Wai | N | N | N | M | gone | optional visit only if desired | gone |
-| Ng | N | N | N | N | M | M | gone |
-| Ho | N | N | N | N | M | M | gone |
-| Wong | N | N | N | N | E | gone | gone |
-| Kwok | N | N | N | N | P | optional present | E |
-| Kit | mention | N | N | moved/visit | moved | R | gone |
-| Chiu workshop | absent | setup | N | P | E | E | E |
-| Cheung | absent | mention | absent | N | M/E | gone | gone |
+| Grandfather | N | N | N | N | N | N | M |
+| Mum | P | P | P | P | P | P | M |
+| Lau | N | N | N | M | X | X | X |
+| Chan | N | N | P | M | X | X | X |
+| Wai | N | N | N | M | X | X | X |
+| Ng | N | N | N | N | M | M | X |
+| Ho | N | N | N | N | M | M | X |
+| Wong | N | N | N | P | X | X | X |
+| Kwok | N | N | N | N | P | P | X |
+| Kit | A | N | P | M | X | R | X |
+| Chiu | — | N | N | P | X | X | X |
+| Cheung | — | — | — | N | X | X | X |
+
+Notes:
+
+- Mum is on-screen packing in Ch1 (background only).
+- Kit is mentioned but not seen in Ch1 ("Kit came by earlier").
+- Chiu is set up in Ch2; Cheung is mentioned by Ho in Ch2.
+- Kwok's Ch6 roof appearance is optional; he is still `PRESENT_PACKING`.
+- Grandfather's Ch7 route: yamen, then the exit.
+
+## Locations
+
+| Location | Ch1 | Ch2 | Ch3 | Ch4 | Ch5 | Ch6 | Ch7 |
+|---|---|---|---|---|---|---|---|
+| Mei flat | first boxes | more boxes | packing | packing | red bowl packed | packing | near-empty |
+| Lau clinic | open | open | open | nearly empty, card on door | `EMPTY_WITH_BUSINESS_CARD` | same | same |
+| Chiu workshop | — | operating | final batch | dismantling | empty | empty | empty; loading corridor usable |
+| Kwok stall | open | open | open | open | shuttered | shuttered | shuttered |
+| Cheung wing water | on | on | on | on | shut off | shut off | shut off |
+| Service footbridge | — | present | present | present | removed | removed | removed |
 | yamen centre | ambient | ambient | ambient | active | sparse | sparse | near-empty |
 
 ---
@@ -3957,9 +4364,11 @@ Her entry can be note-based.
 Late:
 
 ```text
-She left first.
-Grandpa says it was cheating.
+She left before Grandpa.
+He says it was cheating.
 ```
+
+`AFTER` field is filled when her card arrives in Chapter 6 (`payoff_wong_address`).
 
 ## 40.9 Final Mei entry
 
@@ -3977,25 +4386,140 @@ Handwriting is Grandfather's.
 
 # 41. Setup and Payoff Ledger
 
-| Setup flag | Setup | Payoff |
-|---|---|---|
-| `setup_old_photo_seen` | old photo in Ch1 | camera belonged to Grandfather in Ch6 |
-| `setup_lau_windows` | Lau wants windows | new clinic card, later confirmation |
-| `setup_ng_home_line` | pigeons know home | "They know this one" |
-| `setup_wong_bet` | Wong refuses to leave first | note: "You lose" |
-| `setup_red_bowl` | ordinary bowl in flat | argument when packed |
-| `setup_kit_address` | Kit's move | address quest and return visit |
-| `setup_blue_pipe` | navigation landmark | final route no longer depends on it |
-| `setup_boxes` | easy-to-ignore packing | flat consumed by boxes |
-| `setup_mei_photographs` | player repeatedly photographs | Mei lowers camera in Ch6 |
-| `setup_mei_not_subject` | no photos of Mei | Grandfather takes final photo |
-| `theme_rotation` | rotation reveals truth | final angle cannot reveal all |
+Every setup flag below is set by a specific beat. None is an abstract label.
+
+| Setup flag | Set when | Setup | Payoff | Payoff flag |
+|---|---|---|---|---|
+| `setup_boxes` | Ch1 apartment loads | Mum packing in background | flat consumed by boxes | — |
+| `setup_blue_pipe` | Grandfather gives first route (Ch1) | navigation landmark | final route no longer depends on it | `payoff_grandfather_navigation` |
+| `theme_rotation` | perspective tutorial completes (Ch1) | rotation reveals truth | final angle cannot reveal all | `payoff_perspective_theme` |
+| `setup_mei_photographs` | Lau's photograph (Ch1) | player repeatedly photographs | Mei lowers camera in Ch6 | `mei_chose_presence` |
+| `setup_mei_not_subject` | scrapbook first opens (Ch1) | Mei records everyone else | Grandfather takes final photo | `final_photo_mei` |
+| `setup_old_photo_seen` | old photo inspected (Ch1) | old photo in flat | camera was Grandfather's; "Does that bother you?" "Yes." (Ch6) | `payoff_old_photo_camera` |
+| `setup_lau_windows` | Lau's optional line (Ch1) | Lau wants windows | "Two windows." on-screen (Ch4) | `payoff_lau_windows` |
+| `setup_ng_home_line` | Ng photograph (Ch1) | pigeons know home | "They know this one" (Ch6) | `payoff_ng_home_line` |
+| `setup_wong_bet` | Wong's message (Ch1) | Wong refuses to leave first | note: "You lose" (Ch5) | `payoff_wong_bet` |
+| `wong_packing_seen` | Wong packing scene (Ch4) | "I'll send the new address" (Ch5 note) | her card arrives (Ch6) | `payoff_wong_address` |
+| `setup_red_bowl` | Ch2 cold open | ordinary bowl in flat | argument when packed (Ch5) | `mei_mum_argument` |
+| `story_item_rope` | Ng lends rope (Ch3) | "Bring it back quickly" | rope returned: "Twelve days is quickly." (Ch5) | `payoff_ng_rope` |
+| `setup_kit_address` | Kit key scene (Ch3) | Kit's move | address quest and return visit | — |
+| — | Kwok as landmark (Ch1–4) | "Turn after Kwok" | "Where Kwok used to be" on the final walk (Ch7) | `payoff_kwok_landmark` |
 
 ---
 
 # 42. Dialogue Rules
 
-## 42.1 No theme speeches
+## 42.1 Do not make defensive banter the default voice of the City
+
+Teasing, understatement, indirectness, dry humor, and passive-aggressive affection can all belong in the game.
+
+They are not a universal Hong Kong speech pattern and should never be treated as one.
+
+Those behaviors belong to specific characters and specific relationships:
+
+- Grandfather and Mrs. Wong can be combative because they have decades of familiarity.
+- Kit and Mei can tease because they are close friends.
+- Ho can be dry because that is his personality.
+- Cheng should sound more formal and earnest.
+- Cheung can be gentle and direct.
+- Ng can be sparse and sincere.
+- Mum can be practical without constantly hiding what she means.
+
+If every character uses affection through insults or avoidance, the cast will sound as though one writer is speaking through everyone.
+
+## 42.2 Use multiple emotional registers
+
+A useful target for the whole script is approximately:
+
+```text
+50% ordinary and practical conversation
+20% humor, teasing, and deflection
+15% indirect emotional conversation
+10% plain sincerity
+5% silence
+```
+
+This is not a quota to enforce line by line.
+
+It is a diagnostic tool.
+
+If a chapter is almost entirely witty deflection, add a moment where someone simply answers the question.
+
+If a chapter contains too much direct emotional explanation, move some of that meaning back into actions, objects, environment, or silence.
+
+## 42.3 Sincerity should be rare enough to matter, not rare enough to disappear
+
+Characters do not need speeches to be sincere.
+
+Good sincere lines in this story are short:
+
+```text
+Mum:
+I lived here too.
+```
+
+```text
+Ng:
+We'll teach them another.
+```
+
+```text
+Kit:
+But I'm not going to forget you.
+```
+
+```text
+Grandfather:
+Neither do I.
+```
+
+The lack of ornament is what makes them land.
+
+Do not immediately protect these moments with a punchline.
+
+## 42.4 Humor is relationship-specific
+
+Humor should reveal intimacy rather than function as a mandatory dialogue ending.
+
+Grandfather and Wong may insult one another because each understands the affection underneath.
+
+Mei and Kit can shift rapidly between jokes and honesty.
+
+Ho can complain as a form of participation.
+
+Other residents may barely joke at all.
+
+Do not give every NPC a clever final line.
+
+## 42.5 Practical care can replace emotional declaration
+
+Some of the strongest affection in the game should appear as actions:
+
+- Wong sends her forwarding address.
+- Mum wraps the family's bowls carefully.
+- Ng checks every pigeon cage twice.
+- Ho reconnects lights he already dismantled because people are still using the roof.
+- Grandfather keeps Wong's note in his pocket instead of packing it.
+- Cheung records where everyone is going.
+
+These actions can carry sincerity even when no one names the emotion.
+
+## 42.6 Silence is dialogue
+
+Leave room for scenes in which nobody knows what to say.
+
+Good candidates:
+
+- Grandfather reading Wong's note
+- Mei seeing Lau's empty clinic
+- the pause after Mum says, "I lived here too."
+- the old photograph
+- Grandfather's yamen admission
+- the moment before the final photograph
+
+Do not fill those pauses with explanatory dialogue.
+
+## 42.7 No theme speeches
 
 Never write:
 
@@ -4003,9 +4527,30 @@ Never write:
 This city will live forever in our memories.
 ```
 
-Instead write practical conversation around loss.
+A character may still state a truth plainly when it answers a real question.
 
-## 42.2 Ordinary nouns are emotional
+For example:
+
+```text
+Mei:
+Are you going to miss it?
+
+Mum:
+Yes.
+
+Mei:
+But you still want to leave.
+
+Mum:
+Yes.
+
+Mum:
+I can miss it and still want to leave.
+```
+
+This works because it belongs to an immediate mother-daughter conversation. It is not a speech to the audience.
+
+## 42.8 Ordinary nouns are emotional
 
 Use:
 
@@ -4023,19 +4568,140 @@ Use:
 
 These objects make the relocation concrete.
 
-## 42.3 Residents should disagree
+## 42.9 Residents should disagree
 
 Do not harmonize everyone's attitude.
 
-## 42.4 Use humor late
+A sincere line does not have to support Mei's point of view.
 
-The game needs jokes most when the environment gets emptier.
+Mum can sincerely want to leave.
 
-Humor prevents sentimentality from becoming oppressive.
+Kit can sincerely be excited.
 
-## 42.5 Mei does not narrate herself
+Grandfather can sincerely not want to go.
+
+All three can love the same place.
+
+## 42.10 Mei does not narrate herself
 
 No internal monologue unless the scrapbook requires a short handwritten note.
+
+Her emotional arc should be legible through:
+
+- what she asks
+- what she photographs
+- what she stops photographing
+- which routes she remembers
+- what she notices after people leave
+- the rare moments when she says something plainly
+
+---
+
+# 42A. Required Sincere Anchor Beats
+
+These scenes should survive future dialogue rewrites even if exact wording changes.
+
+## Mum
+
+Chapter 5:
+
+```text
+Mum:
+I lived here too.
+```
+
+Chapter 6:
+
+```text
+Mum:
+I can miss it and still want to leave.
+```
+
+Function:
+
+Separates readiness to move from emotional indifference.
+
+## Kit
+
+Chapter 6:
+
+```text
+Kit:
+But I'm not going to forget you.
+```
+
+Function:
+
+Makes their friendship explicit once, after several chapters of teasing.
+
+## Ng
+
+Chapter 6:
+
+```text
+Ng:
+They know this one.
+
+Ng:
+We'll teach them another.
+```
+
+Function:
+
+Expresses adaptation without turning Ng into a thematic lecturer.
+
+## Mrs. Wong
+
+Her sincere gesture is practical rather than verbal:
+
+```text
+I'll send the new address.
+```
+
+Function:
+
+Her argument with Grandfather continues after relocation.
+
+## Grandfather
+
+Chapter 6:
+
+```text
+Mei:
+Does that bother you?
+
+Grandfather:
+Yes.
+```
+
+Chapter 7:
+
+```text
+Mei:
+I don't want to go.
+
+Grandfather:
+Neither do I.
+```
+
+Function:
+
+Twice, he does not deflect.
+
+The Chapter 7 line should be the most emotionally exposed line he has in the game. The Chapter 6 "Yes." prepares the player to believe it.
+
+## Mrs. Wong (secondary)
+
+Chapter 4:
+
+```text
+Mrs. Wong:
+Not about everything.
+```
+
+Function:
+
+The closest she comes to admitting the bet is about more than winning.
 
 ---
 
@@ -4083,6 +4749,7 @@ CH04_MOVE_CABINET
 CH04_GET_LAU_ADDRESS
 CH04_GET_CHAN_ADDRESS
 CH04_GET_KIT_ADDRESS
+CH04_WONG_PACKING
 CH04_RETURN_ADDRESSES
 CH04_UNLOCK_AFTER
 CH04_COMPLETE
@@ -4104,6 +4771,7 @@ CH05_COMPLETE
 
 ```text
 CH06_START
+CH06_WONG_CARD
 CH06_LIGHTS_FAIL
 CH06_TRACE_CIRCUIT
 CH06_LIGHTS_RESTORED
@@ -4156,10 +4824,11 @@ CH07_END
 
 **Cheung:** yamen  
 **Cheng:** yamen/cabinet route  
-**Lau:** clinic or absent briefly depending on order  
+**Lau:** clinic, packing (present for the windows payoff)  
+**Wong:** her room, packing  
 **Chan/Wai:** roof dismantling drying frame  
 **Kit:** new-flat visit point or returning to old neighborhood for keys  
-**Kwok:** stall  
+**Kwok:** stall, operating normally  
 **Ng/Ho:** ambient
 
 ## Chapter 5
@@ -4172,8 +4841,8 @@ CH07_END
 **Lau:** gone  
 **Chan/Wai:** gone  
 **Kit:** gone  
-**Kwok:** packing  
-**Cheung:** moving or gone
+**Kwok:** packing, stall shuttered  
+**Cheung:** moved
 
 ## Chapter 6
 
@@ -4256,13 +4925,28 @@ UNASSISTED_FREE_PHOTO
 
 ### Required
 
-Use sparingly.
+Hard rule: **every chapter contains at least one story-required photograph**, but what counts as worth photographing evolves across the game. The camera has its own arc. Each required photo is a staged objective (objective line + hint); the story does not continue until it is taken.
 
-Examples:
+| Chapter | Mandatory photograph | What changes about photography |
+|---|---|---|
+| 1. The Blue Pipe | Lau + Ng | Mei discovers photography as attention |
+| 2. The Water Line | Mr. Ho after the water returns | Photographing the people who quietly keep Kowloon functioning |
+| 3. Last Batch | Chiu's workers around the final worktable | Photographing a routine for the last time |
+| 4. Three Addresses | Mrs. Cheung with her address book in the yamen | From "where people were" toward "where people are going" |
+| 5. Rooms Going Quiet | The empty Chan clothesline | First mandatory photograph with no person in it |
+| 6. The Last Roof | Mr. Ng preparing his pigeons for the move | Mei still photographs something meaningful, then later consciously chooses not to photograph the rooftop gathering |
+| 7. The Way Out | Mei | Final inversion: someone else photographs her |
 
-- Lau in Chapter 1
-- Ng aircraft photo in Chapter 1
-- final Mei photo, not player-controlled
+**Chapter 5.** Wong's empty room stays optional (the player's choice). The mandatory photo is the empty clothesline: Mei reaches the catwalk that Mrs. Chan's laundry blocked in Chapter 1. The washing is gone; the pegs move in the wind. The camera prompt appears. No person, no event: just the place where something used to happen.
+
+```text
+THE CHANS' CLOTHESLINE
+It looks bigger without anything on it.
+```
+
+**Chapter 6** needs both actions. Earlier that evening Mei photographs Ng preparing his pigeons: she is still documenting things. Much later everyone is together and laughing, and the player expects the chapter's big photo. The prompt appears, and Mei does not take it. The game is not saying "Mei doesn't use the camera anymore"; it is saying "Mei finally understands that not every important moment needs to become a photograph."
+
+**Chapter 7** flips the rule: the mandatory photograph is taken of Mei, not by her.
 
 ### Optional subject
 
@@ -4436,8 +5120,10 @@ Pass if:
 
 Pass if:
 
-- old route is unavailable
+- service footbridge is absent and the old route is unavailable
 - empty workshop route is available
+- Cheung's wing has no water and no pipe ambience
+- rope is in the borrowed-items box and returning it sets `payoff_ng_rope`
 - Wong note cannot be obtained before room state changes
 - Mum argument only fires after required prerequisites
 - optional empty-room photo never blocks progression
@@ -4448,8 +5134,9 @@ Pass if:
 
 - line crossing cannot be solved from default view alone
 - all required roof-light sections update
+- Wong's card updates her `AFTER` entry
 - old photo scene triggers
-- camera-lowering story beat cannot be skipped
+- camera-lowering beat completes on both paths (player raises camera; player idles) and the shutter never fires
 - optional pigeon quest remains optional
 
 ## Chapter 7 test
@@ -4459,7 +5146,8 @@ Pass if:
 - at least two valid routes to yamen exist
 - no waypoint appears
 - Grandfather scene always reachable
-- final camera sequence requires multiple perspective attempts
+- Kwok landmark exchange fires on the final walk
+- final camera sequence completes only after three distinct orientations; idling produces "Try another angle." and never auto-completes
 - ending creates Mei scrapbook entry
 - credits reflect actual taken photos only
 
@@ -4557,6 +5245,8 @@ The finished story succeeds if players can answer all of these without a lore sc
 8. Why does Mei lower the camera on the last roof?
 9. Why does Grandfather photograph Mei?
 10. Why can the final City photograph not be "solved"?
+11. Can the player describe at least three characters who express affection or grief in noticeably different ways?
+12. Does Mum's desire to leave feel sincere rather than emotionally colder than Grandfather's desire to stay?
 
 More importantly, players should be able to navigate at least one late-game route from memory.
 

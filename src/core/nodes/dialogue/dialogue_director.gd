@@ -4,7 +4,8 @@ extends Node
 ## Runs a conversation: locks the controls, types each line out, advances on
 ## Space or F, fires a line's event when it appears, and releases the controls
 ## a moment after the last line so the key that closed it can't also trigger
-## an interaction.
+## an interaction. Lines are string keys (data/i18n/strings.csv), read in the
+## current language as they appear; a language change mid-line shows it again.
 
 signal line_shown(speaker: String, text: String)
 signal event_fired(event: String)
@@ -12,6 +13,8 @@ signal opened
 signal closed
 
 const CHARS_PER_SEC := 55.0
+## a Chinese character carries about a word: typed at reading pace, not letter pace
+const CHARS_PER_SEC_CJK := 24.0
 
 @export var locks: ControlLocks
 @export var box: DialogueBox
@@ -22,6 +25,7 @@ var _lines: Array = []
 var _index := -1
 var _on_done: Callable
 var _full := ""
+var _speaker := ""
 var _shown := 0.0
 var _typing := false
 var _open := false
@@ -56,7 +60,8 @@ func _next() -> void:
 		return
 	var line: Dictionary = _lines[_index]
 	var speaker: String = line.get("speaker", "")
-	_full = line.text
+	_speaker = speaker
+	_full = tr(String(line.text))
 	_shown = 0.0
 	_typing = true
 	box.set_line(speaker, "")
@@ -71,7 +76,7 @@ func _next() -> void:
 func _process(delta: float) -> void:
 	if not _open or not _typing:
 		return
-	_shown = minf(_full.length(), _shown + delta * CHARS_PER_SEC)
+	_shown = minf(_full.length(), _shown + delta * (CHARS_PER_SEC_CJK if LocaleSettings.is_chinese() else CHARS_PER_SEC))
 	box.set_text(_full.substr(0, int(_shown)))
 	if _shown >= _full.length():
 		_typing = false
@@ -89,6 +94,17 @@ func advance() -> void:
 		return
 	box.set_waiting(false)
 	_next()
+
+
+## The language changed with a line up (from the pause menu): show it again, whole.
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_TRANSLATION_CHANGED or not _open or _index < 0 or _index >= _lines.size():
+		return
+	_full = tr(String((_lines[_index] as Dictionary).text))
+	_shown = _full.length()
+	_typing = false
+	box.set_line(_speaker, _full)
+	box.set_waiting(true)
 
 
 func _end() -> void:

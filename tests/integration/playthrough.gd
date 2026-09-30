@@ -77,13 +77,31 @@ func photograph(id: String, from: Vector3) -> void:
 	await place(from)
 	var target: Resident = slice.world.residents[id]
 	slice.photography.enter()
-	await frames(2)
-	# pan the frame onto the subject
+	var up := 0.0
+	while not slice.photography.aiming and up < 5.0:
+		await secs(0.1)
+		up += 0.1
+	expect(slice.photography.aiming and slice.cam.first_person, "the camera comes up to Mei's eye")
+	expect(slice.player.hidden and slice.world.first_person, "first person: Mei's own card is hidden, nothing is cut away")
+	if id == "lau":
+		# she can walk with the camera up, the way she's looking, and the view sways with her steps
+		var face := slice.cam.fp_yaw
+		var before := slice.player.position
+		Input.action_press("move_up")
+		await secs(0.45)
+		var swayed := slice.cam.fp_walk > 0.3
+		Input.action_release("move_up")
+		var moved := slice.player.position - before
+		expect(moved.length() > 0.3 and moved.normalized().dot(-ViewMath.back(face)) > 0.8,
+			"with the camera up, W walks her the way she's looking")
+		expect(swayed, "the view sways as she walks")
+		await secs(0.4)
+	# turn her head onto the subject, as the mouse would
 	var tries := 0
 	while slice.photography.subject.is_empty() and tries < 240:
-		var to := target.global_position - slice.cam.focus
-		to.y = 0
-		slice.cam.pan_offset += to.normalized() * minf(0.15, to.length())
+		var to := target.global_position + Vector3(0, 1.0, 0) - slice.cam.camera.global_position
+		slice.cam.fp_yaw = lerp_angle(slice.cam.fp_yaw, atan2(-to.x, -to.z), 0.3)
+		slice.cam.fp_pitch = lerpf(slice.cam.fp_pitch, atan2(to.y, Vector2(to.x, to.z).length()), 0.3)
 		await frames(1)
 		tries += 1
 	expect(not slice.photography.subject.is_empty(), "framed %s in the viewfinder" % id)
@@ -119,6 +137,9 @@ func _run() -> void:
 	await read_through()
 	expect(q.stage == S.MEDICINE_RECEIVED, "Grandfather hands over the medicine and the camera")
 	expect(slice.photography.has_camera, "Mei has the camera")
+	expect(q.flags.setup_boxes and q.flags.setup_blue_pipe, "the boxes and the blue pipe are set up")
+	var mum: Resident = w.residents.mum
+	expect(mum.visible and mum.sprite.anim.begins_with("work"), "Mum is packing in the background")
 	# the wordless perspective lesson: the view turns once by itself, then the player turns it both ways
 	await secs(3.6)
 	expect(slice.cam.direction == 0, "the tutorial's demo turn comes back to the start")
@@ -127,8 +148,26 @@ func _run() -> void:
 	slice.cam.rotate_view(-1)
 	await secs(1.4)
 	expect(not q._tutorial, "the tutorial clears after turning both ways")
-	await use("oldPhoto", w.refs.oldPhoto)
+	expect(q.flags.theme_rotation, "the turning lesson is marked")
+	# looking at the old photograph holds the print up on screen while they talk
+	await place(w.refs.oldPhoto)
+	for it in slice.interaction._list:
+		if it.id == "oldPhoto":
+			(it.interact as Callable).call()
+	await frames(3)
+	expect(slice.hud.photo_showing(), "the old photograph is shown up close")
+	await read_through()
+	await secs(0.4)
 	expect(q.flags.setup_old_photo_seen, "Grandfather's old photograph is looked at")
+	expect(not slice.hud.photo_showing(), "and put away when the conversation ends")
+	# heading for the door, Mum mentions Kit
+	await place(Vector3(-7.4, A, 0.0))
+	await frames(4)
+	expect(slice.dialogue.is_open(), "Mum speaks up as Mei heads for the door")
+	await read_through()
+	expect(q.flags.mum_kit_mentioned, "Mum says Kit came by")
+	await use("mum", Vector3(-12.0, A, -1.5))
+	expect(q.stage == S.MEDICINE_RECEIVED, "talking to Mum again doesn't move the story")
 
 	print("-- the dead end and the service door")
 	await place(Vector3(1.0, A, 0.0))
@@ -150,6 +189,7 @@ func _run() -> void:
 	await photograph("lau", Vector3(4.0, A, -10.4))
 	expect(q.stage == S.LAU_PHOTO, "Lau's photo is in the scrapbook")
 	expect(slice.scrapbook.entries.has("lau"), "scrapbook has Lau")
+	expect(q.flags.setup_mei_photographs and q.flags.setup_mei_not_subject, "Mei photographs; the album is everyone but her")
 	await use("lau", Vector3(3.6, A, -10.4))
 	expect(q.flags.setup_lau_windows, "Lau goes on about the windows again")
 
@@ -209,6 +249,10 @@ func _run() -> void:
 	expect(q.flags.pigeon_found, "the lost pigeon is spotted behind the tank")
 	await use("sheet", w.refs.sheetSpot)
 	await secs(4.5)
+	# she stays in the coop while Mr. Ng talks, not back on the tank
+	var coop_at: Vector3 = w.level_data.pigeon_path[w.level_data.pigeon_path.size() - 1]
+	expect(slice.dialogue.is_open() and (w.special.LostPigeon as Node3D).position.distance_to(coop_at) < 0.05,
+		"the pigeon stays home in the coop while Mr. Ng is talking")
 	await read_through()
 	expect(q.stage == S.HELPED_NG, "the pigeon flies home")
 	while slice.cam.direction != 0:
@@ -232,7 +276,7 @@ func _run() -> void:
 	var move := InputEventMouseMotion.new()
 	move.position = at
 	move.global_position = at
-	root.push_input(move)
+	root.push_input(move, true)
 	await frames(3)
 	expect(book._hover == 1, "the pointer over a print shows the magnifying glass")
 	var click := InputEventMouseButton.new()
@@ -240,7 +284,7 @@ func _run() -> void:
 	click.global_position = at
 	click.button_index = MOUSE_BUTTON_LEFT
 	click.pressed = true
-	root.push_input(click)
+	root.push_input(click, true)
 	await secs(0.5)
 	expect(book.zoomed(), "clicking a print lifts it up to look at")
 	await book.unzoom()
@@ -288,9 +332,12 @@ func _run() -> void:
 	await secs(1.0)
 	await read_through()
 	expect(q.stage == S.RETURNED_HOME, "Grandfather at home")
+	expect(not mum.visible, "Mum has gone out by the time Mei is home")
 	await use("boxes", w.refs.boxes)
 	await secs(1.0)
 	expect(q.stage == S.COMPLETE, "the boxes, and the ending")
+	await secs(3.5)
+	expect(slice.ending.visible and slice.ending.can_continue, "the end card offers the way on into the next day")
 	t = 0.0
 	while w.fabric_state != "roof" and t < 40.0:
 		await secs(0.5)
@@ -299,6 +346,29 @@ func _run() -> void:
 	expect(son.position.y > 12.0, "Wai is back on the roof")
 	await secs(2.5)
 	expect(not son.sprite.anim.begins_with("carry"), "his arms are empty once the sheets are hung")
+
+	print("-- a controller")
+	var pad := InputEventJoypadButton.new()
+	pad.button_index = JOY_BUTTON_Y
+	pad.pressed = false          # a release, so nothing is triggered
+	Input.parse_input_event(pad)
+	await frames(3)
+	expect(InputDevice.using_pad, "a controller button switches the prompts to the controller")
+	expect(UIStyle.keycaps("[F] Talk").contains(" A ") and UIStyle.keycaps("[Q]").contains("LB"),
+		"keys are named as controller buttons ([F] is A, [Q] is LB)")
+	expect(UIStyle.control_key("title.controls") == "title.controls_pad", "the long control lists have controller versions")
+	var key := InputEventKey.new()
+	key.physical_keycode = KEY_SHIFT
+	key.pressed = false
+	Input.parse_input_event(key)
+	await frames(3)
+	expect(not InputDevice.using_pad, "touching the keyboard switches them back")
+	for action in ["move_up", "rotate_left", "interact", "camera", "scrapbook", "cancel", "look_left"]:
+		var has_pad := false
+		for ev in InputMap.action_get_events(action):
+			if ev is InputEventJoypadButton or ev is InputEventJoypadMotion:
+				has_pad = true
+		expect(has_pad, "%s has a controller binding" % action)
 
 	print("-- pause")
 	var before := AudioSettings.saved_volume()
@@ -309,6 +379,39 @@ func _run() -> void:
 	expect(absf(AudioServer.get_bus_volume_db(0) - linear_to_db(0.16)) < 0.1, "the volume slider sets the master volume")
 	expect(absf(AudioSettings.saved_volume() - 0.4) < 0.01, "the volume is remembered")
 	slice.audio_settings.set_volume(before)
+	# the language, switched live from the pause menu and back
+	var cfg := ConfigFile.new()
+	cfg.load(LocaleSettings.PATH)
+	var had_choice := cfg.has_section_key("locale", "language")
+	var was := LocaleSettings.current()
+	slice.pause.language_button.pressed.emit()
+	await frames(3)
+	expect(LocaleSettings.current() != was, "the language button switches the language")
+	var zh_now := LocaleSettings.is_chinese()
+	expect(slice.pause.hint.text.contains("繼續") == zh_now, "the pause menu's keycap line is drawn again in the new language")
+	slice.pause.language_button.pressed.emit()
+	await frames(3)
+	expect(LocaleSettings.current() == was, "and switches back")
+	if not had_choice:
+		cfg.load(LocaleSettings.PATH)
+		cfg.erase_section_key("locale", "language")
+		cfg.save(LocaleSettings.PATH)
+	# fullscreen, on and off again from the pause menu
+	if DisplayServer.get_name() != "headless":
+		cfg.load(LocaleSettings.PATH)
+		var had_fs := cfg.has_section_key("display", "fullscreen")
+		var fs_was := DisplaySettings.is_fullscreen()
+		slice.pause.fullscreen_button.pressed.emit()
+		await frames(10)
+		expect(DisplaySettings.is_fullscreen() != fs_was, "the fullscreen button changes the window mode")
+		expect(slice.pause.fullscreen_button.text == DisplaySettings.fullscreen_label(), "and the button says which")
+		slice.pause.fullscreen_button.pressed.emit()
+		await frames(10)
+		expect(DisplaySettings.is_fullscreen() == fs_was, "and changes it back")
+		if not had_fs:
+			cfg.load(LocaleSettings.PATH)
+			cfg.erase_section_key("display", "fullscreen")
+			cfg.save(LocaleSettings.PATH)
 	slice.pause.close()
 	await frames(5)
 	expect(not paused and not slice.pause.visible, "resume carries on")

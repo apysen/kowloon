@@ -26,18 +26,19 @@ const NAMES := [
 ]
 
 ## Objectives remind; they never solve. No distances, no markers.
+## [objective, hint] as keys into data/i18n/strings.csv.
 const OBJECTIVES := {
 	START: ["", ""],
-	MEDICINE_RECEIVED: ["Bring Grandfather's medicine to Mrs. Wong.", "Grandfather said to follow the blue pipe."],
-	REACHED_LAU: ["Mr. Lau wants a photograph.", "Press C to raise the camera."],
-	LAU_PHOTO: ["Find a way upstairs.", "“When you reach Lau's place, go up.”"],
-	CATWALK_BLOCKED: ["Someone's washing is blocking the catwalk.", "It's still dripping. Whoever hung it lives close by."],
-	MET_CHAN: ["Find Wai.", "“He's probably gone up to the roof again.”"],
-	SEARCHING_FOR_SON: ["Find Wai.", "“He's probably gone up to the roof again.”"],
-	FOUND_SON: ["One of Mr. Ng's pigeons won't come down.", "“She won't come down unless she can see the way.”"],
-	HELPED_NG: ["Take Mr. Ng's photograph.", "“Get the birds in it.”"],
-	FABRIC_MOVED: ["Bring Grandfather's medicine to Mrs. Wong.", "Wai went to fetch the washing."],
-	MEDICINE_DELIVERED: ["Return home.", ""],
+	MEDICINE_RECEIVED: ["obj.medicine.main", "obj.medicine.hint"],
+	REACHED_LAU: ["obj.reached_lau.main", "obj.reached_lau.hint"],
+	LAU_PHOTO: ["obj.lau_photo.main", "obj.lau_photo.hint"],
+	CATWALK_BLOCKED: ["obj.catwalk.main", "obj.catwalk.hint"],
+	MET_CHAN: ["obj.find_wai.main", "obj.find_wai.hint"],
+	SEARCHING_FOR_SON: ["obj.find_wai.main", "obj.find_wai.hint"],
+	FOUND_SON: ["obj.pigeon.main", "obj.pigeon.hint"],
+	HELPED_NG: ["obj.ng_photo.main", "obj.ng_photo.hint"],
+	FABRIC_MOVED: ["obj.medicine.main", "obj.fabric_moved.hint"],
+	MEDICINE_DELIVERED: ["obj.return_home.main", ""],
 	RETURNED_HOME: ["", ""],
 	COMPLETE: ["", ""],
 }
@@ -50,6 +51,9 @@ static func name_of(stage: int) -> String:
 ## Flags implied by a stage, so debug jumps always leave a consistent world.
 static func flags_for(stage: int) -> Dictionary:
 	return {
+		"setup_boxes": true,
+		"setup_blue_pipe": stage >= MEDICINE_RECEIVED,
+		"setup_mei_photographs": stage >= LAU_PHOTO,
 		"received_camera": stage >= MEDICINE_RECEIVED,
 		"photographed_lau": stage >= LAU_PHOTO,
 		"met_chan": stage >= MET_CHAN,

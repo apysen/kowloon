@@ -11,6 +11,8 @@ extends Node3D
 signal path_finished
 
 const SPEED := 4.2
+## Walking with the camera up at her eye: careful steps.
+const FP_SPEED := 2.3
 const RADIUS := 0.32
 
 @export var locks: ControlLocks
@@ -34,6 +36,9 @@ var _climb_facing := Vector3.ZERO
 var moving := false
 ## Set for a frame by a scripted move (pushing the crate) so the walk plays.
 var moving_override := false
+## Set while the camera is at her eye: she walks relative to where she looks
+## (the only thing holding her is the camera itself).
+var first_person := false
 
 
 func band() -> int:
@@ -88,6 +93,18 @@ func _process(delta: float) -> void:
 		else:
 			position += to * (step / dist)
 		moving = true
+	elif first_person:
+		var before := position
+		if locks.reasons() == ["camera"]:
+			var input := Input.get_vector("move_left", "move_right", "move_down", "move_up")
+			if input.length_squared() > 0.0:
+				var world := ViewMath.camera_relative(input.normalized(), cam.fp_yaw) * FP_SPEED * delta
+				position = walk_space.slide(position, world, RADIUS)
+		facing = -ViewMath.back(cam.fp_yaw)
+		var walked := Vector2(position.x - before.x, position.z - before.z).length()
+		moving = walked > 1e-4
+		cam.fp_feet = position
+		cam.fp_step(walked, delta)
 	elif not locks.is_locked():
 		var input := Input.get_vector("move_left", "move_right", "move_down", "move_up")
 		if input.length_squared() > 0.0:

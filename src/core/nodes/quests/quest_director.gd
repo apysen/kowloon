@@ -1,7 +1,7 @@
 class_name QuestDirector
-extends Node
+extends ChapterDirector
 
-## The Blue Pipe, start to finish. Linear narrative, spatial freedom.
+## Chapter 1, The Blue Pipe, start to finish. Linear narrative, spatial freedom.
 ##
 ## Owns the story stage and its flags, every conversation branch, the
 ## perspective discoveries (the service door, the airshaft handholds, the lost
@@ -13,43 +13,24 @@ signal ending_started
 
 const S := preload("res://src/core/models/quests/quest_stage.gd")
 
-@export var slice: SliceRoot
-
-var stage := QuestStage.START
-var objective := ""
-var hint := ""
 var flags := {
 	"received_camera": false, "photographed_lau": false, "met_chan": false, "found_chan_son": false,
 	"helped_ng": false, "fabric_moved": false, "delivered_medicine": false, "returned_home": false,
 	"rooftop_visited": false, "roof_door_open": false, "pigeon_found": false,
 	# setups the later chapters pay off
 	"setup_old_photo_seen": false, "setup_lau_windows": false, "setup_ng_home_line": false, "setup_wong_bet": false,
+	"setup_boxes": false, "setup_blue_pipe": false, "theme_rotation": false, "setup_mei_photographs": false,
+	"setup_mei_not_subject": false, "mum_kit_mentioned": false,
 }
-var timings: Dictionary = {}
-var start_time := 0.0
-
-var world: World
-var player: Player
-var cam: CameraRig
-var dialogue: DialogueDirector
-var interaction: InteractionDirector
-var photography: PhotographyDirector
-var scrapbook: Scrapbook
-var audio: AudioZones
-var hud: Hud
-var fade: ScreenFade
-var locks: ControlLocks
-
 var errand: Dictionary = {}
 var sheet_down := false
 var ng_briefed := false
-var _tasks: Array[Dictionary] = []
-var _seen: Dictionary = {}
 var _hints := {"move": true, "rotate": false, "camera": false, "scrapbook": false}
 var _moved := 0.0
 var _last_pos := Vector3.ZERO
 var _dead_end_t := 0.0
 var _pigeon_anim: Dictionary = {}
+var _pigeon_home := false
 var _sheet_t := -1.0
 var _homecoming := false
 var _lau_intro_done := false
@@ -61,32 +42,57 @@ var _tutorial := false
 
 
 func setup() -> void:
-	world = slice.world
-	player = slice.player
-	cam = slice.cam
-	dialogue = slice.dialogue
-	interaction = slice.interaction
-	photography = slice.photography
-	scrapbook = slice.scrapbook
-	audio = slice.audio
-	hud = slice.hud
-	fade = slice.fade
-	locks = slice.locks
+	_bind()
 	photography.photo_kept.connect(_on_photo_kept)
 	photography.subject_locked.connect(_on_subject_locked)
 	photography.shutter_ready = _shutter_ready
 	dialogue.event_fired.connect(_on_dialogue_event)
 	world.resident_blocked.connect(func(id: String) -> void:
 		if id == "son":
-			hud.notice("Wai: “Excuse me, Mei, coming through!”", 2.4))
+			hud.notice("notice.wai_coming_through", 2.4))
+	_register_shared()
 	_register_interactions()
 	_register_photo_targets()
-	start_time = Time.get_ticks_msec() / 1000.0
+	flags.setup_boxes = true      # the flat loads with Mum already packing
 
 
-func mark(name: String) -> void:
-	if not timings.has(name):
-		timings[name] = Time.get_ticks_msec() / 1000.0 - start_time
+func is_complete() -> bool:
+	return stage == S.COMPLETE
+
+
+func stage_name() -> String:
+	return QuestStage.name_of(stage)
+
+
+func can_go_upstairs() -> bool:
+	return stage >= S.LAU_PHOTO
+
+
+func roof_door_open() -> bool:
+	return flags.roof_door_open
+
+
+func ladder_reachable() -> bool:
+	return crate_placed
+
+
+func ladder_found() -> bool:
+	return crate_found
+
+
+func _ladder_free() -> bool:
+	return _push.is_empty()
+
+
+func _look_at_old_photo() -> void:
+	# the print itself, held up close while they talk about it; Grandfather has something to say about it once
+	hud.show_photo(OLD_PHOTO)
+	if flags.setup_old_photo_seen:
+		say("old_photo_again", hud.hide_photo)
+	else:
+		say("old_photo", func() -> void:
+			flags.setup_old_photo_seen = true
+			hud.hide_photo())
 
 
 # ----------------------------------------------------------------------------- stage
@@ -117,6 +123,7 @@ func force_stage(s: int) -> void:
 		crate_found = true
 		crate_placed = true
 		world.move_crate(world.refs.crateEnd)
+	_pigeon_home = s >= S.HELPED_NG
 	if s >= S.HELPED_NG:
 		flags.pigeon_found = true
 		if not sheet_down:
@@ -130,98 +137,27 @@ func _sync_world() -> void:
 	flags.fabric_moved = world.fabric_state != "catwalk"
 	if stage >= S.FABRIC_MOVED:
 		flags.roof_door_open = not errand.is_empty() and errand.get("door_open", false)
+	# Mum has gone out by the time Mei gets home ("Your mother saved you some rice")
+	var mum: Resident = world.residents.get("mum")
+	var mum_out := stage >= S.MEDICINE_DELIVERED
+	if mum and mum.gone != mum_out:
+		mum.gone = mum_out
+		mum.visible = not mum_out
 	var bird: Node3D = world.special.LostPigeon
 	if _pigeon_anim.is_empty():
 		var path := world.level_data.pigeon_path
-		bird.position = path[path.size() - 1] if stage >= S.HELPED_NG else path[0]
-
-
-# ----------------------------------------------------------------------------- helpers
-
-
-func say(id: Variant, then := Callable()) -> void:
-	var r := _speaker_resident(id)
-	if r:
-		r.face_toward(player.position, 4.0)
-	dialogue.start(id, then)
-
-
-func _speaker_resident(id: Variant) -> Resident:
-	if not id is String:
-		return null
-	var key := String(id).split("_")[0]
-	var map := {"grandfather": "grandfather", "lau": "lau", "chan": "chan", "son": "son", "ng": "ng", "wong": "wong",
-		"chopper": "chopper", "mahjong": "mahjong2", "fanman": "fanman", "shopkeeper": "shopkeeper", "worker": "worker", "child": "child"}
-	if map.has(key):
-		return world.residents.get(map[key])
-	return null
-
-
-## A line the first time only; afterwards just do the action.
-func once(id: String, then: Callable) -> void:
-	if _seen.has(id):
-		then.call()
-		return
-	_seen[id] = true
-	say(id, then)
-
-
-func later(fn: Callable, secs := 0.0, cond := Callable()) -> void:
-	_tasks.append({"t": secs, "fn": fn, "cond": cond})
-
-
-func _run_tasks(delta: float, paused: bool) -> void:
-	if paused:
-		return
-	var due: Array[Callable] = []
-	var keep: Array[Dictionary] = []
-	for task in _tasks:
-		task.t -= delta
-		if task.t <= 0.0 and (not (task.cond as Callable).is_valid() or (task.cond as Callable).call()):
-			due.append(task.fn)
-		else:
-			keep.append(task)
-	_tasks = keep
-	for fn in due:
-		fn.call()
-
-
-func mei_near(x: float, y: float, z: float, r: float) -> bool:
-	var p := player.position
-	return absf(p.y - y) < 1.0 and Vector2(p.x - x, p.z - z).length() < r
-
-
-func transition(pos: Vector3, steps := 8, on_arrive := Callable()) -> void:
-	locks.lock("transition")
-	audio.footsteps(steps, 0.14)
-	await fade.fade_out(0.38)
-	player.teleport(pos)
-	_sync_world()
-	await get_tree().create_timer(0.25).timeout
-	fade.fade_in(0.45)
-	locks.unlock("transition")
-	if on_arrive.is_valid():
-		on_arrive.call()
+		# home in the coop from the moment she lands, not only once Mr. Ng has finished talking
+		bird.position = path[path.size() - 1] if (stage >= S.HELPED_NG or _pigeon_home) else path[0]
 
 
 func on_enter_roof() -> void:
-	if flags.rooftop_visited:
-		return
 	flags.rooftop_visited = true
-	mark("rooftopReached")
-	# a few quiet seconds with no dialogue and no interface, then a jet comes over
-	hud.set_quiet(true)
-	later(_roof_quiet_over, 6.0)
+	super.on_enter_roof()
 
 
 func _plane_over() -> void:
 	world.play_plane()
 	audio.plane()
-
-
-func _roof_quiet_over() -> void:
-	if not photography.active:
-		hud.set_quiet(false)
 
 
 # ----------------------------------------------------------------------------- interactions
@@ -230,14 +166,8 @@ func _roof_quiet_over() -> void:
 func _register_interactions() -> void:
 	var I := interaction
 	var w := world
-	var npc := w.residents
-	var talk := func(id: String, radius: float, fn: Callable) -> void:
-		var r: Resident = npc[id]
-		I.add({"id": id, "position": func() -> Vector3: return r.position, "radius": radius,
-			"priority": InteractionDirector.Priority.NPC, "verb": "Talk",
-			"can_interact": func() -> bool: return r.can_talk(), "interact": fn})
 
-	talk.call("grandfather", 1.5, func() -> void:
+	talk("grandfather", 1.5, func() -> void:
 		if stage == S.START:
 			say("grandfather_intro", func() -> void: set_stage(S.MEDICINE_RECEIVED))
 		elif stage >= S.RETURNED_HOME:
@@ -247,7 +177,13 @@ func _register_interactions() -> void:
 		else:
 			say("grandfather_idle"))
 
-	talk.call("lau", 2.0, func() -> void:
+	talk("mum", 1.4, func() -> void:
+		if not flags.mum_kit_mentioned:
+			_mum_kit()
+		else:
+			say("mum_idle"))
+
+	talk("lau", 2.0, func() -> void:
 		if stage <= S.MEDICINE_RECEIVED:
 			_lau_intro()
 		elif stage == S.REACHED_LAU:
@@ -259,7 +195,7 @@ func _register_interactions() -> void:
 		else:
 			say("lau_idle"))
 
-	talk.call("chan", 1.9, func() -> void:
+	talk("chan", 1.9, func() -> void:
 		if stage < S.CATWALK_BLOCKED:
 			say("chan_early")
 		elif stage == S.CATWALK_BLOCKED:
@@ -276,7 +212,7 @@ func _register_interactions() -> void:
 		else:
 			say("chan_after"))
 
-	talk.call("son", 1.6, func() -> void:
+	talk("son", 1.6, func() -> void:
 		var step: String = errand.get("step", "")
 		if step == "waiting" or step == "unpinning":
 			say("son_catwalk")
@@ -293,7 +229,7 @@ func _register_interactions() -> void:
 		else:
 			say("son_shh"))
 
-	talk.call("ng", 1.9, func() -> void:
+	talk("ng", 1.9, func() -> void:
 		if stage < S.MET_CHAN:
 			say("ng_stranger")
 		elif stage < S.FOUND_SON:
@@ -308,7 +244,7 @@ func _register_interactions() -> void:
 		else:
 			say("ng_after"))
 
-	talk.call("wong", 1.9, func() -> void:
+	talk("wong", 1.9, func() -> void:
 		if stage >= S.MEDICINE_DELIVERED:
 			say("wong_after")
 			return
@@ -318,32 +254,11 @@ func _register_interactions() -> void:
 	for amb in [["chopper", "chopper", 1.8], ["mahjong2", "mahjong", 1.9], ["fanman", "fanman", 1.3],
 			["shopkeeper", "shopkeeper", 2.2], ["worker", "worker", 1.5], ["child", "child", 1.5]]:
 		var line: String = amb[1]
-		talk.call(amb[0], amb[2], func() -> void: say(line))
+		talk(amb[0], amb[2], func() -> void: say(line))
 
 	var refs := w.refs
-	I.add({"id": "stairsUp", "position": refs.stairsUpA, "radius": 1.3, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Go upstairs", "interact": func() -> void:
-			if stage < S.LAU_PHOTO:
-				say("stairs_blocked")
-				return
-			transition(Vector3(9.2, LevelBuilder.LEVEL_B, -12.4))})
-	I.add({"id": "stairsDown", "position": refs.stairsDownB, "radius": 1.0, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Go downstairs", "interact": func() -> void: transition(Vector3(9.3, LevelBuilder.LEVEL_A, -12.6))})
-	I.add({"id": "roofDoorB", "position": refs.roofDoorB, "radius": 1.0, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Roof door", "interact": func() -> void:
-			if not flags.roof_door_open:
-				say("roofdoor_latched")
-				return
-			transition(Vector3(10.4, LevelBuilder.LEVEL_ROOF, -11.2), 14, on_enter_roof)})
-	I.add({"id": "roofDoorTop", "position": refs.roofDoorTop, "radius": 1.1, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Stairwell door", "interact": func() -> void:
-			if not flags.roof_door_open:
-				say("roofdoor_top_stuck")
-				return
-			transition(Vector3(10.6, LevelBuilder.LEVEL_B, -13.2), 14)})
-
 	I.add({"id": "fabric", "position": refs.fabricPos, "radius": 1.4, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Look",
+		"verb": "verb.look",
 		"can_interact": func() -> bool: return w.fabric_state == "catwalk" and not (errand.get("step", "") in ["waiting", "unpinning"]),
 		"interact": func() -> void:
 			if stage == S.LAU_PHOTO:
@@ -351,83 +266,30 @@ func _register_interactions() -> void:
 			else:
 				say("fabric_again")})
 
-	# the service door at the end of the hall: no prompt, and it won't open,
-	# until Mei has actually seen it
-	var door := w.door("serviceDoor")
-	I.add({"id": "serviceDoor", "radius": 1.3, "priority": InteractionDirector.Priority.QUEST, "verb": "Door",
-		"position": func() -> Vector3:
-			var n: Vector3 = door.normal
-			var side := signf((player.position - (door.pos as Vector3)).dot(n))
-			if side == 0.0:
-				side = 1.0
-			return (door.pos as Vector3) + n * side * 0.7,
-		"can_interact": func() -> bool: return door.discovered and not door.open,
-		"interact": func() -> void:
-			audio.creak()
-			w.open_door(door)})
-
 	# the airshaft: the ladder's bottom rungs have rusted away. An old crate is
 	# hidden behind a broken fridge; turn the view to find it, push it under the
 	# ladder, and climb.
-	I.add({"id": "crate", "radius": 1.2, "priority": InteractionDirector.Priority.QUEST, "verb": "Push",
+	I.add({"id": "crate", "radius": 1.2, "priority": InteractionDirector.Priority.QUEST, "verb": "verb.push",
 		"position": func() -> Vector3: return (w.special.Crate as Node3D).global_position,
 		"can_interact": func() -> bool: return crate_found and not crate_placed and _push.is_empty(),
 		"interact": _push_crate})
-	I.add({"id": "shaftBase", "position": refs.shaftBase, "radius": 1.8, "priority": InteractionDirector.Priority.QUEST,
-		"verb": func() -> String: return "Climb" if crate_placed else "Look up",
-		"can_interact": func() -> bool: return _push.is_empty(),
-		"interact": func() -> void:
-			if not crate_placed:
-				say("shaft_look_found" if crate_found else "shaft_look")
-				return
-			once("shaft_climb", func() -> void:
-				audio.creak()
-				player.traverse(w.level_data.climb_nodes, 2.0, on_enter_roof, true, Vector3(-1, 0, 0)))})
-	I.add({"id": "shaftTop", "position": refs.shaftTop, "radius": 1.2, "priority": InteractionDirector.Priority.QUEST,
-		"verb": func() -> String: return "Climb down" if crate_placed else "Look down",
-		"interact": func() -> void:
-			if not crate_placed:
-				say("shaft_down_unknown")
-				return
-			audio.creak()
-			var nodes := w.level_data.climb_nodes.duplicate()
-			nodes.reverse()
-			nodes.append(Vector3(-5, LevelBuilder.LEVEL_B, -17.6))
-			player.traverse(nodes, 2.2, _sync_world, true, Vector3(-1, 0, 0))})
-
 	# the lost pigeon: find her first (the tank hides her from most sides),
 	# then work out why she won't come down
 	I.add({"id": "sheet", "position": refs.sheetSpot, "radius": 1.6, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Look", "can_interact": func() -> bool: return not sheet_down,
+		"verb": "verb.look", "can_interact": func() -> bool: return not sheet_down,
 		"interact": func() -> void:
 			if stage == S.FOUND_SON and flags.pigeon_found:
 				once("sheet_unpin", _unpin_sheet)
 			else:
 				say("sheet_plain")})
 
+	# the empty flat's back window: nothing to do with today
+	look("unitWindowLook", refs.unitWindowOutside, "env.unit_window", 1.0)
+
 	# the packing boxes: worth a look only once Mei is home again
 	I.add({"id": "boxes", "position": refs.boxes, "radius": 1.3, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "Look", "can_interact": func() -> bool: return stage == S.RETURNED_HOME,
+		"verb": "verb.look", "can_interact": func() -> bool: return stage == S.RETURNED_HOME,
 		"interact": func() -> void: say("boxes_end", _ending)})
-
-	# the old photograph on the wall: Grandfather has something to say about it once
-	I.add({"id": "oldPhoto", "position": refs.oldPhoto, "radius": 1.1, "priority": InteractionDirector.Priority.ENV,
-		"verb": "Look", "interact": func() -> void:
-			if flags.setup_old_photo_seen:
-				say("old_photo_again")
-			else:
-				say("old_photo", func() -> void: flags.setup_old_photo_seen = true)})
-
-	var env := func(id: String, pos: Vector3, text: String, radius := 1.3, pri := InteractionDirector.Priority.ENV) -> void:
-		I.add({"id": id, "position": pos, "radius": radius, "priority": pri, "verb": "Look",
-			"interact": func() -> void: say([{"speaker": "", "text": text}])})
-	env.call("radio", refs.radio, "Grandfather's radio. Something cheerful, half lost in static.", 1.2)
-	env.call("chair", Vector3(4.9, 0, -11.0), "The old dental chair. The vinyl is patched with tape in three places.", 1.1)
-	env.call("sign", refs.lauSign, "劉牙科. Lau Dental. The paint on the sign is older than you are.", 1.0, InteractionDirector.Priority.DECOR)
-	env.call("notice", Vector3(-2.6, 0, -0.5), "The Housing Department's notice. Everyone has read it. Nobody talks about it.", 1.0, InteractionDirector.Priority.DECOR)
-	env.call("coop", refs.coop, "Mr. Ng's coop. Every bird has a name written on a strip of tape.", 1.4, InteractionDirector.Priority.DECOR)
-	env.call("dead-end", Vector3(1.2, 0, -0.5), "The blue pipe runs straight into the wall.", 1.0, InteractionDirector.Priority.DECOR)
-	env.call("well", Vector3(18, LevelBuilder.LEVEL_B, -12), "Far below, the alley is full of other people's rubbish.", 1.0, InteractionDirector.Priority.DECOR)
 
 
 func _register_photo_targets() -> void:
@@ -479,7 +341,7 @@ func _errand_unpin() -> void:
 	son.face_toward(Vector3(16, LevelBuilder.LEVEL_B, -12), 3.5)
 	son.idle_anim = "work"
 	son.sprite.play("work")
-	hud.notice("Wai: “Hold on, they're still wet!”", 3.2)
+	hud.notice("notice.wai_still_wet", 3.2)
 	later(_errand_carry, 3.5)
 
 
@@ -567,7 +429,7 @@ func _discover() -> void:
 		if cam.on_screen(crate) and not _hidden_by_fridge(crate):
 			crate_found = true
 			audio.chime()
-			hud.notice("An old crate, hidden behind the broken fridge.", 3.2)
+			hud.notice("notice.crate_found", 3.2)
 
 	# the pigeon: really hidden by the tank, checked with a ray
 	if not flags.pigeon_found and p.y > 12.0 and stage < S.HELPED_NG:
@@ -575,8 +437,7 @@ func _discover() -> void:
 		if bird.distance_to(p) < 16.0 and cam.on_screen(bird) and not _occluded_by_tank(bird):
 			flags.pigeon_found = true
 			audio.chime()
-			hud.notice("There she is, tucked in behind the water tank." if stage >= S.FOUND_SON
-				else "A pigeon, tucked in behind the water tank.", 3.6)
+			hud.notice("notice.pigeon_found_known" if stage >= S.FOUND_SON else "notice.pigeon_found", 3.6)
 
 
 func _occluded_by_tank(target: Vector3) -> bool:
@@ -716,7 +577,14 @@ func _perspective_tutorial() -> void:
 	await get_tree().create_timer(0.6).timeout
 	hud.tutorial_hide()
 	_tutorial = false
-	hud.show_hint("[WASD] Move    [F] Interact")
+	flags.theme_rotation = true
+	hud.show_hint("hint.move_interact")
+
+
+## Mum, without looking up from the boxes, as Mei heads for the door.
+func _mum_kit() -> void:
+	flags.mum_kit_mentioned = true
+	say("mum_kit")
 
 
 func _lau_intro() -> void:
@@ -727,7 +595,7 @@ func _lau_intro() -> void:
 	say("lau_intro", func() -> void:
 		set_stage(S.REACHED_LAU)
 		_hints.camera = true
-		hud.show_hint("[C] Raise the camera"))
+		hud.show_hint("hint.raise_camera"))
 
 
 func _guide_pigeon() -> void:
@@ -772,13 +640,14 @@ func _tick_flap(delta: float) -> void:
 
 func _on_pigeon_home() -> void:
 	_pigeon_anim = {}
+	_pigeon_home = true
 	var bird: CharacterSprite = world.special.LostPigeon
 	bird.play("idle")
 	locks.unlock("pigeon")
 	audio.coo()
 	say("ng_helped", func() -> void:
 		set_stage(S.HELPED_NG)
-		hud.show_hint("[C] Raise the camera")
+		hud.show_hint("hint.raise_camera")
 		_hints.camera = true)
 
 
@@ -820,7 +689,7 @@ func _on_photo_kept(id: String) -> void:
 		say("lau_after_photo", func() -> void:
 			set_stage(S.LAU_PHOTO)
 			_hints.scrapbook = true
-			hud.show_hint("[TAB] Scrapbook")
+			hud.show_hint("hint.scrapbook")
 			later(_clear_scrapbook_hint, 9.0))
 	elif id == "ng":
 		say("son_leaves", func() -> void:
@@ -853,7 +722,7 @@ func _ending() -> void:
 	audio.silence(3.2)
 	ending_started.emit()
 	await fade.fade_out(3.0)
-	slice.ending.play()
+	slice.ending.play(30, "ending.ch1", Progress.LAST > 1)
 
 
 # ----------------------------------------------------------------------------- per frame
@@ -900,7 +769,7 @@ func tick(delta: float, paused: bool) -> void:
 	_dead_end_t = _dead_end_t + delta if (at_dead_end and not door.discovered) else 0.0
 	if _dead_end_t > 2.5 and not _hints.rotate:
 		_hints.rotate = true
-		hud.show_hint("[Q] [E] Turn the view")
+		hud.show_hint("hint.turn_view")
 	elif _hints.rotate and (door.discovered or not at_dead_end):
 		_hints.rotate = false
 		hud.show_hint("")
@@ -911,6 +780,14 @@ func tick(delta: float, paused: bool) -> void:
 	if _hints.scrapbook and scrapbook.open:
 		_hints.scrapbook = false
 		hud.show_hint("")
+	# the album's first pages: everyone Mei has seen, and never Mei
+	if scrapbook.open and not flags.setup_mei_not_subject:
+		flags.setup_mei_not_subject = true
+
+	# getting ready to leave: Mum mentions Kit on Mei's way to the door
+	if stage == S.MEDICINE_RECEIVED and not flags.mum_kit_mentioned and not _tutorial and not locks.is_locked() \
+			and p.y < 1.0 and p.x > -8.2 and p.x < -6.0 and absf(p.z) < 1.6:
+		_mum_kit()
 
 	# walking into Lau's clinic
 	if stage == S.MEDICINE_RECEIVED and p.y < 1.0 and p.x > 0.0 and p.x < 8.0 and p.z < -9.4 and p.z > -15.0 and not locks.is_locked():

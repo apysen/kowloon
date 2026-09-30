@@ -20,10 +20,10 @@ var _list: Array[Dictionary] = []
 var _prompt := ""
 
 
-## def: id, position (Vector3 or Callable), radius, priority, verb (String or Callable),
-##      can_interact (Callable), interact (Callable)
+## def: id, position (Vector3 or Callable), radius, priority, verb (a string key,
+##      or a Callable returning one), can_interact (Callable), interact (Callable)
 func add(def: Dictionary) -> Dictionary:
-	var item := {"radius": 1.5, "priority": Priority.ENV, "verb": "Look",
+	var item := {"radius": 1.5, "priority": Priority.ENV, "verb": "verb.look",
 		"can_interact": func() -> bool: return true}
 	item.merge(def, true)
 	_list.append(item)
@@ -68,7 +68,8 @@ func _process(_delta: float) -> void:
 		_set_prompt("")
 	else:
 		var verb: Variant = best.verb
-		_set_prompt("[F] " + (String((verb as Callable).call()) if verb is Callable else String(verb)))
+		var key := String((verb as Callable).call()) if verb is Callable else String(verb)
+		_set_prompt(tr("prompt.interact").format({"verb": tr(key)}))
 
 
 func trigger() -> void:
@@ -78,6 +79,11 @@ func trigger() -> void:
 	current = {}
 	_set_prompt("")
 	(it.interact as Callable).call()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED:
+		_prompt = ""      # said again, in the new language, next frame
 
 
 func _set_prompt(text: String) -> void:
