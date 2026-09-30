@@ -761,6 +761,11 @@ def c5_props():
     save(img.rotate(-3, resample=Image.BICUBIC), "chalk_fong")
 
 
+def side_props():
+    # Auntie Fong's old shop sign, strung across the slot behind Chiu's workshop
+    save(board("方記涼茶", (576, 352), (150, 34, 30, 255), (236, 196, 110, 255), 161, sub="FONG'S HERBAL TEA"), "sign_fong")
+
+
 if __name__ == "__main__":
     contact_shadow()
     soft_dot()
@@ -790,3 +795,4 @@ if __name__ == "__main__":
     album_page_stack()
     c4_props()
     c5_props()
+    side_props()

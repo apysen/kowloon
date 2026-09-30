@@ -23,6 +23,7 @@ static func build(b: LevelBuilder) -> void:
 	airshaft(b)
 	chapter_props(b)
 	BuildQuietRooms.build(b)
+	BuildSideQuests.build(b)
 	roof(b)
 	pipes(b)
 	characters(b)

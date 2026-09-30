@@ -23,6 +23,13 @@ extends ChapterDirector
 ## cords run side by side across the courtyard; where they part, only a turned
 ## view shows which goes into the hall (a radio) and which under the storage
 ## room's door. Behind its shelves, seen from the far side, the plug is out.
+##
+## And (OQ03, Auntie Fong's Sign): Mrs. Fong, out on her ledge, wants her
+## husband's old shop sign down before the demolition men get it. It spans the
+## slot behind Chiu's workshop, bolted at each end: one end from the workshop
+## roof (up through the hatch), the other from the neighbours' balcony, which
+## from the front looks joined to the roof and isn't. The way onto it is a
+## steel ladder up the lane's south wall, seen only looking back from the north.
 
 enum {
 	START,
@@ -50,6 +57,8 @@ var flags := {
 	"lau_talked": false, "wong_packing_seen": false, "payoff_lau_windows": false, "theme_line_somebody_shows_you": false,
 	"cheng_respect_mei": false, "after_unlocked": false, "kit_lift": false,
 	"oq02_stopped": false, "oq02_ho": false, "oq02_traced": false, "oq02_plug_seen": false, "oq02_fixed": false, "oq02_done": false,
+	"oq03_asked": false, "oq03_roof": false, "oq03_balcony": false, "oq03_slot_seen": false, "oq03_ladder_seen": false,
+	"oq03_down": false, "oq03_done": false,
 }
 
 var _stage_t := 0.0
@@ -141,6 +150,13 @@ func _live_hint() -> String:
 	var fan := _fan_hint()
 	if fan != "":
 		lines.append(tr(fan))
+	if flags.oq03_asked and not flags.oq03_done:
+		if flags.oq03_down:
+			lines.append(tr("c4.need.fong_tell"))
+		elif flags.oq03_slot_seen and not flags.oq03_balcony:
+			lines.append(tr("c4.need.fong_balcony"))
+		else:
+			lines.append(tr("c4.need.fong"))
 	return "\n".join(lines)
 
 
@@ -189,6 +205,7 @@ func _prepare_world() -> void:
 	_pose(world.residents.kit, world.refs.kitWorkshop, Vector3(0, 0, 1), "sweep")
 	# Ho at his fans as ever; Ng up with his birds
 	_pose(world.residents.fanman, Vector3(-3.4, 0, 0.35), Vector3(0, 0, 1), "work")
+	_set_gone(world.level.get_node_or_null("ChapterProps/Ch4/FongSignDown"), true)
 	_sync_world()
 
 
@@ -300,6 +317,7 @@ func _register_people() -> void:
 	talk("son", 1.6, _talk_chans)
 	talk("kit", 1.6, _talk_kit)
 	talk("fanman", 1.6, _talk_ho)
+	talk("fong", 1.7, _talk_fong)
 	talk("ng", 1.9, func() -> void: say("c4_ng"))
 	talk("shopkeeper", 2.2, func() -> void: say("c4_kwok"))
 	talk("chopper", 1.8, func() -> void: say("c4_chopper"))
@@ -386,6 +404,69 @@ func _trace_fan() -> void:
 		audio.chime()
 		hud.notice("notice.c4_plug_seen", 3.2)
 		_refresh_hint()
+
+
+# ----------------------------------------------------------------------------- OQ03, Auntie Fong's sign
+
+
+func _talk_fong() -> void:
+	if flags.oq03_done:
+		say("c4_fong_after")
+	elif flags.oq03_down:
+		flags.oq03_done = true
+		mark("oq03Done")
+		say("c4_fong_done", _refresh_hint)
+	elif flags.oq03_asked:
+		say("c4_fong_wait")
+	else:
+		flags.oq03_asked = true
+		mark("oq03Asked")
+		say("c4_fong", _refresh_hint)
+
+
+func _unbolt(which: String) -> void:
+	flags[which] = true
+	mark(which)
+	audio.play("ratchet", 0.5, 1.4)
+	if flags.oq03_roof and flags.oq03_balcony:
+		say("c4_fong_bolt_last", func() -> void:
+			flags.oq03_down = true
+			_set_gone(world.level.get_node_or_null("ChapterProps/Ch1-4/FongSign"), true)
+			_set_gone(world.level.get_node_or_null("ChapterProps/Ch4/FongSignDown"), false)
+			audio.play("crate_down", 0.6, 0.8)
+			_refresh_hint())
+	else:
+		say("c4_fong_bolt_first", _refresh_hint)
+
+
+## From the workshop roof, the balcony looks joined on; from the side it isn't.
+## From the lane, the ladder up its wall shows only looking back from the north.
+func _look_for_fong_way() -> void:
+	if not flags.oq03_asked or flags.oq03_down or cam.rotating or locks.is_locked() or dialogue.is_open():
+		return
+	var p := player.position
+	var R := BuildWorkshop.ROOF_Y
+	if not flags.oq03_slot_seen and absf(p.y - R) < 0.5 and p.x > -7.0 and p.x < 0.0 and p.z > 2.4 and p.z < 4.0 \
+			and (cam.direction == 1 or cam.direction == 3):
+		flags.oq03_slot_seen = true
+		mark("oq03SlotSeen")
+		say("c4_fong_slot", _refresh_hint)
+		return
+	if not flags.oq03_ladder_seen and p.y < 1.0 and p.x > -3.5 and p.x < 1.8 and p.z > 4.3 and p.z < 6.0 and cam.direction == 2:
+		flags.oq03_ladder_seen = true
+		mark("oq03LadderSeen")
+		audio.chime()
+		say("c4_ladder_seen", _refresh_hint)
+
+
+func _set_gone(n: Node, gone: bool) -> void:
+	if n == null:
+		return
+	if n is Node3D:
+		n.set_meta("gone", gone)
+		(n as Node3D).visible = not gone
+	for c in n.get_children():
+		_set_gone(c, gone)
 
 
 func _plug_in() -> void:
@@ -535,6 +616,30 @@ func _register_route() -> void:
 				say("c4_panel")})
 	# the yamen, its cannons, its tree, the blackboard upstairs
 	look("hallDoor", refs.hallDoor, "env.c4_hall", 1.3)
+	# up through the workshop's hatch to its roof, and back down (Kit's left the ladder up)
+	I.add({"id": "ladderUp", "position": refs.ladderBase, "radius": 0.9, "priority": Q, "verb": "verb.climb",
+		"interact": func() -> void:
+			audio.creak()
+			transition(refs.hatchTop, 6)})
+	I.add({"id": "ladderDown", "position": refs.hatchTop, "radius": 0.8, "priority": Q, "verb": "verb.climb_down",
+		"interact": func() -> void:
+			audio.creak()
+			transition(refs.ladderBase + Vector3(0.3, 0, 0.6), 6)})
+	# Auntie Fong's sign: its bolts, and the ladder up the lane wall
+	for spec in [["fongBoltRoof", refs.fongBoltRoof, "oq03_roof"], ["fongBoltBalcony", refs.fongBoltBalcony, "oq03_balcony"]]:
+		var which: String = spec[2]
+		I.add({"id": spec[0], "position": spec[1], "radius": 0.9, "priority": Q, "verb": "verb.unbolt",
+			"can_interact": func() -> bool: return flags.oq03_asked and not flags[which],
+			"interact": func() -> void: _unbolt(which)})
+	I.add({"id": "laneLadderUp", "position": refs.laneLadder, "radius": 0.9, "priority": Q, "verb": "verb.climb",
+		"can_interact": func() -> bool: return flags.oq03_ladder_seen,
+		"interact": func() -> void:
+			audio.creak()
+			transition(refs.ladderTop, 10)})
+	I.add({"id": "laneLadderDown", "position": refs.ladderTop, "radius": 0.8, "priority": Q, "verb": "verb.climb_down",
+		"interact": func() -> void:
+			audio.creak()
+			transition(refs.laneLadder, 10)})
 	I.add({"id": "plug", "position": refs.socket, "radius": 1.0, "priority": Q, "verb": "verb.plug_in",
 		"can_interact": func() -> bool: return flags.oq02_plug_seen and not flags.oq02_fixed,
 		"interact": _plug_in})
@@ -714,5 +819,6 @@ func tick(delta: float, paused: bool) -> void:
 	_tick_wong()
 	_discover()
 	_trace_fan()
+	_look_for_fong_way()
 	_tick_fan(delta)
 	_tick_hints()

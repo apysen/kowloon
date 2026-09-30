@@ -539,6 +539,7 @@ func _register_route() -> void:
 			flags.dry_tap = true
 			say([{"speaker": "", "text": "env.c5_sink"}])})
 	look("foldedTable", Vector3(-3.4, 0, 2.2), "env.c5_folded_table", 1.0)
+	look("fongPosts", world.refs.fongBoltRoof, "env.c5_fong_posts", 1.0, InteractionDirector.Priority.DECOR)
 	look("emptyLine", Vector3(16.0, LevelBuilder.LEVEL_B, -12.0), "env.c5_line", 1.0, InteractionDirector.Priority.DECOR)
 	look("footbridgeGone", world.refs.footbridgeGap, "env.c5_footbridge", 0.9)
 

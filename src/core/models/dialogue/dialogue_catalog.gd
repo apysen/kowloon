@@ -1063,6 +1063,41 @@ const LINES := {
 		{"speaker": "mei", "text": "dlg.c4_fan_back.02"},
 		{"speaker": "cheung", "text": "dlg.c4_fan_back.03"},
 	],
+	"c4_fong": [
+		{"speaker": "fong", "text": "dlg.c4_fong.01"},
+		{"speaker": "mei", "text": "dlg.c4_fong.02"},
+		{"speaker": "fong", "text": "dlg.c4_fong.03"},
+		{"speaker": "fong", "text": "dlg.c4_fong.04"},
+		{"speaker": "fong", "text": "dlg.c4_fong.05"},
+		{"speaker": "fong", "text": "dlg.c4_fong.06"},
+		{"speaker": "mei", "text": "dlg.c4_fong.07"},
+		{"speaker": "fong", "text": "dlg.c4_fong.08"},
+	],
+	"c4_fong_wait": [
+		{"speaker": "fong", "text": "dlg.c4_fong_wait.01"},
+	],
+	"c4_fong_bolt_first": [
+		{"speaker": "", "text": "dlg.c4_fong_bolt_first.01"},
+	],
+	"c4_fong_bolt_last": [
+		{"speaker": "", "text": "dlg.c4_fong_bolt_last.01"},
+	],
+	"c4_fong_slot": [
+		{"speaker": "", "text": "dlg.c4_fong_slot.01"},
+	],
+	"c4_ladder_seen": [
+		{"speaker": "", "text": "dlg.c4_ladder_seen.01"},
+	],
+	"c4_fong_done": [
+		{"speaker": "mei", "text": "dlg.c4_fong_done.01"},
+		{"speaker": "fong", "text": "dlg.c4_fong_done.02"},
+		{"speaker": "mei", "text": "dlg.c4_fong_done.03"},
+		{"speaker": "fong", "text": "dlg.c4_fong_done.04"},
+		{"speaker": "fong", "text": "dlg.c4_fong_done.05"},
+	],
+	"c4_fong_after": [
+		{"speaker": "fong", "text": "dlg.c4_fong_after.01"},
+	],
 }
 
 
