@@ -43,8 +43,8 @@ func _run() -> void:
 		var pos := Vector3(float(xyz[0]), float(xyz[1]), float(xyz[2]))
 		var dir := int(parts[2]) if parts.size() > 2 else 0
 		var stage := int(parts[3]) if parts.size() > 3 else 1
-		if _slice.quests.stage != stage:
-			_slice.quests.force_stage(stage)
+		if _slice.director.stage != stage:
+			_slice.director.force_stage(stage)
 		_slice.player.teleport(pos)
 		while _slice.cam.direction != dir:
 			_slice.cam.rotate_view(1)

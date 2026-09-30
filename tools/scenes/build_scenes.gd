@@ -257,7 +257,7 @@ func build_dialogue_box() -> Control:
 	var who := label("", spaced(S.FONT_UI_BOLD, 2), 13, Color("1a1410"))
 	who.name = "Speaker"
 	add(tag, who, true)
-	var nudge := label("SPACE", spaced(S.FONT_MONO, 1), 11, S.CONCRETE_DIM)
+	var nudge := label("dialogue.next", spaced(S.FONT_MONO, 1), 11, S.CONCRETE_DIM)
 	nudge.name = "Nudge"
 	nudge.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 	nudge.offset_left = -64
@@ -293,7 +293,7 @@ func build_viewfinder() -> Control:
 	vig.texture = gt
 	vig.stretch_mode = TextureRect.STRETCH_SCALE
 	vig.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	var film := shadowed(label("●  INSTANT FILM", spaced(S.FONT_MONO, 2), 12, Color(0.94, 0.9, 0.82, 0.75)))
+	var film := shadowed(label("camera.film", spaced(S.FONT_MONO, 2), 12, Color(0.94, 0.9, 0.82, 0.75)))
 	film.name = "FilmLabel"
 	film.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	film.offset_left = -190
@@ -476,18 +476,18 @@ func build_ending() -> Control:
 	var lines := add(center, VBoxContainer.new(), true) as VBoxContainer
 	lines.name = "Lines"
 	lines.add_theme_constant_override("separation", 18)
-	for spec in [["Days", "30 DAYS UNTIL WE LEAVE", spaced(S.FONT_MONO, 4), 15, S.CONCRETE_DIM],
-			["Title", "PROJECT KOWLOON", spaced(S.FONT_UI_BOLD, 8), 44, S.CONCRETE],
-			["Sub", "VERTICAL SLICE COMPLETE", spaced(S.FONT_UI, 5), 14, S.PIPE]]:
+	# text is string keys (data/i18n/strings.csv); the countdown is filled in by EndingScreen
+	for spec in [["Days", "", spaced(S.FONT_MONO, 4), 15, S.CONCRETE_DIM],
+			["Title", "ending.title", spaced(S.FONT_UI_BOLD, 8), 44, S.CONCRETE],
+			["Sub", "ending.sub", spaced(S.FONT_UI, 5), 14, S.PIPE]]:
 		var l := label(spec[1], spec[2], spec[3], spec[4])
 		l.name = spec[0]
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		add(lines, l)
 	var replay := rich(14, S.CONCRETE_DIM)
-	replay.name = "Replay"
-	replay.text = "[center]" + S.keycaps("Press [R] to play again") + "[/center]"
+	replay.name = "Replay"       # its keycaps are drawn in the player's language by EndingScreen
 	replay.custom_minimum_size = Vector2(300, 0)
-	add(lines, replay)
+	add(lines, replay, true)
 	return root
 
 
@@ -519,7 +519,7 @@ func build_pause() -> Control:
 	rule.name = "PipeRule"
 	rule.color = S.PIPE
 	rule.custom_minimum_size = Vector2(3, 0)
-	var title := label("PAUSED", spaced(S.FONT_UI_BOLD, 6), 22, S.CONCRETE)
+	var title := label("pause.title", spaced(S.FONT_UI_BOLD, 6), 22, S.CONCRETE)
 	title.name = "Title"
 	add(head, title)
 	var gap := add(col, Control.new()) as Control
@@ -527,12 +527,12 @@ func build_pause() -> Control:
 	gap.custom_minimum_size = Vector2(0, 4)
 	var resume := add(col, Button.new(), true) as Button
 	resume.name = "Resume"
-	resume.text = "RESUME"
+	resume.text = "pause.resume"
 	# the volume: a label, the slider, and its number
 	var vrow := add(col, HBoxContainer.new()) as HBoxContainer
 	vrow.name = "VolumeRow"
 	vrow.add_theme_constant_override("separation", 14)
-	var vl := label("VOLUME", spaced(S.FONT_UI_BOLD, 3), 14, S.CONCRETE_DIM)
+	var vl := label("pause.volume", spaced(S.FONT_UI_BOLD, 3), 14, S.CONCRETE_DIM)
 	vl.name = "VolumeLabel"
 	vl.custom_minimum_size = Vector2(76, 0)
 	add(vrow, vl)
@@ -551,14 +551,19 @@ func build_pause() -> Control:
 	add(vrow, vv, true)
 	var gfx := add(col, Button.new(), true) as Button
 	gfx.name = "Graphics"
-	gfx.text = "GRAPHICS: FULL"
+	gfx.text = "pause.graphics_full"
+	var fs := add(col, Button.new(), true) as Button
+	fs.name = "Fullscreen"
+	fs.text = "ui.fullscreen_off"
+	var lang := add(col, Button.new(), true) as Button
+	lang.name = "Language"
+	lang.text = "ui.language"
 	var quit := add(col, Button.new(), true) as Button
 	quit.name = "Quit"
-	quit.text = "QUIT TO TITLE"
+	quit.text = "pause.quit"
 	var hint := rich(13, S.CONCRETE_DIM)
-	hint.name = "Hint"
-	hint.text = "[center]" + S.keycaps("[Esc] resume") + "[/center]"
-	add(col, hint)
+	hint.name = "Hint"          # keycaps drawn by PauseMenu, in the player's language
+	add(col, hint, true)
 	var tick := add(root, AudioStreamPlayer.new(), true) as AudioStreamPlayer
 	tick.name = "Tick"
 	tick.stream = load("res://assets/audio/blip.wav")
@@ -639,7 +644,7 @@ func build_title() -> Control:
 	col.name = "Copy"
 	col.add_theme_constant_override("separation", 14)
 	col.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	var name_l := label("PROJECT\nKOWLOON", spaced(S.FONT_UI_BOLD, 5), 60, S.CONCRETE)
+	var name_l := label("title.name", spaced(S.FONT_UI_BOLD, 5), 60, S.CONCRETE)
 	name_l.name = "Name"
 	name_l.add_theme_constant_override("line_spacing", -12)
 	add(col, name_l)
@@ -651,24 +656,44 @@ func build_title() -> Control:
 	pipe.color = S.PIPE
 	pipe.custom_minimum_size = Vector2(38, 6)
 	pipe.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	add(slice_row, label("THE BLUE PIPE", spaced(S.FONT_UI_BOLD, 4), 15, S.PIPE))
-	var copy := label("Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help.",
-		S.FONT_UI_REGULAR, 15, S.CONCRETE_DIM)
+	add(slice_row, label("title.slice", spaced(S.FONT_UI_BOLD, 4), 15, S.PIPE))
+	var copy := label("title.blurb", S.FONT_UI_REGULAR, 15, S.CONCRETE_DIM)
 	copy.name = "Blurb"
 	copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	copy.custom_minimum_size = Vector2(400, 0)
 	add(col, copy)
+	var cont := Button.new()
+	cont.name = "Continue"
+	cont.text = "title.continue"
+	cont.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	var btn := Button.new()
 	btn.name = "Begin"
-	btn.text = "BEGIN"
+	btn.text = "title.begin"
 	btn.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	add(col, btn, true)
+	var buttons := add(col, HBoxContainer.new()) as HBoxContainer
+	buttons.name = "Buttons"
+	buttons.add_theme_constant_override("separation", 18)
+	add(buttons, cont, true)
+	add(buttons, btn, true)
+	var fs := Button.new()
+	fs.name = "Fullscreen"
+	fs.text = "ui.fullscreen_off"
+	fs.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	add(buttons, fs, true)
+	var lang := Button.new()
+	lang.name = "Language"
+	lang.text = "ui.language"
+	lang.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	add(buttons, lang, true)
+	# the dev build's chapter picker: filled in by TitleScreen, one button a chapter
+	var chapters := add(col, HBoxContainer.new(), true) as HBoxContainer
+	chapters.name = "Chapters"
+	chapters.add_theme_constant_override("separation", 12)
 	var ctl := rich(13, S.CONCRETE_DIM)
 	ctl.name = "Controls"
-	ctl.custom_minimum_size = Vector2(440, 0)
+	ctl.custom_minimum_size = Vector2(560, 0)   # fits the Chinese on one line, so no word splits across two
 	ctl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	ctl.text = S.keycaps("[WASD] move   [Q][E] rotate   [F] interact   [C] camera   [TAB] scrapbook   [G] graphics   [F1] debug")
-	add(col, ctl)
+	add(col, ctl, true)        # keycaps drawn by TitleScreen, in the player's language
 	return root
 
 

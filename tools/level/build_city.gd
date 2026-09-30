@@ -17,7 +17,8 @@ extends RefCounted
 const FACADES := ["facade_a", "facade_b", "facade_c", "facade_d"]
 const FACADE_TINTS := [0x8f8a80, 0x7f817a, 0x8a8472, 0x958a7a, 0x7d8580, 0x8a7d70, 0x9a927f, 0x857a70]
 const EXTRAS := ["ext_auntie_laundry", "ext_birdcage_man", "ext_smoker", "ext_plant_lady", "ext_kid_red",
-	"ext_kid_yellow", "ext_student", "ext_fan_woman", "ext_labourer", "ext_grandma_black"]
+	"ext_kid_yellow", "ext_student", "ext_fan_woman", "ext_labourer", "ext_grandma_black",
+	"ext_taichi", "ext_sweeper", "ext_eater", "ext_reader"]
 
 static var _windows: Dictionary = {}
 static var _mesh_cache: Dictionary = {}
@@ -200,6 +201,12 @@ static func filler(b: LevelBuilder) -> void:
 		{"x0": 11.5, "x1": 24.5, "z0": -17.0, "z1": -7.0, "bands": [0.0, 1.0, 1.5]},   # catwalk light well
 		{"x0": -7.0, "x1": -3.0, "z0": -21.0, "z1": -16.0, "bands": [1.0, 1.5]},        # airshaft
 		{"x0": -10.0, "x1": 12.0, "z0": -24.0, "z1": -6.0, "bands": [1.5]},             # under the roof slab
+		{"x0": -8.0, "x1": 2.0, "z0": 4.0, "z1": 6.0, "bands": [0.0, 1.0, 1.5]},         # the slot behind Chiu's workshop
+		{"x0": -8.0, "x1": 0.0, "z0": 0.0, "z1": 8.0, "bands": [1.5]},                  # over the workshop and the balcony
+		{"x0": 2.0, "x1": 7.0, "z0": 4.0, "z1": 6.0, "bands": [0.0, 1.0, 1.5]},          # the lane, on past its gate
+		{"x0": 6.0, "x1": 16.0, "z0": -6.0, "z1": 0.8, "bands": [0.0, 1.0, 1.5]},        # the yamen: its hall and courtyard, open to the sky
+		{"x0": 6.0, "x1": 11.0, "z0": 0.8, "z1": 6.0, "bands": [0.0, 1.0, 1.5]},         # the courtyard's mouth
+		{"x0": 16.0, "x1": 18.2, "z0": 0.4, "z1": 3.0, "bands": [1.0]},                  # headroom over the yamen stair
 	]
 	var overlaps := func(ax0: float, ax1: float, az0: float, az1: float, r: Dictionary) -> bool:
 		return ax0 < r.x1 - 0.01 and ax1 > r.x0 + 0.01 and az0 < r.z1 - 0.01 and az1 > r.z0 + 0.01
@@ -390,11 +397,13 @@ static func _roof_life(b: LevelBuilder, blk: Dictionary) -> void:
 	var w := x1 - x0
 	var d := z1 - z0
 	var P := "City/Roofscape"
-	# a parapet lip
-	b.box(x0, x1, y, y + 0.35, z0, z0 + 0.12, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
-	b.box(x0, x1, y, y + 0.35, z1 - 0.12, z1, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
-	b.box(x0, x0 + 0.12, y, y + 0.35, z0, z1, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
-	b.box(x1 - 0.12, x1, y, y + 0.35, z0, z1, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
+	# a parapet lip, set a centimetre in from the building's edge so its outer
+	# face never lies in the same plane as the facade below it
+	var e := 0.01
+	b.box(x0 + e, x1 - e, y, y + 0.35, z0 + e, z0 + 0.12, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
+	b.box(x0 + e, x1 - e, y, y + 0.35, z1 - 0.12, z1 - e, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
+	b.box(x0 + e, x0 + 0.12, y, y + 0.35, z0 + e, z1 - e, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
+	b.box(x1 - 0.12, x1 - e, y, y + 0.35, z0 + e, z1 - e, c8(0x8a867c), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Lip"})
 	var n_aerials := 1 + b.rand.randi() % 3
 	for k in n_aerials:
 		BuildInteriors._aerial(b, Vector3(x0 + 0.3 + b.rand.randf() * (w - 0.6), y, z0 + 0.3 + b.rand.randf() * (d - 0.6)), 1.8 + b.rand.randf() * 2.6, P + "/Aerials", 1.5)
@@ -421,6 +430,8 @@ static func _roof_life(b: LevelBuilder, blk: Dictionary) -> void:
 		for dx in [-0.4, 0.4]:
 			for dz in [-0.4, 0.4]:
 				b.box(tx + dx - 0.04, tx + dx + 0.04, y, y + 0.8, tz + dz - 0.04, tz + dz + 0.04, c8(0x555555), {"band": 1.5, "surface": "metal", "parent": P, "name": "TankLeg", "cast_shadow": false})
+		# the deck the legs carry and the tank sits on
+		b.box(tx - 0.62, tx + 0.62, y + 0.74, y + 0.8, tz - 0.62, tz + 0.62, c8(0x4f5250), {"band": 1.5, "surface": "rust", "parent": P, "name": "TankDeck"})
 	elif r < 0.52 and w > 2.0:
 		# a pigeon loft
 		b.box(x0 + 0.3, x0 + 1.9, y, y + 1.3, z0 + 0.3, z0 + 1.2, c8(0x6b4a30), {"band": 1.5, "surface": "wood", "parent": P, "name": "Loft"})
@@ -484,6 +495,19 @@ static func shop_signs(b: LevelBuilder) -> void:
 		else:
 			pos = Vector3(blk.x1 + 0.35, y + h / 2, blk.z0 + 0.4 + b.rand.randf() * maxf(0.1, blk.z1 - blk.z0 - 0.8))
 			normal = Vector3(0, 0, 1)
+		# never into a room or through a neighbour: try the other face, else leave it bare
+		# (the same random draws either way, so the rest of the city doesn't shift)
+		if not _sign_clear(b, blk, pos, h, face_south):
+			face_south = not face_south
+			if face_south:
+				pos = Vector3((blk.x0 + blk.x1) / 2, y + h / 2, blk.z1 + 0.35)
+				normal = Vector3(1, 0, 0)
+			else:
+				pos = Vector3(blk.x1 + 0.35, y + h / 2, (blk.z0 + blk.z1) / 2)
+				normal = Vector3(0, 0, 1)
+			if not _sign_clear(b, blk, pos, h, face_south):
+				placed += 1
+				continue
 		var node: MeshInstance3D = blk.node
 		var holder := Node3D.new()
 		holder.name = "Sign%d" % placed
@@ -502,6 +526,27 @@ static func shop_signs(b: LevelBuilder) -> void:
 			c8(0x333333), {"surface": "metal", "parent_node": holder, "name": "Bracket"})
 		b._localize(br, node)
 		placed += 1
+
+
+## Is a sign box, sticking out from `blk` at `pos`, clear of every closed room
+## (with its walls) and every other building?
+static func _sign_clear(b: LevelBuilder, blk: Dictionary, pos: Vector3, h: float, face_south: bool) -> bool:
+	var ext := Vector3(0.05, h / 2, 0.35) if face_south else Vector3(0.35, h / 2, 0.05)
+	var lo := pos - ext
+	var hi := pos + ext
+	for room in b.data.closed_rooms:
+		var ry: float = room.y
+		if hi.y < ry or lo.y > ry + 4.5:
+			continue
+		for r in room.rects:
+			if lo.x < r[1] + 0.35 and hi.x > r[0] - 0.35 and lo.z < r[3] + 0.35 and hi.z > r[2] - 0.35:
+				return false
+	for o in b.filler_blocks:
+		if o == blk or hi.y < o.y0 or lo.y > o.y1:
+			continue
+		if lo.x < o.x1 and hi.x > o.x0 and lo.z < o.z1 and hi.z > o.z0:
+			return false
+	return true
 
 
 static func cables(b: LevelBuilder) -> void:

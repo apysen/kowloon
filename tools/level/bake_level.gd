@@ -16,6 +16,8 @@ func _initialize() -> void:
 	var b := LevelBuilder.new()
 	BuildInteriors.build(b)
 	BuildCity.build(b)
+	var settled := b.settle_people()
+	print("background people: %d moved clear of the scenery, %d with nowhere to stand left out" % settled)
 	b.finish()
 
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://data/level"))

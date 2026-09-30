@@ -34,6 +34,8 @@ var _groups: Dictionary = {}
 var _emissive_cache: Dictionary = {}
 var _mesh_cache: Dictionary = {}
 var filler_blocks: Array[Dictionary] = []
+var _room_count := 0
+var _box_count := 0
 
 
 func _init() -> void:
@@ -170,7 +172,15 @@ func _box_mesh(size: Vector3) -> BoxMesh:
 ##   opts: surface, top, top_tint, band, fadeable, room, collide, collide_y, name,
 ##         parent, cast_shadow, base_y, material, uv_random, key, filler
 func box(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float, color: Color, opts := {}) -> MeshInstance3D:
-	var size := Vector3(absf(x1 - x0), absf(y1 - y0), absf(z1 - z0))
+	# Every box is a hair larger than asked, each by its own amount (one of 101
+	# steps from 0.06 to 6 mm): boxes laid flush against each other (a leg
+	# under an apron, a nosing on a step, two rooms' walls) then never share a
+	# face exactly, which the renderer cannot order and draws as flicker when
+	# the view moves. The depth buffer (reversed float) tells 0.06 mm apart
+	# at any distance the game shows.
+	var grow := 0.00006 * float((_box_count * 37) % 101 + 1)
+	_box_count += 1
+	var size := Vector3(absf(x1 - x0), absf(y1 - y0), absf(z1 - z0)) + Vector3.ONE * 2.0 * grow
 	var mi := MeshInstance3D.new()
 	mi.name = opts.get("name", "Box")
 	mi.mesh = _box_mesh(size)
@@ -297,6 +307,12 @@ func room(r: Dictionary) -> void:
 	var parent_path: String = r.get("parent", "Structure") + "/" + room_name.to_pascal_case()
 	var T := 0.3
 	add_floor(x0, x1, z0, z1, y, room_name)
+	# Neighbouring rooms' slabs and lids overlap under and over their doorways
+	# (each runs out under its walls). Each room's sits a few millimetres off
+	# the last one's, so one surface always wins there instead of the two
+	# flickering over each other. Walking uses the floor's true height.
+	var lift := 0.003 * float(_room_count % 5)
+	_room_count += 1
 	var fo := {"band": band, "surface": floor_surface, "is_floor": true, "parent": parent_path, "name": "Floor"}
 	if r.has("floor_hole"):
 		# a stairwell opening: the slab is laid in pieces around it
@@ -305,15 +321,15 @@ func room(r: Dictionary) -> void:
 		var hz0: float = r.floor_hole[2]
 		var hz1: float = r.floor_hole[3]
 		if hx0 > x0 - T:
-			box(x0 - T, hx0, y - 0.3, y, z0 - T, z1 + T, floor_col, fo)
-		box(hx1, x1 + T, y - 0.3, y, z0 - T, z1 + T, floor_col, fo)
+			box(x0 - T, hx0, y - 0.3, y + lift, z0 - T, z1 + T, floor_col, fo)
+		box(hx1, x1 + T, y - 0.3, y + lift, z0 - T, z1 + T, floor_col, fo)
 		if hz0 > z0 - T:
-			box(hx0, hx1, y - 0.3, y, z0 - T, hz0, floor_col, fo)
-		box(hx0, hx1, y - 0.3, y, hz1, z1 + T, floor_col, fo)
+			box(hx0, hx1, y - 0.3, y + lift, z0 - T, hz0, floor_col, fo)
+		box(hx0, hx1, y - 0.3, y + lift, hz1, z1 + T, floor_col, fo)
 	else:
-		box(x0 - T, x1 + T, y - 0.3, y, z0 - T, z1 + T, floor_col, fo)
+		box(x0 - T, x1 + T, y - 0.3, y + lift, z0 - T, z1 + T, floor_col, fo)
 	if id != "":
-		closed_room(id, [x0, x1, z0, z1], y, h, band, parent_path)
+		closed_room(id, [x0, x1, z0, z1], y, h - lift, band, parent_path)
 
 	var sides := {
 		"n": {"a0": x0 - T, "a1": x1 + T, "fixed": z0 - T / 2, "axis": "x", "inner": Vector3(0, 0, 1)},
@@ -578,3 +594,154 @@ func resident(id: String, sheet_id: String, pos: Vector3, opts := {}) -> Node3D:
 
 func finish() -> void:
 	SurfaceLibrary.save_all()
+
+
+# ----------------------------------------------------------------------------- people, settled
+
+
+## Everyone in the background stands somewhere real: on a surface, clear of
+## huts, tanks, lofts, washing and walls. Each one is checked where the
+## dressing put them; if their body would pass through anything, or there's
+## nothing under their feet, they step to the nearest clear spot on the same
+## level, and if there isn't one they aren't placed. Story residents are left
+## exactly where the scenes put them. Returns [moved, removed].
+func settle_people() -> Array:
+	# the scenery as triangles (merged roofscapes have one huge box, so boxes
+	# won't do), bucketed by 2 m column so each check only sees its neighbours
+	var tris: Array[PackedVector3Array] = []
+	_gather_solids(root, Transform3D.IDENTITY, tris)
+	var grid := {}
+	for i in tris.size():
+		var t := tris[i]
+		var bx := AABB(t[0], Vector3.ZERO).expand(t[1]).expand(t[2])
+		for cell in _cells(bx):
+			if not grid.has(cell):
+				grid[cell] = []
+			(grid[cell] as Array).append(i)
+	var people: Array[Node3D] = []
+	_gather_people(root, people)
+	var moved := 0
+	var removed := 0
+	for r in people:
+		var parent_xf := _world_xform(r.get_parent())
+		var at: Vector3 = parent_xf * r.position
+		if _stands_clear(at, tris, grid):
+			continue
+		var found := false
+		for ring: float in [0.35, 0.7, 1.05, 1.4, 1.8, 2.3]:
+			for k in 12:
+				var a: float = TAU * k / 12.0 + ring
+				var cand: Vector3 = at + Vector3(cos(a), 0, sin(a)) * ring
+				if _stands_clear(cand, tris, grid):
+					r.position = parent_xf.affine_inverse() * cand
+					found = true
+					break
+			if found:
+				break
+		if found:
+			moved += 1
+		else:
+			r.get_parent().remove_child(r)
+			r.free()
+			removed += 1
+	return [moved, removed]
+
+
+const _BODY_HALF := 0.2
+const _FOOT := 0.12
+const _CELL := 2.0
+const _THIN := ["Cable", "Wire", "Line", "Antenna", "AerialArm", "Element", "SignLine", "SheetLine"]
+
+
+## Clear of everything from the ankles to the top of the head, and standing on
+## flat floor at her feet under the whole of her footprint.
+func _stands_clear(at: Vector3, tris: Array[PackedVector3Array], grid: Dictionary) -> bool:
+	var body := AABB(at + Vector3(-_BODY_HALF, 0.08, -_BODY_HALF), Vector3(_BODY_HALF * 2, 1.52, _BODY_HALF * 2))
+	var feet := [Vector2(at.x, at.z), Vector2(at.x - _FOOT, at.z - _FOOT), Vector2(at.x + _FOOT, at.z - _FOOT),
+		Vector2(at.x - _FOOT, at.z + _FOOT), Vector2(at.x + _FOOT, at.z + _FOOT)]
+	var held := [false, false, false, false, false]
+	var seen := {}
+	for cell in _cells(body.grow(0.2)):
+		for i in grid.get(cell, []):
+			if seen.has(i):
+				continue
+			seen[i] = true
+			var t: PackedVector3Array = tris[i]
+			var bx := AABB(t[0], Vector3.ZERO).expand(t[1]).expand(t[2])
+			if bx.intersects(body) and _tri_meets_box(t, body):
+				return false
+			if absf(t[0].y - at.y) < 0.06 and absf(t[1].y - at.y) < 0.06 and absf(t[2].y - at.y) < 0.06:
+				var a2 := Vector2(t[0].x, t[0].z)
+				var b2 := Vector2(t[1].x, t[1].z)
+				var c2 := Vector2(t[2].x, t[2].z)
+				for k in feet.size():
+					if not held[k] and Geometry2D.point_is_inside_triangle(feet[k], a2, b2, c2):
+						held[k] = true
+	return not held.has(false)
+
+
+## Does the triangle actually cross the box (not just its bounding box)? Its
+## plane has to pass between the box's corners.
+func _tri_meets_box(t: PackedVector3Array, bx: AABB) -> bool:
+	var n := (t[1] - t[0]).cross(t[2] - t[0])
+	if n.length_squared() < 1e-12:
+		return false
+	var side := 0
+	for k in 8:
+		var d := n.dot(bx.get_endpoint(k) - t[0])
+		var sgn := 1 if d > 0.0 else -1
+		if side == 0:
+			side = sgn
+		elif sgn != side:
+			return true
+	return false
+
+
+func _cells(bx: AABB) -> Array:
+	var out := []
+	for cx in range(floori(bx.position.x / _CELL), floori(bx.end.x / _CELL) + 1):
+		for cz in range(floori(bx.position.z / _CELL), floori(bx.end.z / _CELL) + 1):
+			out.append(Vector2i(cx, cz))
+	return out
+
+
+func _gather_solids(n: Node, xf: Transform3D, out: Array[PackedVector3Array]) -> void:
+	for c in n.get_children():
+		if c.get_script() != null and (c is CharacterSprite or c.get("resident_id") != null):
+			continue          # people and birds are not scenery
+		var cx := xf * (c as Node3D).transform if c is Node3D else xf
+		var thin := false
+		for t in _THIN:
+			if String(c.name).begins_with(t):
+				thin = true
+		if not thin:
+			if c is MeshInstance3D and (c as MeshInstance3D).mesh:
+				_add_faces((c as MeshInstance3D).mesh.get_faces(), cx, out)
+			elif c is MultiMeshInstance3D and (c as MultiMeshInstance3D).multimesh and (c as MultiMeshInstance3D).multimesh.mesh:
+				var mm := (c as MultiMeshInstance3D).multimesh
+				var faces := mm.mesh.get_faces()
+				for i in mm.instance_count:
+					_add_faces(faces, cx * mm.get_instance_transform(i), out)
+		_gather_solids(c, cx, out)
+
+
+func _add_faces(faces: PackedVector3Array, xf: Transform3D, out: Array[PackedVector3Array]) -> void:
+	for i in range(0, faces.size(), 3):
+		out.append(PackedVector3Array([xf * faces[i], xf * faces[i + 1], xf * faces[i + 2]]))
+
+
+func _gather_people(n: Node, out: Array[Node3D]) -> void:
+	for c in n.get_children():
+		if c.get("resident_id") != null and c.get("story") == false:
+			out.append(c)
+		else:
+			_gather_people(c, out)
+
+
+func _world_xform(n: Node) -> Transform3D:
+	var xf := Transform3D.IDENTITY
+	while n != null and n != root.get_parent():
+		if n is Node3D:
+			xf = (n as Node3D).transform * xf
+		n = n.get_parent()
+	return xf

@@ -334,6 +334,10 @@ static func _tank_mesh() -> ArrayMesh:
 			var leg := BoxMesh.new()
 			leg.size = Vector3(0.08, 0.8, 0.08)
 			st.append_from(leg, 0, Transform3D(Basis.IDENTITY, Vector3(dx, 0.4, dz)))
+	# the deck the legs carry and the tank sits on
+	var deck := BoxMesh.new()
+	deck.size = Vector3(1.24, 0.06, 1.24)
+	st.append_from(deck, 0, Transform3D(Basis.IDENTITY, Vector3(0, 0.77, 0)))
 	var m := st.commit()
 	BuildCity._mesh_cache[key] = m
 	return m
@@ -492,8 +496,8 @@ static func _yamen(b: LevelBuilder) -> void:
 		cannon.height = 1.6
 		var cn := b.piece(cannon, Vector3(-39.0 + k * 1.6, GROUND + 0.25, 4.2), b.surface("rust"), {"band": 1.5, "parent": P, "name": "Cannon", "tint": c8(0x3a3632)})
 		cn.rotation = Vector3(PI / 2, 0, 0)
-	for k in 3:
-		var who: String = ["ext_grandma_black", "ext_birdcage_man", "ext_fan_woman"][k]
+	for k in 5:
+		var who: String = ["ext_grandma_black", "ext_birdcage_man", "ext_fan_woman", "ext_taichi", "ext_reader"][k]
 		var res := b.resident("yamen_%d" % k, who, Vector3(-46.6 + k * 1.1, GROUND, 3.9 + (k % 2) * 0.3),
 			{"anim": "work", "collide": false, "story": false, "parent": "City/People", "facing": Vector3(0, 0, -1)})
 		b.tag(res, 1.5)
