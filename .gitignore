@@ -15,3 +15,10 @@ assets/sprites/aseprite/build/
 /*.exe
 /*.pck
 /export/
+
+# Full-size source fonts (downloaded by scripts/make_cjk_fonts.py)
+tools/fonts/src/
+
+# Python bytecode
+__pycache__/
+*.pyc
