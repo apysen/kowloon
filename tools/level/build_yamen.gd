@@ -361,6 +361,37 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	b.resident("cheng", "cheng", Vector3(14.1, A, -2.3), {"anim": "work", "facing": Vector3(0, 0, 1), "parent": C4})
 	b.resident("mover_a", "mover_a", Vector3(15.2, A, -1.8), {"anim": "work", "facing": Vector3(-1, 0, 0.3), "parent": C4})
 	b.resident("mover_b", "mover_b", Vector3(9.7, A, 4.2), {"anim": "work", "facing": Vector3(0, 0, -1), "parent": C4})
+	# her fan, beside the table, on an extension cable that runs through half the
+	# yamen (OQ02): side by side with the radio's across the courtyard, parting at
+	# the corner, one up the veranda into the hall, the other under the storage
+	# room's door to a socket behind the shelves, where the plug has been knocked out
+	PropKit.fan(b, 10.7, -1.35, A, C4 + "/CheungFan", Vector3(-1, 0, -0.3))
+	b.add_obstacle(10.5, 10.9, -1.55, -1.15, A, "cheungFan", "chapter:Ch4")
+	var cord := b.surface("grain")
+	var black := c8(0x1c1c1e)
+	var run_b := [Vector3(10.7, A + 0.03, -1.15), Vector3(13.85, A + 0.03, -1.15), Vector3(13.85, A + 0.03, -3.1),
+		Vector3(14.95, A + 0.03, -3.1), Vector3(14.95, A + 0.03, -5.9), Vector3(15.05, A + 0.03, -6.3)]
+	var run_a := [Vector3(11.4, A + 0.03, -1.1), Vector3(13.8, A + 0.03, -1.1), Vector3(13.8, A + 0.03, -3.1),
+		Vector3(13.45, A + 0.03, -4.15), Vector3(13.45, A + 2.2, -4.15)]
+	for run in [run_a, run_b]:
+		for i in run.size() - 1:
+			b.cylinder(run[i], run[i + 1], 0.012, cord, {"parent": C4 + "/Cords", "name": "Cord", "tint": black, "band": 0.0, "cast_shadow": false})
+	# the socket, low on the back wall behind the shelves, and the plug on the floor under it
+	b.box(14.95, 15.15, A + 0.3, A + 0.42, -6.5, -6.47, c8(0xe8e4d8), {"band": 0.0, "surface": "metal", "parent": C4 + "/Cords", "name": "Socket", "cast_shadow": false})
+	var plug := Node3D.new()
+	plug.name = "Plug"
+	plug.position = Vector3(15.05, A + 0.03, -6.3)
+	b.attach(plug, b.group(C4 + "/Cords"))
+	b.tag(plug, 0.0, false, {"dynamic": true})
+	var pm := b.box(-0.04, 0.04, -0.02, 0.03, -0.05, 0.05, c8(0x2a2a2a), {"surface": "metal", "parent_node": plug, "name": "PlugBody", "cast_shadow": false})
+	pm.remove_meta("band")
+	b.ref("cordsPart", Vector3(13.8, A, -2.3))
+	b.ref("socket", Vector3(15.05, A, -5.8))
+	# after: the fan stood by the veranda, still, its cable wound round its base
+	var G57 := "ChapterProps/Ch5-7/CheungFan"
+	PropKit.fan(b, 12.9, -3.75, A, G57, Vector3(0, 0, 1))
+	b.cylinder(Vector3(12.9, A + 0.06, -3.75), Vector3(12.9, A + 0.12, -3.75), 0.16, cord, {"parent": G57, "name": "CordCoil", "tint": black, "band": 0.0})
+
 	# and the old people who come out into the sun every morning
 	b.resident("yamen_taichi", "ext_taichi", Vector3(12.0, A, -1.2), {"anim": "work", "facing": Vector3(0, 0, 1), "parent": C4})
 	b.resident("yamen_bird", "ext_birdcage_man", Vector3(8.5, A, 1.65), {"facing": Vector3(0.3, 0, 1), "parent": C4})

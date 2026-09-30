@@ -1037,6 +1037,32 @@ const LINES := {
 	"c5_leung_after": [
 		{"speaker": "leung", "text": "dlg.c5_leung_after.01"},
 	],
+	"c4_fan_stops": [
+		{"speaker": "", "text": "dlg.c4_fan_stops.01"},
+		{"speaker": "cheung", "text": "dlg.c4_fan_stops.02"},
+		{"speaker": "cheung", "text": "dlg.c4_fan_stops.03"},
+	],
+	"c4_cheung_fan_wait": [
+		{"speaker": "cheung", "text": "dlg.c4_cheung_fan_wait.01"},
+	],
+	"c4_ho_fan": [
+		{"speaker": "mei", "text": "dlg.c4_ho_fan.01"},
+		{"speaker": "ho", "text": "dlg.c4_ho_fan.02"},
+		{"speaker": "ho", "text": "dlg.c4_ho_fan.03"},
+		{"speaker": "ho", "text": "dlg.c4_ho_fan.04"},
+	],
+	"c4_cords": [
+		{"speaker": "", "text": "dlg.c4_cords.01"},
+	],
+	"c4_plug": [
+		{"speaker": "", "text": "dlg.c4_plug.01"},
+		{"speaker": "", "text": "dlg.c4_plug.02", "event": "fanOn"},
+	],
+	"c4_fan_back": [
+		{"speaker": "cheung", "text": "dlg.c4_fan_back.01"},
+		{"speaker": "mei", "text": "dlg.c4_fan_back.02"},
+		{"speaker": "cheung", "text": "dlg.c4_fan_back.03"},
+	],
 }
 
 

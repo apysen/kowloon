@@ -988,6 +988,14 @@ obstacles = Array[Dictionary]([{
 "z0": 3.9,
 "z1": 4.6
 }, {
+"key": "chapter:Ch4",
+"name": "cheungFan",
+"x0": 10.5,
+"x1": 10.9,
+"y": 0.0,
+"z0": -1.55,
+"z1": -1.15
+}, {
 "key": "",
 "name": "lauToolBoxes",
 "x0": 5.0,
@@ -1280,6 +1288,7 @@ refs = {
 "coop": Vector3(3, 13, -21),
 "coopHole": Vector3(4.25, 15.35, -22.45),
 "coopPos": Vector3(3, 13.3, -22.4),
+"cordsPart": Vector3(13.8, 0, -2.3),
 "crateEnd": Vector3(-6.45, 5, -19.95),
 "crateStart": Vector3(-3.55, 5, -19.95),
 "fabricPos": Vector3(15.3, 5, -12),
@@ -1327,6 +1336,7 @@ refs = {
 "sheetSpot": Vector3(7, 13, -21),
 "sideGap": Vector3(16.6, 0, -5.95),
 "signHinges": Vector3(-4.7, 9.25, 6.5),
+"socket": Vector3(15.05, 0, -5.8),
 "stairsCDown": Vector3(1, 5, 2.5),
 "stairsCUp": Vector3(1, 0, 1.4),
 "stairsDownB": Vector3(8.5, 5, -13.9),

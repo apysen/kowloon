@@ -17,6 +17,12 @@ extends ChapterDirector
 ## and Mei's album learns a new word: AFTER.
 ##
 ## The day's photograph: Mrs. Cheung with her address book.
+##
+## On the side (OQ02, Mrs. Cheung's Fan): not long after Mei meets her, the fan
+## by her table stops. Mr. Ho says the motor's fine: follow the cable. Two
+## cords run side by side across the courtyard; where they part, only a turned
+## view shows which goes into the hall (a radio) and which under the storage
+## room's door. Behind its shelves, seen from the far side, the plug is out.
 
 enum {
 	START,
@@ -43,6 +49,7 @@ var flags := {
 	"panel_open": false, "cabinet_moved": false, "address_lau": false, "address_chan": false, "address_kit": false,
 	"lau_talked": false, "wong_packing_seen": false, "payoff_lau_windows": false, "theme_line_somebody_shows_you": false,
 	"cheng_respect_mei": false, "after_unlocked": false, "kit_lift": false,
+	"oq02_stopped": false, "oq02_ho": false, "oq02_traced": false, "oq02_plug_seen": false, "oq02_fixed": false, "oq02_done": false,
 }
 
 var _stage_t := 0.0
@@ -131,7 +138,22 @@ func _live_hint() -> String:
 			lines.append(tr("c4.cab.panel_look" if not flags.panel_seen else "c4.cab.panel_open"))
 		else:
 			lines.append(tr("c4.cab.tell"))
+	var fan := _fan_hint()
+	if fan != "":
+		lines.append(tr(fan))
 	return "\n".join(lines)
+
+
+func _fan_hint() -> String:
+	if not flags.oq02_stopped or flags.oq02_done:
+		return ""
+	if flags.oq02_fixed:
+		return "c4.need.fan_tell"
+	if not flags.oq02_ho:
+		return "c4.need.fan"
+	if not flags.oq02_traced:
+		return "c4.need.fan_cord"
+	return "c4.need.fan_plug"
 
 
 func _refresh_hint() -> void:
@@ -277,7 +299,7 @@ func _register_people() -> void:
 	talk("chan", 1.9, _talk_chans)
 	talk("son", 1.6, _talk_chans)
 	talk("kit", 1.6, _talk_kit)
-	talk("fanman", 1.6, func() -> void: say("c4_ho"))
+	talk("fanman", 1.6, _talk_ho)
 	talk("ng", 1.9, func() -> void: say("c4_ng"))
 	talk("shopkeeper", 2.2, func() -> void: say("c4_kwok"))
 	talk("chopper", 1.8, func() -> void: say("c4_chopper"))
@@ -289,6 +311,12 @@ func _register_people() -> void:
 func _talk_cheung() -> void:
 	if not flags.cheung_met:
 		_meet_cheung()
+	elif flags.oq02_fixed and not flags.oq02_done:
+		flags.oq02_done = true
+		mark("oq02Done")
+		say("c4_fan_back", _refresh_hint)
+	elif flags.oq02_stopped and not flags.oq02_fixed and stage == ADDRESSES:
+		say("c4_cheung_fan_wait")
 	elif stage == RETURN:
 		_return_addresses()
 	elif stage == PHOTO_CHEUNG:
@@ -298,6 +326,75 @@ func _talk_cheung() -> void:
 	else:
 		var n := int(flags.address_lau) + int(flags.address_chan) + int(flags.address_kit)
 		say("c4_cheung_wait" if n < 3 else "c4_cheung_cabinet")
+
+
+func _talk_ho() -> void:
+	if flags.oq02_stopped and not flags.oq02_ho and not flags.oq02_fixed:
+		flags.oq02_ho = true
+		mark("oq02Ho")
+		say("c4_ho_fan", _refresh_hint)
+	else:
+		say("c4_ho")
+
+
+# ----------------------------------------------------------------------------- OQ02, Mrs. Cheung's fan
+
+
+var _fan_rotor: Node3D
+var _fan_speed := 14.0
+var _fan_stop_t := 0.0
+
+
+## Some while after Mei has met her, back in the courtyard: the fan stops.
+func _tick_fan(delta: float) -> void:
+	if _fan_rotor == null:
+		_fan_rotor = world.level.get_node_or_null("ChapterProps/Ch4/CheungFan/FanRotor")
+		if _fan_rotor == null:
+			return
+	var target := 0.0 if flags.oq02_stopped and not flags.oq02_fixed else 14.0
+	_fan_speed = move_toward(_fan_speed, target, delta * (5.0 if target == 0.0 else 9.0))
+	_fan_rotor.rotation.z += delta * _fan_speed
+	if flags.oq02_stopped or stage != ADDRESSES or dialogue.is_open() or locks.is_locked():
+		return
+	var p := player.position
+	var in_court := p.y < 1.0 and p.x > 6.4 and p.x < 15.5 and p.z > -3.0 and p.z < 6.0
+	if in_court:
+		_fan_stop_t += delta
+	if _fan_stop_t > 18.0 and in_court:
+		flags.oq02_stopped = true
+		mark("oq02Stopped")
+		say("c4_fan_stops", _refresh_hint)
+
+
+## Where the two cords part, only a turned view tells them apart; behind the
+## storage room's shelves, only the far side shows the plug.
+func _trace_fan() -> void:
+	if not flags.oq02_ho or flags.oq02_fixed or cam.rotating or locks.is_locked() or dialogue.is_open():
+		return
+	var at: Vector3 = world.refs.cordsPart
+	if not flags.oq02_traced and mei_near(at.x, at.y, at.z, 1.8) and (cam.direction == 1 or cam.direction == 3):
+		flags.oq02_traced = true
+		mark("oq02Traced")
+		audio.chime()
+		say("c4_cords", _refresh_hint)
+		return
+	var p := player.position
+	var in_store := p.y < 1.0 and p.x > 14.0 and p.x < 17.0 and p.z > -6.5 and p.z < -3.5
+	if flags.oq02_traced and not flags.oq02_plug_seen and in_store and cam.direction == 2:
+		flags.oq02_plug_seen = true
+		mark("oq02PlugSeen")
+		audio.chime()
+		hud.notice("notice.c4_plug_seen", 3.2)
+		_refresh_hint()
+
+
+func _plug_in() -> void:
+	flags.oq02_fixed = true
+	var plug: Node3D = world.level.get_node_or_null("ChapterProps/Ch4/Cords/Plug")
+	if plug:
+		plug.position = Vector3(15.05, 0.36, -6.44)
+	mark("oq02Fixed")
+	say("c4_plug", _refresh_hint)
 
 
 func _talk_cheng() -> void:
@@ -438,6 +535,9 @@ func _register_route() -> void:
 				say("c4_panel")})
 	# the yamen, its cannons, its tree, the blackboard upstairs
 	look("hallDoor", refs.hallDoor, "env.c4_hall", 1.3)
+	I.add({"id": "plug", "position": refs.socket, "radius": 1.0, "priority": Q, "verb": "verb.plug_in",
+		"can_interact": func() -> bool: return flags.oq02_plug_seen and not flags.oq02_fixed,
+		"interact": _plug_in})
 	look("cannons", refs.cannons, "env.c4_cannons", 1.2)
 	look("yamenTree", refs.yamenTree, "env.c4_tree", 1.1, InteractionDirector.Priority.DECOR)
 	look("blackboard", refs.blackboard, "env.c4_blackboard", 1.0)
@@ -613,4 +713,6 @@ func tick(delta: float, paused: bool) -> void:
 	_tick_arrival()
 	_tick_wong()
 	_discover()
+	_trace_fan()
+	_tick_fan(delta)
 	_tick_hints()
