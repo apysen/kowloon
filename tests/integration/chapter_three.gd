@@ -68,6 +68,17 @@ func interact(id: String) -> bool:
 	return false
 
 
+## Turn the view round until `flag` is set; returns the direction that showed it (-1 if none).
+func turn_until(flag: String) -> int:
+	for d in [1, 2, 3, 0]:
+		await turn_to(d)
+		await secs(0.4)
+		await read_through()
+		if q.flags[flag]:
+			return d
+	return -1
+
+
 func turn_to(dir: int) -> void:
 	while slice.cam.direction != dir:
 		slice.cam.rotate_view(1)
@@ -167,6 +178,34 @@ func _run() -> void:
 	expect(await interact("son"), "Wai can be asked")
 	expect(q.flags.story_item_plank and w.residents.son.idle_anim != "sit", "Mrs. Chan: get up. The plank")
 	expect(q.stage == C.SET_UP, "everything the route needs")
+
+	print("-- on the side: Wai's shortcut (OQ05)")
+	expect(await interact("son"), "Wai: Chiu's roof to ours, thirty seconds")
+	expect(q.flags.oq05_asked and w.residents.son.position.y > 12.0, "off he goes, to wait on the roof")
+	await place(w.refs.shortcutStairTop)
+	await turn_to(0)
+	await secs(0.5)
+	expect(not q.flags.oq05_stair and not await interact("shortcutStair"), "from the front, Chiu's back parapet is just a wall")
+	var sd := await turn_until("oq05_stair")
+	expect(sd == 1 or sd == 3, "from the side: steel steps down behind it")
+	await turn_to(0)
+	expect(await interact("shortcutStair"), "down onto the lower roof")
+	await secs(1.2)
+	sd = await turn_until("oq05_ladder")
+	expect(sd == 2, "looking back from the north, behind the washing: a ladder")
+	await turn_to(0)
+	await place(w.refs.rearLadderFoot)
+	expect(await interact("rearLadderUp"), "up to the balcony on the back of our building")
+	await secs(1.2)
+	expect(not await interact("waiBridge"), "from the front, no way on")
+	sd = await turn_until("oq05_bridge")
+	expect(sd == 1 or sd == 3, "from the side: two planks up onto the roof")
+	await turn_to(0)
+	await place(w.refs.waiBridgeFoot)
+	expect(await interact("waiBridge"), "over the planks")
+	await secs(1.4)
+	await read_through()
+	expect(slice.player.position.y > 12.0 and q.flags.oq05_done, "'Told you.' 'Than you.'")
 
 	print("-- setting it up")
 	await place(w.refs.plankGap)

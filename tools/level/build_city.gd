@@ -207,6 +207,7 @@ static func filler(b: LevelBuilder) -> void:
 		{"x0": 6.0, "x1": 16.0, "z0": -6.0, "z1": 0.8, "bands": [0.0, 1.0, 1.5]},        # the yamen: its hall and courtyard, open to the sky
 		{"x0": 6.0, "x1": 11.0, "z0": 0.8, "z1": 6.0, "bands": [0.0, 1.0, 1.5]},         # the courtyard's mouth
 		{"x0": 16.0, "x1": 18.2, "z0": 0.4, "z1": 3.0, "bands": [1.0]},                  # headroom over the yamen stair
+		{"x0": -8.4, "x1": -5.3, "z0": -6.2, "z1": 0.0, "bands": [1.5]},                 # Wai's shortcut: the low roof and the balcony over it
 	]
 	var overlaps := func(ax0: float, ax1: float, az0: float, az1: float, r: Dictionary) -> bool:
 		return ax0 < r.x1 - 0.01 and ax1 > r.x0 + 0.01 and az0 < r.z1 - 0.01 and az1 > r.z0 + 0.01

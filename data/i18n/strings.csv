@@ -971,3 +971,21 @@ c2.need.page_seen,Mr. Kwok's back page: on the little balcony under the awning. 
 c2.need.page_back,Mr. Kwok's back page: take it to him.,郭伯的報紙底頁：拿去給他。
 c2.need.tile,The white dragon: down the crack at the foot of the alcove's wall. Where does the crack come out?,白板：跌進了麻雀角落牆腳的罅裡。那條罅通到哪裡？
 c2.need.tile_back,The white dragon: back to the mahjong table.,白板：還給麻雀枱。
+dlg.c3_wai_shortcut.01,"You go up to Chiu's roof by the ladder, right?",你上趙記天台係爬梯嘅，係咪？
+dlg.c3_wai_shortcut.02,There's only the ladder.,淨係得把梯。
+dlg.c3_wai_shortcut.03,There's a way from Chiu's roof to ours. Thirty seconds.,趙記天台去我哋天台有條路。三十秒。
+dlg.c3_wai_shortcut.04,Show me.,帶我去睇下。
+dlg.c3_wai_shortcut.05,Find it. I'll be on our roof.,自己搵。我喺我哋天台等你。
+dlg.c3_wai_waiting.01,That's the long way.,呢條係遠路。
+dlg.c3_short_stair.01,"From the side: behind Chiu's back parapet, three steel steps down onto the next roof.",從側面看：趙記天台後面的矮牆後，有三級鐵梯落去隔籬的天台。
+dlg.c3_short_ladder.01,"Looking back from the north, behind the washing: a ladder up to a balcony on the back of Mei's building.",從北面回頭看，在晾著的衣服後面：一條梯子通上阿美那座大廈後面的一個露台。
+dlg.c3_short_bridge.01,From the side: two planks laid from the balcony's rail up onto the roof.,從側面看：兩塊木板從露台欄杆搭上天台。
+dlg.c3_wai_race.01,Told you.,我都話咗。
+dlg.c3_wai_race.02,That's not a route. That's a list of bad ideas.,呢啲唔係路。係一串壞主意。
+dlg.c3_wai_race.03,It's faster.,快啲囉。
+dlg.c3_wai_race.04,Than what?,快過咩？
+dlg.c3_wai_race.05,Than you.,快過你。
+dlg.c3_wai_race_after.01,Don't tell Mum about the planks.,唔好同阿媽講嗰兩塊木板。
+c3.need.wai,"Wai's shortcut: from Chiu's roof to the Chans' roof, somehow.",阿偉的捷徑：由趙記天台去陳家天台，不知怎樣走。
+verb.cross,Cross,過去
+env.c5_wai_bridge,"Where Wai's planks went up to the roof: two nail holes in the balcony rail, and a drop.",阿偉的木板以前搭上天台的地方：露台欄杆上兩個釘孔，下面一道空。

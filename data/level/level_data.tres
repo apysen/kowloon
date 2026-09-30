@@ -334,6 +334,20 @@ floors = Array[Dictionary]([{
 "z0": -14.9,
 "z1": -14.15
 }, {
+"name": "lowRoof",
+"x0": -8.0,
+"x1": -5.6,
+"y": 9.05,
+"z0": -4.6,
+"z1": -0.1
+}, {
+"name": "rearBalcony",
+"x0": -8.0,
+"x1": -5.6,
+"y": 11.2,
+"z0": -6.0,
+"z1": -4.7
+}, {
 "name": "roof",
 "x0": -10.0,
 "x1": 12.0,
@@ -1347,6 +1361,8 @@ refs = {
 "pulley": Vector3(-6.4, 11.97, 5),
 "pump": Vector3(12.7, 0.6, -16.4),
 "radio": Vector3(-13.2, 0, -1.3),
+"rearBalcony": Vector3(-6.2, 11.2, -5.3),
+"rearLadderFoot": Vector3(-6.2, 9.05, -4.2),
 "rearStairFoot": Vector3(8.2, 0, 0.05),
 "rearStairTop": Vector3(11.35, 5, 0.05),
 "redBowl": Vector3(-9.1, 0, -2.95),
@@ -1356,6 +1372,8 @@ refs = {
 "shaftBase": Vector3(-5, 5, -18.2),
 "shaftTop": Vector3(-7.8, 13, -19.95),
 "sheetSpot": Vector3(7, 13, -21),
+"shortcutStairFoot": Vector3(-6.3, 9.05, -1.1),
+"shortcutStairTop": Vector3(-6.3, 9.25, 0.55),
 "sideGap": Vector3(16.6, 0, -5.95),
 "signHinges": Vector3(-4.7, 9.25, 6.5),
 "socket": Vector3(15.05, 0, -5.8),
@@ -1374,6 +1392,8 @@ refs = {
 "unitValves": Vector3(21.4, 5, -20.8),
 "unitWindow": Vector3(24.15, 6.4, -19.2),
 "unitWindowOutside": Vector3(24.75, 5, -19.2),
+"waiBridgeFoot": Vector3(-6.9, 11.2, -5.5),
+"waiBridgeTop": Vector3(-6.9, 13, -6.9),
 "wellBalcony": Vector3(11.3, 1.75, -14.5),
 "wellBalconyDoor": Vector3(9.95, 0, -12.35),
 "winch": Vector3(-5.85, 9.25, 6.5),

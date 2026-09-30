@@ -1157,6 +1157,35 @@ const LINES := {
 	"c2_tile_after": [
 		{"speaker": "tsang", "text": "dlg.c2_tile_after.01"},
 	],
+	"c3_wai_shortcut": [
+		{"speaker": "wai", "text": "dlg.c3_wai_shortcut.01"},
+		{"speaker": "mei", "text": "dlg.c3_wai_shortcut.02"},
+		{"speaker": "wai", "text": "dlg.c3_wai_shortcut.03"},
+		{"speaker": "mei", "text": "dlg.c3_wai_shortcut.04"},
+		{"speaker": "wai", "text": "dlg.c3_wai_shortcut.05"},
+	],
+	"c3_wai_waiting": [
+		{"speaker": "wai", "text": "dlg.c3_wai_waiting.01"},
+	],
+	"c3_short_stair": [
+		{"speaker": "", "text": "dlg.c3_short_stair.01"},
+	],
+	"c3_short_ladder": [
+		{"speaker": "", "text": "dlg.c3_short_ladder.01"},
+	],
+	"c3_short_bridge": [
+		{"speaker": "", "text": "dlg.c3_short_bridge.01"},
+	],
+	"c3_wai_race": [
+		{"speaker": "wai", "text": "dlg.c3_wai_race.01"},
+		{"speaker": "mei", "text": "dlg.c3_wai_race.02"},
+		{"speaker": "wai", "text": "dlg.c3_wai_race.03"},
+		{"speaker": "mei", "text": "dlg.c3_wai_race.04"},
+		{"speaker": "wai", "text": "dlg.c3_wai_race.05"},
+	],
+	"c3_wai_race_after": [
+		{"speaker": "wai", "text": "dlg.c3_wai_race_after.01"},
+	],
 }
 
 

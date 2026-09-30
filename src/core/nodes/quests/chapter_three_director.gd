@@ -17,6 +17,13 @@ extends ChapterDirector
 ##
 ## Perspective shows what's possible; people make it usable.
 
+## On the side (OQ05, Wai's Shortcut): once he's given up the plank, Wai says
+## there's a way from Chiu's roof to the Chans' in thirty seconds, and goes
+## to wait on the roof. It's three things seen by turning the view: steel steps
+## behind Chiu's back parapet down onto the lower roof; from there, looking
+## back from the north behind the washing, a ladder up to a balcony on the
+## back of Mei's building; and from its side, two planks up onto the roof.
+
 enum {
 	START,
 	GO_WITH_KIT,
@@ -48,6 +55,7 @@ const DAYS_LEFT := 18
 var flags := {
 	"factory_route_pulley_found": false, "story_item_rope": false, "story_item_plank": false, "pulley_safe": false,
 	"plank_laid": false, "sign_hinges_seen": false, "sign_folded": false, "rope_rigged": false, "crate_down": false,
+	"oq05_asked": false, "oq05_stair": false, "oq05_ladder": false, "oq05_bridge": false, "oq05_done": false,
 	"chiu_scene": false, "setup_kit_address": false, "setup_mei_fears_disconnection": false,
 }
 
@@ -68,6 +76,7 @@ func setup() -> void:
 	unregister("workshopDoorShut")
 	_register_people()
 	_register_route()
+	_register_shortcut()
 	_register_sounds()
 	# the day's photograph: the hands round the last worktable, the last time
 	photography.add_target("chiu", world.residents.hand_a, func() -> bool: return stage == PHOTO_WORKERS and not scrapbook.entries.has("chiu"))
@@ -132,6 +141,12 @@ func _live_hint() -> String:
 				lines.append(tr("c3.do.rope"))
 			if lines.is_empty():
 				lines.append(tr("c3.do.kit"))
+	if flags.oq05_asked and not flags.oq05_done:
+		if lines.is_empty():
+			var o: Array = OBJECTIVES.get(stage, ["", ""])
+			if String(o[1]) != "":
+				lines.append(tr(o[1]))
+		lines.append(tr("c3.need.wai"))
 	return "\n".join(lines)
 
 
@@ -371,12 +386,84 @@ func _talk_chan() -> void:
 
 
 func _talk_wai() -> void:
-	if flags.story_item_plank:
+	if flags.story_item_plank and not flags.oq05_asked:
+		flags.oq05_asked = true
+		mark("oq05Asked")
+		say("c3_wai_shortcut", func() -> void:
+			# off he goes, to wait on the roof
+			_pose(world.residents.son, Vector3(-6.4, LevelBuilder.LEVEL_ROOF, -7.8), Vector3(-0.3, 0, 1), "idle")
+			_refresh_hint())
+	elif flags.oq05_done:
+		say("c3_wai_race_after")
+	elif flags.oq05_asked:
+		say("c3_wai_waiting")
+	elif flags.story_item_plank:
 		say("c3_wai_after")
 	elif flags.factory_route_pulley_found:
 		_plank_scene()
 	else:
 		say("c3_wai")
+
+
+# ----------------------------------------------------------------------------- OQ05, Wai's shortcut
+
+
+func _register_shortcut() -> void:
+	var I := interaction
+	var refs := world.refs
+	var Q := InteractionDirector.Priority.QUEST
+	var steps := [
+		["shortcutStair", refs.shortcutStairTop, "verb.downstairs", "oq05_stair", refs.shortcutStairFoot],
+		["shortcutStairBack", refs.shortcutStairFoot, "verb.upstairs", "oq05_stair", refs.shortcutStairTop],
+		["rearLadderUp", refs.rearLadderFoot, "verb.climb", "oq05_ladder", refs.rearBalcony],
+		["rearLadderDown", refs.rearBalcony, "verb.climb_down", "oq05_ladder", refs.rearLadderFoot],
+		["waiBridgeBack", refs.waiBridgeTop, "verb.cross", "oq05_bridge", refs.waiBridgeFoot],
+	]
+	for st in steps:
+		var flag: String = st[3]
+		var to: Vector3 = st[4]
+		I.add({"id": st[0], "position": st[1], "radius": 0.8, "priority": Q, "verb": st[2],
+			"can_interact": func() -> bool: return flags[flag],
+			"interact": func() -> void:
+				audio.creak()
+				transition(to, 6)})
+	I.add({"id": "waiBridge", "position": refs.waiBridgeFoot, "radius": 0.7, "priority": Q, "verb": "verb.cross",
+		"can_interact": func() -> bool: return flags.oq05_bridge,
+		"interact": func() -> void:
+			audio.creak()
+			transition(refs.waiBridgeTop, 6, _over_the_planks)})
+
+
+## Up the planks onto the roof, and there's Wai.
+func _over_the_planks() -> void:
+	on_enter_roof()
+	if flags.oq05_asked and not flags.oq05_done:
+		flags.oq05_done = true
+		mark("oq05Done")
+		say("c3_wai_race", _refresh_hint)
+
+
+## The three things seen by turning: the steps, the ladder, the planks.
+func _shortcut_discover() -> void:
+	if not flags.oq05_asked or flags.oq05_bridge or cam.rotating or locks.is_locked() or dialogue.is_open():
+		return
+	var p := player.position
+	var side := cam.direction == 1 or cam.direction == 3
+	if not flags.oq05_stair and absf(p.y - BuildWorkshop.ROOF_Y) < 0.4 and p.x < -4.6 and p.z < 1.8 and side:
+		flags.oq05_stair = true
+		mark("oq05Stair")
+		audio.chime()
+		say("c3_short_stair")
+	elif flags.oq05_stair and not flags.oq05_ladder and absf(p.y - BuildSideQuests.LOW_Y) < 0.4 and p.z < 0.0 and cam.direction == 2:
+		flags.oq05_ladder = true
+		mark("oq05Ladder")
+		audio.chime()
+		say("c3_short_ladder")
+	elif flags.oq05_ladder and not flags.oq05_bridge and absf(p.y - BuildSideQuests.REAR_Y) < 0.4 and side:
+		flags.oq05_bridge = true
+		mark("oq05Bridge")
+		audio.chime()
+		say("c3_short_bridge")
 
 
 func _plank_scene() -> void:
@@ -720,6 +807,7 @@ func tick(delta: float, paused: bool) -> void:
 	_refresh_hint()
 	_tick_crate(delta)
 	_discover()
+	_shortcut_discover()
 	_tick_hints()
 	# walking into the workshop: Uncle Chiu
 	var p := player.position

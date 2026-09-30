@@ -9,6 +9,10 @@ extends RefCounted
 ##   awning; from the catwalk the page seems to lie on the awning (Chapter 2).
 ##   OQ04, the last mahjong tile: the crack at the foot of the alcove's wall,
 ##   and where it comes out in the lane, behind a stack of crates (Chapter 2).
+##   OQ05, Wai's shortcut: from Chiu's roof, steel steps over its back parapet
+##   down onto the lower roof behind; a ladder from there, behind somebody's
+##   washing, up to a balcony on the back of Mei's building; and two planks
+##   from its rail up onto the main roof. From Chapter 5 the planks are gone.
 ##   OQ03, Auntie Fong's sign: her old shop's board, strung across the slot
 ##   behind Chiu's workshop between the workshop's roof and the neighbours'
 ##   balcony, bolted at each end; the steel ladder up the lane's south wall
@@ -33,6 +37,7 @@ static func build(b: LevelBuilder) -> void:
 	_fong_sign(b)
 	_well_balcony(b)
 	_mahjong_crack(b)
+	_wai_shortcut(b)
 
 
 # ----------------------------------------------------------------------------- OQ01, Mr. Kwok's back page
@@ -142,3 +147,61 @@ static func _fong_sign(b: LevelBuilder) -> void:
 
 	# Mrs. Fong, out on her ledge with her radio
 	b.resident("fong", "ext_plant_lady", Vector3(13.4, LevelBuilder.LEVEL_B, -16.75), {"facing": Vector3(0.3, 0, 1), "parent": "ChapterProps/Ch4"})
+
+
+# ----------------------------------------------------------------------------- OQ05, Wai's shortcut
+
+
+const LOW_ROOF := [-8.0, -5.6, -4.6, -0.1]     # the lower roof behind Chiu's
+const LOW_Y := 9.05
+const REAR_BALC := [-8.0, -5.6, -6.0, -4.7]    # the balcony on the back of Mei's building
+const REAR_Y := 11.2
+
+
+static func _wai_shortcut(b: LevelBuilder) -> void:
+	var P := "Structure/Shortcut"
+	var o := {"band": 1.0, "parent": P}
+	# the lower roof: tar over a slab, a parapet on its open sides, somebody's line of washing
+	b.add_floor(LOW_ROOF[0], LOW_ROOF[1], LOW_ROOF[2], LOW_ROOF[3], LOW_Y, "lowRoof")
+	b.box(LOW_ROOF[0] - 0.2, LOW_ROOF[1] + 0.2, LOW_Y - 0.25, LOW_Y, LOW_ROOF[2] - 0.1, LOW_ROOF[3], c8(0x4a4640),
+		o.merged({"surface": "concrete", "top": "tar", "name": "LowRoof"}))
+	for side in [[LOW_ROOF[0] - 0.2, LOW_ROOF[0]], [LOW_ROOF[1], LOW_ROOF[1] + 0.2]]:
+		b.box(side[0], side[1], LOW_Y, LOW_Y + 0.45, LOW_ROOF[2], LOW_ROOF[3], c8(0x7e7a70), o.merged({"surface": "concrete", "name": "Parapet", "fadeable": true}))
+	var ly := LOW_Y + 1.9
+	b.box(LOW_ROOF[0], LOW_ROOF[1], ly, ly + 0.03, -4.12, -4.09, c8(0x222222), o.merged({"surface": "grain", "name": "Line", "cast_shadow": false}))
+	for spec in [[-7.8, -7.1, 1.1, 0xd8c4a0], [-7.0, -6.5, 0.8, 0x6f7d62], [-6.35, -5.8, 1.25, 0xe8e2d4]]:
+		var cloth := b.box(spec[0], spec[1], ly - spec[2], ly, -4.12, -4.09, c8(spec[3]), o.merged({"surface": "fabric", "name": "Cloth"}))
+		cloth.set_meta("cloth", true)
+	# 1: steel steps over Chiu's back parapet, down onto it
+	for k in 3:
+		var sz := -0.05 - k * 0.3
+		b.box(-6.6, -6.0, LOW_Y + 0.08 * (3 - k), LOW_Y + 0.08 * (3 - k) + 0.04, sz - 0.26, sz, c8(0x5a5e5c),
+			o.merged({"surface": "metal", "name": "Step"}))
+	b.ref("shortcutStairTop", Vector3(-6.3, BuildWorkshop.ROOF_Y, 0.55))
+	b.ref("shortcutStairFoot", Vector3(-6.3, LOW_Y, -1.1))
+	# 2: the ladder up the balcony's front, behind the washing
+	var steel := c8(0x3a3a38)
+	for lx in [-6.4, -6.0]:
+		b.box(lx - 0.02, lx + 0.02, LOW_Y, REAR_Y + 0.9, REAR_BALC[3] + 0.02, REAR_BALC[3] + 0.06, steel, o.merged({"surface": "rust", "name": "LadderRail"}))
+	var ry := LOW_Y + 0.3
+	while ry < REAR_Y + 0.8:
+		b.box(-6.4, -6.0, ry, ry + 0.03, REAR_BALC[3] + 0.02, REAR_BALC[3] + 0.05, steel, o.merged({"surface": "rust", "name": "Rung", "cast_shadow": false}))
+		ry += 0.3
+	b.ref("rearLadderFoot", Vector3(-6.2, LOW_Y, -4.2))
+	# the balcony: a slab on brackets, a rail, a pot, a chair
+	b.add_floor(REAR_BALC[0], REAR_BALC[1], REAR_BALC[2], REAR_BALC[3], REAR_Y, "rearBalcony")
+	b.box(REAR_BALC[0], REAR_BALC[1], REAR_Y - 0.2, REAR_Y, REAR_BALC[2], REAR_BALC[3], c8(0x7e7a70), o.merged({"surface": "concrete", "name": "Slab"}))
+	var rail := c8(0x6a7a70)
+	b.box(REAR_BALC[0], REAR_BALC[1], REAR_Y + 0.93, REAR_Y + 1.0, REAR_BALC[3] - 0.05, REAR_BALC[3], rail, o.merged({"surface": "metal", "name": "Rail"}))
+	for px in [REAR_BALC[0], -7.2, -6.4, REAR_BALC[1] - 0.05]:
+		b.box(px, px + 0.05, REAR_Y, REAR_Y + 1.0, REAR_BALC[3] - 0.05, REAR_BALC[3], rail, o.merged({"surface": "metal", "name": "RailPost"}))
+	PlantKit.place(b, "aspidistra", Vector3(-7.6, REAR_Y, -5.6), P, 1.0)
+	b.ref("rearBalcony", Vector3(-6.2, REAR_Y, -5.3))
+	# 3: two planks from its rail up onto the roof (gone by Chapter 5: two nail holes)
+	var G := "ChapterProps/Ch1-4/WaiBridge"
+	for pxs in [[-7.25, -7.0], [-6.95, -6.7]]:
+		var plank := b.box(pxs[0], pxs[1], -0.02, 0.02, -1.25, 1.25, c8(0x8a6a48), {"band": 1.0, "surface": "wood", "parent": G, "name": "Plank"})
+		plank.position = Vector3((pxs[0] + pxs[1]) / 2, (REAR_Y + 1.0 + LevelBuilder.LEVEL_ROOF + 0.4) / 2, -6.0)
+		plank.rotation.x = 0.55
+	b.ref("waiBridgeFoot", Vector3(-6.9, REAR_Y, -5.5))
+	b.ref("waiBridgeTop", Vector3(-6.9, LevelBuilder.LEVEL_ROOF, -6.9))
