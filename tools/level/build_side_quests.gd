@@ -74,7 +74,8 @@ static func _well_balcony(b: LevelBuilder) -> void:
 	# the door onto it, halfway up the stairs to Lau's landing
 	b.box(10.44, 10.5, Y, Y + 2.0, -14.85, -14.2, c8(0x4f6a5a), {"band": 0.0, "surface": "wood", "parent": P, "name": "BalconyDoor"})
 	b.box(10.42, 10.44, Y + 0.95, Y + 1.05, -14.35, -14.25, c8(0xc9a55a), {"band": 0.0, "surface": "metal", "parent": P, "name": "BalconyDoorHandle", "cast_shadow": false})
-	b.ref("wellBalconyDoor", Vector3(9.95, A, -12.35))
+	# on the flight itself, the tread beside the door (the stairs are walkable)
+	b.ref("wellBalconyDoor", Vector3(10.15, A + 1.73, -14.3))
 	b.ref("wellBalcony", Vector3(11.3, Y, -14.5))
 	b.ref("awningSeen", Vector3(13.2, LevelBuilder.LEVEL_B, -12.7))
 	# today: Mr. Kwok's back page, blown down onto it

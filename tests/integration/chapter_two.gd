@@ -240,6 +240,16 @@ func _run() -> void:
 	expect(await interact("kwokPage"), "the back page: racing results, half a crossword")
 	expect(await interact("wellBalconyBack"), "back through the door")
 	await secs(1.2)
+	expect(absf(slice.player.position.y - 1.73) < 0.2, "back on the tread beside the door, halfway up the flight")
+	# the flight is walkable: down it, up it, and not into its side from the floor
+	var ws: WalkSpace = slice.player.walk_space
+	# the foot is against the stairwell's south wall (z -12): she comes and goes from the west
+	var down := ws.slide(ws.slide(slice.player.position, Vector2(0, 2.6), 0.32), Vector2(-1.2, 0), 0.32)
+	expect(down.x < 9.4 and absf(down.y) < 0.01, "she can walk down the stairs and off onto the floor")
+	var up := ws.slide(ws.slide(Vector3(9.0, 0, -12.4), Vector2(1.15, 0), 0.32), Vector2(0, -2.8), 0.32)
+	expect(up.y > 1.9, "and walk up them from the foot to the top step")
+	var side := ws.slide(Vector3(9.4, 0, -13.6), Vector2(0.8, 0), 0.32)
+	expect(side.x < 9.6 and side.y < 0.01, "from the floor beside the flight, its side is solid")
 	await place(Vector3(2.9, 0, -5.0))
 	expect(await interact("shopkeeper"), "back to Mr. Kwok")
 	expect(q.flags.oq01_done, "'Poor judgment.'")

@@ -96,6 +96,13 @@ func add_floor(x0: float, x1: float, z0: float, z1: float, y: float, floor_name 
 	data.floors.append({"x0": minf(x0, x1), "x1": maxf(x0, x1), "z0": minf(z0, z1), "z1": maxf(z0, z1), "y": y, "name": floor_name})
 
 
+## A walkable flight of stairs (see WalkSpace.add_flight).
+func add_flight(x0: float, x1: float, z0: float, z1: float, axis: String, at: float, y_at: float, slope: float,
+		y_min: float, y_max: float, floor_name := "") -> void:
+	data.floors.append({"x0": minf(x0, x1), "x1": maxf(x0, x1), "z0": minf(z0, z1), "z1": maxf(z0, z1), "y": y_min, "name": floor_name,
+		"rise": {"axis": axis, "at": at, "y_at": y_at, "slope": slope, "y_min": y_min, "y_max": y_max}})
+
+
 func add_obstacle(x0: float, x1: float, z0: float, z1: float, y: float, obstacle_name := "", key := "") -> void:
 	data.obstacles.append({"x0": minf(x0, x1), "x1": maxf(x0, x1), "z0": minf(z0, z1), "z1": maxf(z0, z1),
 		"y": y, "name": obstacle_name, "key": key})

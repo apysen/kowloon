@@ -10,6 +10,10 @@ extends RefCounted
 ## moves, a resident standing in a corridor). Movement slides along walls one
 ## axis at a time.
 ##
+## A floor can also be a flight of stairs: a rectangle whose height rises along
+## one axis. Whoever walks onto it climbs with it, so Mei can walk up the steps
+## she can see instead of being moved between floors.
+##
 ## Mei's footprint is a square that must lie wholly on floor, so her centre
 ## always stays a radius away from the inside face of every wall. The sprite's
 ## anchor depth (see pixel_sprite.gdshaderinc) does the rest of the no-clipping
@@ -17,6 +21,8 @@ extends RefCounted
 ## from being sliced by them.
 
 const LEVEL_TOLERANCE := 1.0
+## How far a walker steps up or down onto a flight from where they stand.
+const STEP := 0.6
 
 
 class Floor:
@@ -26,9 +32,23 @@ class Floor:
 	var z1: float
 	var y: float
 	var name: String
+	## A flight of stairs: "x" or "z" is the axis it climbs along, from height
+	## `rise_y` at `rise_at`, by `rise_slope` per metre, held within y_min..y_max.
+	var rise_axis := ""
+	var rise_at := 0.0
+	var rise_y := 0.0
+	var rise_slope := 0.0
+	var y_min := 0.0
+	var y_max := 0.0
 
 	func contains(x: float, z: float) -> bool:
 		return x >= x0 and x <= x1 and z >= z0 and z <= z1
+
+	func height_at(x: float, z: float) -> float:
+		if rise_axis == "":
+			return y
+		var a := z if rise_axis == "z" else x
+		return clampf(rise_y + (a - rise_at) * rise_slope, y_min, y_max)
 
 
 class Obstacle:
@@ -68,6 +88,18 @@ func add_floor(x0: float, x1: float, z0: float, z1: float, y: float, floor_name 
 	return f
 
 
+func add_flight(x0: float, x1: float, z0: float, z1: float, axis: String, at: float, y_at: float, slope: float,
+		y_min: float, y_max: float, floor_name := "") -> Floor:
+	var f := add_floor(x0, x1, z0, z1, y_min, floor_name)
+	f.rise_axis = axis
+	f.rise_at = at
+	f.rise_y = y_at
+	f.rise_slope = slope
+	f.y_min = y_min
+	f.y_max = y_max
+	return f
+
+
 func add_obstacle(x0: float, x1: float, z0: float, z1: float, y: float, obstacle_name := "", active := Callable()) -> Obstacle:
 	var o := Obstacle.new()
 	o.x0 = minf(x0, x1)
@@ -82,12 +114,21 @@ func add_obstacle(x0: float, x1: float, z0: float, z1: float, y: float, obstacle
 
 
 func floor_at(x: float, z: float, y: float) -> Floor:
+	var best: Floor = null
+	var best_d := INF
 	for f in floors:
-		if absf(f.y - y) > LEVEL_TOLERANCE:
+		if not f.contains(x, z):
 			continue
-		if f.contains(x, z):
-			return f
-	return null
+		var d := absf(f.height_at(x, z) - y)
+		if d > LEVEL_TOLERANCE:
+			continue
+		# a flight within a step of the feet is the one being walked on
+		if f.rise_axis != "" and d <= STEP:
+			d = -1.0
+		if d < best_d:
+			best = f
+			best_d = d
+	return best
 
 
 func circle_hits_obstacle(x: float, z: float, y: float, r: float, ignore: Obstacle = null) -> Obstacle:
@@ -128,4 +169,7 @@ func slide(pos: Vector3, delta_xz: Vector2, r: float, max_step := 0.12, ignore: 
 	var p := pos
 	for i in steps:
 		p = resolve_move(p, delta_xz.x / steps, delta_xz.y / steps, r, ignore)
+		var f := floor_at(p.x, p.z, p.y)
+		if f != null:
+			p.y = f.height_at(p.x, p.z)
 	return p

@@ -54,6 +54,21 @@ floors = Array[Dictionary]([{
 "z0": -15.0,
 "z1": -12.0
 }, {
+"name": "stairsA",
+"rise": {
+"at": -12.3,
+"axis": "z",
+"slope": -0.7777777777777777,
+"y_at": 0.175,
+"y_max": 2.1,
+"y_min": 0.0
+},
+"x0": 9.75,
+"x1": 10.5,
+"y": 0.0,
+"z0": -15.0,
+"z1": -12.3
+}, {
 "name": "Landing",
 "x0": 8.0,
 "x1": 12.0,
@@ -566,6 +581,14 @@ obstacles = Array[Dictionary]([{
 "y": 0.0,
 "z0": -10.8,
 "z1": -9.3
+}, {
+"key": "",
+"name": "stairsASides",
+"x0": 9.9,
+"x1": 10.5,
+"y": -0.8,
+"z0": -15.0,
+"z1": -12.75
 }, {
 "key": "",
 "name": "stairwell",
@@ -1461,7 +1484,7 @@ refs = {
 "stairsCDown": Vector3(1, 5, 2.5),
 "stairsCUp": Vector3(1, 0, 1.4),
 "stairsDownB": Vector3(8.5, 5, -13.9),
-"stairsUpA": Vector3(9.4, 0, -14.2),
+"stairsUpA": Vector3(10.15, 2, -14.62),
 "stallGap": Vector3(2.35, 0, -4.85),
 "steamer": Vector3(-6.6, 6.25, 3.57),
 "storeDoor": Vector3(14.65, 0, -2.6),
@@ -1477,7 +1500,7 @@ refs = {
 "waiBridgeFoot": Vector3(-6.9, 11.2, -5.5),
 "waiBridgeTop": Vector3(-6.9, 13, -6.9),
 "wellBalcony": Vector3(11.3, 1.75, -14.5),
-"wellBalconyDoor": Vector3(9.95, 0, -12.35),
+"wellBalconyDoor": Vector3(10.15, 1.73, -14.3),
 "winch": Vector3(-5.85, 9.25, 6.5),
 "wongPacking": Vector3(11.3, 5, -12.5),
 "wongTable": Vector3(25.6, 5, -14),

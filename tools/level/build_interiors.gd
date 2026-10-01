@@ -299,7 +299,15 @@ static func level_a(b: LevelBuilder) -> void:
 		b.box(9.9, 10.5, Y, Y + 0.35 * (i + 1), -12.3 - i * 0.45, -12.75 - i * 0.45, c8(0x5d5a52), {"surface": "concrete", "parent": "Structure/LevelA/Stairwell", "name": "Step"})
 		b.box(9.88, 10.5, Y + 0.35 * (i + 1) - 0.03, Y + 0.35 * (i + 1), -12.3 - i * 0.45, -12.36 - i * 0.45, c8(0x8a8a80), {"surface": "metal", "parent": "Structure/LevelA/Stairwell", "name": "Nosing", "cast_shadow": false})
 	b.cylinder(Vector3(9.85, Y + 1.0, -12.2), Vector3(9.85, Y + 2.9, -15.0), 0.025, b.surface("metal"), {"parent": "Structure/LevelA/Stairwell", "name": "Handrail", "tint": c8(0x6a5a48)})
-	b.ref("stairsUpA", Vector3(9.4, Y, -14.2))
+	# the flight is walkable: its height is each tread's at the tread's middle
+	# (0.35 up per 0.45 along), reaching 2.1 at the wall. It runs a little wider
+	# than the steps, under the handrail, so Mei's footprint fits on it. Below
+	# the first step, a low obstacle keeps anyone on the floor out of the steps'
+	# solid sides (it reaches only those below 0.2: anyone on the flight is above it)
+	b.add_flight(9.75, 10.5, -15.0, -12.3, "z", -12.3, Y + 0.175, -0.35 / 0.45, Y, Y + 2.1, "stairsA")
+	b.add_obstacle(9.9, 10.5, -15.0, -12.75, Y - 0.8, "stairsASides")
+	# where the flight meets the wall: "Go upstairs" from the top step
+	b.ref("stairsUpA", Vector3(10.15, Y + 2.0, -14.62))
 
 	# The ground under the catwalk light well: other people's rubbish
 	b.box(11, 25, -0.3, 0, -17, -7, c8(0x3a3833), {"band": 0.0, "surface": "concrete", "parent": "Structure/LightWell", "name": "WellFloor"})

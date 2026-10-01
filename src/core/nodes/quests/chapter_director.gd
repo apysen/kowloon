@@ -239,7 +239,7 @@ func _register_shared() -> void:
 				return
 			transition(Vector3(9.2, LevelBuilder.LEVEL_B, -12.4))})
 	I.add({"id": "stairsDown", "position": refs.stairsDownB, "radius": 1.0, "priority": InteractionDirector.Priority.QUEST,
-		"verb": "verb.downstairs", "interact": func() -> void: transition(Vector3(9.3, LevelBuilder.LEVEL_A, -12.6))})
+		"verb": "verb.downstairs", "interact": func() -> void: transition(refs.stairsUpA)})   # onto the top step of the flight below
 	I.add({"id": "roofDoorB", "position": refs.roofDoorB, "radius": 1.0, "priority": InteractionDirector.Priority.QUEST,
 		"verb": "verb.roof_door", "interact": func() -> void:
 			if not roof_door_open():

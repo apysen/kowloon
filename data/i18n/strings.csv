@@ -172,7 +172,7 @@ verb.roof_door,Roof door,天台門
 verb.stairwell_door,Stairwell door,樓梯間門
 verb.door,Door,門
 verb.eat,Eat,食飯
-verb.stair_door,"Side door, up the stairs",樓梯中間嗰度側門
+verb.stair_door,Side door,側門
 verb.push,Push,推
 verb.climb,Climb,爬上去
 verb.look_up,Look up,抬頭看

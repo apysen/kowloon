@@ -28,5 +28,9 @@ extends Resource
 func build_walk_space() -> WalkSpace:
 	var ws := WalkSpace.new()
 	for f in floors:
-		ws.add_floor(f.x0, f.x1, f.z0, f.z1, f.y, f.name)
+		if f.has("rise"):
+			var r: Dictionary = f.rise
+			ws.add_flight(f.x0, f.x1, f.z0, f.z1, r.axis, r.at, r.y_at, r.slope, r.y_min, r.y_max, f.name)
+		else:
+			ws.add_floor(f.x0, f.x1, f.z0, f.z1, f.y, f.name)
 	return ws
