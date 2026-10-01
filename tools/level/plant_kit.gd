@@ -57,11 +57,20 @@ static func _aspidistra() -> Array:
 	rng.seed = 11
 	var pot := SurfaceTool.new()
 	pot.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(pot, Vector3(0, 0.12, 0), 0.24, 0.12, 0.155, 12)       # the pot, narrowing to its foot
-	_cyl(pot, Vector3(0, 0.245, 0), 0.05, 0.172, 0.172, 12)     # its rolled rim
+	_cyl(pot, Vector3(0, 0.12, 0), 0.24, 0.12, 0.155, 12, false)   # the pot, narrowing to its foot
+	# its rolled rim: an open ring, so the soil shows inside it
+	_cyl(pot, Vector3(0, 0.245, 0), 0.05, 0.172, 0.172, 12, false)
+	_cyl(pot, Vector3(0, 0.2, 0), 0.07, 0.14, 0.13, 12, false, true)        # the inside wall above the soil
+	var lip := TorusMesh.new()                                              # the rim's rolled top
+	lip.inner_radius = 0.136
+	lip.outer_radius = 0.178
+	lip.rings = 16
+	lip.ring_segments = 6
+	pot.append_from(lip, 0, Transform3D(Basis.IDENTITY.scaled(Vector3(1, 0.6, 1)), Vector3(0, 0.262, 0)))
 	var soil := SurfaceTool.new()
 	soil.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(soil, Vector3(0, 0.262, 0), 0.012, 0.15, 0.15, 12)
+	_cyl(soil, Vector3(0, 0.226, 0), 0.012, 0.14, 0.14, 12)                 # 4 cm down inside the rim
+	_ellipsoid(soil, Vector3(0, 0.232, 0), Vector3.UP, Vector3.RIGHT, Vector3(0.24, 0.025, 0.24))   # heaped a little at the middle
 	var light := SurfaceTool.new()
 	light.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var dark := SurfaceTool.new()
@@ -71,7 +80,7 @@ static func _aspidistra() -> Array:
 		var phi := TAU * i / n + rng.randf_range(-0.2, 0.2)
 		var length := rng.randf_range(0.36, 0.56)
 		var lean := rng.randf_range(0.12, 0.55)
-		var base := Vector3(cos(phi), 0, sin(phi)) * 0.04 + Vector3(0, 0.26, 0)
+		var base := Vector3(cos(phi), 0, sin(phi)) * 0.04 + Vector3(0, 0.235, 0)
 		_arched_leaf(light if i % 3 != 0 else dark, base, phi, lean, length, rng.randf_range(0.07, 0.09))
 	return [["Pot", pot.commit(), "plaster", TERRACOTTA], ["Soil", soil.commit(), "tar", SOIL],
 		["Leaves", light.commit(), "grain", LEAF], ["LeavesDark", dark.commit(), "grain", LEAF_DARK]]
@@ -105,7 +114,8 @@ static func _chilli() -> Array:
 	rng.seed = 37
 	var basin := SurfaceTool.new()
 	basin.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(basin, Vector3(0, 0.065, 0), 0.13, 0.235, 0.165, 16)
+	_cyl(basin, Vector3(0, 0.065, 0), 0.13, 0.235, 0.165, 16, false)          # open-topped
+	_cyl(basin, Vector3(0, 0.07, 0), 0.12, 0.228, 0.16, 16, false, true)       # its inside face
 	var rim := SurfaceTool.new()
 	rim.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var ring := TorusMesh.new()          # the blue enamel edge, a ring round the lip
@@ -116,27 +126,40 @@ static func _chilli() -> Array:
 	rim.append_from(ring, 0, Transform3D(Basis.IDENTITY, Vector3(0, 0.13, 0)))
 	var soil := SurfaceTool.new()
 	soil.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(soil, Vector3(0, 0.125, 0), 0.01, 0.22, 0.22, 16)
+	_cyl(soil, Vector3(0, 0.1, 0), 0.012, 0.215, 0.215, 16)                   # 3 cm down inside the lip
+	_ellipsoid(soil, Vector3(0, 0.106, 0), Vector3.UP, Vector3.RIGHT, Vector3(0.34, 0.03, 0.34))
 	var leaves := SurfaceTool.new()
 	leaves.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var inner := SurfaceTool.new()
+	inner.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var centre := Vector3(0, 0.34, 0)
-	_rod(leaves, Vector3(0, 0.12, 0), centre, 0.016, 0.012, 5)       # the stem
-	var n := 60
-	for i in n:
-		# spread evenly over the dome (a Fibonacci sphere, the underside squashed)
-		var y := 1.0 - 1.7 * (i + 0.5) / n
-		var r := sqrt(maxf(0.0, 1.0 - y * y))
-		var a := i * 2.39996
-		var p := Vector3(cos(a) * r, y * 0.8, sin(a) * r) * 0.2 + centre
-		var out := (p - centre).normalized()
-		_leaf(leaves, p, out, rng.randf_range(0.075, 0.1), rng.randf_range(0.035, 0.05), rng.randf() * TAU)
+	_rod(inner, Vector3(0, 0.1, 0), centre, 0.016, 0.012, 5)       # the stem
+	# branches out from it, so the leaves have something to grow on
+	for k in 6:
+		var a := k * TAU / 6 + 0.4
+		var tip := centre + Vector3(cos(a) * 0.15, rng.randf_range(-0.08, 0.08), sin(a) * 0.15)
+		_rod(inner, centre + Vector3(0, -0.12, 0), tip, 0.008, 0.004, 4)
+	# three shells of leaves, the inner two darker in the bush's own shade, so it
+	# reads full from any side and close up, not as a hollow ball
+	for shell: Array in [[0.2, 110, leaves, 1.0], [0.14, 60, inner, 0.9], [0.08, 26, inner, 0.8]]:
+		var n: int = shell[1]
+		for i in n:
+			# spread evenly over the dome (a Fibonacci sphere, the underside squashed)
+			var y := 1.0 - 1.7 * (i + 0.5) / n
+			var r := sqrt(maxf(0.0, 1.0 - y * y))
+			var a := i * 2.39996 + float(shell[0]) * 9.0
+			var p := Vector3(cos(a) * r, y * 0.8, sin(a) * r) * float(shell[0]) + centre
+			var out := (p - centre).normalized()
+			var sc: float = shell[3]
+			_leaf(shell[2], p, out, rng.randf_range(0.075, 0.1) * sc, rng.randf_range(0.035, 0.05) * sc, rng.randf() * TAU)
 	var fruit := SurfaceTool.new()
 	fruit.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for a in [0.3, 1.7, 2.9, 4.2, 5.4]:
 		var p := centre + Vector3(cos(a) * 0.19, rng.randf_range(-0.06, 0.06), sin(a) * 0.19)
 		_rod(fruit, p, p + Vector3(cos(a) * 0.02, -0.075, sin(a) * 0.02), 0.013, 0.0, 6)   # hanging, pointed
 	return [["Basin", basin.commit(), "metal", ENAMEL], ["Rim", rim.commit(), "metal", ENAMEL_RIM],
-		["Soil", soil.commit(), "tar", SOIL], ["Leaves", leaves.commit(), "grain", LEAF], ["Chillies", fruit.commit(), "grain", CHILLI]]
+		["Soil", soil.commit(), "tar", SOIL], ["Leaves", leaves.commit(), "grain", LEAF],
+		["LeavesDark", inner.commit(), "grain", LEAF_DARK], ["Chillies", fruit.commit(), "grain", CHILLI]]
 
 
 # ----------------------------------------------------------------------------- shapes
@@ -192,14 +215,20 @@ static func _rod(st: SurfaceTool, a: Vector3, b: Vector3, r0: float, r1: float, 
 	st.append_from(c, 0, Transform3D(Basis(x, y, z), (a + b) * 0.5))
 
 
-static func _cyl(st: SurfaceTool, at: Vector3, h: float, top: float, bottom: float, sides: int) -> void:
+## `capped` false leaves the top open (a pot's mouth); `inside` turns the faces
+## inward and drops both caps, for the inner wall of a pot seen over its rim.
+static func _cyl(st: SurfaceTool, at: Vector3, h: float, top: float, bottom: float, sides: int, capped := true, inside := false) -> void:
 	var c := CylinderMesh.new()
 	c.height = h
 	c.top_radius = top
 	c.bottom_radius = bottom
 	c.radial_segments = sides
 	c.rings = 1
+	c.cap_top = capped and not inside
+	c.cap_bottom = not inside
+	c.flip_faces = inside
 	st.append_from(c, 0, Transform3D(Basis.IDENTITY, at))
+
 
 
 static func _box(st: SurfaceTool, at: Vector3, size: Vector3) -> void:

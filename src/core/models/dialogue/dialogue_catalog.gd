@@ -66,6 +66,10 @@ const LINES := {
 		{"speaker": "", "text": "dlg.boxes_end.02"},
 		{"speaker": "mei", "text": "dlg.boxes_end.03"},
 	],
+	"rice_end": [
+		{"speaker": "", "text": "dlg.rice_end.01"},
+		{"speaker": "", "text": "dlg.rice_end.02"},
+	],
 	"lau_intro": [
 		{"speaker": "lau", "text": "dlg.lau_intro.01"},
 		{"speaker": "mei", "text": "dlg.lau_intro.02"},

@@ -39,7 +39,7 @@ const OBJECTIVES := {
 	HELPED_NG: ["obj.ng_photo.main", "obj.ng_photo.hint"],
 	FABRIC_MOVED: ["obj.medicine.main", "obj.fabric_moved.hint"],
 	MEDICINE_DELIVERED: ["obj.return_home.main", ""],
-	RETURNED_HOME: ["", ""],
+	RETURNED_HOME: ["obj.rice.main", ""],
 	COMPLETE: ["", ""],
 }
 

@@ -70,7 +70,7 @@ STRINGS = [
     ("c7.obj.find", "Find Grandfather.", "找公公。"),
     ("c7.obj.home", "Go home.", "回家。"),
     ("c7.we_left", "WE LEFT.", "我們走了。"),
-    ("c7.credits.title", "PROJECT KOWLOON", "PROJECT KOWLOON"),
+    ("c7.credits.title", "WALLED CITY", "WALLED CITY"),
     ("c7.credits.thanks", "Thank you for playing.", "謝謝你玩這個遊戲。"),
     ("c7.credits.replay", "Press [R] to return to the title", "按 [R] 回到標題"),
     ("res.mei.name", "Mei", "阿美"),

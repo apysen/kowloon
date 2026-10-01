@@ -227,9 +227,10 @@ static func _landing(b: LevelBuilder) -> void:
 		"wall": c8(0x8a8272), "floor": c8(0x4e4a42), "open": {"w": [[3.1, 3.9]]}, "lintel": true,
 		"floor_hole": [STAIR_X[0], STAIR_X[1], TOP[2], 3.0], "parent": "Structure/LevelB", "wall_surface": "concrete"})
 	b.add_obstacle(STAIR_X[0], STAIR_X[1], TOP[2], 3.0, B, "yamenStairHole")
-	for px in [STAIR_X[0], (STAIR_X[0] + STAIR_X[1]) * 0.5, STAIR_X[1]]:
+	# the flight arrives at the hole's south edge: a newel post each side, the head left open
+	for px in [STAIR_X[0], STAIR_X[1]]:
 		b.box(px - 0.03, px + 0.03, B, B + 1.0, 2.94, 3.0, c8(0x4f7a5a), {"surface": "metal", "parent": P + "/Top", "name": "RailPost", "band": 1.0})
-	b.box(STAIR_X[0], STAIR_X[1], B + 0.93, B + 1.0, 2.94, 3.0, c8(0x4f7a5a), {"surface": "metal", "parent": P + "/Top", "name": "Rail", "band": 1.0})
+	b.box(STAIR_X[0], STAIR_X[1], B - 0.04, B + 0.01, 2.97, 3.03, c8(0xd8b23a), {"surface": "metal", "parent": P + "/Top", "name": "Lip", "cast_shadow": false, "band": 1.0})
 	PropKit.bulb(b, Vector3(17.0, B + 3.2, 3.6), B + 4.2, P + "/Top")
 	b.ref("yamenStairDown", Vector3(17.0, B, 3.35))
 	b.ref("yamenTop", Vector3(17.0, B, 3.6))
@@ -341,19 +342,21 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	b.add_obstacle(15.0, 16.2, -5.35, -4.65, A, "cabinet", "way:cabinet")
 	b.ref("cabinet", Vector3(15.6, A, -4.3))
 
-	# Chapter 4: the movers at work, Mrs. Cheung's things labelled in the courtyard
+	# Chapter 4: the movers at work, Mrs. Cheung's things labelled in the courtyard.
+	# Everything here stands only in Chapter 4, so its obstacles carry "chapter:Ch4"
+	# too, or they'd be invisible walls in every other chapter
 	var C4 := "ChapterProps/Ch4"
 	PropKit.table(b, 9.0, 10.2, -1.2, -0.55, A, 0.72, c8(0x9a9aa0), C4, "metal")
-	b.add_obstacle(9.0, 10.2, -1.2, -0.55, A, "cheungTable")
+	b.add_obstacle(9.0, 10.2, -1.2, -0.55, A, "cheungTable", "chapter:Ch4")
 	b.box(9.8, 10.0, A + 0.72, A + 0.8, -0.95, -0.75, c8(0x3a3a4a), {"surface": "grain", "parent": C4, "name": "Teacup", "cast_shadow": false})
 	# a wardrobe and her boxes, each with its label
-	b.box(9.2, 10.2, A, A + 1.8, 3.2, 3.75, c8(0x7a5a3a), {"surface": "wood", "parent": C4, "name": "Wardrobe", "collide": true, "collide_y": A})
+	b.box(9.2, 10.2, A, A + 1.8, 3.2, 3.75, c8(0x7a5a3a), {"surface": "wood", "parent": C4, "name": "Wardrobe", "collide": true, "collide_y": A, "key": "chapter:Ch4"})
 	b.card("res://assets/textures/props/label_c714.png", Vector3(9.7, A + 1.2, 3.76), Vector2(0.3, 0.18), Vector3(0, 0, 1), {"parent": C4, "name": "Label", "band": 0.0})
 	PropKit.cardboard(b, 10.1, 10.9, A, A + 0.6, 4.6, 5.4, c8(0xa8834f), C4)
 	PropKit.cardboard(b, 10.15, 10.8, A + 0.6, A + 1.05, 4.7, 5.3, c8(0x9c7a48), C4)
-	b.add_obstacle(10.1, 10.9, 4.6, 5.4, A, "yamenBoxes")
+	b.add_obstacle(10.1, 10.9, 4.6, 5.4, A, "yamenBoxes", "chapter:Ch4")
 	# the movers' handcart, waiting at the courtyard's mouth
-	b.box(6.5, 7.9, A + 0.25, A + 0.32, 3.9, 4.6, c8(0x5a4a3a), {"surface": "wood", "parent": C4, "name": "Handcart", "collide": true, "collide_y": A})
+	b.box(6.5, 7.9, A + 0.25, A + 0.32, 3.9, 4.6, c8(0x5a4a3a), {"surface": "wood", "parent": C4, "name": "Handcart", "collide": true, "collide_y": A, "key": "chapter:Ch4"})
 	for wx in [6.7, 7.7]:
 		b.cylinder(Vector3(wx, A + 0.2, 3.85), Vector3(wx, A + 0.2, 4.65), 0.2, b.surface("rust"), {"parent": C4, "name": "Wheel", "tint": c8(0x2a2a28), "band": 0.0})
 	# the people: Mrs. Cheung at her table, Mr. Cheng with his plan, the movers at the storage room
@@ -402,7 +405,7 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	b.box(4.3, 5.8, A, A + 0.004, -13.3, -11.7, c8(0xdfe6dc), {"surface": "floor", "parent": "ChapterProps/Ch4-7", "name": "ChairMark", "cast_shadow": false, "band": 0.0})
 	PropKit.cardboard(b, 5.0, 5.8, A, A + 0.55, -14.7, -14.05, c8(0xa8834f), C4)
 	PropKit.cardboard(b, 5.05, 5.75, A + 0.55, A + 0.95, -14.65, -14.1, c8(0x9c7a48), C4)
-	b.add_obstacle(5.0, 5.8, -14.7, -14.05, A, "lauToolBoxes")
+	b.add_obstacle(5.0, 5.8, -14.7, -14.05, A, "lauToolBoxes", "chapter:Ch4")
 	b.card("res://assets/textures/props/card_lau.png", Vector3(1.7, A + 1.45, -9.02), Vector2(0.3, 0.18), Vector3(0, 0, -1), {"parent": C4, "name": "LauCard", "band": 0.0})
 	b.ref("lauCard", Vector3(2.35, A, -9.5))
 	b.ref("lauPacking", Vector3(4.8, A, -12.6))
@@ -415,8 +418,8 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	# Mrs. Wong's things, carried out onto the landing for her daughter to collect
 	PropKit.cardboard(b, 11.3, 11.95, B, B + 0.6, -14.7, -14.1, c8(0xa8834f), C4)
 	PropKit.cardboard(b, 11.35, 11.9, B + 0.6, B + 0.95, -14.6, -14.2, c8(0x9c7a48), C4)
-	b.add_obstacle(11.3, 11.95, -14.7, -14.1, B, "wongBoxes")
-	b.box(10.9, 11.3, B, B + 0.5, -13.6, -13.2, c8(0x6b4a30), {"surface": "wood", "parent": C4, "name": "TeaChest", "collide": true, "collide_y": B, "band": 1.0})
+	b.add_obstacle(11.3, 11.95, -14.7, -14.1, B, "wongBoxes", "chapter:Ch4")
+	b.box(10.9, 11.3, B, B + 0.5, -13.6, -13.2, c8(0x6b4a30), {"surface": "wood", "parent": C4, "name": "TeaChest", "collide": true, "collide_y": B, "band": 1.0, "key": "chapter:Ch4"})
 	b.ref("wongPacking", Vector3(11.3, B, -12.5))
 	# the Chans' drying frame on the roof, half taken down: its poles laid on the roof
 	for k in 3:
@@ -425,10 +428,17 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 
 	# the lane's gate: locked until Chapter 4, then left open
 	var G13 := "ChapterProps/Ch1-3"
-	var bar_z := 4.4
-	while bar_z < 6.0:
-		b.box(1.87, 1.93, A, A + 2.5, bar_z, bar_z + 0.03, c8(0x3a3a38), {"band": 0.0, "surface": "metal", "parent": G13, "name": "GateBar"})
-		bar_z += 0.18
+	# a whole gate between the frame's posts (z 4.4 to 5.9): rails top and bottom
+	# meeting both posts, bars evenly between, chained and padlocked at the latch side
+	var steel := c8(0x3a3a38)
+	for ry in [A + 0.08, A + 1.2, A + 2.44]:
+		b.box(1.86, 1.94, ry, ry + 0.06, 4.4, 5.9, steel, {"band": 0.0, "surface": "metal", "parent": G13, "name": "GateRail"})
+	for k in 9:
+		var bz := 4.45 + k * 0.175
+		b.box(1.885, 1.915, A + 0.02, A + 2.5, bz - 0.015, bz + 0.015, steel, {"band": 0.0, "surface": "metal", "parent": G13, "name": "GateBar"})
+	for side in [1.82, 1.94]:   # the chain, looped round the end bar and the post
+		b.box(side, side + 0.04, A + 1.05, A + 1.35, 5.8, 5.96, c8(0x6a6a66), {"band": 0.0, "surface": "metal", "parent": G13, "name": "GateChain", "cast_shadow": false})
+	b.box(1.75, 1.82, A + 0.98, A + 1.1, 5.82, 5.92, c8(0xb08a3a), {"band": 0.0, "surface": "metal", "parent": G13, "name": "Padlock"})
 	b.add_obstacle(1.75, 2.05, 4.3, 6.0, A, "laneGateShut", "chapter:Ch1-3")
 	var G47 := "ChapterProps/Ch4-7"
 	# swung back against the lane's south wall

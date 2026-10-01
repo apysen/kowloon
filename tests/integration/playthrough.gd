@@ -335,7 +335,10 @@ func _run() -> void:
 	expect(not mum.visible, "Mum has gone out by the time Mei is home")
 	await use("boxes", w.refs.boxes)
 	await secs(1.0)
-	expect(q.stage == S.COMPLETE, "the boxes, and the ending")
+	expect(q.stage == S.RETURNED_HOME, "the boxes are only a look now")
+	await use("rice", w.refs.rice)
+	await secs(1.0)
+	expect(q.stage == S.COMPLETE, "the rice Mum saved, and the ending")
 	await secs(3.5)
 	expect(slice.ending.visible and slice.ending.can_continue, "the end card offers the way on into the next day")
 	t = 0.0

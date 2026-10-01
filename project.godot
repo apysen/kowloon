@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Project Kowloon"
-config/description="Kowloon Walled City, the last weeks before the move. Vertical slice: The Blue Pipe."
+config/name="Walled City"
+config/description="Kowloon Walled City, the last weeks before the move."
 run/main_scene="res://scenes/app/title_screen.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"

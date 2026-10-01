@@ -36,6 +36,8 @@ dlg.grandfather_end.01,Eat. It's getting cold.,食飯啦。凍㗎喇。
 dlg.boxes_end.01,"Cardboard boxes, taped shut. Your mother's handwriting on the sides.",一個個用膠紙封好的紙皮箱，側面寫著媽媽的字。
 dlg.boxes_end.02,KITCHEN.  WINTER CLOTHES.  RADIO.,廚房。　冬衣。　收音機。
 dlg.boxes_end.03,They were here this morning.,今朝已經喺度㗎喇。
+dlg.rice_end.01,"Half a bowl of rice under a plate, still a little warm. A few pieces of choi sum on top, and a slice of lap cheong Kit missed.",半碗飯用碟蓋住，仲有少少暖。上面幾條菜心，仲有一片阿潔漏咗嘅臘腸。
+dlg.rice_end.02,Mei pulls the red stool in and picks up the chopsticks.,阿美拉近張紅色櫈仔，拎起筷子。
 dlg.lau_intro.01,"Mei! Mind the tray, those are clean.",阿美！小心個盤，嗰啲啱啱洗乾淨㗎。
 dlg.lau_intro.02,You're packing already?,你已經執緊嘢喇？
 dlg.lau_intro.03,Your mother hasn't started?,你阿媽仲未執？
@@ -169,6 +171,8 @@ verb.downstairs,Go downstairs,下樓
 verb.roof_door,Roof door,天台門
 verb.stairwell_door,Stairwell door,樓梯間門
 verb.door,Door,門
+verb.eat,Eat,食飯
+verb.stair_door,"Side door, up the stairs",樓梯中間嗰度側門
 verb.push,Push,推
 verb.climb,Climb,爬上去
 verb.look_up,Look up,抬頭看
@@ -204,6 +208,7 @@ obj.ng_photo.main,Take Mr. Ng's photograph.,給吳伯拍一張照片。
 obj.ng_photo.hint,“Get the birds in it.”,「影埋啲雀。」
 obj.fabric_moved.hint,Wai went to fetch the washing.,阿偉去收衣服了。
 obj.return_home.main,Return home.,回家。
+obj.rice.main,Eat the rice Mum saved.,食媽媽留低嘅飯。
 res.lau.name,Mr. Lau,劉醫生
 res.lau.occupation,dentist,牙醫
 res.lau.location,"Third Floor, Lung Chun Road",龍津路三樓
@@ -232,7 +237,7 @@ camera.controls_pad,[RS] look    [LS] walk    [Y] lower camera,[RS] 環顧    [L
 dialogue.next,SPACE,SPACE
 ending.days,{days} DAYS UNTIL WE LEAVE,距離搬走，還有 {days} 日
 ending.day,{days} DAY UNTIL WE LEAVE,距離搬走，還有 {days} 日
-ending.title,PROJECT KOWLOON,PROJECT KOWLOON
+ending.title,WALLED CITY,WALLED CITY
 ending.sub,VERTICAL SLICE COMPLETE,試玩版完
 ending.replay,Press [R] to play again,按 [R] 重新開始
 pause.title,PAUSED,暫停
@@ -245,7 +250,7 @@ pause.hint,[Esc] resume,[Esc] 繼續
 ui.language,LANGUAGE: ENGLISH,語言：繁體中文
 ui.fullscreen_on,FULLSCREEN: ON,全螢幕：開
 ui.fullscreen_off,FULLSCREEN: OFF,全螢幕：關
-title.name,PROJECT\nKOWLOON,PROJECT\nKOWLOON
+title.name,WALLED\nCITY,WALLED\nCITY
 title.slice,THE BLUE PIPE,藍色水喉
 title.blurb,"Kowloon Walled City, the last weeks before the move. Grandfather needs his medicine taken to Mrs. Wong. A vertical slice, about fifteen minutes. Headphones help.",九龍城寨，搬遷前的最後幾個星期。公公要你把藥送去給黃婆婆。試玩版，約十五分鐘。建議戴上耳機。
 title.begin,BEGIN,開始
@@ -279,7 +284,7 @@ dlg.c2_ho_find.12,Blue branch. Follow it until it stops being blue.,藍色嗰條
 dlg.c2_ho_find.13,Why does it stop being blue?,點解會唔再係藍色？
 dlg.c2_ho_find.14,Paint ran out.,油漆用晒囉。
 dlg.c2_ho_find.15,Who painted it?,邊個油嘅？
-dlg.c2_ho_find.16,"Whoever laid it. Nobody built this lot, Mei. Everybody did.",邊個駁就邊個油。呢度啲水喉冇人起過，阿美。係個個一齊起嘅。
+dlg.c2_ho_find.16,"Whoever laid it. No plumber ever came in here, Mei. Every family ran its own pipe.",邊個駁就邊個油。呢度從來冇水喉師傅入過嚟，阿美。家家戶戶自己駁自己嗰條。
 dlg.c2_ho_trace.01,Blue. Until it isn't. Go on.,藍色。跟到佢唔係藍為止。去啦。
 dlg.c2_blue_until.01,Blue until it isn't. Very helpful.,藍到唔係藍為止。真係好有用。
 dlg.c2_branch_seen.01,From the side it's plain: the faded one only goes down the well to a capped end. The blue one crosses it.,從側面看就清楚了：褪色那條只是沿天井落到一個封死的管口，藍色那條則橫過天井。
@@ -393,7 +398,7 @@ env.footbridge,Planks across the well. People on this side have crossed it for y
 res.ho.name,Mr. Ho,何師傅
 res.ho.occupation,repairs things,修理師傅
 res.ho.location,"The hall, by the fans",走廊，風扇堆旁
-res.ho.note,He says nobody built the water system. Everybody did.,他說這裡的水喉沒有人建過，是大家一起建的。
+res.ho.note,"He says no plumber ever came in. Every family ran its own pipe.",他說從來沒有水喉師傅進來過，每家每戶都是自己接的。
 res.ho.context,"For years there was no public water supply inside the City. Residents sank wells and pumped water up to tanks on the roofs; the pipes that brought it down were laid, and mended, by whoever needed them.",多年來城寨內沒有公共供水。居民自己打井，把水泵上天台水缸；把水送下來的水喉，都是有需要的人自己鋪、自己修的。
 title.dev_chapters,DEV · CHAPTERS,開發版・章節
 title.chapter,CHAPTER {n},第{n}章
@@ -1183,7 +1188,7 @@ c7.card.title,THE WAY OUT,出路
 c7.obj.find,Find Grandfather.,找公公。
 c7.obj.home,Go home.,回家。
 c7.we_left,WE LEFT.,我們走了。
-c7.credits.title,PROJECT KOWLOON,PROJECT KOWLOON
+c7.credits.title,WALLED CITY,WALLED CITY
 c7.credits.thanks,Thank you for playing.,謝謝你玩這個遊戲。
 c7.credits.replay,Press [R] to return to the title,按 [R] 回到標題
 res.mei.name,Mei,阿美

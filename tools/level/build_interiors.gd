@@ -81,6 +81,23 @@ static func level_a(b: LevelBuilder) -> void:
 		b.box(x + 0.02, x + 0.14, Y + 0.87, Y + 0.875, -0.55, -0.53, c8(0xc9a55a), {"surface": "wood", "parent": P6, "name": "Chopsticks", "cast_shadow": false})
 	b.box(-11.3, -11.0, Y + 0.8, Y + 1.05, -0.2, 0.05, c8(0x4f7f70), {"surface": "metal", "parent": P6, "name": "Thermos"})
 	PropKit.stool(b, -11.5, 0.6, Y, c8(0xc9463a), P6)
+	# where Mei sits to eat the rice Mum saved her: the end of Chapter 1. The bowl
+	# at her place by the red stool, a plate over it to keep it warm, chopsticks beside
+	var rice_bowl := CylinderMesh.new()
+	rice_bowl.top_radius = 0.07
+	rice_bowl.bottom_radius = 0.04
+	rice_bowl.height = 0.07
+	rice_bowl.radial_segments = 16
+	b.piece(rice_bowl, Vector3(-11.5, Y + 0.835, -0.02), b.surface("grain"), {"parent": "ChapterProps/Ch1/Rice", "name": "SavedRice", "tint": c8(0xe8e2d0)})
+	var rice_plate := CylinderMesh.new()
+	rice_plate.top_radius = 0.1
+	rice_plate.bottom_radius = 0.085
+	rice_plate.height = 0.012
+	rice_plate.radial_segments = 20
+	b.piece(rice_plate, Vector3(-11.5, Y + 0.876, -0.02), b.surface("grain"), {"parent": "ChapterProps/Ch1/Rice", "name": "RicePlate", "tint": c8(0xdfe4e2)})
+	b.box(-11.36, -11.355, Y + 0.8, Y + 0.806, -0.12, 0.1, c8(0xc9a55a), {"surface": "wood", "parent": "ChapterProps/Ch1/Rice", "name": "Chopsticks", "cast_shadow": false})
+	b.box(-11.345, -11.34, Y + 0.8, Y + 0.806, -0.12, 0.1, c8(0xc9a55a), {"surface": "wood", "parent": "ChapterProps/Ch1/Rice", "name": "Chopsticks", "cast_shadow": false})
+	b.ref("rice", Vector3(-11.5, Y, 0.9))
 	PropKit.stool(b, -10.3, -0.5, Y, c8(0x3f6fa8), P6)
 	PropKit.shelf_z(b, -14, -13.4, -2.2, -0.4, Y, 1.5, c8(0x5d4632), P6)
 	b.add_obstacle(-14, -13.4, -2.2, -0.4, Y, "shelf", "chapter:Ch1-6")
@@ -307,27 +324,37 @@ static func level_b(b: LevelBuilder) -> void:
 	panel_door(b, 9.9, 10.9, Y, 2.3, -14.95, c8(0x56705f), "Structure/LevelB/Landing", -1.0, "RoofDoor")
 	b.ref("stairsDownB", Vector3(8.5, Y, -13.9))
 	b.ref("roofDoorB", Vector3(10.4, Y, -14.4))
-	# the flight down toward the clinic: steps dropping away from the landing,
-	# their nosings painted safety yellow so the opening reads from any view
+	# the flight down toward the clinic: it starts at the landing's edge (z -13.1),
+	# where Mei steps onto it, and drops south in solid concrete steps between the
+	# shaft's walls to a half-landing where it turns out of sight, their nosings
+	# painted safety yellow so it reads from any view. It stops 0.75 down: below
+	# that is the ceiling of the stairwell on Level A
 	var SP := "Structure/LevelB/Landing/StairsDown"
-	for i in 6:
-		var top := Y - 0.3 * (i + 1)
-		var sz0 := -15.0 + 0.34 * i
-		b.box(8.02, 8.93, top - 0.3, top, sz0, sz0 + 0.34, c8(0x6a665c), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "Step"})
-		b.box(8.02, 8.93, top - 0.035, top, sz0 + 0.28, sz0 + 0.34, c8(0xd8b23a), {"band": 1.0, "surface": "metal", "parent": SP, "name": "Nosing", "cast_shadow": false})
-	b.box(8.0, 8.95, Y - 2.2, Y - 1.9, -15.0, -13.1, c8(0x2a2826), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "Below"})
+	for i in 4:
+		var top := Y - 0.17 * (i + 1)
+		var z1 := -13.1 - 0.27 * i
+		var z0 := -15.0 if i == 3 else z1 - 0.27
+		b.box(8.0, 8.95, Y - 0.75, top, z0, z1, c8(0x6a665c), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "Step" if i < 3 else "HalfLanding"})
+		b.box(8.0, 8.95, top - 0.03, top + 0.002, z1 - 0.05, z1, c8(0xd8b23a), {"band": 1.0, "surface": "metal", "parent": SP, "name": "Nosing", "cast_shadow": false})
+	# the shaft's walls below the landing's floor, so it's a stairwell, not a hole
+	b.box(7.9, 8.0, Y - 0.75, Y - 0.02, -15.05, -13.1, c8(0x5f5b52), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "ShaftWall"})
+	b.box(8.95, 9.05, Y - 0.75, Y - 0.04, -15.05, -13.1, c8(0x5f5b52), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "ShaftWall"})
+	b.box(7.9, 9.05, Y - 0.75, Y - 0.02, -15.1, -15.0, c8(0x5f5b52), {"band": 1.0, "surface": "concrete", "parent": SP, "name": "ShaftWall"})
+	# a handrail on the west wall, falling with the flight
+	b.cylinder(Vector3(8.07, Y + 0.9, -13.0), Vector3(8.07, Y + 0.9 - 0.68, -14.2), 0.022, b.surface("metal"), {"parent": SP, "name": "Handrail", "tint": c8(0x6a5a48), "band": 1.0})
+	for hz in [-13.3, -14.0]:
+		var hy: float = Y + 0.9 - 0.68 * (-13.0 - hz) / 1.2
+		b.box(8.0, 8.08, hy - 0.08, hy - 0.02, hz - 0.015, hz + 0.015, c8(0x5a5a58), {"band": 1.0, "surface": "metal", "parent": SP, "name": "HandrailBracket", "cast_shadow": false})
 	# the lip of the opening, also painted, and light spilling up from the flight below
 	b.box(8.0, 8.95, Y - 0.04, Y + 0.01, -13.16, -13.1, c8(0xd8b23a), {"band": 1.0, "surface": "metal", "parent": SP, "name": "Lip", "cast_shadow": false})
 	b.box(8.95, 9.0, Y - 0.04, Y + 0.01, -15.0, -13.1, c8(0xd8b23a), {"band": 1.0, "surface": "metal", "parent": SP, "name": "Lip", "cast_shadow": false})
-	PropKit.bulb(b, Vector3(8.48, Y - 0.9, -14.6), Y - 0.35, SP)
-	# a painted green rail round the opening, with balusters, so it reads as a stairwell from every side
+	PropKit.bulb(b, Vector3(8.48, Y + 2.6, -14.3), Y + 4.2, SP)
+	# a painted green rail along the landing's side of the drop only: the north
+	# end, where the flight starts, is left open to walk onto
 	var rail := c8(0x4f7a5a)
 	for pz in [-13.1, -13.75, -14.4, -14.97]:
 		b.box(8.96, 9.04, Y, Y + 1.0, pz - 0.04, pz + 0.04, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "RailPost"})
-	for px in [8.05, 8.5]:
-		b.box(px - 0.04, px + 0.04, Y, Y + 1.0, -13.14, -13.06, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "RailPost"})
 	b.box(8.95, 9.05, Y + 0.93, Y + 1.0, -15.0, -13.05, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "Rail"})
-	b.box(8.0, 9.05, Y + 0.93, Y + 1.0, -13.15, -13.05, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "Rail"})
 	b.box(8.97, 9.03, Y + 0.45, Y + 0.5, -15.0, -13.07, rail, {"band": 1.0, "surface": "metal", "parent": SP, "name": "MidRail"})
 	# the painted marker on the walls above the flight
 	b.card("res://assets/textures/props/sign_stairs_down.png", Vector3(8.48, Y + 1.75, -14.94), Vector2(0.6, 0.8), Vector3(0, 0, 1), {"parent": SP, "name": "StairSign", "band": 1.0})
@@ -351,7 +378,9 @@ static func level_b(b: LevelBuilder) -> void:
 	hinge.position = Vector3(2.2, Y, -13.0)
 	hinge.rotation.y = deg_to_rad(70)
 	b.attach(hinge, b.group(PT))
-	b.tag(hinge, 1.0)
+	# it stands in the doorway, so it's seen from the corridor: tagged with the room
+	# so it isn't taken for the cubicle's contents (hidden until Mei is inside)
+	b.tag(hinge, 1.0, false, {"room": "toilet"})
 	var leaf := b.box(0.0, 0.78, 0.0, 2.05, -0.02, 0.02, c8(0x7a8a6a), {"surface": "metal", "parent_node": hinge, "name": "Leaf"})
 	leaf.remove_meta("band")
 	var knob := b.box(0.66, 0.72, 1.0, 1.06, 0.02, 0.06, c8(0xc9a55a), {"surface": "metal", "parent_node": hinge, "name": "Knob", "cast_shadow": false})
@@ -436,9 +465,10 @@ static func level_b(b: LevelBuilder) -> void:
 	b.attach(fabric, b.group("Special"))
 	b.tag(fabric, 1.0, false, {"dynamic": true})
 	var cols := [c8(0x3f6fa8), c8(0xc9a55a), c8(0xa8534a)]
+	# narrow enough that the outer two hang clear of the catwalk rails (1.05 out from the line's middle)
 	for i in 3:
-		var cloth := b.box(-0.02, 0.02, -2.05, -0.05, -0.36, 0.36, cols[i], {"surface": "fabric", "parent_node": fabric, "name": "Cloth"})
-		cloth.position = Vector3(0, -1.05, -0.78 + i * 0.78)
+		var cloth := b.box(-0.02, 0.02, -2.05, -0.05, -0.22, 0.22, cols[i], {"surface": "fabric", "parent_node": fabric, "name": "Cloth"})
+		cloth.position = Vector3(0, -1.05, -0.56 + i * 0.56)
 		cloth.remove_meta("band")
 		cloth.set_meta("cloth", true)
 	var line := b.box(-0.02, 0.02, -0.02, 0.02, -1.2, 1.2, c8(0x222222), {"surface": "grain", "parent_node": fabric, "name": "Line"})
@@ -676,12 +706,12 @@ static func roof(b: LevelBuilder) -> void:
 	b.box(-7.2, -7, Y, Y + 0.35, -21, -16, c8(0x6d6a60), {"band": 2.0, "surface": "concrete", "parent": P, "name": "ShaftRim"})
 	b.box(-3, -2.8, Y, Y + 0.35, -21, -16, c8(0x6d6a60), {"band": 2.0, "surface": "concrete", "parent": P, "name": "ShaftRim"})
 
-	# stair hut with its door
-	b.box(8.8, 11.6, Y, Y + 2.8, -15, -12.4, c8(0x7a7466), {"band": 2.0, "collide": true, "collide_y": Y, "fadeable": true,
+	# the stair hut and its door never fade: it's Mei's way back down, and the
+	# roof's one landmark, so it stays solid wherever she stands up here
+	b.box(8.8, 11.6, Y, Y + 2.8, -15, -12.4, c8(0x7a7466), {"band": 2.0, "collide": true, "collide_y": Y,
 		"surface": "plaster", "top": "tar", "parent": P, "name": "StairHut", "base_y": Y})
-	# the door and the roof sheet fade with the hut, or they'd hang in the air when it gives way
-	panel_door(b, 9.9, 10.9, Y, 2.2, -12.4, c8(0x56705f), P, 2.0, "HutDoor", true)
-	b.box(8.7, 11.7, Y + 2.8, Y + 2.86, -15.1, -12.2, c8(0x9a9690), {"band": 2.0, "surface": "rust", "parent": P, "name": "HutRoof", "fadeable": true})
+	panel_door(b, 9.9, 10.9, Y, 2.2, -12.4, c8(0x56705f), P, 2.0, "HutDoor")
+	b.box(8.7, 11.7, Y + 2.8, Y + 2.86, -15.1, -12.2, c8(0x9a9690), {"band": 2.0, "surface": "rust", "parent": P, "name": "HutRoof"})
 	b.ref("roofDoorTop", Vector3(10.4, Y, -11.8))
 	b.ref("shaftTop", Vector3(-7.8, Y, -19.95))
 

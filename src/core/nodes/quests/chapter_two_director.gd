@@ -349,7 +349,9 @@ func _register_side() -> void:
 	I.add({"id": "pageAwning", "position": refs.awningSeen, "radius": 1.6, "priority": InteractionDirector.Priority.ENV, "verb": "verb.look",
 		"can_interact": func() -> bool: return flags.oq01_asked and not flags.oq01_seen,
 		"interact": func() -> void: say("c2_page_awning")})
-	I.add({"id": "wellBalconyDoor", "position": refs.wellBalconyDoor, "radius": 0.8, "priority": Q, "verb": "verb.door",
+	# the door is halfway up the flight, out of reach of the floor: name it, so the
+	# prompt at the foot of the stairs isn't mistaken for the stairs themselves
+	I.add({"id": "wellBalconyDoor", "position": refs.wellBalconyDoor, "radius": 0.8, "priority": Q, "verb": "verb.stair_door",
 		"can_interact": func() -> bool: return flags.oq01_seen,
 		"interact": func() -> void:
 			audio.creak()
@@ -357,7 +359,9 @@ func _register_side() -> void:
 	I.add({"id": "wellBalconyBack", "position": refs.wellBalcony, "radius": 0.8, "priority": Q, "verb": "verb.door",
 		"interact": func() -> void:
 			audio.creak()
-			transition(refs.wellBalconyDoor + Vector3(-0.2, 0, 0.3), 5)})
+			# back at the foot of the flight, clear of the steps and the stairwell's wall
+			# (z -12): the old spot overlapped the wall and she couldn't move
+			transition(refs.wellBalconyDoor + Vector3(-0.45, 0, -0.3), 5)})
 	I.add({"id": "kwokPage", "position": refs.kwokPage, "radius": 0.9, "priority": Q, "verb": "verb.take",
 		"can_interact": func() -> bool: return flags.oq01_asked and not flags.oq01_page,
 		"interact": func() -> void:

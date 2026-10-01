@@ -137,23 +137,6 @@ theme_override_font_sizes/font_size = 60
 theme_override_colors/font_color = Color(0.8509804, 0.83137256, 0.78039217, 1)
 text = "title.name"
 
-[node name="SliceName" type="HBoxContainer" parent="Center/Row/Copy" unique_id=835465299]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="Pipe" type="ColorRect" parent="Center/Row/Copy/SliceName" unique_id=722792384]
-custom_minimum_size = Vector2(38, 6)
-layout_mode = 2
-size_flags_vertical = 4
-color = Color(0.24705882, 0.5254902, 0.81960785, 1)
-
-[node name="Label" type="Label" parent="Center/Row/Copy/SliceName" unique_id=300551102]
-layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_na7ja")
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.24705882, 0.5254902, 0.81960785, 1)
-text = "title.slice"
-
 [node name="Blurb" type="Label" parent="Center/Row/Copy" unique_id=795869290]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2

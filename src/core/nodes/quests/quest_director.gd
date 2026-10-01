@@ -286,10 +286,14 @@ func _register_interactions() -> void:
 	# the empty flat's back window: nothing to do with today
 	look("unitWindowLook", refs.unitWindowOutside, "env.unit_window", 1.0)
 
-	# the packing boxes: worth a look only once Mei is home again
-	I.add({"id": "boxes", "position": refs.boxes, "radius": 1.3, "priority": InteractionDirector.Priority.QUEST,
+	# the packing boxes: worth a look once Mei is home again
+	I.add({"id": "boxes", "position": refs.boxes, "radius": 1.3, "priority": InteractionDirector.Priority.ENV,
 		"verb": "verb.look", "can_interact": func() -> bool: return stage == S.RETURNED_HOME,
-		"interact": func() -> void: say("boxes_end", _ending)})
+		"interact": func() -> void: say("boxes_end")})
+	# the rice Mum saved her (Grandfather mentions it): the day ends as she sits down to eat
+	I.add({"id": "rice", "position": refs.rice, "radius": 1.1, "priority": InteractionDirector.Priority.QUEST,
+		"verb": "verb.eat", "can_interact": func() -> bool: return stage == S.RETURNED_HOME,
+		"interact": func() -> void: say("rice_end", _ending)})
 
 
 func _register_photo_targets() -> void:
@@ -708,7 +712,7 @@ func _home_again() -> void:
 	locks.lock("homecoming")
 	await get_tree().create_timer(0.4).timeout
 	locks.unlock("homecoming")
-	# the day ends only when the player chooses to look at the boxes
+	# the day ends only when the player chooses to sit down and eat
 	say("grandfather_return", func() -> void: set_stage(S.RETURNED_HOME))
 
 

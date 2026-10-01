@@ -81,10 +81,16 @@ static func _stairs(b: LevelBuilder) -> void:
 	b.room({"x0": 0, "x1": 2, "z0": 1, "z1": 4, "y": B, "name": "LandingC", "wall": c8(0x7a7466), "floor": c8(0x4e4a42),
 		"open": {"w": [[1.6, 2.8]]}, "parent": "Structure/LevelB", "wall_surface": "concrete", "floor_hole": [0.15, 1.85, 3.0, 4.0]})
 	var LP := P + "/LandingC"
-	var rail := c8(0x4f7a5a)
-	for px in [0.15, 1.0, 1.85]:
-		b.box(px - 0.03, px + 0.03, B, B + 1.0, 2.94, 3.0, rail, {"surface": "metal", "parent": LP, "name": "RailPost", "band": 1.0})
-	b.box(0.15, 1.85, B + 0.93, B + 1.0, 2.94, 3.0, rail, {"surface": "metal", "parent": LP, "name": "Rail", "band": 1.0})
+	# the head of the flight, open on the landing's side: steps start at the hole's
+	# edge (z 3) and drop away south, over the flight that climbs up beneath them
+	# (no deeper than 0.75: the stair room's ceiling below is at 4.2)
+	for i in 4:
+		var top := B - 0.17 * (i + 1)
+		var z0 := 3.0 + 0.25 * i
+		b.box(0.15, 1.85, B - 0.75, top, z0, z0 + 0.25, c8(0x5d5a52), {"surface": "concrete", "parent": LP, "name": "Step", "band": 1.0})
+		b.box(0.15, 1.85, top - 0.03, top + 0.002, z0, z0 + 0.05, c8(0xd8b23a), {"surface": "metal", "parent": LP, "name": "Nosing", "cast_shadow": false, "band": 1.0})
+	b.box(0.15, 1.85, B - 0.04, B + 0.01, 2.97, 3.03, c8(0xd8b23a), {"surface": "metal", "parent": LP, "name": "Lip", "cast_shadow": false, "band": 1.0})
+	b.cylinder(Vector3(1.93, B + 0.9, 2.9), Vector3(1.93, B + 0.9 - 0.68, 3.95), 0.022, b.surface("metal"), {"parent": LP, "name": "Handrail", "tint": c8(0x6a5a48), "band": 1.0})
 	b.box(0.15, 1.85, B - 2.0, B - 1.8, 3.0, 4.0, c8(0x2a2826), {"surface": "concrete", "parent": LP, "name": "Below", "band": 1.0})
 	b.add_obstacle(0.15, 1.85, 3.0, 4.0, B, "stairsCHole")
 	PropKit.bulb(b, Vector3(1.0, B + 3.2, 1.8), B + 4.2, LP)

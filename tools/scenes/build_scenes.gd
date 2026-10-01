@@ -648,15 +648,6 @@ func build_title() -> Control:
 	name_l.name = "Name"
 	name_l.add_theme_constant_override("line_spacing", -12)
 	add(col, name_l)
-	var slice_row := add(col, HBoxContainer.new()) as HBoxContainer
-	slice_row.name = "SliceName"
-	slice_row.add_theme_constant_override("separation", 12)
-	var pipe := add(slice_row, ColorRect.new()) as ColorRect
-	pipe.name = "Pipe"
-	pipe.color = S.PIPE
-	pipe.custom_minimum_size = Vector2(38, 6)
-	pipe.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	add(slice_row, label("title.slice", spaced(S.FONT_UI_BOLD, 4), 15, S.PIPE))
 	var copy := label("title.blurb", S.FONT_UI_REGULAR, 15, S.CONCRETE_DIM)
 	copy.name = "Blurb"
 	copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
