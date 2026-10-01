@@ -7,12 +7,14 @@ extends RefCounted
 ## Chapter 5 some pages are of places, which have no occupation or location,
 ## and some notes are written in later.
 
-const ENTRIES: Array[String] = ["lau", "ng", "ho", "chiu", "cheung", "line", "lau_clinic", "wong_room", "kit", "wong", "ng_birds", "old_photo"]
+const ENTRIES: Array[String] = ["lau", "ng", "ho", "chiu", "cheung", "line", "lau_clinic", "wong_room", "kit", "wong", "ng_birds", "old_photo", "mei"]
 ## Pages whose note is only written in later (Progress.late_notes): until then, none.
 const NOTE_LATER: Array[String] = ["lau_clinic", "wong_room"]
 const FIELDS: Array[String] = ["name", "occupation", "location", "context", "note"]
 ## Pages of places, not people: a name, a note and the history, no byline.
-const PLACES: Array[String] = ["line", "lau_clinic", "wong_room", "ng_birds", "old_photo"]
+const PLACES: Array[String] = ["line", "lau_clinic", "wong_room", "ng_birds", "old_photo", "mei"]
+## Pages whose note is in somebody else's hand (Grandfather's, under Mei's photograph).
+const OTHER_HAND: Array[String] = ["mei"]
 const PLACE_FIELDS: Array[String] = ["name", "context", "note"]
 ## Pages with no print on them: just her notes, on a sheet taped in.
 const NOTE_PAGES: Array[String] = ["kit", "wong"]
@@ -53,7 +55,7 @@ static func entry(id: String) -> Dictionary:
 
 ## The fields a page has in the string table.
 static func fields_of(id: String) -> Array[String]:
-	if NOTE_PAGES.has(id):
+	if NOTE_PAGES.has(id) or OTHER_HAND.has(id):
 		return NOTE_FIELDS
 	return PLACE_FIELDS if PLACES.has(id) else FIELDS
 

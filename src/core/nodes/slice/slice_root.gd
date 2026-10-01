@@ -82,6 +82,8 @@ func _ready() -> void:
 			director = ChapterFiveDirector.new()
 		6:
 			director = ChapterSixDirector.new()
+		7:
+			director = ChapterSevenDirector.new()
 		_:
 			director = quests
 	if director != quests:

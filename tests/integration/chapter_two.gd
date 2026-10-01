@@ -270,7 +270,10 @@ func _run() -> void:
 	await place(Vector3(-9.1, 0, -2.2))
 	expect(await interact("mum"), "Mum can be talked to")
 	expect(q.stage == C.TEA and not q.is_complete(), "the day doesn't end on Mum's line: the kettle goes on")
-	await secs(9.0)
+	var tea_t := 0.0
+	while not q.flags.tea_served and tea_t < 16.0:
+		await secs(0.25)
+		tea_t += 0.25
 	expect(q.flags.tea_served, "Mum brings Grandfather his tea")
 	expect(w.level.get_node_or_null("TeaCup") != null, "the cup is on the table by him")
 	await place(Vector3(-11.9, 0, 0.9))

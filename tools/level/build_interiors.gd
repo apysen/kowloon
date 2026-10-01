@@ -25,6 +25,7 @@ static func build(b: LevelBuilder) -> void:
 	BuildQuietRooms.build(b)
 	BuildSideQuests.build(b)
 	BuildLastRoof.build(b)
+	BuildWayOut.build(b)
 	roof(b)
 	pipes(b)
 	characters(b)
@@ -58,6 +59,8 @@ static func lighting(b: LevelBuilder) -> void:
 static func level_a(b: LevelBuilder) -> void:
 	var Y := LevelBuilder.LEVEL_A
 	var P := "Furniture/Apartment"
+	# nearly all of it gone by the last day (Chapter 7: BuildQuietRooms._last_day)
+	var P6 := "ChapterProps/Ch1-6/Apartment"
 
 	# Mei's flat: a single room, three generations, and today, boxes
 	b.room({"x0": -14, "x1": -6, "z0": -4, "z1": 4, "y": Y, "name": "Apartment", "id": "apartment",
@@ -65,27 +68,27 @@ static func level_a(b: LevelBuilder) -> void:
 		"open": {"e": [[-1, 1]]}, "parent": "Structure/LevelA"})
 	# three generations, one room: Grandfather below, Mei on the top bunk, a
 	# curtain drawn back at the head; Mum sleeps up on the cockloft
-	PropKit.bed(b, -14, -12, 1.8, 4, Y, c8(0x8a6f5a), c8(0xd8d0bd), P)
-	b.add_obstacle(-14, -12, 1.8, 4, Y, "bed")
-	PropKit.bunk_top(b, -14, -12, 1.8, 4, Y, c8(0x8a6f5a), c8(0xe4dccb), c8(0x6f5a8a), P)
-	PropKit.curtain(b, 1.85, 2.4, Y + 0.3, Y + 1.3, -11.93, "z", c8(0xa8453a), P)
-	b.box(-12.0, -11.93, Y + 1.3, Y + 1.33, 1.82, 3.48, c8(0x5a4a3a), {"surface": "metal", "parent": P, "name": "CurtainRail", "cast_shadow": false})
-	PropKit.table(b, -12.2, -10.8, -1.2, 0.2, Y, 0.8, c8(0x6b4a30), P)
-	b.add_obstacle(-12.2, -10.8, -1.2, 0.2, Y, "table")
+	PropKit.bed(b, -14, -12, 1.8, 4, Y, c8(0x8a6f5a), c8(0xd8d0bd), P6)
+	b.add_obstacle(-14, -12, 1.8, 4, Y, "bed", "chapter:Ch1-6")
+	PropKit.bunk_top(b, -14, -12, 1.8, 4, Y, c8(0x8a6f5a), c8(0xe4dccb), c8(0x6f5a8a), P6)
+	PropKit.curtain(b, 1.85, 2.4, Y + 0.3, Y + 1.3, -11.93, "z", c8(0xa8453a), P6)
+	b.box(-12.0, -11.93, Y + 1.3, Y + 1.33, 1.82, 3.48, c8(0x5a4a3a), {"surface": "metal", "parent": P6, "name": "CurtainRail", "cast_shadow": false})
+	PropKit.table(b, -12.2, -10.8, -1.2, 0.2, Y, 0.8, c8(0x6b4a30), P6)
+	b.add_obstacle(-12.2, -10.8, -1.2, 0.2, Y, "table", "chapter:Ch1-6")
 	for i in 3:   # rice bowls and chopsticks
 		var x := -11.9 + i * 0.3
-		b.box(x, x + 0.16, Y + 0.8, Y + 0.87, -0.8, -0.64, c8(0xe8e2d0), {"surface": "grain", "parent": P, "name": "RiceBowl"})
-		b.box(x + 0.02, x + 0.14, Y + 0.87, Y + 0.875, -0.55, -0.53, c8(0xc9a55a), {"surface": "wood", "parent": P, "name": "Chopsticks", "cast_shadow": false})
-	b.box(-11.3, -11.0, Y + 0.8, Y + 1.05, -0.2, 0.05, c8(0x4f7f70), {"surface": "metal", "parent": P, "name": "Thermos"})
-	PropKit.stool(b, -11.5, 0.6, Y, c8(0xc9463a), P)
-	PropKit.stool(b, -10.3, -0.5, Y, c8(0x3f6fa8), P)
-	PropKit.shelf_z(b, -14, -13.4, -2.2, -0.4, Y, 1.5, c8(0x5d4632), P)
-	b.add_obstacle(-14, -13.4, -2.2, -0.4, Y, "shelf")
-	var radio := PropKit.radio(b, -13.95, -13.45, Y + 1.5, -1.8, -0.9, P)
+		b.box(x, x + 0.16, Y + 0.8, Y + 0.87, -0.8, -0.64, c8(0xe8e2d0), {"surface": "grain", "parent": P6, "name": "RiceBowl"})
+		b.box(x + 0.02, x + 0.14, Y + 0.87, Y + 0.875, -0.55, -0.53, c8(0xc9a55a), {"surface": "wood", "parent": P6, "name": "Chopsticks", "cast_shadow": false})
+	b.box(-11.3, -11.0, Y + 0.8, Y + 1.05, -0.2, 0.05, c8(0x4f7f70), {"surface": "metal", "parent": P6, "name": "Thermos"})
+	PropKit.stool(b, -11.5, 0.6, Y, c8(0xc9463a), P6)
+	PropKit.stool(b, -10.3, -0.5, Y, c8(0x3f6fa8), P6)
+	PropKit.shelf_z(b, -14, -13.4, -2.2, -0.4, Y, 1.5, c8(0x5d4632), P6)
+	b.add_obstacle(-14, -13.4, -2.2, -0.4, Y, "shelf", "chapter:Ch1-6")
+	var radio := PropKit.radio(b, -13.95, -13.45, Y + 1.5, -1.8, -0.9, P6)
 	radio.name = "Radio"
-	PropKit.altar(b, -13.95, -13.6, Y + 1.2, Y + 1.25, -1.2, -1.0, P)
+	PropKit.altar(b, -13.95, -13.6, Y + 1.2, Y + 1.25, -1.2, -1.0, P6)
 	b.card("res://assets/textures/props/calendar_1992.png", Vector3(-9.2, Y + 1.8, -4.0), Vector2(0.45, 0.68), Vector3(0, 0, 1),
-		{"parent": P, "name": "Calendar", "band": 0.0})
+		{"parent": P6, "name": "Calendar", "band": 0.0})
 	# turned on Grandfather in his chair
 	var rotor := PropKit.fan(b, -7.0, 3.2, Y, P, Vector3(-12.8, Y, -0.15) - Vector3(-7.0, Y, 3.2))
 	rotor.reparent(b.group("Special"), false)
@@ -93,23 +96,23 @@ static func level_a(b: LevelBuilder) -> void:
 	rotor.name = "Fan"
 	PropKit.bulb(b, Vector3(-10, Y + 3.3, -0.5), Y + 4.2, P)
 	# a birdcage hanging by the window, an old clock, slippers by the door
-	b.box(-6.9, -6.6, Y, Y + 0.05, -0.8, -0.4, c8(0x3f6fa8), {"surface": "fabric", "parent": P, "name": "Slippers", "cast_shadow": false})
-	b.box(-6.9, -6.6, Y, Y + 0.05, 0.4, 0.8, c8(0xa8453a), {"surface": "fabric", "parent": P, "name": "Slippers", "cast_shadow": false})
-	b.box(-8.6, -8.3, Y + 2.5, Y + 2.85, -3.99, -3.9, c8(0x6b4a30), {"surface": "wood", "parent": P, "name": "Clock"})
+	b.box(-6.9, -6.6, Y, Y + 0.05, -0.8, -0.4, c8(0x3f6fa8), {"surface": "fabric", "parent": P6, "name": "Slippers", "cast_shadow": false})
+	b.box(-6.9, -6.6, Y, Y + 0.05, 0.4, 0.8, c8(0xa8453a), {"surface": "fabric", "parent": P6, "name": "Slippers", "cast_shadow": false})
+	b.box(-8.6, -8.3, Y + 2.5, Y + 2.85, -3.99, -3.9, c8(0x6b4a30), {"surface": "wood", "parent": P6, "name": "Clock"})
 
 	# Packing boxes, present from the very first frame. Against the back wall,
 	# behind Grandfather's chair.
 	var bc := c8(0xa8834f)
-	PropKit.cardboard(b, -13.9, -12.7, Y, Y + 0.8, -3.95, -3.1, bc, P)
-	b.add_obstacle(-13.9, -12.7, -3.95, -3.1, Y, "boxes")
-	PropKit.cardboard(b, -12.6, -11.5, Y, Y + 0.7, -3.95, -3.2, c8(0x9c7a48), P)
-	b.add_obstacle(-12.6, -11.5, -3.95, -3.2, Y, "boxes2")
-	PropKit.cardboard(b, -13.7, -12.9, Y + 0.8, Y + 1.4, -3.9, -3.2, c8(0xb08c58), P)
+	PropKit.cardboard(b, -13.9, -12.7, Y, Y + 0.8, -3.95, -3.1, bc, P6)
+	b.add_obstacle(-13.9, -12.7, -3.95, -3.1, Y, "boxes", "chapter:Ch1-6")
+	PropKit.cardboard(b, -12.6, -11.5, Y, Y + 0.7, -3.95, -3.2, c8(0x9c7a48), P6)
+	b.add_obstacle(-12.6, -11.5, -3.95, -3.2, Y, "boxes2", "chapter:Ch1-6")
+	PropKit.cardboard(b, -13.7, -12.9, Y + 0.8, Y + 1.4, -3.9, -3.2, c8(0xb08c58), P6)
 	# one more by the door, its label on the side you only see once you turn round
-	PropKit.cardboard(b, -6.7, -6.05, Y, Y + 0.6, 1.3, 2.2, c8(0xa07d4a), P, "")
-	b.add_obstacle(-6.7, -6.05, 1.3, 2.2, Y, "boxes3")
+	PropKit.cardboard(b, -6.7, -6.05, Y, Y + 0.6, 1.3, 2.2, c8(0xa07d4a), P6, "")
+	b.add_obstacle(-6.7, -6.05, 1.3, 2.2, Y, "boxes3", "chapter:Ch1-6")
 	b.card("res://assets/textures/props/carton_new_flat.png", Vector3(-6.7, Y + 0.32, 1.75), Vector2(0.8, 0.4), Vector3(-1, 0, 0),
-		{"parent": P, "name": "NewFlatLabel", "band": 0.0})
+		{"parent": P6, "name": "NewFlatLabel", "band": 0.0})
 	# the cockloft over the boxes: Mum's bedding, and the cases already packed
 	PropKit.cockloft(b, -14, -11.2, -4, -2.6, Y, 2.3, P)
 
@@ -136,14 +139,14 @@ static func level_a(b: LevelBuilder) -> void:
 	b.add_obstacle(-7.45, -6.05, -4, -2.85, Y, "toiletNook")
 
 	# coats and a bag on hooks by the door
-	b.box(-6.08, -6.03, Y + 1.74, Y + 1.78, -2.6, -1.35, c8(0x5a4a3a), {"surface": "wood", "parent": P, "name": "HookRail", "cast_shadow": false})
-	b.box(-6.16, -6.05, Y + 0.95, Y + 1.74, -2.5, -2.02, c8(0x4f5a70), {"surface": "fabric", "parent": P, "name": "Coat"})
-	b.box(-6.18, -6.05, Y + 1.25, Y + 1.72, -1.88, -1.5, c8(0x8a6a48), {"surface": "fabric", "parent": P, "name": "Bag"})
+	b.box(-6.08, -6.03, Y + 1.74, Y + 1.78, -2.6, -1.35, c8(0x5a4a3a), {"surface": "wood", "parent": P6, "name": "HookRail", "cast_shadow": false})
+	b.box(-6.16, -6.05, Y + 0.95, Y + 1.74, -2.5, -2.02, c8(0x4f5a70), {"surface": "fabric", "parent": P6, "name": "Coat"})
+	b.box(-6.18, -6.05, Y + 1.25, Y + 1.72, -1.88, -1.5, c8(0x8a6a48), {"surface": "fabric", "parent": P6, "name": "Bag"})
 
 	# Grandfather's old photograph, framed on the back wall
-	b.box(-10.76, -10.34, Y + 1.44, Y + 1.76, -3.99, -3.96, c8(0x4a3322), {"surface": "wood", "parent": P, "name": "PhotoFrame"})
+	b.box(-10.76, -10.34, Y + 1.44, Y + 1.76, -3.99, -3.96, c8(0x4a3322), {"surface": "wood", "parent": P6, "name": "PhotoFrame"})
 	b.card("res://assets/textures/props/old_photo.png", Vector3(-10.55, Y + 1.6, -3.96), Vector2(0.34, 0.262), Vector3(0, 0, 1),
-		{"parent": P, "name": "OldPhoto", "band": 0.0})
+		{"parent": P6, "name": "OldPhoto", "band": 0.0})
 	b.ref("boxes", Vector3(-12.3, 0, -2.6))
 	b.ref("radio", Vector3(-13.2, 0, -1.3))
 	b.ref("oldPhoto", Vector3(-10.55, 0, -3.3))
@@ -199,7 +202,7 @@ static func level_a(b: LevelBuilder) -> void:
 
 	# Hidden corridor to Lau's
 	b.room({"x0": 2, "x1": 4, "z0": -9, "z1": 1, "y": Y, "name": "Corridor", "wall": c8(0x77705e), "floor": c8(0x4a463e),
-		"id": "corridor", "open": {"w": [[-6, -4], [-1.3, 1.3]]}, "skip": ["n"], "parent": "Structure/LevelA",
+		"id": "corridor", "open": {"w": [[-6, -4], [-1.3, 1.3]], "e": [BuildWayOut.PASSAGE.slice(2, 4)]}, "skip": ["n"], "parent": "Structure/LevelA",
 		"dado": "mosaic", "dado_color": c8(0xc9b89a)})
 	b.room({"x0": 0, "x1": 2, "z0": -6, "z1": -4, "y": Y, "name": "Stall", "wall": c8(0x6a6a55), "floor": c8(0x4a463e),
 		"skip": ["e"], "id": "corridor", "parent": "Structure/LevelA", "no_fade": true})

@@ -454,9 +454,11 @@ func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Di
 	if String(r.get("after", "")) != "":
 		specs.append([tr("scrapbook.after").format({"after": r.after}), 19, UIStyle.PIPE.darkened(0.25), -6])
 	# her note, then anything she wrote under it on a later day; either may be blank for now
+	# (under her own photograph, the note is Grandfather's, in his hand)
+	var note_font: Font = UIStyle.FONT_SERIF if ResidentCatalog.OTHER_HAND.has(String(r.get("id", ""))) else UIStyle.FONT_HAND
 	for extra in [[String(r.note), 23], [String(r.get("later", "")), 20]]:
 		if extra[0] != "":
-			specs.append([extra[0], extra[1], UIStyle.NOTE_INK, -8])
+			specs.append([extra[0], extra[1] if note_font == UIStyle.FONT_HAND else 18, UIStyle.NOTE_INK, -8, note_font])
 	if String(r.context) != "":
 		specs.append([String(r.context), 18, PENCIL, -8])
 	for spec in specs:
@@ -465,7 +467,7 @@ func _entry_page(root: Control, r: Dictionary, tex: Texture2D, index: int) -> Di
 		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		l.custom_minimum_size = Vector2(320, 0)
 		l.size = Vector2(320, 0)
-		l.add_theme_font_override("font", UIStyle.FONT_HAND)
+		l.add_theme_font_override("font", spec[4] if spec.size() > 4 else UIStyle.FONT_HAND)
 		l.add_theme_font_size_override("font_size", spec[1])
 		l.add_theme_color_override("font_color", spec[2])
 		l.add_theme_constant_override("line_spacing", spec[3])

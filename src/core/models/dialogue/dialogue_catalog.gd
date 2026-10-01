@@ -1363,6 +1363,73 @@ const LINES := {
 	"c6_ho_wait": [
 		{"speaker": "ho", "text": "dlg.c6_ho_wait.01"},
 	],
+	"c7_open": [
+		{"speaker": "mum", "text": "dlg.c7_open.01"},
+		{"speaker": "mei", "text": "dlg.c7_open.02"},
+		{"speaker": "mum", "text": "dlg.c7_open.03"},
+		{"speaker": "mei", "text": "dlg.c7_open.04"},
+		{"speaker": "mum", "text": "dlg.c7_open.05"},
+		{"speaker": "", "text": "dlg.c7_open.06"},
+		{"speaker": "mum", "text": "dlg.c7_open.07"},
+		{"speaker": "mei", "text": "dlg.c7_open.08"},
+	],
+	"c7_mum_wait": [
+		{"speaker": "mum", "text": "dlg.c7_mum_wait.01"},
+	],
+	"c7_yamen": [
+		{"speaker": "mei", "text": "dlg.c7_yamen.01"},
+		{"speaker": "grandfather", "text": "dlg.c7_yamen.02"},
+		{"speaker": "mei", "text": "dlg.c7_yamen.03"},
+		{"speaker": "grandfather", "text": "dlg.c7_yamen.04"},
+		{"speaker": "", "text": "dlg.c7_yamen.05"},
+	],
+	"c7_yamen_2": [
+		{"speaker": "mei", "text": "dlg.c7_yamen_2.01"},
+		{"speaker": "", "text": "dlg.c7_yamen_2.02"},
+		{"speaker": "grandfather", "text": "dlg.c7_yamen_2.03"},
+	],
+	"c7_wrong_way": [
+		{"speaker": "mei", "text": "dlg.c7_wrong_way.01"},
+		{"speaker": "grandfather", "text": "dlg.c7_wrong_way.02"},
+		{"speaker": "mei", "text": "dlg.c7_wrong_way.03"},
+		{"speaker": "grandfather", "text": "dlg.c7_wrong_way.04"},
+		{"speaker": "mei", "text": "dlg.c7_wrong_way.05"},
+		{"speaker": "grandfather", "text": "dlg.c7_wrong_way.06"},
+	],
+	"c7_kwok": [
+		{"speaker": "grandfather", "text": "dlg.c7_kwok.01"},
+		{"speaker": "mei", "text": "dlg.c7_kwok.02"},
+	],
+	"c7_home": [
+		{"speaker": "mum", "text": "dlg.c7_home.01"},
+		{"speaker": "mum", "text": "dlg.c7_home.02"},
+		{"speaker": "", "text": "dlg.c7_home.03"},
+	],
+	"c7_try_angle": [
+		{"speaker": "grandfather", "text": "dlg.c7_try_angle.01"},
+	],
+	"c7_doesnt_fit": [
+		{"speaker": "mei", "text": "dlg.c7_doesnt_fit.01"},
+		{"speaker": "grandfather", "text": "dlg.c7_doesnt_fit.02"},
+		{"speaker": "mei", "text": "dlg.c7_doesnt_fit.03"},
+		{"speaker": "", "text": "dlg.c7_doesnt_fit.04"},
+		{"speaker": "grandfather", "text": "dlg.c7_doesnt_fit.05"},
+	],
+	"c7_give_me": [
+		{"speaker": "grandfather", "text": "dlg.c7_give_me.01"},
+		{"speaker": "mei", "text": "dlg.c7_give_me.02"},
+		{"speaker": "grandfather", "text": "dlg.c7_give_me.03"},
+		{"speaker": "", "text": "dlg.c7_give_me.04"},
+		{"speaker": "grandfather", "text": "dlg.c7_give_me.05"},
+		{"speaker": "mei", "text": "dlg.c7_give_me.06"},
+		{"speaker": "grandfather", "text": "dlg.c7_give_me.07"},
+	],
+	"c7_pipe": [
+		{"speaker": "", "text": "dlg.c7_pipe.01"},
+	],
+	"c7_radio_gone": [
+		{"speaker": "", "text": "dlg.c7_radio_gone.01"},
+	],
 }
 
 

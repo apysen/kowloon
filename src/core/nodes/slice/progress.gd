@@ -9,7 +9,7 @@ extends RefCounted
 ## ChapterProps/Ch<first>-<last> and is taken out on the other days.
 ## KOWLOON_CHAPTER picks the chapter for tests and captures.
 
-const LAST := 6
+const LAST := 7
 
 static var chapter := 1
 static var carried_photos: Dictionary = {}     # id -> Texture2D

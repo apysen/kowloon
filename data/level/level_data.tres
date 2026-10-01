@@ -348,6 +348,20 @@ floors = Array[Dictionary]([{
 "z0": -6.0,
 "z1": -4.7
 }, {
+"name": "kwoksTurn",
+"x0": 4.0,
+"x1": 5.5,
+"y": 0.0,
+"z0": -7.5,
+"z1": -6.5
+}, {
+"name": "hallStrip",
+"x0": 5.5,
+"x1": 6.45,
+"y": 0.0,
+"z0": -7.5,
+"z1": -2.2
+}, {
 "name": "roof",
 "x0": -10.0,
 "x1": 12.0,
@@ -377,7 +391,7 @@ floors = Array[Dictionary]([{
 "z1": -21.0
 }])
 obstacles = Array[Dictionary]([{
-"key": "",
+"key": "chapter:Ch1-6",
 "name": "bed",
 "x0": -14.0,
 "x1": -12.0,
@@ -385,7 +399,7 @@ obstacles = Array[Dictionary]([{
 "z0": 1.8,
 "z1": 4.0
 }, {
-"key": "",
+"key": "chapter:Ch1-6",
 "name": "table",
 "x0": -12.2,
 "x1": -10.8,
@@ -393,7 +407,7 @@ obstacles = Array[Dictionary]([{
 "z0": -1.2,
 "z1": 0.2
 }, {
-"key": "",
+"key": "chapter:Ch1-6",
 "name": "shelf",
 "x0": -14.0,
 "x1": -13.4,
@@ -401,7 +415,7 @@ obstacles = Array[Dictionary]([{
 "z0": -2.2,
 "z1": -0.4
 }, {
-"key": "",
+"key": "chapter:Ch1-6",
 "name": "boxes",
 "x0": -13.9,
 "x1": -12.7,
@@ -409,7 +423,7 @@ obstacles = Array[Dictionary]([{
 "z0": -3.95,
 "z1": -3.1
 }, {
-"key": "",
+"key": "chapter:Ch1-6",
 "name": "boxes2",
 "x0": -12.6,
 "x1": -11.5,
@@ -417,7 +431,7 @@ obstacles = Array[Dictionary]([{
 "z0": -3.95,
 "z1": -3.2
 }, {
-"key": "",
+"key": "chapter:Ch1-6",
 "name": "boxes3",
 "x0": -6.7,
 "x1": -6.05,
@@ -1201,6 +1215,46 @@ obstacles = Array[Dictionary]([{
 "z0": -20.45,
 "z1": -19.35
 }, {
+"key": "chapter:Ch7",
+"name": "gfChair",
+"x0": -13.100000000000001,
+"x1": -12.5,
+"y": 0.0,
+"z0": -0.44999999999999996,
+"z1": 0.15
+}, {
+"key": "chapter:Ch7",
+"name": "suitcase",
+"x0": -7.25,
+"x1": -6.45,
+"y": 0.0,
+"z0": 0.65,
+"z1": 1.0
+}, {
+"key": "chapter:Ch7",
+"name": "lastBox",
+"x0": -10.2,
+"x1": -9.5,
+"y": 0.0,
+"z0": 3.2,
+"z1": 3.9
+}, {
+"key": "chapter:Ch1-6",
+"name": "kwoksTurnShut",
+"x0": 4.0,
+"x1": 4.35,
+"y": 0.0,
+"z0": -7.5,
+"z1": -6.5
+}, {
+"key": "chapter:Ch1-6",
+"name": "stripStack",
+"x0": 5.5,
+"x1": 6.45,
+"y": 0.0,
+"z0": -3.7,
+"z1": -3.0
+}, {
 "key": "",
 "name": "StairHut",
 "x0": 8.8,
@@ -1337,6 +1391,7 @@ refs = {
 "cordsPart": Vector3(13.8, 0, -2.3),
 "crateEnd": Vector3(-6.45, 5, -19.95),
 "crateStart": Vector3(-3.55, 5, -19.95),
+"exitLine": Vector3(8.6, 0, 5.5),
 "fabricPos": Vector3(15.3, 5, -12),
 "foldPanel": Vector3(13.45, 5, 0.1),
 "fongBoltBalcony": Vector3(-1.2, 9.25, 6.45),
@@ -1360,6 +1415,7 @@ refs = {
 "knock": Vector3(13, 7.45, -14.5),
 "kwokPacking": Vector3(3.2, 0, -6.5),
 "kwokPage": Vector3(12.8, 1.75, -14.55),
+"kwoksTurn": Vector3(4.6, 0, -7),
 "ladderBase": Vector3(-1.8, 5, 0.7),
 "ladderTop": Vector3(-0.25, 9.25, 6.45),
 "landingC": Vector3(1, 5, 1.8),
@@ -1375,6 +1431,8 @@ refs = {
 "loadingArea": Vector3(7.4, 0, 3.4),
 "mahjongTin": Vector3(-1, 0, 3),
 "mastBoard": Vector3(10.95, 13, -19.6),
+"ngLadderFoot": Vector3(5.85, 0, -5.8),
+"ngLadderTop": Vector3(5.6, 13, -6.8),
 "northLedge": Vector3(15, 5, -16.8),
 "oldPhoto": Vector3(-10.55, 0, -3.3),
 "partyTable": Vector3(-4.7, 13, -10.9),
@@ -1406,6 +1464,7 @@ refs = {
 "stallGap": Vector3(2.35, 0, -4.85),
 "steamer": Vector3(-6.6, 6.25, 3.57),
 "storeDoor": Vector3(14.65, 0, -2.6),
+"suitcase": Vector3(-7.4, 0, 1.3),
 "tank": Vector3(9.2, 13, -21.2),
 "tileCrack": Vector3(-2.8, 0, 3.4),
 "tileHole": Vector3(-2.8, 0, 5.2),
@@ -1428,6 +1487,7 @@ refs = {
 "yamenBalcony": Vector3(13.5, 5, 0.05),
 "yamenCourt": Vector3(9, 0, 1),
 "yamenLane": Vector3(4, 0, 5.1),
+"yamenSeat": Vector3(9, 0, 0.6),
 "yamenStairDown": Vector3(17, 5, 3.35),
 "yamenStairUp": Vector3(17, 0, 0.3),
 "yamenTop": Vector3(17, 5, 3.6),

@@ -59,6 +59,8 @@ var shutter_ready: Callable
 ## The one moment she doesn't take: raising the camera gets as far as her
 ## chest, and she lowers it again herself. The shutter can't fire.
 var refusing := false
+## Framing only: the camera is up, but the shutter won't go (Chapter 7's last look back).
+var shutter_locked := false
 
 
 ## A photo target: a resident and when a picture of them counts.
@@ -300,7 +302,7 @@ func _process(delta: float) -> void:
 
 
 func capture() -> void:
-	if not aiming or showing_photo:
+	if not aiming or showing_photo or shutter_locked:
 		return
 	if subject.is_empty():
 		hud.notice("notice.film_precious")
