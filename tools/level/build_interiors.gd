@@ -1021,23 +1021,31 @@ static func plant(b: LevelBuilder, kind: String, pos: Vector3, parent: String, b
 
 
 static func _aerial(b: LevelBuilder, base: Vector3, h: float, parent: String, band: float) -> void:
-	## A TV aerial: a mast with two or three cross-arms and dipole elements.
-	var col := c8(0x3a3a3a)
-	var m := base + Vector3(0.03, 0, 0.03)
-	var mast := ModelKit.tube([Vector3.ZERO, Vector3(0, h, 0)], 0.024, 0.0, 8)
-	ModelKit.place(b, mast, m, "metal", col, {"band": band, "parent": parent, "name": "AerialMast"})
-	ModelKit.place(b, ModelKit.rbox(Vector3(0.14, 0.01, 0.14), 0.003), m + Vector3(0, 0.005, 0), "metal", col, {"band": band, "parent": parent, "name": "AerialFoot", "cast_shadow": false})
+	## A TV aerial: a mast on a foot plate with two or three clamped cross-arms
+	## and their dipole elements. One mesh per aerial (shared between aerials of
+	## the same height), so a roof forest of them costs two draws apiece.
 	var arms := 2 + b.rand.randi() % 2
-	for k in arms:
-		var y := base.y + h - 0.2 - k * 0.45
-		var w := 0.7 - k * 0.12
-		ModelKit.place(b, ModelKit.tube([Vector3(-w, 0, 0), Vector3(w, 0, 0)], 0.012, 0.0, 6), Vector3(m.x, y + 0.015, base.z + 0.025), "metal", col,
-			{"band": band, "parent": parent, "name": "AerialArm", "cast_shadow": false})
-		ModelKit.place(b, ModelKit.puck(0.034, 0.05, 0.004, 10), Vector3(m.x, y - 0.01, m.z), "metal", col.darkened(0.2), {"band": band, "parent": parent, "name": "AerialClamp", "cast_shadow": false})
-		for e in 4:
-			var ex := base.x - w + e * (2 * w) / 3.0 + 0.01
-			ModelKit.place(b, ModelKit.tube([Vector3(0, 0, -0.25), Vector3(0, 0, 0.3)], 0.007, 0.0, 5), Vector3(ex, y + 0.01, base.z), "metal", col,
-				{"band": band, "parent": parent, "name": "Element", "cast_shadow": false})
+	var hq := snappedf(h, 0.1)
+	var key := "aerial3_%.1f_%d" % [hq, arms]
+	if not BuildCity._mesh_cache.has(key):
+		var st := SurfaceTool.new()
+		st.begin(Mesh.PRIMITIVE_TRIANGLES)
+		st.append_from(ModelKit.rbox(Vector3(0.14, 0.01, 0.14), 0.003), 0, Transform3D(Basis.IDENTITY, Vector3(0, 0.005, 0)))
+		for k in arms:
+			var y := hq - 0.2 - k * 0.45
+			var w := 0.7 - k * 0.12
+			st.append_from(ModelKit.tube([Vector3(-w, 0, 0), Vector3(w, 0, 0)], 0.012, 0.0, 6), 0, Transform3D(Basis.IDENTITY, Vector3(0, y + 0.015, -0.005)))
+			st.append_from(ModelKit.puck(0.034, 0.05, 0.004, 10), 0, Transform3D(Basis.IDENTITY, Vector3(0, y - 0.01, 0)))
+			for e in 4:
+				var ex := -w + e * (2 * w) / 3.0 - 0.02
+				st.append_from(ModelKit.tube([Vector3(0, 0, -0.25), Vector3(0, 0, 0.3)], 0.007, 0.0, 5), 0, Transform3D(Basis.IDENTITY, Vector3(ex, y + 0.01, -0.03)))
+		BuildCity._mesh_cache[key] = st.commit()
+	var at := base + Vector3(0.03, 0, 0.03)
+	# the mast on its own: the people settling into the scene step round it,
+	# while the arms up over their heads are let pass (LevelBuilder._THIN)
+	ModelKit.place(b, ModelKit.tube([Vector3.ZERO, Vector3(0, hq, 0)], 0.024, 0.0, 8), at, "metal", c8(0x3a3a3a), {"band": band, "parent": parent, "name": "AerialMast"})
+	b.piece(BuildCity._mesh_cache[key], at, b.surface("metal"),
+		{"band": band, "parent": parent, "name": "AerialArm", "tint": c8(0x3a3a3a), "cast_shadow": false})
 
 
 static func _wire_mesh_material() -> StandardMaterial3D:

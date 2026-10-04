@@ -198,6 +198,8 @@ func _box_mesh(size: Vector3) -> BoxMesh:
 ##   opts: surface, top, top_tint, band, fadeable, room, collide, collide_y, name,
 ##         parent, cast_shadow, base_y, material, uv_random, key, filler
 func box(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float, color: Color, opts := {}) -> MeshInstance3D:
+	if String(opts.get("name", "")) == "Step" and String(opts.get("surface", "")) == "concrete" and absf(y1 - y0) > 0.1:
+		return _step(x0, x1, y0, y1, z0, z1, color, opts)
 	# Every box is a hair larger than asked, each by its own amount (one of 101
 	# steps from 0.06 to 6 mm): boxes laid flush against each other (a leg
 	# under an apron, a nosing on a step, two rooms' walls) then never share a
@@ -258,6 +260,25 @@ const SOFT_FIXTURES := ["Step", "Nosing", "Stringer", "Rail", "RailPost", "MidRa
 	"Shutter", "ShutterBox", "BottomBar", "HoistBeam", "HoistMount", "GallowsPost", "GallowsArm", "TankLeg", "TankBrace", "Strut", "Beam",
 	"CoopPost", "CoopFloor", "Perch", "Mast", "Antenna", "SheetPost", "LinePost", "ShaftRim", "TankDeck", "Vent", "Plinth", "Hood", "HoodPost",
 	"Mount", "Platform", "LedgeEnd", "Slab", "BalconySlab", "AirConBracket", "AirConStrut", "PipeBracket", "Clamp", "Sink", "SinkStand"]
+
+
+## A concrete step as it's poured: the body, and a terrazzo tread laid on
+## it that overhangs every edge a little and is rounded at its nose, so each
+## step shows a lit edge and a line of shadow under it.
+func _step(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float, color: Color, opts: Dictionary) -> MeshInstance3D:
+	var top := maxf(y0, y1)
+	var t := 0.035
+	var o := opts.duplicate()
+	o["name"] = "StepBody"
+	var body := box(x0, x1, minf(y0, y1), top - t, z0, z1, color.darkened(0.08), o)
+	var to := opts.duplicate()
+	to["name"] = "Step"
+	to["top"] = "floor"
+	to["soft"] = true
+	to["collide"] = false
+	var g := 0.018
+	box(minf(x0, x1) - g, maxf(x0, x1) + g, top - t, top, minf(z0, z1) - g, maxf(z0, z1) + g, color.lightened(0.06), to)
+	return body
 
 
 ## Whether a box is a prop to round off: not part of a room's shell, the

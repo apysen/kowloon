@@ -892,6 +892,7 @@ static func _balcony(b: LevelBuilder, face: String, plane: float, u0: float, u1:
 static func horizon(b: LevelBuilder) -> void:
 	var P := "City/Horizon"
 	# the rest of Kowloon City: low detail, beyond the tenements round the plot
+	var towers := []
 	for i in 150:
 		var ang := b.rand.randf() * TAU
 		var r := 118 + b.rand.randf() * 70
@@ -906,6 +907,8 @@ static func horizon(b: LevelBuilder) -> void:
 		var m := b.box(x, x + w, -2, h, z, z + d, col, {"band": 1.5, "surface": "facade_far", "top": "tar", "uv_random": true,
 			"parent": P + "/Skyline", "name": "Distant", "cast_shadow": false})
 		m.set_instance_shader_parameter("emission_scale", 0.4 + b.rand.randf() * 0.6)
+		towers.append([x, w, z, d, h, col])
+	_skyline_roofs(b, towers, P + "/Skyline")
 	# a flat for the streets and the harbour so the distance is never a void
 	b.box(-320, 320, -2.4, -2.0, -320, 320, c8(0x5f5a52), {"band": 1.5, "surface": "concrete", "parent": P, "name": "Ground", "cast_shadow": false})
 	var water := StandardMaterial3D.new()
@@ -933,6 +936,59 @@ static func horizon(b: LevelBuilder) -> void:
 	b.piece(hill, Vector3(-235, 14, -40), b.surface("concrete"), {"band": 1.5, "parent": P, "name": "CheckerboardHill", "tint": c8(0x6f8a66), "cast_shadow": false})
 	b.card("res://assets/textures/props/checkerboard.png", Vector3(-215.5, 17, -40), Vector2(13, 13), Vector3(1, 0, 0),
 		{"band": 1.5, "parent": P, "name": "Checkerboard", "unshaded": false})
+
+
+## The far towers' roofs against the sky: a parapet round each, a storey
+## stepped back on some, and the tanks, stair huts and aerials every roof in
+## Kowloon carried. Drawn as a few MultiMeshes, with their own random stream
+## so nothing nearer moves.
+static func _skyline_roofs(b: LevelBuilder, towers: Array, parent: String) -> void:
+	var r := RandomNumberGenerator.new()
+	r.seed = 4471
+	var holder := b.group(parent)
+	var parapet := []
+	var tanks := []
+	var huts := []
+	var aerials := []
+	for t in towers:
+		var x: float = t[0]
+		var w: float = t[1]
+		var z: float = t[2]
+		var d: float = t[3]
+		var h: float = t[4]
+		var top := h
+		if r.randf() < 0.45 and w > 7.0 and d > 7.0:
+			# a storey set back from the street face
+			var sx := x + w * r.randf_range(0.15, 0.35)
+			var sz := z + d * r.randf_range(0.15, 0.35)
+			var sw := w * r.randf_range(0.45, 0.6)
+			var sd := d * r.randf_range(0.45, 0.6)
+			var sh := r.randf_range(2.8, 6.0)
+			var m := b.box(sx, sx + sw, h, h + sh, sz, sz + sd, (t[5] as Color).darkened(0.05), {"band": 1.5, "surface": "facade_far", "top": "tar", "uv_random": true,
+				"parent": parent, "name": "DistantSetback", "cast_shadow": false})
+			m.set_instance_shader_parameter("emission_scale", 0.3 + r.randf() * 0.5)
+			parapet.append(Transform3D(Basis.IDENTITY.scaled(Vector3(sw, 1, sd)), Vector3(sx + sw * 0.5, h + sh, sz + sd * 0.5)))
+		parapet.append(Transform3D(Basis.IDENTITY.scaled(Vector3(w, 1, d)), Vector3(x + w * 0.5, top, z + d * 0.5)))
+		for k in r.randi_range(1, 3):
+			var at := Vector3(x + r.randf_range(0.8, w - 0.8), top, z + r.randf_range(0.8, d - 0.8))
+			match r.randi() % 3:
+				0:
+					tanks.append(Transform3D(Basis(Vector3.UP, r.randf() * TAU).scaled(Vector3.ONE * 1.4), at))
+				1:
+					huts.append(Transform3D(Basis(Vector3.UP, r.randi_range(0, 3) * PI / 2), at))
+				_:
+					aerials.append(Transform3D(Basis(Vector3.UP, r.randf() * TAU), at))
+	# a parapet in unit size, stretched per roof: 0.9 m high, 0.25 m thick at 10 m
+	var ring := merged("skyline_parapet", [[Vector3(0, 0.45, 0.49), Vector3(1.0, 0.9, 0.02)], [Vector3(0, 0.45, -0.49), Vector3(1.0, 0.9, 0.02)],
+		[Vector3(0.49, 0.45, 0), Vector3(0.02, 0.9, 1.0)], [Vector3(-0.49, 0.45, 0), Vector3(0.02, 0.9, 1.0)]])
+	var hut := merged("skyline_hut", [[Vector3(0, 1.2, 0), Vector3(2.2, 2.4, 2.0)], [Vector3(0, 2.45, 0), Vector3(2.5, 0.1, 2.3)], [Vector3(0, 1.0, 1.01), Vector3(0.8, 2.0, 0.04)]])
+	for mm in [multimesh(b, ring, parapet, b.surface("concrete"), c8(0x8a8a84), holder, "DistantParapets", false),
+			multimesh(b, BuildWalledCity._tank_mesh(), tanks, b.surface("rust"), c8(0x9aa0a0), holder, "DistantTanks", false),
+			multimesh(b, hut, huts, b.surface("plaster"), c8(0xa8a294), holder, "DistantHuts", false),
+			multimesh(b, BuildWalledCity._aerial_mesh(3.2, 2), aerials, b.surface("metal"), c8(0x3a3a3a), holder, "DistantAerials", false)]:
+		if mm:
+			# on the skyline's band, so it shows and hides with the towers
+			b.tag(mm, 1.5)
 
 
 static func plane(b: LevelBuilder) -> void:
