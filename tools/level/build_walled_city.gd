@@ -307,14 +307,19 @@ static func _dress(b: LevelBuilder, plots: Array[Dictionary]) -> void:
 
 
 static func _aerial_mesh(h: float, arms: int) -> ArrayMesh:
-	var boxes := [[Vector3(0, h / 2, 0), Vector3(0.06, h, 0.06)]]
+	var boxes := [[Vector3(0, 0, 0), Vector3(0, h, 0), 0.025]]
 	for k in arms:
 		var y := h - 0.2 - k * 0.45
 		var w := 0.7 - k * 0.12
-		boxes.append([Vector3(0, y, 0), Vector3(2 * w, 0.03, 0.03)])
+		boxes.append([Vector3(-w, y, 0), Vector3(w, y, 0), 0.012])
+		boxes.append([Vector3(0, y - 0.04, 0), Vector3(0, y + 0.04, 0), 0.03])   # the clamp
 		for e in 4:
-			boxes.append([Vector3(-w + e * (2 * w) / 3.0, y, 0.02), Vector3(0.02, 0.02, 0.55)])
-	return BuildCity.merged("aerial_%.1f_%d" % [h, arms], boxes)
+			var x := -w + e * (2 * w) / 3.0
+			boxes.append([Vector3(x, y, -0.26), Vector3(x, y, 0.3), 0.007])
+	# guy wires down to the roof
+	for s in [-1.0, 1.0]:
+		boxes.append([Vector3(0, h * 0.7, 0), Vector3(s * 0.8, 0, s * 0.4), 0.003])
+	return BuildCity.merged("aerial2_%.1f_%d" % [h, arms], boxes)
 
 
 static func _tank_mesh() -> ArrayMesh:
@@ -323,24 +328,31 @@ static func _tank_mesh() -> ArrayMesh:
 		return BuildCity._mesh_cache[key]
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var cyl := CylinderMesh.new()
-	cyl.top_radius = 0.6
-	cyl.bottom_radius = 0.6
-	cyl.height = 1.1
-	cyl.radial_segments = 12
-	st.append_from(cyl, 0, Transform3D(Basis.IDENTITY, Vector3(0, 1.35, 0)))
+	# the tank: riveted bands, a domed lid with a hatch, an overflow pipe
+	var prof := PackedVector2Array([Vector2(0, 0), Vector2(0.6, 0)])
+	for k in 4:
+		var y := 0.04 + k * 0.34
+		prof.append_array(PackedVector2Array([Vector2(0.6, y - 0.03), Vector2(0.625, y - 0.02), Vector2(0.625, y + 0.02), Vector2(0.6, y + 0.03)]))
+	prof.append_array(PackedVector2Array([Vector2(0.6, 1.1), Vector2(0.55, 1.18), Vector2(0.3, 1.24), Vector2(0.0, 1.26)]))
+	st.append_from(ModelKit._lathe(prof, 20, Vector2.ONE), 0, Transform3D(Basis.IDENTITY, Vector3(0, 0.8, 0)))
+	st.append_from(ModelKit._lathe(PackedVector2Array([Vector2(0, 0), Vector2(0.2, 0), Vector2(0.2, 0.06), Vector2(0, 0.08)]), 14, Vector2.ONE), 0, Transform3D(Basis.IDENTITY, Vector3(0.15, 2.04, 0.1)))
+	_rod(st, Vector3(0.6, 1.75, 0), Vector3(0.75, 1.75, 0), 0.03)
+	_rod(st, Vector3(0.75, 1.75, 0), Vector3(0.75, 0.82, 0), 0.03)
+	# the stand: angle legs, cross-braced, carrying a deck
 	for dx in [-0.4, 0.4]:
 		for dz in [-0.4, 0.4]:
-			var leg := BoxMesh.new()
-			leg.size = Vector3(0.08, 0.8, 0.08)
-			st.append_from(leg, 0, Transform3D(Basis.IDENTITY, Vector3(dx, 0.4, dz)))
-	# the deck the legs carry and the tank sits on
-	var deck := BoxMesh.new()
-	deck.size = Vector3(1.24, 0.06, 1.24)
-	st.append_from(deck, 0, Transform3D(Basis.IDENTITY, Vector3(0, 0.77, 0)))
+			st.append_from(BuildCity._soft(Vector3(0.08, 0.8, 0.08), 0.01), 0, Transform3D(Basis.IDENTITY, Vector3(dx, 0.4, dz)))
+	for s in [-1.0, 1.0]:
+		_rod(st, Vector3(-0.4, 0.1, 0.4 * s), Vector3(0.4, 0.7, 0.4 * s), 0.012)
+		_rod(st, Vector3(0.4 * s, 0.1, -0.4), Vector3(0.4 * s, 0.7, 0.4), 0.012)
+	st.append_from(BuildCity._soft(Vector3(1.24, 0.06, 1.24), 0.012), 0, Transform3D(Basis.IDENTITY, Vector3(0, 0.77, 0)))
 	var m := st.commit()
 	BuildCity._mesh_cache[key] = m
 	return m
+
+
+static func _rod(st: SurfaceTool, a: Vector3, c: Vector3, r: float) -> void:
+	BuildCity._append_rod(st, a, c, r)
 
 
 ## The roofscape: parapets, the forest of aerials, tanks, huts and lofts,
@@ -490,12 +502,8 @@ static func _yamen(b: LevelBuilder) -> void:
 	bench.merge({"surface": "wood", "name": "Bench"})
 	b.box(-47.0, -45.0, GROUND, GROUND + 0.45, 3.0, 3.5, c8(0x6b4a30), bench)
 	for k in 2:
-		var cannon := CylinderMesh.new()
-		cannon.top_radius = 0.12
-		cannon.bottom_radius = 0.2
-		cannon.height = 1.6
-		var cn := b.piece(cannon, Vector3(-39.0 + k * 1.6, GROUND + 0.25, 4.2), b.surface("rust"), {"band": 1.5, "parent": P, "name": "Cannon", "tint": c8(0x3a3632)})
-		cn.rotation = Vector3(PI / 2, 0, 0)
+		var cx := -39.0 + k * 1.6
+		ObjectKit.cannon(b, Vector3(cx, GROUND + 0.25, 3.4), Vector3(cx, GROUND + 0.22, 5.0), 0.17, c8(0x3a3632), P, 1.5)
 	for k in 5:
 		var who: String = ["ext_grandma_black", "ext_birdcage_man", "ext_fan_woman", "ext_taichi", "ext_reader"][k]
 		var res := b.resident("yamen_%d" % k, who, Vector3(-46.6 + k * 1.1, GROUND, 3.9 + (k % 2) * 0.3),

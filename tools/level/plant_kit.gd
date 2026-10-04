@@ -57,19 +57,19 @@ static func _aspidistra() -> Array:
 	rng.seed = 11
 	var pot := SurfaceTool.new()
 	pot.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(pot, Vector3(0, 0.12, 0), 0.24, 0.12, 0.155, 12, false)   # the pot, narrowing to its foot
+	_cyl(pot, Vector3(0, 0.12, 0), 0.24, 0.12, 0.155, 28, false)   # the pot, narrowing to its foot
 	# its rolled rim: an open ring, so the soil shows inside it
-	_cyl(pot, Vector3(0, 0.245, 0), 0.05, 0.172, 0.172, 12, false)
-	_cyl(pot, Vector3(0, 0.2, 0), 0.07, 0.14, 0.13, 12, false, true)        # the inside wall above the soil
+	_cyl(pot, Vector3(0, 0.245, 0), 0.05, 0.172, 0.172, 28, false)
+	_cyl(pot, Vector3(0, 0.2, 0), 0.07, 0.14, 0.13, 28, false, true)        # the inside wall above the soil
 	var lip := TorusMesh.new()                                              # the rim's rolled top
 	lip.inner_radius = 0.136
 	lip.outer_radius = 0.178
-	lip.rings = 16
+	lip.rings = 32
 	lip.ring_segments = 6
 	pot.append_from(lip, 0, Transform3D(Basis.IDENTITY.scaled(Vector3(1, 0.6, 1)), Vector3(0, 0.262, 0)))
 	var soil := SurfaceTool.new()
 	soil.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(soil, Vector3(0, 0.226, 0), 0.012, 0.14, 0.14, 12)                 # 4 cm down inside the rim
+	_cyl(soil, Vector3(0, 0.226, 0), 0.012, 0.14, 0.14, 28)                 # 4 cm down inside the rim
 	_ellipsoid(soil, Vector3(0, 0.232, 0), Vector3.UP, Vector3.RIGHT, Vector3(0.24, 0.025, 0.24))   # heaped a little at the middle
 	var light := SurfaceTool.new()
 	light.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -114,19 +114,19 @@ static func _chilli() -> Array:
 	rng.seed = 37
 	var basin := SurfaceTool.new()
 	basin.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(basin, Vector3(0, 0.065, 0), 0.13, 0.235, 0.165, 16, false)          # open-topped
-	_cyl(basin, Vector3(0, 0.07, 0), 0.12, 0.228, 0.16, 16, false, true)       # its inside face
+	_cyl(basin, Vector3(0, 0.065, 0), 0.13, 0.235, 0.165, 32, false)          # open-topped
+	_cyl(basin, Vector3(0, 0.07, 0), 0.12, 0.228, 0.16, 32, false, true)       # its inside face
 	var rim := SurfaceTool.new()
 	rim.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var ring := TorusMesh.new()          # the blue enamel edge, a ring round the lip
 	ring.inner_radius = 0.222
 	ring.outer_radius = 0.248
-	ring.rings = 16
+	ring.rings = 32
 	ring.ring_segments = 6
 	rim.append_from(ring, 0, Transform3D(Basis.IDENTITY, Vector3(0, 0.13, 0)))
 	var soil := SurfaceTool.new()
 	soil.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_cyl(soil, Vector3(0, 0.1, 0), 0.012, 0.215, 0.215, 16)                   # 3 cm down inside the lip
+	_cyl(soil, Vector3(0, 0.1, 0), 0.012, 0.215, 0.215, 32)                   # 3 cm down inside the lip
 	_ellipsoid(soil, Vector3(0, 0.106, 0), Vector3.UP, Vector3.RIGHT, Vector3(0.34, 0.03, 0.34))
 	var leaves := SurfaceTool.new()
 	leaves.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -232,6 +232,4 @@ static func _cyl(st: SurfaceTool, at: Vector3, h: float, top: float, bottom: flo
 
 
 static func _box(st: SurfaceTool, at: Vector3, size: Vector3) -> void:
-	var m := BoxMesh.new()
-	m.size = size
-	st.append_from(m, 0, Transform3D(Basis.IDENTITY, at))
+	st.append_from(ModelKit._soft_box(size, minf(0.015, minf(size.x, minf(size.y, size.z)) * 0.3), 2, 0.0, 0.0, 0), 0, Transform3D(Basis.IDENTITY, at))

@@ -37,15 +37,16 @@ static func _flat(b: LevelBuilder) -> void:
 	var wood := c8(0x6b4a30)
 	var cx := -12.8
 	var cz := -0.15
-	b.box(cx - 0.25, cx + 0.25, A + 0.42, A + 0.48, cz - 0.24, cz + 0.24, wood, {"band": 0.0, "surface": "wood", "parent": G, "name": "ChairSeat"})
-	b.box(cx - 0.25, cx - 0.2, A + 0.48, A + 1.05, cz - 0.24, cz + 0.24, wood.darkened(0.1), {"band": 0.0, "surface": "wood", "parent": G, "name": "ChairBack"})
-	for lx in [-0.22, 0.18]:
-		for lz in [-0.21, 0.17]:
-			b.box(cx + lx, cx + lx + 0.04, A, A + 0.42, cz + lz, cz + lz + 0.04, wood.darkened(0.2), {"band": 0.0, "surface": "wood", "parent": G, "name": "ChairLeg"})
+	ObjectKit.chair(b, cx, cz, A, Vector3(1, 0, 0), wood, G, {"band": 0.0})
 	b.add_obstacle(cx - 0.3, cx + 0.3, cz - 0.3, cz + 0.3, A, "gfChair", "chapter:Ch7")
 	# one suitcase by the door, one box
-	b.box(-7.2, -6.5, A, A + 0.62, 0.7, 0.95, c8(0x5a3a2a), {"band": 0.0, "surface": "fabric", "parent": G, "name": "Suitcase"})
-	b.box(-6.95, -6.75, A + 0.62, A + 0.66, 0.8, 0.85, c8(0x2a2a2a), {"band": 0.0, "surface": "metal", "parent": G, "name": "Handle", "cast_shadow": false})
+	# a hard case stood on its end, its handle on top, straps buckled round it
+	ModelKit.box(b, -7.2, -6.5, A, A + 0.62, 0.7, 0.95, c8(0x5a3a2a), {"band": 0.0, "surface": "grain", "parent": G, "name": "Suitcase", "radius": 0.03})
+	ModelKit.box(b, -7.202, -6.498, A, A + 0.62, 0.818, 0.832, c8(0x3a2418), {"band": 0.0, "surface": "grain", "parent": G, "name": "SuitcaseSeam", "radius": 0.004, "cast_shadow": false})
+	for sx in [-7.05, -6.65]:
+		ModelKit.box(b, sx - 0.02, sx + 0.02, A - 0.002, A + 0.622, 0.698, 0.952, c8(0x8a6a48), {"band": 0.0, "surface": "fabric", "parent": G, "name": "Strap", "radius": 0.004, "cast_shadow": false})
+	ModelKit.place(b, ModelKit.tube([Vector3(-0.07, 0, 0), Vector3(-0.06, 0.045, 0), Vector3(0.06, 0.045, 0), Vector3(0.07, 0, 0)], 0.011, 0.025, 8), Vector3(-6.85, A + 0.62, 0.825), "fabric", c8(0x2a2a2a),
+		{"band": 0.0, "parent": G, "name": "Handle", "cast_shadow": false})
 	b.add_obstacle(-7.25, -6.45, 0.65, 1.0, A, "suitcase", "chapter:Ch7")
 	PropKit.cardboard(b, -10.2, -9.5, A, A + 0.55, 3.2, 3.9, c8(0xa8834f), G, "s")
 	b.add_obstacle(-10.2, -9.5, 3.2, 3.9, A, "lastBox", "chapter:Ch7")
@@ -79,7 +80,11 @@ static func _kwoks_turn(b: LevelBuilder) -> void:
 	# and from the courtyard, the strip's mouth closed off with a stack of the yamen's chairs
 	var S := "ChapterProps/Ch1-6/StripStack"
 	for k in 4:
-		b.box(STRIP[0] + 0.05, STRIP[1] - 0.05, A + k * 0.3, A + k * 0.3 + 0.28, -3.6, -3.1, c8(0x3f6fa8), {"band": 0.0, "surface": "metal", "parent": S, "name": "StackedChair"})
+		# folding chairs, folded flat and stacked on their sides
+		var y0 := A + k * 0.3
+		ModelKit.box(b, STRIP[0] + 0.05, STRIP[1] - 0.05, y0 + 0.02, y0 + 0.26, -3.6, -3.1, c8(0x3f6fa8), {"band": 0.0, "surface": "metal", "parent": S, "name": "StackedChair", "radius": 0.02})
+		for z in [-3.58, -3.12]:
+			ModelKit.box(b, STRIP[0] + 0.03, STRIP[1] - 0.03, y0, y0 + 0.28, z - 0.012, z + 0.012, c8(0x5a5a58), {"band": 0.0, "surface": "metal", "parent": S, "name": "ChairFrame", "radius": 0.01})
 	b.add_obstacle(STRIP[0], STRIP[1], -3.7, -3.0, A, "stripStack", "chapter:Ch1-6")
 
 

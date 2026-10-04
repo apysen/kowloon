@@ -78,7 +78,7 @@ static func _back_shop(b: LevelBuilder) -> void:
 		var top := A + rise * (i + 1)
 		b.box(x0, x0 + run + 0.04, top - 0.05, top, STAIR_Z[0] + 0.05, STAIR_Z[1] - 0.05, c8(0x5a5e5c),
 			{"band": 0.0, "surface": "metal", "parent": P + "/Stair", "name": "Tread"})
-		b.box(x0 + run - 0.01, x0 + run + 0.04, top - 0.05, top, STAIR_Z[0] + 0.05, STAIR_Z[1] - 0.05, c8(0xc9a23a),
+		b.box(x0 + run - 0.01, x0 + run + 0.043, top - 0.05, top + 0.003, STAIR_Z[0] + 0.05, STAIR_Z[1] - 0.05, c8(0xc9a23a),
 			{"band": 0.0, "surface": "metal", "parent": P + "/Stair", "name": "Nosing", "cast_shadow": false})
 	b.cylinder(Vector3(STAIR_X[0], A + 0.05, STAIR_Z[1] - 0.04), Vector3(STAIR_X[1], B, STAIR_Z[1] - 0.04), 0.035, b.surface("rust"),
 		{"parent": P + "/Stair", "name": "Stringer", "tint": c8(0x3a3a38), "band": 0.0})
@@ -134,14 +134,14 @@ static func _back_shop(b: LevelBuilder) -> void:
 		sy += 0.16
 	b.box(SHOP_DOOR[0] - 0.05, SHOP_DOOR[1] + 0.05, A, A + 0.1, face + 0.02, face + 0.05, c8(0x4a4e4a),
 		{"band": 0.0, "surface": "metal", "parent": SH, "name": "BottomBar"})
-	b.box(8.7, 8.82, A + 0.12, A + 0.26, face + 0.05, face + 0.09, c8(0xc9a55a), {"band": 0.0, "surface": "metal", "parent": SH, "name": "Padlock"})
+	ObjectKit.padlock(b, Vector3(8.76, A + 0.18, face + 0.07), Vector3(0, 0, 1), SH, 1.2, {"band": 0.0})
 	b.add_obstacle(SHOP_DOOR[0], SHOP_DOOR[1], SHOP[3], -14.9, A, "backShopShut", "chapter:Ch1-4")
 	var RO := C57 + "/BackShopShutter"
 	b.box(SHOP_DOOR[0] - 0.1, SHOP_DOOR[1] + 0.1, A + 2.45, A + 2.72, face - 0.02, face + 0.2, c8(0x6a706a),
 		{"band": 0.0, "surface": "metal", "parent": RO, "name": "ShutterBox"})
 	b.box(SHOP_DOOR[0] - 0.05, SHOP_DOOR[1] + 0.05, A + 2.38, A + 2.45, face + 0.02, face + 0.06, c8(0x4a4e4a),
 		{"band": 0.0, "surface": "metal", "parent": RO, "name": "BottomBar"})
-	b.box(8.72, 8.8, A + 2.2, A + 2.36, face + 0.06, face + 0.1, c8(0xc9a55a), {"band": 0.0, "surface": "metal", "parent": RO, "name": "Padlock"})
+	ObjectKit.padlock(b, Vector3(8.76, A + 2.27, face + 0.08), Vector3(0, 0, 1), RO, 1.2, {"band": 0.0})
 
 
 static func _stair_head(b: LevelBuilder) -> void:
@@ -233,7 +233,7 @@ static func _lau(b: LevelBuilder) -> void:
 		b.box(tx - 0.03, tx + 0.03, A + 1.52, A + 1.56, -9.02, -9.01, c8(0xe8dca8), {"band": 0.0, "surface": "grain", "parent": G, "name": "Tape", "cast_shadow": false})
 	# one wire, cut, hanging from the ceiling where the chair's lamp was fed
 	b.cylinder(Vector3(5.5, A + 4.15, -12.6), Vector3(5.45, A + 3.3, -12.55), 0.008, b.surface("grain"),
-		{"parent": G, "name": "Wire", "tint": c8(0x1c1c1e), "band": 0.0, "cast_shadow": false})
+		{"parent": G, "name": "Wire", "tint": c8(0x1c1c1e), "band": 0.0, "cast_shadow": false, "ceiling_mounted": true})
 	b.ref("lauPale", Vector3(0.9, A, -12.0))
 
 
@@ -251,12 +251,7 @@ static func _wong(b: LevelBuilder) -> void:
 	# on the table: an envelope (today), and later the bowl Mei brings back
 	var env := b.box(25.3, 25.62, B + 0.5, B + 0.506, -15.05, -14.85, c8(0xf0e8d4), {"band": 1.0, "surface": "grain", "parent": C5 + "/WongNote", "name": "Envelope"})
 	env.rotation.y = 0.2
-	var bowl := CylinderMesh.new()
-	bowl.top_radius = 0.09
-	bowl.bottom_radius = 0.055
-	bowl.height = 0.07
-	bowl.radial_segments = 16
-	b.piece(bowl, Vector3(25.85, B + 0.535, -15.1), b.surface("grain"), {"parent": C5 + "/WongBowl", "name": "Bowl", "tint": c8(0xe6ecef), "band": 1.0})
+	ObjectKit.rice_bowl(b, Vector3(25.85, B + 0.5, -15.1), 0.085, c8(0xe6ecef), C5 + "/WongBowl", "Bowl", false, {"band": 1.0})
 	b.ref("wongTable", Vector3(25.6, B, -14.0))
 
 
@@ -345,14 +340,10 @@ static func _flat(b: LevelBuilder) -> void:
 	b.box(-10.85, -10.8, A + 0.2, A + 0.62, -1.9, -1.55, c8(0x3f6fa8), {"band": 0.0, "surface": "grain", "parent": I, "name": "Stool"})
 	b.cylinder(Vector3(-10.5, A + 0.2, -1.8), Vector3(-10.5, A + 0.46, -1.8), 0.07, b.surface("metal"), {"parent": I, "name": "SeedTin", "tint": c8(0xc9a55a), "band": 0.0})
 	b.cylinder(Vector3(-10.62, A + 0.36, -1.58), Vector3(-10.62, A + 0.42, -1.58), 0.11, b.surface("fabric"), {"parent": I, "name": "Rope", "tint": c8(0xb09a6a), "band": 0.0})
-	var bowl := CylinderMesh.new()
-	bowl.top_radius = 0.075
-	bowl.bottom_radius = 0.045
-	bowl.height = 0.06
-	bowl.radial_segments = 14
-	b.piece(bowl, Vector3(-10.45, A + 0.39, -1.62), b.surface("grain"), {"parent": I, "name": "Bowl", "tint": c8(0xe6ecef), "band": 0.0})
+	ObjectKit.rice_bowl(b, Vector3(-10.45, A + 0.36, -1.62), 0.075, c8(0xe6ecef), I, "Bowl", false, {"band": 0.0})
 	b.cylinder(Vector3(-10.75, A + 0.4, -1.7), Vector3(-10.58, A + 0.44, -1.86), 0.012, b.surface("metal"), {"parent": I, "name": "Screwdriver", "tint": c8(0xb8392e), "band": 0.0})
-	b.box(-10.72, -10.66, A + 0.37, A + 0.41, -1.52, -1.48, c8(0xece6d4), {"band": 0.0, "surface": "grain", "parent": I, "name": "Tile", "cast_shadow": false})
+	# the one tile out of Grandfather's drawer: the first flower, the plum
+	MahjongKit.lying(b, "flower_plum", Vector3(-10.66, A + 0.42, -1.52), Vector3(-0.4, 0, 1), true, I, {"band": 0.0})
 	b.ref("borrowedBox", Vector3(-10.6, A, -1.1))
 
 

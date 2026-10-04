@@ -94,15 +94,71 @@ static func face_windows(facade: String, off: Vector2, face: String, a0: float, 
 
 
 static func merged(key: String, boxes: Array) -> ArrayMesh:
-	## boxes: [[center Vector3, size Vector3], ...] merged into one mesh.
+	## Parts merged into one mesh. Each is a box, [center, size], built with
+	## its edges rounded off; or a round rod, [from, to, radius].
 	if _mesh_cache.has(key):
 		return _mesh_cache[key]
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for bx in boxes:
-		var bm := BoxMesh.new()
-		bm.size = bx[1]
-		st.append_from(bm, 0, Transform3D(Basis.IDENTITY, bx[0]))
+	for part in boxes:
+		if part.size() == 3:
+			_append_rod(st, part[0], part[1], part[2])
+			continue
+		var size: Vector3 = part[1]
+		var r := clampf(minf(size.x, minf(size.y, size.z)) * 0.25, 0.002, 0.012)
+		st.append_from(_soft(size, r), 0, Transform3D(Basis.IDENTITY, part[0]))
+	var m := st.commit()
+	_mesh_cache[key] = m
+	return m
+
+
+## A rounded box mesh, one bevel step: cheap enough for the city's thousands.
+static func _soft(size: Vector3, r: float) -> ArrayMesh:
+	var key := "soft_%.3f_%.3f_%.3f_%.4f" % [size.x, size.y, size.z, r]
+	if not _mesh_cache.has(key):
+		_mesh_cache[key] = ModelKit._soft_box(size, r, 1, 0.0, 0.0, 0)
+	return _mesh_cache[key]
+
+
+## A six-sided rod from a to c, its ends capped.
+static func _append_rod(st: SurfaceTool, a: Vector3, c: Vector3, r: float) -> void:
+	var len := a.distance_to(c)
+	var key := "rod_%.3f_%.4f" % [len, r]
+	if not _mesh_cache.has(key):
+		var cm := CylinderMesh.new()
+		cm.top_radius = r
+		cm.bottom_radius = r
+		cm.height = len
+		cm.radial_segments = 6
+		cm.rings = 1
+		_mesh_cache[key] = cm
+	st.append_from(_mesh_cache[key], 0, Transform3D(FixtureKit._along(c - a), (a + c) * 0.5))
+
+
+## A sheet of corrugated iron, `w` across x and `d` along z, its ridges
+## running along z, laid flat at y = 0 (centred).
+static func corrugated(w: float, d: float, pitch := 0.07, depth := 0.018) -> ArrayMesh:
+	var key := "corr_%.2f_%.2f" % [w, d]
+	if _mesh_cache.has(key):
+		return _mesh_cache[key]
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var n := maxi(4, int(w / pitch * 4))
+	for i in n:
+		var x0 := -w / 2 + w * i / n
+		var x1 := -w / 2 + w * (i + 1) / n
+		var y0 := sin(x0 / pitch * TAU) * depth * 0.5
+		var y1 := sin(x1 / pitch * TAU) * depth * 0.5
+		var n0 := Vector3(-cos(x0 / pitch * TAU) * depth * PI / pitch, 1, 0).normalized()
+		var n1 := Vector3(-cos(x1 / pitch * TAU) * depth * PI / pitch, 1, 0).normalized()
+		for side in [1.0, -1.0]:
+			var q := [Vector3(x0, y0, -d / 2), Vector3(x1, y1, -d / 2), Vector3(x1, y1, d / 2), Vector3(x0, y0, d / 2)]
+			var nn := [n0 * side, n1 * side, n1 * side, n0 * side]
+			var order := [0, 2, 1, 0, 3, 2] if side > 0 else [0, 1, 2, 0, 2, 3]
+			for k in order:
+				st.set_normal(nn[k])
+				st.set_uv(Vector2(q[k].x, q[k].z))
+				st.add_vertex(q[k] + Vector3(0, -0.002 if side < 0 else 0.0, 0))
 	var m := st.commit()
 	_mesh_cache[key] = m
 	return m
@@ -111,42 +167,70 @@ static func merged(key: String, boxes: Array) -> ArrayMesh:
 ## A window cage in local space: x across the window, y up, z out from the wall.
 static func cage_mesh(w: float, h: float, depth: float, bars: int, variant: int) -> ArrayMesh:
 	var key := "cage_%.2f_%.2f_%.2f_%d_%d" % [w, h, depth, bars, variant]
+	if _mesh_cache.has(key):
+		return _mesh_cache[key]
 	var boxes := []
 	var t := 0.035
-	# floor tray and top
+	# a frame of square tube, the floor tray inside it, a lid on top
 	boxes.append([Vector3(0, 0, depth / 2), Vector3(w, t * 1.5, depth)])
-	boxes.append([Vector3(0, h, depth / 2), Vector3(w, t, depth)])
-	# front bars
-	for k in bars + 1:
-		var x := -w / 2 + w * k / bars
+	boxes.append([Vector3(0, h, depth / 2), Vector3(w + t, t, depth + t)])
+	for x in [-w / 2, w / 2]:
 		boxes.append([Vector3(x, h / 2, depth), Vector3(t, h, t)])
-	# side bars
+		boxes.append([Vector3(x, 0.05, depth / 2), Vector3(t, 0.1, depth)])
+	boxes.append([Vector3(0, 0.05, depth), Vector3(w, 0.1, t * 0.6)])
+	# round bars, front and sides
+	for k in range(1, bars):
+		var x := -w / 2 + w * k / bars
+		boxes.append([Vector3(x, 0.1, depth), Vector3(x, h, depth), 0.009])
 	for k in 3:
-		var z := depth * (k + 1) / 3.0
-		boxes.append([Vector3(-w / 2, h / 2, z), Vector3(t, h, t)])
-		boxes.append([Vector3(w / 2, h / 2, z), Vector3(t, h, t)])
-	# horizontal rails
+		var z := depth * (k + 0.5) / 3.0
+		for x in [-w / 2, w / 2]:
+			boxes.append([Vector3(x, 0.1, z), Vector3(x, h, z), 0.009])
+	# flat rails across the bars; variant 1 adds a scroll of bent bar in the middle
 	var rails := 2 if variant == 0 else 3
 	for k in rails:
 		var y := h * (k + 1) / (rails + 1.0)
-		boxes.append([Vector3(0, y, depth), Vector3(w, t, t)])
+		boxes.append([Vector3(0, y, depth), Vector3(w, t * 0.6, t * 0.6)])
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	st.append_from(merged(key + "_frame", boxes), 0, Transform3D.IDENTITY)
+	if variant == 1:
+		for k in 2:
+			var cx := -w / 4 + k * w / 2
+			var ring := []
+			for j in 13:
+				var a := TAU * j / 12
+				ring.append(Vector3(cx + cos(a) * 0.09, h * 0.5 + sin(a) * 0.09, depth))
+			for j in 12:
+				_append_rod(st, ring[j], ring[j + 1], 0.007)
 	if variant == 2:
-		# a canopy of corrugated sheet over the cage
-		boxes.append([Vector3(0, h + 0.06, depth / 2 + 0.05), Vector3(w + 0.1, 0.03, depth + 0.15)])
-	return merged(key, boxes)
+		# a canopy of corrugated sheet over the cage, tipped to shed the rain
+		st.append_from(corrugated(w + 0.12, depth + 0.2), 0, Transform3D(Basis(Vector3.RIGHT, 0.12), Vector3(0, h + 0.06, depth / 2 + 0.06)))
+	var m := st.commit()
+	_mesh_cache[key] = m
+	return m
 
 
 static func ac_mesh() -> ArrayMesh:
-	return merged("ac", [
+	var parts := [
 		[Vector3(0, 0.2, 0.22), Vector3(0.62, 0.4, 0.44)],
 		[Vector3(0, -0.02, 0.22), Vector3(0.66, 0.03, 0.5)],      # bracket shelf
-		[Vector3(-0.25, -0.12, 0.2), Vector3(0.03, 0.22, 0.03)],
-		[Vector3(0.25, -0.12, 0.2), Vector3(0.03, 0.22, 0.03)],
-	])
+	]
+	# the louvred front, and the slots down its sides
+	for k in 6:
+		parts.append([Vector3(0, 0.06 + k * 0.055, 0.445), Vector3(0.54, 0.018, 0.02)])
+	for s in [-1.0, 1.0]:
+		for k in 4:
+			parts.append([Vector3(s * 0.312, 0.1 + k * 0.07, 0.22), Vector3(0.008, 0.02, 0.32)])
+		# angle brackets: an arm out from the wall and a strut up from below it
+		parts.append([Vector3(s * 0.25, -0.03, 0.0), Vector3(s * 0.25, -0.03, 0.47), 0.012])
+		parts.append([Vector3(s * 0.25, -0.32, 0.0), Vector3(s * 0.25, -0.03, 0.4), 0.011])
+	parts.append([Vector3(0.2, 0.0, 0.42), Vector3(0.24, -0.35, 0.46), 0.006])   # the drip pipe
+	return merged("ac2", parts)
 
 
 static func pole_mesh(len: float) -> ArrayMesh:
-	return merged("pole_%.2f" % len, [[Vector3(0, 0, len / 2), Vector3(0.04, 0.04, len)]])
+	return merged("pole2_%.2f" % len, [[Vector3(0, 0, 0), Vector3(0, 0, len), 0.02], [Vector3(0, 0, len - 0.02), Vector3(0, 0, len + 0.01), 0.026]])
 
 
 static func multimesh(b: LevelBuilder, mesh: Mesh, xforms: Array, mat: Material, tint: Color, parent: Node3D, mname: String, shadows := true) -> MultiMeshInstance3D:
@@ -277,6 +361,17 @@ static func _block(b: LevelBuilder, blk: Dictionary) -> void:
 	var facade: String = FACADES[b.rand.randi() % FACADES.size()]
 	# uv offsets snap to whole window bays so dressing can find the windows
 	var off := Vector2(float(b.rand.randi() % 6) / 6.0, float(b.rand.randi() % 2) / 2.0)
+	# Carry the horizontal facade phase around three consecutive corners.  A
+	# rectangular block whose perimeter is not an exact six-metre texture repeat
+	# must have one seam; put that seam on its north-west corner, away from the
+	# workshop-roof view, rather than letting every visible corner jump.
+	var repeat_w := 6.0
+	var face_u := {
+		"n": 0.0,
+		"e": fposmod((float(blk.x1) - float(blk.z0)) / repeat_w, 1.0),
+	}
+	face_u["s"] = fposmod(float(face_u.e) + (float(blk.x1) + float(blk.z1)) / repeat_w, 1.0)
+	face_u["w"] = fposmod(float(face_u.s) + (float(blk.z1) - float(blk.x0)) / repeat_w, 1.0)
 	var tint := c8(FACADE_TINTS[b.rand.randi() % FACADE_TINTS.size()])
 	var n := b.filler_blocks.size()
 	var m := b.box(blk.x0, blk.x1, blk.y0, blk.y1, blk.z0, blk.z1, tint,
@@ -284,8 +379,10 @@ static func _block(b: LevelBuilder, blk: Dictionary) -> void:
 		"parent": "City/Blocks", "name": "Block%03d" % n})
 	# lit windows vary per building
 	m.set_instance_shader_parameter("emission_scale", 0.6 + b.rand.randf() * 0.8)
+	m.set_instance_shader_parameter("side_u_offset", Vector4(face_u.e, face_u.w, face_u.s, face_u.n))
 	blk["facade"] = facade
 	blk["off"] = off
+	blk["face_u"] = face_u
 	blk["tint"] = tint
 	blk["node"] = m
 	b.filler_blocks.append(blk)
@@ -338,7 +435,8 @@ static func _dress_block(b: LevelBuilder, blk: Dictionary) -> void:
 		if not _face_open(b, blk, face, 1.2):
 			continue
 		var f: Array = faces[face]
-		var wins := face_windows(blk.facade, blk.off, face, f[1], f[2], blk.y0, blk.y1)
+		var face_off: Vector2 = blk.off + Vector2(float(blk.face_u.get(face, 0.0)), 0.0)
+		var wins := face_windows(blk.facade, face_off, face, f[1], f[2], blk.y0, blk.y1)
 		for w in wins:
 			var u: float = (w.u0 + w.u1) * 0.5
 			var ww: float = w.u1 - w.u0 + 0.2
@@ -416,34 +514,47 @@ static func _roof_life(b: LevelBuilder, blk: Dictionary) -> void:
 		var hw := minf(w - 0.4, 1.6 + b.rand.randf())
 		var hd := minf(d - 0.4, 1.4 + b.rand.randf())
 		b.box(hx, hx + hw, y, y + 2.1, hz, hz + hd, c8(0xb8b0a0).lerp(c8(0x8a8a7a), b.rand.randf()), {"band": 1.5, "surface": "plaster", "parent": P, "name": "Hut"})
-		b.box(hx - 0.1, hx + hw + 0.1, y + 2.1, y + 2.16, hz - 0.1, hz + hd + 0.1, c8(0x9aa0a0), {"band": 1.5, "surface": "rust", "parent": P, "name": "HutRoof"})
-		b.box(hx + hw * 0.3, hx + hw * 0.3 + 0.7, y, y + 1.9, hz + hd, hz + hd + 0.03, c8(0x5a6a7a), {"band": 1.5, "surface": "metal", "parent": P, "name": "HutDoor"})
+		# a corrugated roof tipped to drain off the back, held down by a timber batten
+		b.piece(corrugated(hw + 0.24, hd + 0.24), Vector3(hx + hw * 0.5, y + 2.16, hz + hd * 0.5), b.surface("rust"),
+			{"band": 1.5, "parent": P, "name": "HutRoof", "tint": c8(0x9aa0a0), "rotation": Vector3(-0.07, 0, 0)})
+		b.box(hx - 0.1, hx + hw + 0.1, y + 2.17, y + 2.22, hz + hd * 0.5 - 0.03, hz + hd * 0.5 + 0.03, c8(0x6b4a30), {"band": 1.5, "surface": "timber", "parent": P, "name": "HutBatten"})
+		# the door: a painted plank leaf in a frame, a knob, a step of brick
+		var dx0 := hx + hw * 0.3
+		b.box(dx0, dx0 + 0.7, y, y + 1.9, hz + hd, hz + hd + 0.03, c8(0x5a6a7a), {"band": 1.5, "surface": "metal", "parent": P, "name": "HutDoor"})
+		for fx in [[dx0 - 0.06, dx0], [dx0 + 0.7, dx0 + 0.76]]:
+			b.box(fx[0], fx[1], y, y + 1.96, hz + hd, hz + hd + 0.05, c8(0x4a4038), {"band": 1.5, "surface": "timber", "parent": P, "name": "DoorFrame"})
+		b.box(dx0 - 0.06, dx0 + 0.76, y + 1.9, y + 1.96, hz + hd, hz + hd + 0.05, c8(0x4a4038), {"band": 1.5, "surface": "timber", "parent": P, "name": "DoorFrame"})
+		FixtureKit.knob(b, Vector3(dx0 + 0.6, y + 1.0, hz + hd + 0.03), Vector3(0, 0, 1), {"parent": P, "band": 1.5})
+		# a small barred window beside it
+		if hw > 1.5:
+			var wx := dx0 + 0.95
+			b.box(wx, wx + 0.5, y + 1.1, y + 1.6, hz + hd, hz + hd + 0.01, c8(0x2a2a28), {"band": 1.5, "material": b.glass(true), "parent": P, "name": "HutWindow"})
+			for k in 5:
+				b.cylinder(Vector3(wx + 0.05 + k * 0.1, y + 1.1, hz + hd + 0.04), Vector3(wx + 0.05 + k * 0.1, y + 1.6, hz + hd + 0.04), 0.008, b.surface("metal"),
+					{"band": 1.5, "parent": P, "name": "HutBar", "tint": c8(0x3a3a38), "segments": 6, "cast_shadow": false})
 	elif r < 0.4:
 		# a water tank on a stand
 		var tx := x0 + w * 0.5
 		var tz := z0 + d * 0.5
-		var cm := CylinderMesh.new()
-		cm.top_radius = 0.6
-		cm.bottom_radius = 0.6
-		cm.height = 1.1
-		cm.radial_segments = 16
-		b.piece(cm, Vector3(tx, y + 1.35, tz), b.surface("rust"), {"band": 1.5, "parent": P, "name": "Tank", "tint": c8(0xa0a8a8)})
-		for dx in [-0.4, 0.4]:
-			for dz in [-0.4, 0.4]:
-				b.box(tx + dx - 0.04, tx + dx + 0.04, y, y + 0.8, tz + dz - 0.04, tz + dz + 0.04, c8(0x555555), {"band": 1.5, "surface": "metal", "parent": P, "name": "TankLeg", "cast_shadow": false})
-		# the deck the legs carry and the tank sits on
-		b.box(tx - 0.62, tx + 0.62, y + 0.74, y + 0.8, tz - 0.62, tz + 0.62, c8(0x4f5250), {"band": 1.5, "surface": "rust", "parent": P, "name": "TankDeck"})
+		# the riveted tank on its braced stand, shared with the walled city's roofs
+		b.piece(BuildWalledCity._tank_mesh(), Vector3(tx, y, tz), b.surface("rust"), {"band": 1.5, "parent": P, "name": "Tank", "tint": c8(0xa0a8a8)})
 	elif r < 0.52 and w > 2.0:
 		# a pigeon loft
-		b.box(x0 + 0.3, x0 + 1.9, y, y + 1.3, z0 + 0.3, z0 + 1.2, c8(0x6b4a30), {"band": 1.5, "surface": "wood", "parent": P, "name": "Loft"})
-		b.box(x0 + 0.25, x0 + 1.95, y + 1.3, y + 1.36, z0 + 0.25, z0 + 1.25, c8(0x9aa0a0), {"band": 1.5, "surface": "rust", "parent": P, "name": "LoftRoof"})
+		b.box(x0 + 0.3, x0 + 1.9, y, y + 1.3, z0 + 0.3, z0 + 1.2, c8(0x6b4a30), {"band": 1.5, "surface": "timber", "parent": P, "name": "Loft"})
+		b.piece(corrugated(1.7, 1.0), Vector3(x0 + 1.1, y + 1.34, z0 + 0.75), b.surface("rust"), {"band": 1.5, "parent": P, "name": "LoftRoof", "tint": c8(0x9aa0a0), "rotation": Vector3(0.06, 0, 0)})
+		# the slatted front the birds look out through, and a landing board
+		for k in 9:
+			var sx := x0 + 0.38 + k * 0.18
+			b.box(sx, sx + 0.04, y + 0.3, y + 1.22, z0 + 1.2, z0 + 1.23, c8(0x5a3a22), {"band": 1.5, "surface": "timber", "parent": P, "name": "LoftSlat", "cast_shadow": false})
+		b.box(x0 + 0.35, x0 + 1.85, y + 0.26, y + 0.3, z0 + 1.2, z0 + 1.42, c8(0x7a5a3a), {"band": 1.5, "surface": "timber", "parent": P, "name": "LandingBoard"})
 	if b.rand.randf() < 0.45:
 		# washing on a line between two poles
 		var lx0 := x0 + 0.25
 		var lx1 := x1 - 0.25
 		var lz := z0 + d * (0.3 + b.rand.randf() * 0.4)
-		b.box(lx0, lx0 + 0.05, y, y + 1.9, lz, lz + 0.05, c8(0x5a5a55), {"band": 1.5, "surface": "metal", "parent": P, "name": "LinePost"})
-		b.box(lx1 - 0.05, lx1, y, y + 1.9, lz, lz + 0.05, c8(0x5a5a55), {"band": 1.5, "surface": "metal", "parent": P, "name": "LinePost"})
+		for px in [lx0 + 0.025, lx1 - 0.025]:
+			b.cylinder(Vector3(px, y, lz + 0.025), Vector3(px, y + 1.9, lz + 0.025), 0.022, b.surface("metal"), {"band": 1.5, "parent": P, "name": "LinePost", "tint": c8(0x5a5a55), "segments": 8})
+		b.cylinder(Vector3(lx0 + 0.025, y + 1.86, lz + 0.025), Vector3(lx1 - 0.025, y + 1.86, lz + 0.025), 0.004, b.surface("grain"), {"band": 1.5, "parent": P, "name": "Line", "tint": c8(0x2a2a2a), "segments": 5, "cast_shadow": false})
 		var cols := [c8(0xe8e2d4), c8(0xc9463a), c8(0x3f6fa8), c8(0xd8b040), c8(0x6f8a5a), c8(0xe0a0b0)]
 		var cx := lx0 + 0.2
 		while cx < lx1 - 0.4:

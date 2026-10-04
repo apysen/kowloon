@@ -37,6 +37,7 @@ func _initialize() -> void:
 		quit(1)
 		return
 	var count := _count(b.root)
+	print("%d prop boxes rounded off" % b.soft_boxes)
 	print("baked level: %d nodes, %d floors, %d obstacles, %d filler blocks in %d ms" % [
 		count, b.data.floors.size(), b.data.obstacles.size(), b.filler_blocks.size(), Time.get_ticks_msec() - t0])
 	b.root.free()

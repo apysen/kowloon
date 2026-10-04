@@ -26,6 +26,8 @@ const SPECS := {
 	"metal": [Vector2(1.2, 1.2), 0.8],
 	"fabric": [Vector2(0.6, 0.6), 0.8],
 	"grain": [Vector2(2, 2), 0.7],
+	"glaze": [Vector2(0.6, 0.6), 0.5],
+	"timber": [Vector2(1.2, 1.2), 0.8],
 	"facade_a": [Vector2(6, 5), 1.0],
 	"facade_b": [Vector2(6, 5), 1.0],
 	"facade_c": [Vector2(6, 5), 1.0],

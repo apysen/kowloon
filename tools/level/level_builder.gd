@@ -36,6 +36,7 @@ var _mesh_cache: Dictionary = {}
 var filler_blocks: Array[Dictionary] = []
 var _room_count := 0
 var _box_count := 0
+var soft_boxes := 0
 
 
 func _init() -> void:
@@ -140,6 +141,22 @@ func emissive(color: Color, energy := 2.0, unshaded := true) -> StandardMaterial
 	return m
 
 
+## Window glass: faintly green, glossy, a little see-through; `dark` for a
+## pane with an unlit room behind it.
+func glass(dark := false) -> StandardMaterial3D:
+	var k := "glass_%s" % dark
+	if _emissive_cache.has(k):
+		return _emissive_cache[k]
+	var m := StandardMaterial3D.new()
+	m.albedo_color = Color(0.16, 0.2, 0.22, 0.92) if dark else Color(0.62, 0.74, 0.74, 0.32)
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.roughness = 0.06
+	m.metallic = 0.25
+	m.metallic_specular = 0.8
+	_emissive_cache[k] = m
+	return m
+
+
 ## A textured card material (signs, posters, calendars): lit, alpha-scissored.
 func card_material(tex_path: String, emission := 0.0, unshaded := false) -> StandardMaterial3D:
 	var k := tex_path + str(emission) + str(unshaded)
@@ -190,7 +207,18 @@ func box(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float, color
 	var size := Vector3(absf(x1 - x0), absf(y1 - y0), absf(z1 - z0)) + Vector3.ONE * 2.0 * grow
 	var mi := MeshInstance3D.new()
 	mi.name = opts.get("name", "Box")
-	mi.mesh = _box_mesh(size)
+	if _softened(size, opts):
+		# a prop: its edges rounded, the way anything made and handled is.
+		# The mesh is shared by size to the millimetre and scaled to the exact
+		# size, which keeps each box's own hair of growth.
+		var q := (size / 0.002).round() * 0.002
+		q = q.max(Vector3.ONE * 0.002)
+		var r := clampf(q[ModelKit._min_axis(q)] * 0.22, 0.001, 0.012)
+		mi.mesh = ModelKit.rbox(q, r, 2)
+		mi.scale = size / q
+		soft_boxes += 1
+	else:
+		mi.mesh = _box_mesh(size)
 	mi.position = Vector3((x0 + x1) * 0.5, (y0 + y1) * 0.5, (z0 + z1) * 0.5)
 	if opts.has("material"):
 		mi.material_override = opts.material
@@ -198,7 +226,10 @@ func box(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float, color
 		var s: String = opts.get("surface", "grain")
 		if s == "":
 			s = "grain"
-		mi.material_override = surface(s, opts.get("top", ""))
+		var top: String = opts.get("top", "")
+		if top == "" and s == "concrete" and String(opts.get("name", "")) == "Step":
+			top = "floor"
+		mi.material_override = surface(s, top)
 		mi.set_instance_shader_parameter("tint", color)
 		if opts.has("base_y"):
 			mi.set_instance_shader_parameter("base_y", opts.base_y)
@@ -217,13 +248,58 @@ func box(x0: float, x1: float, y0: float, y1: float, z0: float, z1: float, color
 	return mi
 
 
+## Fittings that stand inside a room's shell but are made things, not walls:
+## rounded like props.
+const SOFT_FIXTURES := ["Step", "Nosing", "Stringer", "Rail", "RailPost", "MidRail", "Handrail", "HandrailBracket", "Post", "GateRail",
+	"GateFrame", "GateBar", "Frame", "DoorFrame", "Sill", "WindowFrame", "CasementFrame", "Window", "Grille", "Lattice", "Slat", "SignBoard",
+	"SignBox", "SignBracket", "Bracket", "Coping", "LedgeSlab", "Plank", "Batten", "LadderRail", "LadderRung", "Rung", "Lip", "Counter",
+	"Shutter", "ShutterBox", "BottomBar", "HoistBeam", "HoistMount", "GallowsPost", "GallowsArm", "TankLeg", "TankBrace", "Strut", "Beam",
+	"CoopPost", "CoopFloor", "Perch", "Mast", "Antenna", "SheetPost", "LinePost", "ShaftRim", "TankDeck", "Vent", "Plinth", "Hood", "HoodPost",
+	"Mount", "Platform", "LedgeEnd", "Slab", "BalconySlab", "AirConBracket", "AirConStrut", "PipeBracket", "Clamp", "Sink", "SinkStand"]
+
+
+## Whether a box is a prop to round off: not part of a room's shell, the
+## city or the ground, not textured by its own material, and small.
+func _softened(size: Vector3, opts: Dictionary) -> bool:
+	if not opts.get("soft", true) or opts.has("material"):
+		return false
+	for k in ["is_lid", "is_floor", "filler"]:
+		if opts.get(k, false):
+			return false
+	if opts.get("soft", false) == true:
+		return minf(size.x, minf(size.y, size.z)) >= 0.004
+	var parent: String = opts.get("parent", "Structure/Misc")
+	if opts.has("parent_node"):
+		# the group path of the node it hangs from
+		var names: Array[String] = []
+		var n: Node = opts.parent_node
+		while n != null and n != root:
+			names.push_front(String(n.name))
+			n = n.get_parent()
+		parent = "/".join(names)
+	if parent.begins_with("City/Roofscape"):
+		# the roofs seen from the slice's own roof: as close as any room
+		return minf(size.x, minf(size.y, size.z)) >= 0.004 and maxf(size.x, maxf(size.y, size.z)) <= 30.0
+	if parent.begins_with("City"):
+		return false
+	if SOFT_FIXTURES.has(String(opts.get("name", ""))):
+		return minf(size.x, minf(size.y, size.z)) >= 0.004 and maxf(size.x, maxf(size.y, size.z)) <= 12.0
+	if opts.get("room", "") != "":
+		return false
+	if parent.begins_with("Structure"):
+		return false
+	return maxf(size.x, maxf(size.y, size.z)) <= 2.5 and minf(size.x, minf(size.y, size.z)) >= 0.004
+
+
 ## Tag a node as a level piece for the runtime cutaway.
 func tag(node: Node3D, band: float, fadeable := false, opts := {}) -> void:
 	node.set_meta("band", band)
 	node.set_meta("fadeable", fadeable)
 	if opts.get("room", "") != "":
 		node.set_meta("room", opts.room)
-	for k in ["is_lid", "is_floor", "filler", "dynamic"]:
+	if opts.get("room_side", "") != "":
+		node.set_meta("room_side", opts.room_side)
+	for k in ["is_lid", "is_floor", "filler", "dynamic", "ceiling_mounted"]:
 		if opts.get(k, false):
 			node.set_meta(k, true)
 
@@ -339,10 +415,10 @@ func room(r: Dictionary) -> void:
 		closed_room(id, [x0, x1, z0, z1], y, h - lift, band, parent_path)
 
 	var sides := {
-		"n": {"a0": x0 - T, "a1": x1 + T, "fixed": z0 - T / 2, "axis": "x", "inner": Vector3(0, 0, 1)},
-		"s": {"a0": x0 - T, "a1": x1 + T, "fixed": z1 + T / 2, "axis": "x", "inner": Vector3(0, 0, -1)},
-		"w": {"a0": z0, "a1": z1, "fixed": x0 - T / 2, "axis": "z", "inner": Vector3(1, 0, 0)},
-		"e": {"a0": z0, "a1": z1, "fixed": x1 + T / 2, "axis": "z", "inner": Vector3(-1, 0, 0)},
+		"n": {"side": "n", "a0": x0 - T, "a1": x1 + T, "fixed": z0 - T / 2, "axis": "x", "inner": Vector3(0, 0, 1)},
+		"s": {"side": "s", "a0": x0 - T, "a1": x1 + T, "fixed": z1 + T / 2, "axis": "x", "inner": Vector3(0, 0, -1)},
+		"w": {"side": "w", "a0": z0, "a1": z1, "fixed": x0 - T / 2, "axis": "z", "inner": Vector3(1, 0, 0)},
+		"e": {"side": "e", "a0": z0, "a1": z1, "fixed": x1 + T / 2, "axis": "z", "inner": Vector3(-1, 0, 0)},
 	}
 	for side in sides:
 		if side in skip:
@@ -358,7 +434,7 @@ func room(r: Dictionary) -> void:
 			cursor = maxf(cursor, g[1])
 		if cursor < s.a1:
 			segments.append([cursor, s.a1])
-		var wall_opts := {"fadeable": not r.get("no_fade", false), "band": wall_band, "room": id, "surface": wall_surface,
+		var wall_opts := {"fadeable": not r.get("no_fade", false), "band": wall_band, "room": id, "room_side": side, "surface": wall_surface,
 			"parent": parent_path, "name": "Wall" + side.to_upper(), "base_y": y}
 		for seg in segments:
 			var m := _wall_segment(s, seg[0], seg[1], y, y + h, wall, wall_opts)
@@ -378,7 +454,7 @@ func _wall_segment(s: Dictionary, a: float, b: float, y0: float, y1: float, colo
 		m = box(a, b, y0, y1, s.fixed - T / 2, s.fixed + T / 2, color, opts)
 	else:
 		m = box(s.fixed - T / 2, s.fixed + T / 2, y0, y1, a, b, color, opts)
-	m.set_meta("side", s.get("side", ""))
+	m.set_meta("room_side", s.get("side", ""))
 	return m
 
 
@@ -432,7 +508,8 @@ func _door_frame(s: Dictionary, a: float, b: float, y: float, band: float, id: S
 	var T := 0.3
 	var fw := 0.08
 	var col := c8(0x4a3a2e)
-	var o := {"band": band, "surface": "wood", "parent": parent_path + "/Frames", "name": "Frame", "room": id, "fadeable": true}
+	var o := {"band": band, "surface": "wood", "parent": parent_path + "/Frames", "name": "Frame", "room": id,
+		"room_side": String(s.get("side", "")), "fadeable": true}
 	if s.axis == "x":
 		box(a, a + fw, y, y + 2.7, s.fixed - T / 2 - 0.02, s.fixed + T / 2 + 0.02, col, o)
 		box(b - fw, b, y, y + 2.7, s.fixed - T / 2 - 0.02, s.fixed + T / 2 + 0.02, col, o)
@@ -487,8 +564,8 @@ func door(d: Dictionary) -> void:
 	for yy in [0.35, 1.3, 2.25]:
 		var r := box(0.06, width - 0.06, yy, yy + 0.08, -0.07, 0.07, col.darkened(0.15), {"surface": "metal", "parent_node": pivot, "name": "Rail"})
 		r.remove_meta("band")
-	var knob := box(width - 0.22, width - 0.14, 1.16, 1.24, -0.11, 0.11, c8(0xc9a55a), {"surface": "metal", "parent_node": pivot, "name": "Knob"})
-	knob.remove_meta("band")
+	for side in [-1.0, 1.0]:
+		FixtureKit.knob(self, Vector3(width - 0.18, 1.2, 0.05 * side), Vector3(0, 0, side), {"parent_node": pivot, "untagged": true})
 	# the Hong Kong service-door plate (閒人免進), on the face that looks back down the hall
 	var plate := card("res://assets/textures/props/sign_staff_only.png", Vector3(width / 2, 1.75, -0.06), Vector2(0.62, 0.31),
 		Vector3(0, 0, -1), {"parent_node": pivot, "untagged": true, "name": "Plate"})

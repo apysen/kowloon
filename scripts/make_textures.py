@@ -420,6 +420,49 @@ def grain():
     save("grain", alb, height, 3.0, rough)
 
 
+def timber():
+    """Furniture timber: one continuous board, varnished, the grain running
+    along U with the odd flatsawn cathedral and a pin knot. No plank seams,
+    so posts, rails and panels read as solid wood."""
+    s = (N, N)
+    yy, xx = np.mgrid[0:N, 0:N].astype(float)
+    warp = spectral(s, 3.4, 131, stretch=(1, 3)) * 70
+    spacing = spectral(s, 2.6, 137, stretch=(1, 6)) * 4.0
+    # whole cycles across the tile, so it repeats without a seam
+    rings = np.sin((yy + warp) * 2 * math.pi * 24 / N + spacing) * 0.5 + 0.5
+    rings = smooth(rings, 0.55, 1.0) * 0.7 + rings * 0.3
+    fine = spectral(s, 1.0, 132, stretch=(1, 40), lo=6)
+    figure = spectral(s, 1.8, 133, stretch=(1, 10))
+    pores = smooth(spectral(s, 0.4, 134, stretch=(1, 20), lo=40), 0.7, 0.9)
+    knots_f1, _, _ = worley(s, 6, 135)
+    knot = 1.0 - smooth(knots_f1, 2, 7)
+    light = color("#e2c49e")
+    dark = color("#a07850")
+    alb = lerp(light, dark, np.clip(rings * 0.3 + fine * 0.35 + figure * 0.35, 0, 1))
+    alb = lerp(alb, color("#5a3a22"), knot * 0.7 + pores * 0.12)
+    wear = smooth(spectral(s, 2.0, 136), 0.55, 1.0)
+    alb = lerp(alb, color("#ead2b2"), wear * 0.12)
+    height = fine * 0.08 - pores * 0.12 - knot * 0.05
+    rough = 0.32 + 0.25 * wear + 0.1 * pores
+    save("timber", alb, height, 1.5, rough)
+
+
+def glaze():
+    """Glazed porcelain and enamel ware: near-white, glossy, a few iron
+    specks from the kiln and a fine crazing in the glaze where it has aged."""
+    s = (N, N)
+    pool = spectral(s, 2.6, 121)
+    speck = smooth(spectral(s, 0.6, 122, lo=60), 0.93, 0.96)
+    craze = cracks(s, 123, count=90, width=0.8, coverage=0.5)
+    alb = np.ones((N, N, 3)) * color("#f6f4ee")
+    alb = alb * (0.97 + 0.03 * pool[..., None])
+    alb = lerp(alb, color("#6a5a48"), speck * 0.7)
+    alb = lerp(alb, color("#cfc8b8"), craze * 0.25)
+    height = pool * 0.15 - craze * 0.25
+    rough = 0.12 + 0.05 * pool + craze * 0.15 + speck * 0.2
+    save("glaze", alb, height, 2.0, rough)
+
+
 # ----------------------------------------------------------------------------- facades
 
 
@@ -619,6 +662,8 @@ SURFACES = {
     "metal": metal,
     "fabric": fabric,
     "grain": grain,
+    "glaze": glaze,
+    "timber": timber,
     "facade_a": lambda: facade("facade_a", 201, "plain", False),
     "facade_b": lambda: facade("facade_b", 202, "tile", False),
     "facade_c": lambda: facade("facade_c", 203, "mixed", False),

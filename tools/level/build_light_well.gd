@@ -110,23 +110,11 @@ static func _footbridge(b: LevelBuilder) -> void:
 
 ## A painted steel rail along x (posts, top rail, mid rail) at z.
 static func _rail_x(b: LevelBuilder, x0: float, x1: float, z: float, parent: String) -> void:
-	var col := c8(0x4f7a5a)
-	b.box(x0, x1, Y + 0.93, Y + 1.0, z - 0.03, z + 0.03, col, {"band": 1.0, "fadeable": true, "surface": "metal", "parent": parent, "name": "Rail"})
-	b.box(x0, x1, Y + 0.45, Y + 0.49, z - 0.02, z + 0.02, col, {"band": 1.0, "fadeable": true, "surface": "metal", "parent": parent, "name": "MidRail"})
-	var n := maxi(1, roundi((x1 - x0) / 1.0))
-	for i in n + 1:
-		var px := x0 + (x1 - x0) * i / n
-		b.box(px - 0.03, px + 0.03, Y, Y + 1.0, z - 0.03, z + 0.03, col, {"band": 1.0, "fadeable": true, "surface": "metal", "parent": parent, "name": "Post"})
+	FixtureKit.railing(b, Vector3(x0, Y, z), Vector3(x1, Y, z), 1.0, c8(0x4f7a5a), parent, {"band": 1.0, "fadeable": true})
 
 
 static func _rail_z(b: LevelBuilder, z0: float, z1: float, x: float, parent: String) -> void:
-	var col := c8(0x4f7a5a)
-	b.box(x - 0.03, x + 0.03, Y + 0.93, Y + 1.0, z0, z1, col, {"band": 1.0, "fadeable": true, "surface": "metal", "parent": parent, "name": "Rail"})
-	b.box(x - 0.02, x + 0.02, Y + 0.45, Y + 0.49, z0, z1, col, {"band": 1.0, "fadeable": true, "surface": "metal", "parent": parent, "name": "MidRail"})
-	var n := maxi(1, roundi(absf(z1 - z0) / 1.0))
-	for i in n + 1:
-		var pz := z0 + (z1 - z0) * i / n
-		b.box(x - 0.03, x + 0.03, Y, Y + 1.0, pz - 0.03, pz + 0.03, col, {"band": 1.0, "fadeable": true, "surface": "metal", "parent": parent, "name": "Post"})
+	FixtureKit.railing(b, Vector3(x, Y, z0), Vector3(x, Y, z1), 1.0, c8(0x4f7a5a), parent, {"band": 1.0, "fadeable": true})
 
 
 # ----------------------------------------------------------------------------- the two flats
@@ -153,9 +141,9 @@ static func _rooms(b: LevelBuilder) -> void:
 	var chain := c8(0x8a8a86)
 	var pts := [Vector3(21.2, Y + 1.12, face + 0.13), Vector3(21.55, Y + 1.0, face + 0.1), Vector3(21.75, Y + 1.08, face + 0.03)]
 	for i in pts.size() - 1:
-		b.cylinder(pts[i], pts[i + 1], 0.018, b.surface("metal"), {"parent": P, "name": "Chain", "tint": chain, "band": 1.0, "cast_shadow": false, "fadeable": true})
+		ObjectKit.chain(b, pts[i], pts[i + 1], 0.05, 0.005, chain, P, "Chain", {"band": 1.0, "fadeable": true})
 	b.box(21.7, 21.8, Y + 1.02, Y + 1.14, face, face + 0.05, chain, {"band": 1.0, "fadeable": true, "surface": "metal", "parent": P, "name": "Staple"})
-	b.box(21.5, 21.62, Y + 0.84, Y + 0.98, face + 0.08, face + 0.13, c8(0xc9a55a), {"band": 1.0, "fadeable": true, "surface": "metal", "parent": P, "name": "Padlock"})
+	ObjectKit.padlock(b, Vector3(21.56, Y + 0.92, face + 0.105), Vector3(0, 0, 1), P, 1.1, {"band": 1.0, "fadeable": true})
 	b.card("res://assets/textures/props/notice_rehoused.png", Vector3(20.9, Y + 1.62, face + 0.05), Vector2(0.5, 0.64), Vector3(0, 0, 1), {"parent": P, "name": "RehousedNotice", "band": 1.0, "fadeable": true})
 	# the back kitchen window: a sill across the gap, a frame, and one casement swung open
 	var wx: float = UNIT[1] + 0.15
@@ -177,7 +165,12 @@ static func _rooms(b: LevelBuilder) -> void:
 	for part in [[0.0, 0.8, 0.0, 0.05], [0.0, 0.8, 1.0, 1.05], [0.0, 0.05, 0.0, 1.05], [0.75, 0.8, 0.0, 1.05]]:
 		var m := b.box(-0.03, 0.03, part[2], part[3], -part[1], -part[0], c8(0x3f5a4a), {"surface": "wood", "parent_node": hinge, "name": "CasementFrame"})
 		m.remove_meta("band")
-	var glass := b.box(-0.01, 0.01, 0.05, 1.0, -0.75, -0.05, c8(0x9ab8bc), {"surface": "metal", "parent_node": hinge, "name": "Pane", "cast_shadow": false})
+	var glass := b.box(-0.006, 0.006, 0.05, 1.0, -0.75, -0.05, c8(0x9ab8bc), {"material": b.glass(), "parent_node": hinge, "name": "Pane", "cast_shadow": false})
+	# a glazing bar across the middle, and the stay that holds it open
+	var bar := b.box(-0.02, 0.02, 0.5, 0.54, -0.75, -0.05, c8(0x3f5a4a), {"surface": "timber", "parent_node": hinge, "name": "CasementFrame"})
+	bar.remove_meta("band")
+	var stay := ModelKit.place(b, ModelKit.tube([Vector3(0.03, 0.06, -0.7), Vector3(0.03, 0.06, -0.9)], 0.005, 0.0, 6), Vector3.ZERO, "metal", c8(0x2a2a2a),
+		{"parent_node": hinge, "name": "Stay", "untagged": true, "cast_shadow": false})
 	glass.remove_meta("band")
 	b.ref("unitWindow", Vector3(wx, Y + 1.4, (wz0 + wz1) / 2))
 
@@ -190,8 +183,16 @@ static func _pump(b: LevelBuilder) -> void:
 	## on a concrete plinth under a tin hood, lifting water from the well pipe.
 	var PP := "Structure/LightWell/Pump"
 	b.box(12.1, 13.4, 0.0, 0.25, -16.9, -15.9, c8(0x7a766c), {"band": 0.0, "surface": "concrete", "parent": PP, "name": "Plinth"})
-	b.cylinder(Vector3(12.45, 0.55, -16.4), Vector3(13.05, 0.55, -16.4), 0.22, b.surface("metal"), {"parent": PP, "name": "Motor", "tint": c8(0x3f6a5a), "band": 0.0})
-	b.cylinder(Vector3(13.05, 0.55, -16.4), Vector3(13.2, 0.55, -16.4), 0.14, b.surface("metal"), {"parent": PP, "name": "PumpHead", "tint": c8(0x5a5a58), "band": 0.0})
+	# the motor: a finned casing with domed end bells, its fan cowl at the back
+	var fins := PackedVector2Array([Vector2(0, -0.3), Vector2(0.15, -0.3), Vector2(0.2, -0.26)])
+	for k in 9:
+		var fy := -0.22 + k * 0.05
+		fins.append_array(PackedVector2Array([Vector2(0.2, fy - 0.012), Vector2(0.235, fy - 0.006), Vector2(0.235, fy + 0.006), Vector2(0.2, fy + 0.012)]))
+	fins.append_array(PackedVector2Array([Vector2(0.2, 0.26), Vector2(0.15, 0.3), Vector2(0, 0.3)]))
+	ModelKit.place(b, ModelKit.lathe(fins, 28), Vector3(12.75, 0.55, -16.4), "metal", c8(0x3f6a5a), {"parent": PP, "name": "Motor", "band": 0.0, "rotation": Vector3(0, 0, PI / 2)})
+	ModelKit.place(b, ModelKit.lathe(ModelKit.rounded_profile([Vector2(0, 0), Vector2(0.14, 0), Vector2(0.15, 0.08), Vector2(0.1, 0.16), Vector2(0, 0.16)], 0.03), 24),
+		Vector3(13.04, 0.55, -16.4), "metal", c8(0x5a5a58), {"parent": PP, "name": "PumpHead", "band": 0.0, "rotation": Vector3(0, 0, -PI / 2)})
+	ModelKit.place(b, ModelKit.rbox(Vector3(0.12, 0.1, 0.1), 0.012), Vector3(12.75, 0.82, -16.4), "metal", c8(0x2e4a40), {"parent": PP, "name": "TerminalBox", "band": 0.0})
 	b.box(12.3, 13.3, 0.25, 0.3, -16.7, -16.1, c8(0x4a4a48), {"band": 0.0, "surface": "metal", "parent": PP, "name": "Mount"})
 	b.box(12.0, 13.5, 0.95, 1.0, -17.0, -15.8, c8(0x9aa0a0), {"band": 0.0, "surface": "rust", "parent": PP, "name": "Hood"})
 	for hx in [12.05, 13.4]:
@@ -252,10 +253,11 @@ static func _pipes(b: LevelBuilder) -> void:
 
 static func _air_conditioners(b: LevelBuilder) -> void:
 	## Three window units on brackets on the north wall, standing off it so the
-	## branch runs behind them: from the well they hide where it goes.
+	## branch runs behind them. The two on Mrs. Fong's wall flank her doorway;
+	## neither unit nor its diagonal struts intrudes over the door or name plate.
 	var face: float = LEDGE_Z[0]
 	var PA := P + "/AirCon"
-	for x in [14.0, 15.5, 19.1]:
+	for x in [12.7, 16.7, 19.1]:
 		var x1: float = x + 0.8
 		var y0 := Y + 2.1
 		var z0 := face + 0.28
@@ -298,26 +300,28 @@ static func _unit_inside(b: LevelBuilder) -> void:
 	# straight up. From the side, the first turns and runs off through the west
 	# wall to the neighbour's; the third goes up through the ceiling, to the tank
 	# on the roof. The second runs along the wall to this flat's own old sink.
-	var top := Y + 4.15
+	var top := Y + 4.2
 	PropKit.pipe_run(b, [Vector3(VALVE_X[0], MANIFOLD_Y + 0.35, mz), Vector3(VALVE_X[0], Y + 3.3, mz), Vector3(VALVE_X[0], Y + 3.3, -19.4),
 		Vector3(x0 + 0.02, Y + 3.3, -19.4)], 0.05, GREY, PU, 1.0, "ToNeighbour")
 	PropKit.pipe_run(b, [Vector3(VALVE_X[1], MANIFOLD_Y + 0.35, mz), Vector3(VALVE_X[1], Y + 2.4, mz), Vector3(23.72, Y + 2.4, mz),
 		Vector3(23.72, Y + 2.4, -20.2), Vector3(23.72, Y + 1.2, -20.2)], 0.045, GREY, PU, 1.0, "ToSink")
 	# ...down to a brass bib tap over the sink, its spout turned into the basin
-	b.cylinder(Vector3(23.72, Y + 1.22, -20.2), Vector3(23.72, Y + 1.08, -20.2), 0.05, b.surface("metal"), {"parent": PU, "name": "TapBody", "tint": c8(0xa8894a), "band": 1.0})
-	b.cylinder(Vector3(23.72, Y + 1.1, -20.2), Vector3(23.6, Y + 1.06, -20.2), 0.022, b.surface("metal"), {"parent": PU, "name": "TapSpout", "tint": c8(0xa8894a), "band": 1.0, "cast_shadow": false})
-	b.cylinder(Vector3(23.6, Y + 1.06, -20.2), Vector3(23.6, Y + 0.98, -20.2), 0.02, b.surface("metal"), {"parent": PU, "name": "TapSpout", "tint": c8(0xa8894a), "band": 1.0, "cast_shadow": false})
-	b.box(23.69, 23.75, Y + 1.24, Y + 1.27, -20.3, -20.1, c8(0xb8392e), {"band": 1.0, "surface": "metal", "parent": PU, "name": "TapHandle", "cast_shadow": false})
+	ObjectKit.tap(b, Vector3(23.72, Y + 1.22, -20.2), Vector3(-1, 0, 0), c8(0xb8392e), PU, {"band": 1.0})
 	b.box(23.74, 23.8, Y + 1.1, Y + 1.3, -20.25, -20.15, c8(0x5a5a58), {"band": 1.0, "surface": "metal", "parent": PU, "name": "TapClip", "cast_shadow": false})
 	PropKit.pipe_run(b, [Vector3(VALVE_X[2], MANIFOLD_Y + 0.35, mz), Vector3(VALVE_X[2], Y + 2.9, mz), Vector3(VALVE_X[2], Y + 2.9, -19.4),
 		Vector3(VALVE_X[2], top, -19.4)], 0.06, GREY, PU, 1.0, "ToTank")
-	b.box(VALVE_X[2] - 0.12, VALVE_X[2] + 0.12, top - 0.03, top, -19.52, -19.28, c8(0x5a5a58), {"band": 1.0, "surface": "metal", "parent": PU, "name": "CeilingCollar", "cast_shadow": false})
+	b.box(VALVE_X[2] - 0.12, VALVE_X[2] + 0.12, top - 0.03, top, -19.52, -19.28, c8(0x5a5a58), {"band": 1.0, "surface": "metal", "parent": PU, "name": "CeilingCollar", "cast_shadow": false, "ceiling_mounted": true})
 	b.box(x0, x0 + 0.03, Y + 3.18, Y + 3.42, -19.52, -19.28, c8(0x5a5a58), {"band": 1.0, "surface": "metal", "parent": PU, "name": "WallCollar", "cast_shadow": false})
 	# the back kitchen, under the window: a cement counter and the old sink
 	b.box(x1 - 0.62, x1, Y, Y + 0.82, -21.2, -20.0, c8(0x8e8a80), {"band": 1.0, "surface": "concrete", "parent": PU, "name": "Counter"})
 	b.add_obstacle(x1 - 0.62, x1, -21.2, -20.0, Y, "unitCounter")
-	b.box(x1 - 0.6, x1 - 0.05, Y + 0.6, Y + 0.84, -20.5, -19.95, c8(0xa8aaa4), {"band": 1.0, "surface": "metal", "parent": PU, "name": "Sink"})
-	b.box(x1 - 0.55, x1 - 0.1, Y + 0.64, Y + 0.66, -20.45, -20.0, c8(0x5a5a58), {"band": 1.0, "surface": "metal", "parent": PU, "name": "SinkBasin", "cast_shadow": false})
+	# a glazed fireclay sink: thick rim, a deep basin, a brass plughole
+	var sx := x1 - 0.325
+	var sz := -20.225
+	for e in [[x1 - 0.6, x1 - 0.05, -20.5, -20.44], [x1 - 0.6, x1 - 0.05, -20.01, -19.95], [x1 - 0.6, x1 - 0.54, -20.44, -20.01], [x1 - 0.11, x1 - 0.05, -20.44, -20.01]]:
+		ModelKit.box(b, e[0], e[1], Y + 0.6, Y + 0.84, e[2], e[3], c8(0xd8d8d0), {"band": 1.0, "surface": "glaze", "parent": PU, "name": "Sink", "radius": 0.02})
+	ModelKit.box(b, x1 - 0.55, x1 - 0.1, Y + 0.6, Y + 0.64, -20.45, -20.0, c8(0xc8c8c0), {"band": 1.0, "surface": "glaze", "parent": PU, "name": "SinkBasin", "radius": 0.015})
+	ModelKit.place(b, ModelKit.puck(0.025, 0.004, 0.001, 14), Vector3(sx, Y + 0.638, sz), "metal", c8(0xa8894a), {"band": 1.0, "parent": PU, "name": "Plughole", "cast_shadow": false})
 	b.box(x1 - 0.66, x1, Y, Y + 0.6, -20.5, -19.95, c8(0x6a665c), {"band": 1.0, "surface": "concrete", "parent": PU, "name": "SinkStand"})
 	b.add_obstacle(x1 - 0.66, x1, -20.5, -19.95, Y, "unitSink")
 	b.ref("unitSink", Vector3(x1 - 0.32, Y + 0.66, -20.22))
@@ -346,7 +350,9 @@ static func _unit_inside(b: LevelBuilder) -> void:
 	b.box(20.95, 21.35, Y, Y + 0.02, -17.76, -17.68, c8(0x8a8a86), {"band": 1.0, "surface": "metal", "parent": PU, "name": "ChainBelow", "cast_shadow": false})
 	# a bare bulb on its flex, dead: the light is what comes through the window
 	b.cylinder(Vector3(21.0, Y + 4.1, -19.4), Vector3(21.0, Y + 3.2, -19.4), 0.006, b.surface("grain"), {"parent": PU, "name": "Flex", "tint": c8(0x1c1c1e), "band": 1.0, "cast_shadow": false})
-	b.piece(PropKit._sphere(0.05), Vector3(21.0, Y + 3.15, -19.4), b.surface("metal"), {"parent": PU, "name": "DeadBulb", "tint": c8(0xd8d4c8), "band": 1.0})
+	ModelKit.place(b, ModelKit.lathe(PackedVector2Array([Vector2(0, -0.055), Vector2(0.022, -0.05), Vector2(0.04, -0.03), Vector2(0.05, 0.0), Vector2(0.042, 0.03), Vector2(0.02, 0.05), Vector2(0.016, 0.06), Vector2(0, 0.06)]), 16),
+		Vector3(21.0, Y + 3.12, -19.4), "glaze", c8(0xd8d4c8), {"parent": PU, "name": "DeadBulb", "band": 1.0})
+	ModelKit.place(b, ModelKit.puck(0.022, 0.06, 0.006, 14), Vector3(21.0, Y + 3.18, -19.4), "metal", c8(0x2a2a2a), {"parent": PU, "name": "DeadSocket", "band": 1.0})
 	b.lamp(Vector3(x1 - 0.6, Y + 1.6, -19.2), Color(0.95, 0.88, 0.75), 1.6, 5.5, {"name": "WindowLight"})
 	b.ref("unitInside", Vector3(23.2, Y, -19.2))
 	b.ref("unitValves", Vector3(21.4, Y, MANIFOLD_Z + 0.5))

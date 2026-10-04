@@ -70,9 +70,7 @@ static func _courtyard(b: LevelBuilder) -> void:
 	for cx in [7.4, 12.8]:
 		var out := -1.0 if cx < 10.0 else 1.0
 		b.box(cx - 0.75, cx + 0.75, A, A + 0.3, -2.7, -2.0, c8(0x8e887a), {"band": 0.0, "surface": "concrete", "parent": P, "name": "CannonPlinth", "collide": true, "collide_y": A})
-		b.cylinder(Vector3(cx - out * 0.55, A + 0.5, -2.35), Vector3(cx + out * 0.7, A + 0.47, -2.35), 0.15, b.surface("rust"), {"parent": P, "name": "Cannon", "tint": c8(0x2e2c2a), "band": 0.0, "segments": 14})
-		b.cylinder(Vector3(cx + out * 0.66, A + 0.47, -2.35), Vector3(cx + out * 0.74, A + 0.47, -2.35), 0.18, b.surface("rust"), {"parent": P, "name": "Muzzle", "tint": c8(0x2a2826), "band": 0.0, "segments": 14})
-		b.piece(PropKit._sphere(0.19), Vector3(cx - out * 0.58, A + 0.5, -2.35), b.surface("rust"), {"parent": P, "name": "CannonBreech", "tint": c8(0x2e2c2a), "band": 0.0})
+		ObjectKit.cannon(b, Vector3(cx - out * 0.6, A + 0.5, -2.35), Vector3(cx + out * 0.74, A + 0.47, -2.35), 0.15, c8(0x2e2c2a), P, 0.0)
 		for wz in [-2.6, -2.1]:
 			b.box(cx - 0.22, cx + 0.22, A + 0.3, A + 0.42, wz - 0.03, wz + 0.03, c8(0x5a4632), {"band": 0.0, "surface": "wood", "parent": P, "name": "CannonChock", "cast_shadow": false})
 	b.ref("cannons", Vector3(7.4, A, -1.6))
@@ -85,8 +83,18 @@ static func _courtyard(b: LevelBuilder) -> void:
 	b.ref("yamenTree", Vector3(8.2, A, 1.6))
 	# folding chairs by the tree, where the old people sit
 	for ch in [[8.1, 1.1], [8.2, 2.2]]:
-		PropKit.stool(b, ch[0], ch[1], A, c8(0x3f6fa8), PF, 0.42)
+		ObjectKit.folding_chair(b, ch[0], ch[1], A, Vector3(-1, 0, 0.15 if ch[1] < 2.0 else -0.2), c8(0x3f6fa8), PF, 0.0)
 	b.ref("yamenCourt", Vector3(9.0, A, 1.0))
+	# the lane past the gate: its north side is somebody's brick planter, full
+	# (where the walkable ground stops, something is there to stop Mei)
+	b.box(2.6, 5.95, A, A + 0.5, 3.95, 4.3, c8(0x8a5a44), {"band": 0.0, "surface": "concrete", "parent": P, "name": "LanePlanter"})
+	b.box(2.65, 5.9, A + 0.5, A + 0.52, 4.0, 4.25, c8(0x3a2a1e), {"band": 0.0, "surface": "grain", "parent": P, "name": "LanePlanterSoil", "cast_shadow": false})
+	b.box(2.58, 5.97, A + 0.5, A + 0.56, 3.93, 3.99, c8(0x9a6a52), {"band": 0.0, "surface": "concrete", "parent": P, "name": "LanePlanterCoping"})
+	b.box(2.58, 5.97, A + 0.5, A + 0.56, 4.26, 4.32, c8(0x9a6a52), {"band": 0.0, "surface": "concrete", "parent": P, "name": "LanePlanterCoping"})
+	var kinds := ["chilli", "aspidistra", "onions", "aspidistra", "chilli"]
+	for k in kinds.size():
+		PlantKit.place(b, kinds[k], Vector3(3.05 + k * 0.68, A + 0.52, 4.12), P, 0.0)
+	b.add_obstacle(2.6, 5.95, 3.9, 4.35, A, "lanePlanter")
 	b.ref("yamenLane", Vector3(4.0, A, 5.1))
 	b.ref("loadingArea", Vector3(7.4, A, 3.4))
 
@@ -216,7 +224,7 @@ static func _landing(b: LevelBuilder) -> void:
 		var top := A + 0.5 * (i + 1)
 		var sz := 0.8 + i * 0.245
 		b.box(STAIR_X[0], STAIR_X[1], top - 0.5, top, sz, minf(sz + 0.28, LANDING[3]), c8(0x5d5a52), {"surface": "concrete", "parent": SP, "name": "Step", "band": 0.0})
-		b.box(STAIR_X[0], STAIR_X[1], top - 0.03, top, sz, sz + 0.05, c8(0xd8b23a), {"surface": "metal", "parent": SP, "name": "Nosing", "cast_shadow": false, "band": 0.0})
+		b.box(STAIR_X[0], STAIR_X[1], top - 0.03, top + 0.003, sz, sz + 0.05, c8(0xd8b23a), {"surface": "metal", "parent": SP, "name": "Nosing", "cast_shadow": false, "band": 0.0})
 	b.add_obstacle(STAIR_X[0] - 0.05, STAIR_X[1] + 0.05, 0.75, LANDING[3], A, "yamenStair")
 	# letterboxes for the flats above, most of them taped shut
 	b.card("res://assets/textures/props/mailboxes.png", Vector3(15.82, A + 1.4, -0.2), Vector2(1.0, 0.7), Vector3(1, 0, 0), {"parent": SP, "name": "Letterboxes", "band": 0.0})
@@ -268,7 +276,7 @@ static func _classroom(b: LevelBuilder) -> void:
 				leg.remove_meta("band")
 	b.add_obstacle(14.85, 15.65, 3.05, 3.95, B, "deskStack", "way:stairgap")
 	b.card("res://assets/textures/props/poster_1.png", Vector3(14.0, B + 2.0, CLASS[3]), Vector2(0.5, 0.7), Vector3(0, 0, -1), {"parent": PK, "name": "Poster", "band": 1.0})
-	PropKit.tube_light(b, Vector3(12.2, B + 3.7, 2.5), Vector3(14.4, B + 3.7, 2.5), PK)
+	PropKit.tube_light(b, Vector3(12.2, B + 3.7, 2.5), Vector3(14.4, B + 3.7, 2.5), B + 4.2, PK)
 	b.ref("classroom", Vector3(13.3, B, 2.2))
 	# the balcony door: one leaf open to walk through, the other folded shut and bolted
 	b.add_floor(12.3, 13.1, BALC[3] - 0.1, CLASS[2] + 0.1, B, "classDoor")
@@ -307,13 +315,45 @@ static func _balcony(b: LevelBuilder) -> void:
 		bx += 1.4
 	# the stair down to the courtyard, off the balcony's west end
 	var n := 9
+	var run := (REAR_X[1] - REAR_X[0]) / n
+	var stair_parent := P + "/RearStair"
+	var steel := c8(0x555954)
+	var structure := c8(0x3f4642)
 	for i in n:
-		var x1: float = REAR_X[1] - i * (REAR_X[1] - REAR_X[0]) / n
+		var x1: float = REAR_X[1] - i * run
+		var x0 := x1 - run - 0.02
 		var top := B - (i + 1) * (B - A) / float(n + 1)
-		b.box(x1 - (REAR_X[1] - REAR_X[0]) / n - 0.02, x1, top - 0.08, top, BALC[2] + 0.05, BALC[3] - 0.05, c8(0x7e7a70),
-			{"band": 0.0 if top < 4.4 else 1.0, "surface": "concrete", "parent": P + "/RearStair", "name": "Step", "fadeable": true})
-	b.cylinder(Vector3(REAR_X[0], A + 1.0, BALC[2] + 0.05), Vector3(REAR_X[1], B + 1.0, BALC[2] + 0.05), 0.025, b.surface("metal"),
-		{"parent": P + "/RearStair", "name": "Handrail", "tint": rail, "band": 0.0, "fadeable": true})
+		var step_band := 0.0 if top < 4.4 else 1.0
+		b.box(x0, x1, top - 0.08, top, BALC[2] + 0.05, BALC[3] - 0.05, steel,
+			{"band": step_band, "surface": "metal", "parent": stair_parent, "name": "Step", "fadeable": true})
+		# A shallow cross-member beneath every tread visibly seats it on both
+		# stringers; a yellow leading edge makes the open stair readable at night.
+		b.box(x0 + 0.03, x0 + 0.09, top - 0.14, top - 0.075, BALC[2] + 0.02, BALC[3] - 0.02, structure,
+			{"band": step_band, "surface": "metal", "parent": stair_parent, "name": "TreadSupport", "fadeable": true})
+		b.box(x0, x0 + 0.045, top - 0.02, top + 0.003, BALC[2] + 0.05, BALC[3] - 0.05, c8(0xd8b23a),
+			{"band": step_band, "surface": "metal", "parent": stair_parent, "name": "Nosing", "fadeable": true, "cast_shadow": false})
+	# Two continuous inclined stringers carry the flight from the courtyard pad
+	# into the balcony slab instead of leaving each tread in open air.
+	for z in [BALC[2] + 0.16, BALC[3] - 0.16]:
+		b.cylinder(Vector3(REAR_X[0] + 0.04, A + 0.24, z), Vector3(REAR_X[1] - 0.04, B - 0.24, z), 0.055,
+			b.surface("rust"), {"parent": stair_parent, "name": "Stringer", "tint": structure, "band": 0.0, "fadeable": true})
+	# Rails on both open sides, with posts landing directly on alternating treads
+	# plus full-height newels at the courtyard and balcony ends.
+	for z in [BALC[2] + 0.05, BALC[3] - 0.05]:
+		var rail_start := Vector3(REAR_X[0] + run * 0.5, A + 1.27, z)
+		var rail_end := Vector3(REAR_X[1], B + 1.0, z)
+		b.cylinder(rail_start, rail_end, 0.028, b.surface("metal"),
+			{"parent": stair_parent, "name": "Handrail", "tint": rail, "band": 0.0, "fadeable": true})
+		for i in range(0, n, 2):
+			var post_x1: float = REAR_X[1] - i * run
+			var post_x := post_x1 - run * 0.5
+			var post_top := B - (i + 1) * (B - A) / float(n + 1)
+			var along := (post_x - rail_start.x) / (rail_end.x - rail_start.x)
+			var rail_y: float = lerpf(rail_start.y, rail_end.y, along)
+			b.cylinder(Vector3(post_x, post_top, z), Vector3(post_x, rail_y, z), 0.024, b.surface("metal"),
+				{"parent": stair_parent, "name": "RailPost", "tint": rail, "band": 0.0, "fadeable": true})
+		b.cylinder(Vector3(REAR_X[1], B, z), rail_end, 0.032, b.surface("metal"),
+			{"parent": stair_parent, "name": "Newel", "tint": rail, "band": 1.0, "fadeable": true})
 	b.add_obstacle(REAR_X[0], REAR_X[1], BALC[2], BALC[3], A, "rearStair")
 	b.ref("rearStairTop", Vector3(BALC[0] + 0.35, B, 0.05))
 	b.ref("rearStairFoot", Vector3(REAR_X[0] - 0.4, A, 0.05))
@@ -348,22 +388,32 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	var C4 := "ChapterProps/Ch4"
 	PropKit.table(b, 9.0, 10.2, -1.2, -0.55, A, 0.72, c8(0x9a9aa0), C4, "metal")
 	b.add_obstacle(9.0, 10.2, -1.2, -0.55, A, "cheungTable", "chapter:Ch4")
-	b.box(9.8, 10.0, A + 0.72, A + 0.8, -0.95, -0.75, c8(0x3a3a4a), {"surface": "grain", "parent": C4, "name": "Teacup", "cast_shadow": false})
+	ObjectKit.cup(b, Vector3(9.9, A + 0.72, -0.85), 0.042, 0.08, c8(0x3a3a4a), C4, "Teacup", true, Vector3(-1, 0, 0.4))
 	# a wardrobe and her boxes, each with its label
-	b.box(9.2, 10.2, A, A + 1.8, 3.2, 3.75, c8(0x7a5a3a), {"surface": "wood", "parent": C4, "name": "Wardrobe", "collide": true, "collide_y": A, "key": "chapter:Ch4"})
-	b.card("res://assets/textures/props/label_c714.png", Vector3(9.7, A + 1.2, 3.76), Vector2(0.3, 0.18), Vector3(0, 0, 1), {"parent": C4, "name": "Label", "band": 0.0})
+	ObjectKit.wardrobe(b, 9.2, 10.2, A, 1.8, 3.2, 3.75, Vector3(0, 0, 1), c8(0x7a5a3a), C4, {"collide": true, "collide_y": A, "key": "chapter:Ch4", "band": 0.0})
+	b.card("res://assets/textures/props/label_c714.png", Vector3(9.95, A + 1.2, 3.785), Vector2(0.3, 0.18), Vector3(0, 0, 1), {"parent": C4, "name": "Label", "band": 0.0})
 	PropKit.cardboard(b, 10.1, 10.9, A, A + 0.6, 4.6, 5.4, c8(0xa8834f), C4)
 	PropKit.cardboard(b, 10.15, 10.8, A + 0.6, A + 1.05, 4.7, 5.3, c8(0x9c7a48), C4)
 	b.add_obstacle(10.1, 10.9, 4.6, 5.4, A, "yamenBoxes", "chapter:Ch4")
 	# the movers' handcart, waiting at the courtyard's mouth
-	b.box(6.5, 7.9, A + 0.25, A + 0.32, 3.9, 4.6, c8(0x5a4a3a), {"surface": "wood", "parent": C4, "name": "Handcart", "collide": true, "collide_y": A, "key": "chapter:Ch4"})
+	b.box(6.5, 7.9, A + 0.25, A + 0.32, 3.9, 4.6, c8(0x5a4a3a), {"surface": "timber", "parent": C4, "name": "Handcart", "collide": true, "collide_y": A, "key": "chapter:Ch4"})
+	# its low sides, the iron frame under the bed, the wheels, and the handles out the back
+	for z in [3.9, 4.56]:
+		ModelKit.box(b, 6.5, 7.9, A + 0.32, A + 0.42, z, z + 0.04, c8(0x5a4a3a).darkened(0.1), {"surface": "timber", "parent": C4, "name": "CartSide", "band": 0.0})
+	for z in [3.95, 4.55]:
+		ModelKit.box(b, 6.45, 7.95, A + 0.21, A + 0.25, z - 0.02, z + 0.02, c8(0x3a3a38), {"surface": "rust", "parent": C4, "name": "CartFrame", "band": 0.0})
 	for wx in [6.7, 7.7]:
-		b.cylinder(Vector3(wx, A + 0.2, 3.85), Vector3(wx, A + 0.2, 4.65), 0.2, b.surface("rust"), {"parent": C4, "name": "Wheel", "tint": c8(0x2a2a28), "band": 0.0})
-	# the people: Mrs. Cheung at her table, Mr. Cheng with his plan, the movers at the storage room
+		for wz in [3.86, 4.64]:
+			ObjectKit.cart_wheel(b, Vector3(wx, A + 0.2, wz), Vector3(0, 0, 1), 0.19, C4, {"band": 0.0})
+	for z in [3.95, 4.55]:
+		ModelKit.place(b, ModelKit.tube([Vector3(6.5, A + 0.23, z), Vector3(6.1, A + 0.6, z), Vector3(5.98, A + 0.66, z)], 0.02, 0.06, 8), Vector3.ZERO, "rust", c8(0x3a3a38),
+			{"parent": C4, "name": "CartHandle", "band": 0.0})
+	# The storage doorway is only a person's width, so Cheng stands beside its
+	# wall and the movers wait by their handcart instead of pinching the entrance.
 	b.resident("cheung", "cheung", Vector3(9.6, A, -1.6), {"anim": "sit", "facing": Vector3(0, 0, 1), "parent": C4})
-	b.resident("cheng", "cheng", Vector3(14.1, A, -2.3), {"anim": "work", "facing": Vector3(0, 0, 1), "parent": C4})
-	b.resident("mover_a", "mover_a", Vector3(15.2, A, -1.8), {"anim": "work", "facing": Vector3(-1, 0, 0.3), "parent": C4})
-	b.resident("mover_b", "mover_b", Vector3(9.7, A, 4.2), {"anim": "work", "facing": Vector3(0, 0, -1), "parent": C4})
+	b.resident("cheng", "cheng", Vector3(13.45, A, -2.05), {"anim": "work", "facing": Vector3(0.6, 0, 1), "parent": C4})
+	b.resident("mover_a", "mover_a", Vector3(8.35, A, 3.55), {"anim": "work", "facing": Vector3(-1, 0, 0.3), "parent": C4})
+	b.resident("mover_b", "mover_b", Vector3(8.95, A, 3.55), {"anim": "work", "facing": Vector3(-1, 0, 0.2), "parent": C4})
 	# her fan, beside the table, on an extension cable that runs through half the
 	# yamen (OQ02): side by side with the radio's across the courtyard, parting at
 	# the corner, one up the veranda into the hall, the other under the storage
@@ -419,7 +469,7 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	PropKit.cardboard(b, 11.3, 11.95, B, B + 0.6, -14.7, -14.1, c8(0xa8834f), C4)
 	PropKit.cardboard(b, 11.35, 11.9, B + 0.6, B + 0.95, -14.6, -14.2, c8(0x9c7a48), C4)
 	b.add_obstacle(11.3, 11.95, -14.7, -14.1, B, "wongBoxes", "chapter:Ch4")
-	b.box(10.9, 11.3, B, B + 0.5, -13.6, -13.2, c8(0x6b4a30), {"surface": "wood", "parent": C4, "name": "TeaChest", "collide": true, "collide_y": B, "band": 1.0, "key": "chapter:Ch4"})
+	BuildInteriors.tea_chest(b, 10.9, 11.3, B, B + 0.5, -13.6, -13.2, c8(0x6b4a30), C4, {"collide": true, "collide_y": B, "band": 1.0, "key": "chapter:Ch4"})
 	b.ref("wongPacking", Vector3(11.3, B, -12.5))
 	# the Chans' drying frame on the roof, half taken down: its poles laid on the roof
 	for k in 3:
@@ -436,9 +486,9 @@ static func _chapter_bits(b: LevelBuilder) -> void:
 	for k in 9:
 		var bz := 4.45 + k * 0.175
 		b.box(1.885, 1.915, A + 0.02, A + 2.5, bz - 0.015, bz + 0.015, steel, {"band": 0.0, "surface": "metal", "parent": G13, "name": "GateBar"})
-	for side in [1.82, 1.94]:   # the chain, looped round the end bar and the post
-		b.box(side, side + 0.04, A + 1.05, A + 1.35, 5.8, 5.96, c8(0x6a6a66), {"band": 0.0, "surface": "metal", "parent": G13, "name": "GateChain", "cast_shadow": false})
-	b.box(1.75, 1.82, A + 0.98, A + 1.1, 5.82, 5.92, c8(0xb08a3a), {"band": 0.0, "surface": "metal", "parent": G13, "name": "Padlock"})
+	for side in [1.84, 1.96]:   # the chain, looped round the end bar and the post
+		ObjectKit.chain(b, Vector3(side, A + 1.35, 5.88), Vector3(side, A + 1.08, 5.88), 0.05, 0.0045, c8(0x6a6a66), G13, "GateChain", {"band": 0.0})
+	ObjectKit.padlock(b, Vector3(1.8, A + 1.02, 5.88), Vector3(-1, 0, 0), G13, 0.9, {"band": 0.0})
 	b.add_obstacle(1.75, 2.05, 4.3, 6.0, A, "laneGateShut", "chapter:Ch1-3")
 	var G47 := "ChapterProps/Ch4-7"
 	# swung back against the lane's south wall

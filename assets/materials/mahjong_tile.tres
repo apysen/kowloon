@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/props/mahjong_atlas.png" id="1_lwk5a"]
+[ext_resource type="Texture2D" path="res://assets/textures/props/mahjong_atlas_n.png" id="2_wcne6"]
+
+[resource]
+albedo_texture = ExtResource("1_lwk5a")
+roughness = 0.32
+normal_enabled = true
+normal_texture = ExtResource("2_wcne6")
+clearcoat_enabled = true
+clearcoat = 0.35
+clearcoat_roughness = 0.22
+texture_filter = 5

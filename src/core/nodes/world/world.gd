@@ -6,11 +6,15 @@ extends Node3D
 ##
 ## Visibility bands: geometry above Mei's level is hidden (the cutaway), and
 ## on her level anything standing between her and the camera fades. A closed
-## room keeps its lid on and hides its furniture and people until Mei walks
-## in; its walls only fade where they stand directly in front of her.
+## room keeps its furniture and people fully rendered behind an opaque shell;
+## only that shell fades near Mei, so contents can never arrive late.
 ## Nothing appears or disappears when the view turns.
 
 signal resident_blocked(resident_id: String)
+
+## Closed rooms begin opening shortly before Mei reaches them. This keeps the
+## reveal discoverable without exposing interiors from across a hallway.
+const ROOM_WALL_REVEAL_DISTANCE := 2.2
 
 @export var level: Node3D
 @export var level_data: LevelData
@@ -49,7 +53,13 @@ var _live: Array[Dictionary] = []
 ## re-checked in full when Mei changes level and otherwise a slice per frame.
 var _static: Array[Dictionary] = []
 var _static_pb := -1
+var _static_all_bands := false
 var _static_at := 0
+var _room_fades: Dictionary = {}
+var _room_view_blockers: Dictionary = {}
+var _active_view_blockers: Array[Dictionary] = []
+var _view_blocker_transitions: Array[Dictionary] = []
+var _view_blocker_key := ""
 var _sprites: Array[CharacterSprite] = []
 var _cloths: Array[Node3D] = []
 var _lights: Array[OmniLight3D] = []
@@ -74,6 +84,9 @@ func _ready() -> void:
 	for it in _items:
 		var live: bool = it.fadeable or it.dynamic or it.content_of != "" or it.node is Resident or it.above != ""
 		(_live if live else _static).append(it)
+	for room in level_data.closed_rooms:
+		_room_fades[String(room.id)] = 0.0
+	_build_room_view_blockers()
 	_build_doors()
 	_build_holds()
 	_build_dust()
@@ -116,7 +129,7 @@ func _collect(root: Node) -> void:
 			if r.collides and r.story:
 				var res_ref := r
 				r.obstacle = walk_space.add_obstacle(0, 0, 0, 0, r.position.y, r.resident_id,
-					func() -> bool: return res_ref.visible and not res_ref.gone and not res_ref.ghost)
+					func() -> bool: return res_ref.visible and res_ref.in_focus and not res_ref.gone and not res_ref.ghost)
 			if not n.has_meta("band"):
 				n.set_meta("band", PerspectiveRules.band_of(n.global_position.y + 0.5))
 			_items.append(_item(n))
@@ -152,15 +165,23 @@ func _item(n: Node3D) -> Dictionary:
 		"band": float(n.get_meta("band")),
 		"fadeable": bool(n.get_meta("fadeable", false)),
 		"room": String(n.get_meta("room", "")),
+		"room_side": String(n.get_meta("room_side", "")),
 		# on top of a closed room: out of sight while Mei is in the room below
 		"above": String(n.get_meta("above_room", "")),
 		"is_lid": n.has_meta("is_lid"),
 		"is_floor": n.has_meta("is_floor"),
+		"ceiling_mounted": n.has_meta("ceiling_mounted"),
+		"ceiling_of": "",
 		"filler": n.has_meta("filler"),
 		"dynamic": n.has_meta("dynamic") or (n is Resident and (n as Resident).story),
 		"meshes": meshes,
 		"aabb": aabb,
 		"opacity": 1.0,
+		"room_opacity": 1.0,
+		"band_opacity": 1.0,
+		"view_opacity": 1.0,
+		"view_target": 1.0,
+		"view_transition": false,
 		"visible": true,
 		"content_of": "",
 		"swings": false,
@@ -168,9 +189,172 @@ func _item(n: Node3D) -> Dictionary:
 	# doors stand in a room's boundary: they are never its hidden contents
 	var in_doors := String(level.get_path_to(n)).begins_with("Doors")
 	it.swings = in_doors and n.get_parent().name == "Doors"
+	if it.room != "" and not it.is_lid:
+		var named_side := _side_from_shell_name(String(n.name))
+		if named_side != "":
+			it.room_side = named_side
+	if it.room != "" and it.room_side == "" and not it.is_lid:
+		# The shell node itself is centred on its wall. Its merged AABB can be
+		# skewed by child trim and is not reliable for identifying the side.
+		it.room_side = _nearest_room_side(String(it.room), n.global_position)
 	if not it.room and not it.is_floor and not (n is Resident) and not in_doors:
 		it.content_of = room_at_point(aabb.get_center())
+	if it.ceiling_mounted:
+		it.ceiling_of = it.content_of
 	return it
+
+
+func _apply_item_opacity(it: Dictionary) -> void:
+	var opacity: float = float(it.opacity) * float(it.room_opacity) * float(it.band_opacity) * float(it.view_opacity)
+	var transparency := 0.0 if opacity >= 0.995 else 1.0 - opacity
+	for m in it.meshes:
+		var gi := m as GeometryInstance3D
+		gi.transparency = transparency
+		# Lit windows on a faded room or wall must not float in mid-air.
+		if gi.has_meta("emission_base"):
+			gi.set_instance_shader_parameter("emission_scale", float(gi.get_meta("emission_base")) * opacity * opacity)
+
+
+func _room_reveal_triggers(p: Vector3) -> Dictionary:
+	var triggers := {}
+	for room in level_data.closed_rooms:
+		var room_id := String(room.id)
+		var reveal := room_id == current_room
+		if reveal or absf(p.y - float(room.y)) > 2.0:
+			triggers[room_id] = reveal
+			continue
+		for rect in room.rects:
+			var nearest := Vector3(
+				clampf(p.x, float(rect[0]), float(rect[1])), p.y,
+				clampf(p.z, float(rect[2]), float(rect[3])))
+			if nearest.distance_to(p) <= ROOM_WALL_REVEAL_DISTANCE:
+				reveal = true
+				break
+		triggers[room_id] = reveal
+	return triggers
+
+
+func _nearest_room_side(room_id: String, point: Vector3) -> String:
+	var nearest := INF
+	var nearest_side := ""
+	for room in level_data.closed_rooms:
+		if String(room.id) != room_id:
+			continue
+		for rect in room.rects:
+			var distances := {
+				"w": absf(point.x - float(rect[0])),
+				"e": absf(point.x - float(rect[1])),
+				"n": absf(point.z - float(rect[2])),
+				"s": absf(point.z - float(rect[3])),
+			}
+			for side in distances:
+				if float(distances[side]) < nearest:
+					nearest = float(distances[side])
+					nearest_side = String(side)
+		break
+	return nearest_side
+
+
+func _side_from_shell_name(node_name: String) -> String:
+	var upper := node_name.to_upper()
+	for prefix in ["WALL", "LINTEL"]:
+		for side in ["N", "S", "E", "W"]:
+			if upper.begins_with(prefix + side):
+				return side.to_lower()
+	return ""
+
+
+## Cache the non-room scenery that can project across each room from each
+## quarter-turn. Runtime only changes opacity on this short list: geometry is
+## never spawned, hidden, or rebuilt as Mei crosses a doorway.
+func _build_room_view_blockers() -> void:
+	for room in level_data.closed_rooms:
+		var room_id := String(room.id)
+		var x0 := INF
+		var x1 := -INF
+		var z0 := INF
+		var z1 := -INF
+		for rect in room.rects:
+			x0 = minf(x0, float(rect[0]))
+			x1 = maxf(x1, float(rect[1]))
+			z0 = minf(z0, float(rect[2]))
+			z1 = maxf(z1, float(rect[3]))
+		var centre := Vector3((x0 + x1) * 0.5, float(room.y), (z0 + z1) * 0.5)
+		var room_band := PerspectiveRules.player_band(float(room.y))
+		for direction in 4:
+			var back := ViewMath.back(direction * PI / 2.0)
+			var right := ViewMath.right(direction * PI / 2.0)
+			var room_lmin := INF
+			var room_lmax := -INF
+			var room_smax := -INF
+			for x in [x0, x1]:
+				for z in [z0, z1]:
+					var d := Vector3(x, centre.y, z) - centre
+					room_lmin = minf(room_lmin, d.dot(right))
+					room_lmax = maxf(room_lmax, d.dot(right))
+					room_smax = maxf(room_smax, d.dot(back))
+			var blockers: Array[Dictionary] = []
+			for it in _items:
+				if it.node is Resident or it.dynamic or it.is_floor or int(float(it.band)) != room_band:
+					continue
+				# The active room stays enclosed by its own back and side walls.
+				# Ordinary contents remain fully rendered; elevated infrastructure
+				# at the foreground boundary (pipe runs, brackets, hanging trim) is
+				# allowed into the cutaway so it cannot stripe across the room.
+				if String(it.room) == room_id:
+					continue
+				var b: AABB = it.aabb
+				if b.size.length_squared() < 0.0001 or b.end.y < float(room.y) + 0.45:
+					continue
+				if String(it.content_of) == room_id and b.position.y < float(room.y) + 2.2:
+					continue
+				var lmin := INF
+				var lmax := -INF
+				var smax := -INF
+				for x in [b.position.x, b.end.x]:
+					for z in [b.position.z, b.end.z]:
+						var d := Vector3(x, centre.y, z) - centre
+						var lateral := d.dot(right)
+						lmin = minf(lmin, lateral)
+						lmax = maxf(lmax, lateral)
+						smax = maxf(smax, d.dot(back))
+				if smax > room_smax - 0.65 and lmax > room_lmin - 0.2 and lmin < room_lmax + 0.2:
+					blockers.append(it)
+			_room_view_blockers["%s:%d" % [room_id, direction]] = blockers
+
+
+func _queue_view_blocker(it: Dictionary, target: float) -> void:
+	it.view_target = target
+	if not it.view_transition:
+		it.view_transition = true
+		_view_blocker_transitions.append(it)
+
+
+func _set_room_view(room_id: String, direction: int) -> void:
+	var key := "%s:%d" % [room_id, direction] if room_id != "" else ""
+	if key == _view_blocker_key:
+		return
+	_view_blocker_key = key
+	for it in _active_view_blockers:
+		_queue_view_blocker(it, 1.0)
+	_active_view_blockers = []
+	if key == "":
+		return
+	for it in _room_view_blockers.get(key, []):
+		_queue_view_blocker(it, 0.0)
+		_active_view_blockers.append(it)
+
+
+func _update_view_blockers(delta: float) -> void:
+	for i in range(_view_blocker_transitions.size() - 1, -1, -1):
+		var it := _view_blocker_transitions[i]
+		var target: float = float(it.view_target)
+		it.view_opacity = float(it.view_opacity) + (target - float(it.view_opacity)) * minf(1.0, delta * 10.0)
+		if absf(float(it.view_opacity) - target) <= 0.004:
+			it.view_opacity = target
+			it.view_transition = false
+			_view_blocker_transitions.remove_at(i)
+		_apply_item_opacity(it)
 
 
 ## Each piece of washing hangs from its line: a pivot at the top edge, so the
@@ -178,9 +362,9 @@ func _item(n: Node3D) -> Dictionary:
 func _hang_cloths() -> void:
 	for c in _cloths:
 		var mi := c as MeshInstance3D
-		if mi == null or not (mi.mesh is BoxMesh):
+		if mi == null or mi.mesh == null:
 			continue
-		var size: Vector3 = (mi.mesh as BoxMesh).size
+		var size: Vector3 = mi.get_aabb().size
 		var parent := mi.get_parent()
 		var pivot := Node3D.new()
 		pivot.name = mi.name + "Hanger"
@@ -201,9 +385,32 @@ func move_crate(p: Vector3) -> void:
 	crate_obstacle.z1 = p.z + 0.35
 
 
-func _static_visibility(it: Dictionary, pb: int) -> void:
+func _band_opacity(band: float, pb: int, all_bands: bool) -> float:
+	if all_bands:
+		return 1.0
+	# From the rooftops, the stacked city below is the surrounding skyline, not
+	# a competing floor. Keep every lower architectural layer fully solid so
+	# people, signs, pipes, and buildings read as one dense environment.
+	if pb == 2 and band <= 2.0:
+		return 1.0
+	if band == 1.5:
+		return 0.18 if pb == 2 else 0.0
+	if int(band) == pb:
+		return 1.0
+	# Lower floors remain as subdued architectural context instead of either
+	# covering the active floor or disappearing into a black void.
+	if band < pb:
+		return 0.18 if int(band) == pb - 1 else 0.09
+	return 0.0
+
+
+func _static_visibility(it: Dictionary, pb: int, all_bands := false) -> void:
 	var node: Node3D = it.node
-	var vis: bool = PerspectiveRules.band_visible(it.band, pb) and not node.get_meta("gone", false)
+	var vis: bool = (all_bands or PerspectiveRules.band_visible(it.band, pb)) and not node.get_meta("gone", false)
+	var band_opacity := _band_opacity(float(it.band), pb, all_bands)
+	if absf(float(it.band_opacity) - band_opacity) > 0.001:
+		it.band_opacity = band_opacity
+		_apply_item_opacity(it)
 	if vis != it.visible:
 		it.visible = vis
 		node.visible = vis
@@ -306,6 +513,14 @@ func room_at(p: Vector3) -> String:
 	return ""
 
 
+func _porter_reveal(p: Vector3) -> float:
+	# The porter waits in the lane beyond the mahjong exit. Keep him out of the
+	# interior composition, then bring him in only after Mei crosses outside.
+	if absf(p.y - LevelBuilder.LEVEL_A) > 2.0:
+		return 0.0
+	return clampf((p.z - 4.0) / 0.7, 0.0, 1.0)
+
+
 func door(id: String) -> Dictionary:
 	for d in doors:
 		if d.id == id:
@@ -389,6 +604,16 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 	var back := cam.back_vector()
 	var right := cam.right_vector()
 	current_room = room_at(p)
+	_set_room_view("" if first_person else current_room, cam.direction)
+	_update_view_blockers(delta)
+	var room_reveal_triggers := _room_reveal_triggers(p)
+	for room_id in _room_fades:
+		var reveal_target := 1.0 if first_person or bool(room_reveal_triggers.get(room_id, false)) else 0.0
+		var reveal: float = float(_room_fades[room_id])
+		reveal += (reveal_target - reveal) * minf(1.0, delta * 10.0)
+		if absf(reveal - reveal_target) <= 0.004:
+			reveal = reveal_target
+		_room_fades[room_id] = reveal
 
 	for d in doors:
 		var target := 1.0 if d.open else 0.0
@@ -407,14 +632,15 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 		else:
 			res.sprite.camera_yaw = yaw
 
-	if vb != _static_pb:
+	if vb != _static_pb or first_person != _static_all_bands:
 		_static_pb = vb
+		_static_all_bands = first_person
 		for it in _static:
-			_static_visibility(it, vb)
+			_static_visibility(it, vb, first_person)
 	elif not _static.is_empty():
 		var n := ceili(_static.size() / 8.0)
 		for k in n:
-			_static_visibility(_static[_static_at], vb)
+			_static_visibility(_static[_static_at], vb, first_person)
 			_static_at = (_static_at + 1) % _static.size()
 
 	for it in _live:
@@ -428,20 +654,48 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 				it.band = PerspectiveRules.band_of(node.global_position.y + 0.5)
 			if node is Resident:
 				it.content_of = room_at_point(node.global_position + Vector3(0, 0.5, 0))
-		var vis := PerspectiveRules.band_visible(it.band, vb)
-		if it.content_of != "" and it.content_of != current_room and not first_person:
-			vis = false
+		var vis := first_person or PerspectiveRules.band_visible(it.band, vb)
+		var band_opacity := _band_opacity(float(it.band), pb, first_person)
+		if absf(float(it.band_opacity) - band_opacity) > 0.001:
+			it.band_opacity = band_opacity
+			if not node is Resident:
+				_apply_item_opacity(it)
+		# Room contents never fade: the fully rendered room waits behind its
+		# opaque shell. Character-only masks below handle different floors and
+		# special exterior reveals without delaying furniture or props.
+		var room_target := 1.0
+		var interaction_focus := true
+		if not first_person and node is Resident and current_room != "":
+			interaction_focus = it.content_of == current_room
+			if it.content_of != current_room:
+				# An enclosed room isolates its cast as well as its architecture.
+				# Outsiders remain animated, but cannot show through the back wall.
+				room_target = 0.0
+		elif not first_person and it.ceiling_of != "":
+			# A fixture belongs to the lid rather than to the furnished room below:
+			# fade it at exactly the same rate so it cannot float in the cutaway.
+			room_target = 1.0 - float(_room_fades.get(it.ceiling_of, 0.0))
+		elif not first_person and it.content_of != "":
+			interaction_focus = it.content_of == current_room or float(_room_fades.get(it.content_of, 0.0)) > 0.5
+		if not first_person and node is Resident and absf(node.global_position.y - p.y) > 2.0:
+			room_target = 0.0
+		if not first_person and node is Resident and (node as Resident).resident_id == "porter":
+			room_target *= _porter_reveal(p)
+		var old_room_opacity: float = it.room_opacity
+		it.room_opacity = room_target
+		var room_opacity_changed := absf(old_room_opacity - float(it.room_opacity)) > 0.0001
 		if current_room != "" and it.above == current_room:
-			vis = false
-		elif current_room != "" and node is Resident and room_at_point(node.global_position - Vector3(0, 3.8, 0)) == current_room:
-			# someone up on the roof of the room she's in: through the ceiling
 			vis = false
 		if node.get_meta("gone", false):
 			vis = false
 		if node is Resident:
 			var res2 := node as Resident
+			res2.in_focus = interaction_focus and room_target > 0.5 and vis
+			res2.sprite.room_fade = float(it.room_opacity)
 			if res2.gone:
 				vis = false
+		elif room_opacity_changed:
+			_apply_item_opacity(it)
 		if vis != it.visible:
 			it.visible = vis
 			node.visible = vis
@@ -450,11 +704,22 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 		if it.swings:
 			it.aabb = _aabb_of(it.meshes)
 		var target_op := 1.0
+		var room_shell_opacity := false
 		var same_band: bool = it.band == pb or (pb == 2 and it.band == 1.5)
 		if first_person:
 			pass
-		elif it.is_lid and it.room == current_room:
-			target_op = 0.0
+		elif it.room != "" and (current_room == "" or String(it.room) == current_room):
+			# Keep the room enclosed: the roof and only the wall between the
+			# camera and Mei fade. The back wall and both side walls stay solid.
+			var foreground_side: String = ["s", "e", "n", "w"][cam.direction]
+			var shell_detail := String(node.get_parent().name) == "Frames"
+			var detail_in_front := (node.global_position - p).dot(back) > 0.2
+			var blocks_mei := it.aabb.intersects_segment(
+				cam.camera.global_position, p + Vector3(0, 0.8, 0)) != null
+			if it.is_lid or String(it.room_side) == foreground_side or blocks_mei \
+					or (shell_detail and detail_in_front):
+				target_op = 1.0 - float(_room_fades.get(it.room, 0.0))
+			room_shell_opacity = true
 		elif same_band:
 			var b: AABB = it.aabb
 			var smin := INF
@@ -476,25 +741,17 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 			var reach := 15.0
 			if it.filler:
 				reach = 7.0
-			elif it.room != "" and it.room != current_room:
-				# another room stays closed: only the wall right across the line to Mei gives way
-				reach = 1.4
 			# a ceiling is overhead: if any of it reaches toward the camera it covers
 			# her, even when its edge overhangs just behind her (a doorway)
 			var in_front := smax > 0.25 if it.is_lid else smin > 0.25
 			if in_front and lmax > -reach and lmin < reach and b.end.y > p.y + 0.9:
 				target_op = 0.12 if it.filler else 0.06
 		if absf(it.opacity - target_op) > 0.004:
-			it.opacity = it.opacity + (target_op - it.opacity) * minf(1.0, delta * 10.0)
+			it.opacity = target_op if room_shell_opacity else \
+				it.opacity + (target_op - it.opacity) * minf(1.0, delta * 10.0)
 			if absf(it.opacity - target_op) <= 0.004:
 				it.opacity = target_op
-			var tr: float = 0.0 if it.opacity >= 0.995 else 1.0 - it.opacity
-			for m in it.meshes:
-				var gi := m as GeometryInstance3D
-				gi.transparency = tr
-				# lit windows on a faded building must not float in mid-air
-				if gi.has_meta("emission_base"):
-					gi.set_instance_shader_parameter("emission_scale", float(gi.get_meta("emission_base")) * it.opacity * it.opacity)
+			_apply_item_opacity(it)
 
 	# interior vs rooftop light
 	var under := walk_space.floor_at(p.x, p.z, p.y)

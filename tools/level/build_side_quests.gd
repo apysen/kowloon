@@ -95,10 +95,10 @@ static func _mahjong_crack(b: LevelBuilder) -> void:
 	b.box(-3.0, -2.6, A, A + 0.18, 4.3, 4.32, c8(0x141210), {"band": 0.0, "surface": "concrete", "parent": "Structure/Workshop/Lane", "name": "CrackHole", "cast_shadow": false})
 	var C := "ChapterProps/Ch2/LaneCrates"
 	for spec in [[-3.5, -2.9, 0.0, 0.34], [-2.85, -2.25, 0.0, 0.34], [-3.45, -2.95, 0.34, 0.68], [-2.8, -2.3, 0.34, 0.68], [-3.2, -2.6, 0.68, 1.02]]:
-		b.box(spec[0], spec[1], A + spec[2], A + spec[3] - 0.02, 4.4, 4.85, c8(0x3f6fa8) if int(spec[2] * 10) % 2 == 0 else c8(0xc9463a),
-			{"band": 0.0, "surface": "grain", "parent": C, "name": "Crate"})
+		ObjectKit.plastic_crate(b, spec[0], spec[1], A + spec[2], A + spec[3] - 0.02, 4.4, 4.85, c8(0x3f6fa8) if int(spec[2] * 10) % 2 == 0 else c8(0xc9463a), C, "Crate", {"band": 0.0})
 	b.add_obstacle(-3.5, -2.25, 4.35, 4.9, A, "laneCrates", "chapter:Ch2")
-	b.box(-2.86, -2.74, A, A + 0.05, 4.32, 4.4, c8(0xece6d4), {"band": 0.0, "surface": "grain", "parent": "ChapterProps/Ch2/LostTile", "name": "Tile", "cast_shadow": false})
+	# the white dragon, come out of the crack face up in the dust
+	MahjongKit.lying(b, "white_dragon", Vector3(-2.8, A, 4.362), Vector3(0.3, 0, 1), true, "ChapterProps/Ch2/LostTile", {"band": 0.0})
 	b.ref("tileHole", Vector3(-2.8, A, 5.2))
 
 
@@ -162,13 +162,20 @@ const REAR_Y := 11.2
 static func _wai_shortcut(b: LevelBuilder) -> void:
 	var P := "Structure/Shortcut"
 	var o := {"band": 1.0, "parent": P}
-	# the lower roof: tar over a slab, a parapet on its open sides, somebody's line of washing
+	# The lower service roof: tar over a slab, a parapet on its open sides, and
+	# somebody's washing on a proper pair of galvanized clothesline standards.
 	b.add_floor(LOW_ROOF[0], LOW_ROOF[1], LOW_ROOF[2], LOW_ROOF[3], LOW_Y, "lowRoof")
 	b.box(LOW_ROOF[0] - 0.2, LOW_ROOF[1] + 0.2, LOW_Y - 0.25, LOW_Y, LOW_ROOF[2] - 0.1, LOW_ROOF[3], c8(0x4a4640),
 		o.merged({"surface": "concrete", "top": "tar", "name": "LowRoof"}))
 	for side in [[LOW_ROOF[0] - 0.2, LOW_ROOF[0]], [LOW_ROOF[1], LOW_ROOF[1] + 0.2]]:
 		b.box(side[0], side[1], LOW_Y, LOW_Y + 0.45, LOW_ROOF[2], LOW_ROOF[3], c8(0x7e7a70), o.merged({"surface": "concrete", "name": "Parapet", "fadeable": true}))
 	var ly := LOW_Y + 1.9
+	var service_steel := c8(0x555b58)
+	for pole_x in [LOW_ROOF[0] + 0.12, LOW_ROOF[1] - 0.12]:
+		b.box(pole_x - 0.025, pole_x + 0.025, LOW_Y, ly + 0.08, -4.14, -4.07, service_steel,
+			o.merged({"surface": "metal", "name": "ClotheslinePost"}))
+		b.box(pole_x - 0.16, pole_x + 0.16, ly + 0.03, ly + 0.08, -4.14, -4.07, service_steel,
+			o.merged({"surface": "metal", "name": "ClotheslineCrossbar"}))
 	b.box(LOW_ROOF[0], LOW_ROOF[1], ly, ly + 0.03, -4.12, -4.09, c8(0x222222), o.merged({"surface": "grain", "name": "Line", "cast_shadow": false}))
 	for spec in [[-7.8, -7.1, 1.1, 0xd8c4a0], [-7.0, -6.5, 0.8, 0x6f7d62], [-6.35, -5.8, 1.25, 0xe8e2d4]]:
 		var cloth := b.box(spec[0], spec[1], ly - spec[2], ly, -4.12, -4.09, c8(spec[3]), o.merged({"surface": "fabric", "name": "Cloth"}))
@@ -189,13 +196,38 @@ static func _wai_shortcut(b: LevelBuilder) -> void:
 		b.box(-6.4, -6.0, ry, ry + 0.03, REAR_BALC[3] + 0.02, REAR_BALC[3] + 0.05, steel, o.merged({"surface": "rust", "name": "Rung", "cast_shadow": false}))
 		ry += 0.3
 	b.ref("rearLadderFoot", Vector3(-6.2, LOW_Y, -4.2))
-	# the balcony: a slab on brackets, a rail, a pot, a chair
+	# The upper landing is carried by a small steel frame standing on the lower
+	# roof.  This makes the shortcut read as one maintained service structure,
+	# rather than a slab and railing suspended independently in the air.
 	b.add_floor(REAR_BALC[0], REAR_BALC[1], REAR_BALC[2], REAR_BALC[3], REAR_Y, "rearBalcony")
 	b.box(REAR_BALC[0], REAR_BALC[1], REAR_Y - 0.2, REAR_Y, REAR_BALC[2], REAR_BALC[3], c8(0x7e7a70), o.merged({"surface": "concrete", "name": "Slab"}))
+	b.box(REAR_BALC[0] + 0.05, REAR_BALC[1] - 0.05, REAR_Y - 0.32, REAR_Y - 0.2, REAR_BALC[3] - 0.18, REAR_BALC[3] - 0.08,
+		steel, o.merged({"surface": "rust", "name": "LandingBearer"}))
+	for support_x in [REAR_BALC[0] + 0.22, REAR_BALC[1] - 0.12]:
+		b.box(support_x - 0.045, support_x + 0.045, LOW_Y, REAR_Y - 0.2, REAR_BALC[3] - 0.18, REAR_BALC[3] - 0.08,
+			steel, o.merged({"surface": "rust", "name": "LandingPost"}))
+	b.cylinder(Vector3(REAR_BALC[0] + 0.22, REAR_Y - 1.0, REAR_BALC[3] - 0.13),
+		Vector3(REAR_BALC[0] + 0.82, REAR_Y - 0.24, REAR_BALC[3] - 0.13), 0.025, b.surface("rust"),
+		{"parent": P, "name": "LandingBrace", "tint": steel, "band": 1.0})
+	b.cylinder(Vector3(REAR_BALC[1] - 0.12, REAR_Y - 1.0, REAR_BALC[3] - 0.13),
+		Vector3(REAR_BALC[1] - 0.72, REAR_Y - 0.24, REAR_BALC[3] - 0.13), 0.025, b.surface("rust"),
+		{"parent": P, "name": "LandingBrace", "tint": steel, "band": 1.0})
 	var rail := c8(0x6a7a70)
-	b.box(REAR_BALC[0], REAR_BALC[1], REAR_Y + 0.93, REAR_Y + 1.0, REAR_BALC[3] - 0.05, REAR_BALC[3], rail, o.merged({"surface": "metal", "name": "Rail"}))
-	for px in [REAR_BALC[0], -7.2, -6.4, REAR_BALC[1] - 0.05]:
-		b.box(px, px + 0.05, REAR_Y, REAR_Y + 1.0, REAR_BALC[3] - 0.05, REAR_BALC[3], rail, o.merged({"surface": "metal", "name": "RailPost"}))
+	# The ladder arrives through a deliberate break in the front rail.
+	for seg in [[REAR_BALC[0], -6.5], [-5.9, REAR_BALC[1]]]:
+		for rail_y in [REAR_Y + 0.48, REAR_Y + 0.95]:
+			b.box(seg[0], seg[1], rail_y - 0.025, rail_y + 0.025, REAR_BALC[3] - 0.05, REAR_BALC[3], rail,
+				o.merged({"surface": "metal", "name": "Rail"}))
+		for px in [seg[0], seg[1] - 0.05]:
+			b.box(px, px + 0.05, REAR_Y, REAR_Y + 1.0, REAR_BALC[3] - 0.05, REAR_BALC[3], rail,
+				o.merged({"surface": "metal", "name": "RailPost"}))
+	# Return rails tie the front guard back into the slab at both ends.
+	for side_x in [REAR_BALC[0], REAR_BALC[1] - 0.05]:
+		for rail_y in [REAR_Y + 0.48, REAR_Y + 0.95]:
+			b.box(side_x, side_x + 0.05, rail_y - 0.025, rail_y + 0.025, REAR_BALC[2], REAR_BALC[3], rail,
+				o.merged({"surface": "metal", "name": "ReturnRail"}))
+		b.box(side_x, side_x + 0.05, REAR_Y, REAR_Y + 1.0, REAR_BALC[2], REAR_BALC[2] + 0.05, rail,
+			o.merged({"surface": "metal", "name": "RailPost"}))
 	PlantKit.place(b, "aspidistra", Vector3(-7.6, REAR_Y, -5.6), P, 1.0)
 	b.ref("rearBalcony", Vector3(-6.2, REAR_Y, -5.3))
 	# 3: two planks from its rail up onto the roof (gone by Chapter 5: two nail holes)

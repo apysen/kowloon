@@ -1,0 +1,29 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/world_surface.gdshader" id="1_06d5y"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/concrete_albedo.png" id="2_f4twe"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/concrete_normal.png" id="3_b2oy7"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/concrete_rough.png" id="4_43q17"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/floor_albedo.png" id="5_0ptnq"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/floor_normal.png" id="6_8n33v"]
+[ext_resource type="Texture2D" path="res://assets/textures/surfaces/floor_rough.png" id="7_oyg4k"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_06d5y")
+shader_parameter/albedo_tex = ExtResource("2_f4twe")
+shader_parameter/normal_tex = ExtResource("3_b2oy7")
+shader_parameter/rough_tex = ExtResource("4_43q17")
+shader_parameter/has_emission = null
+shader_parameter/emission_energy = null
+shader_parameter/has_top = true
+shader_parameter/top_albedo_tex = ExtResource("5_0ptnq")
+shader_parameter/top_normal_tex = ExtResource("6_8n33v")
+shader_parameter/top_rough_tex = ExtResource("7_oyg4k")
+shader_parameter/top_tint = null
+shader_parameter/top_tile = 2.0
+shader_parameter/tile_size = Vector2(4, 4)
+shader_parameter/normal_strength = 1.0
+shader_parameter/roughness_scale = null
+shader_parameter/blend_sharpness = null
+shader_parameter/foot_grime = null

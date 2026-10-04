@@ -48,26 +48,24 @@ static func _gathering(b: LevelBuilder) -> void:
 	# a folding table with what's left: a pot, bowls, a thermos, oranges
 	PropKit.table(b, -5.3, -4.1, -12.1, -11.35, R, 0.72, c8(0x9a9aa0), P, "metal")
 	b.add_obstacle(-5.3, -4.1, -12.1, -11.35, R, "partyTable", "chapter:Ch6")
-	b.cylinder(Vector3(-4.95, R + 0.72, -11.7), Vector3(-4.95, R + 0.95, -11.7), 0.16, b.surface("metal"), {"parent": P, "name": "Pot", "tint": c8(0x8a9aa0), "band": 2.0})
-	b.cylinder(Vector3(-4.45, R + 0.72, -11.9), Vector3(-4.45, R + 1.08, -11.9), 0.07, b.surface("metal"), {"parent": P, "name": "Thermos", "tint": c8(0xb8392e), "band": 2.0})
+	ObjectKit.pot(b, Vector3(-4.95, R + 0.72, -11.7), 0.15, 0.2, c8(0x8a9aa0), P, "Pot", {"band": 2.0})
+	ObjectKit.thermos(b, Vector3(-4.45, R + 0.72, -11.9), 0.065, 0.36, c8(0xb8392e), P, "Thermos", {"band": 2.0})
 	for k in 3:
-		b.box(-4.7 + k * 0.18, -4.58 + k * 0.18, R + 0.72, R + 0.78, -11.55, -11.43, c8(0xf2eee4), {"band": 2.0, "surface": "grain", "parent": P, "name": "Bowl", "cast_shadow": false})
+		ObjectKit.rice_bowl(b, Vector3(-4.64 + k * 0.18, R + 0.72, -11.49), 0.058, c8(0xf2eee4), P, "Bowl", false, {"band": 2.0})
 	for k in 4:
-		var o := b.box(-4.35 + (k % 2) * 0.09, -4.27 + (k % 2) * 0.09, R + 0.72, R + 0.8, -11.5 - (k / 2) * 0.09, -11.42 - (k / 2) * 0.09, c8(0xe0802a),
-			{"band": 2.0, "surface": "grain", "parent": P, "name": "Orange", "cast_shadow": false})
-		o.name = "Orange"
+		# oranges, a little squat, each with its dimple and a sprig of stalk
+		var at := Vector3(-4.31 + (k % 2) * 0.09, R + 0.72 + 0.038 + (0.03 if k == 3 else 0.0), -11.46 - (k / 2) * 0.09 + (0.045 if k == 3 else 0.0))
+		ModelKit.place(b, ModelKit.lathe(PackedVector2Array([Vector2(0, -0.036), Vector2(0.02, -0.034), Vector2(0.036, -0.018), Vector2(0.04, 0.0), Vector2(0.036, 0.018), Vector2(0.02, 0.033), Vector2(0.004, 0.034), Vector2(0, 0.031)]), 18),
+			at, "fabric", c8(0xe0802a), {"band": 2.0, "parent": P, "name": "Orange", "cast_shadow": false, "rotation": Vector3(0.2 * k, k, 0)})
 	# folding chairs nobody's taking: two open, three folded against the parapet
 	for spec in [[-6.3, -12.6], [-2.9, -12.9]]:
 		var cx: float = spec[0]
 		var cz: float = spec[1]
-		b.box(cx - 0.22, cx + 0.22, R + 0.44, R + 0.48, cz - 0.2, cz + 0.2, c8(0x3f6fa8), {"band": 2.0, "surface": "metal", "parent": P, "name": "ChairSeat"})
-		b.box(cx - 0.22, cx + 0.22, R + 0.48, R + 0.95, cz + 0.17, cz + 0.2, c8(0x3f6fa8), {"band": 2.0, "surface": "metal", "parent": P, "name": "ChairBack"})
-		for lx in [-0.2, 0.17]:
-			b.box(cx + lx, cx + lx + 0.03, R, R + 0.44, cz - 0.18, cz + 0.18, c8(0x5a5a58), {"band": 2.0, "surface": "metal", "parent": P, "name": "ChairLeg", "cast_shadow": false})
+		ObjectKit.folding_chair(b, cx, cz, R, Vector3(0, 0, -1), c8(0x3f6fa8), P, 2.0)
 	for k in 3:
 		b.box(-9.9, -9.84, R, R + 0.9, -14.4 + k * 0.5, -13.95 + k * 0.5, c8(0x3f6fa8), {"band": 2.0, "surface": "metal", "parent": P, "name": "FoldedChair"})
 	# Mr. Ho's toolbox, open; the drying frames down, poles laid by the posts
-	b.box(-2.2, -1.7, R, R + 0.25, -12.3, -12.05, c8(0xb8392e), {"band": 2.0, "surface": "metal", "parent": P, "name": "Toolbox"})
+	ObjectKit.toolbox(b, -2.2, -1.7, R, R + 0.25, -12.3, -12.05, c8(0xb8392e), P, {"band": 2.0})
 	for k in 3:
 		b.box(-8.8, -3.0, R, R + 0.05, -8.2 + k * 0.1, -8.15 + k * 0.1, c8(0x8a8a86), {"band": 2.0, "surface": "metal", "parent": P, "name": "FramePole"})
 	# Mr. Ng's cages, stacked by the coop, one basket open
