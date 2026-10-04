@@ -37,6 +37,8 @@ var filler_blocks: Array[Dictionary] = []
 var _room_count := 0
 var _box_count := 0
 var soft_boxes := 0
+var occluders := 0
+var shadowless := 0
 
 
 func _init() -> void:
@@ -678,6 +680,52 @@ func resident(id: String, sheet_id: String, pos: Vector3, opts := {}) -> Node3D:
 
 func finish() -> void:
 	SurfaceLibrary.save_all()
+	occluders += _add_occluders(root)
+	shadowless += _small_cast_no_shadow(root)
+
+
+## Small things (a bolt, a cup, a chopstick) throw shadows too small to see
+## but cost a draw in every shadow map: they keep only the shadow they catch.
+func _small_cast_no_shadow(n: Node) -> int:
+	var count := 0
+	for c in n.get_children():
+		if c is GeometryInstance3D and not (c is MultiMeshInstance3D) and (c as GeometryInstance3D).cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			var gi := c as GeometryInstance3D
+			var size := gi.get_aabb().size * gi.global_transform.basis.get_scale() if gi.is_inside_tree() else gi.get_aabb().size
+			if maxf(size.x, maxf(size.y, size.z)) < 0.15 and not gi is SpriteBase3D:
+				gi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+				count += 1
+		count += _small_cast_no_shadow(c)
+	return count
+
+
+## Every big solid box of the building (walls, floors, ceilings, the city's
+## blocks) also stands as an occluder, so that from Mei's eye the renderer
+## skips whatever is behind a wall. Occlusion runs only in first person
+## (World switches it), since the usual view fades walls away to see in.
+## Pieces that come and go with the chapters are left out.
+func _add_occluders(n: Node) -> int:
+	var count := 0
+	for c in n.get_children():
+		if c is MeshInstance3D and (c as MeshInstance3D).mesh is BoxMesh:
+			var path := String(root.get_path_to(c))
+			if (path.begins_with("Structure/") or path.begins_with("City/Blocks")) and not c.has_meta("dynamic"):
+				var size: Vector3 = ((c as MeshInstance3D).mesh as BoxMesh).size * (c as Node3D).scale
+				var dims := [size.x, size.y, size.z]
+				dims.sort()
+				# a wall, a floor or a block: two sides a metre or more, solid enough to stop sight
+				if dims[1] >= 1.0 and dims[0] >= 0.08:
+					var occ := OccluderInstance3D.new()
+					occ.name = "Occluder"
+					var shape := BoxOccluder3D.new()
+					# a hair smaller than the wall, so it never culls what sits on its face
+					shape.size = size - Vector3.ONE * minf(0.04, dims[0] * 0.3)
+					occ.occluder = shape
+					c.add_child(occ)
+					occ.owner = root
+					count += 1
+		count += _add_occluders(c)
+	return count
 
 
 # ----------------------------------------------------------------------------- people, settled

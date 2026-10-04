@@ -72,6 +72,8 @@ var _dust: GPUParticles3D
 
 
 func _ready() -> void:
+	# occlusion is for her eye only (update() turns it on with the camera raised)
+	get_viewport().use_occlusion_culling = false
 	walk_space = level_data.build_walk_space()
 	refs = level_data.refs
 	for name in ["Fabric", "Bundle", "Sheet", "LostPigeon", "Tank", "Plane", "Fan", "Crate", "Ladder", "CoopFlap"]:
@@ -82,7 +84,12 @@ func _ready() -> void:
 	_collect(level)
 	_hang_cloths()
 	for it in _items:
-		var live: bool = it.fadeable or it.dynamic or it.content_of != "" or it.node is Resident or it.above != ""
+		# A prop that merely stands in a room is static: its room never fades
+		# it (only people and ceiling fixtures follow a room's fade), so it
+		# needs looking at only when the band or the view changes. Thousands
+		# of modelled parts stand in rooms; walking them every frame cost more
+		# than drawing them.
+		var live: bool = it.fadeable or it.dynamic or it.node is Resident or it.above != "" or it.ceiling_of != ""
 		(_live if live else _static).append(it)
 	for room in level_data.closed_rooms:
 		_room_fades[String(room.id)] = 0.0
@@ -632,19 +639,32 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 		else:
 			res.sprite.camera_yaw = yaw
 
+	if first_person != _static_all_bands:
+		# into or out of her eye: everything gets looked at afresh, and from
+		# her eye the walls hide what's behind them (the usual view fades
+		# walls away, so there the renderer must draw everything)
+		for it in _live:
+			it.erase("fp_settled")
+		get_viewport().use_occlusion_culling = first_person
 	if vb != _static_pb or first_person != _static_all_bands:
 		_static_pb = vb
 		_static_all_bands = first_person
 		for it in _static:
 			_static_visibility(it, vb, first_person)
 	elif not _static.is_empty():
-		var n := ceili(_static.size() / 8.0)
+		# a slow sweep in between: set_gone() shows and hides pieces at once,
+		# this only settles anything left over
+		var n := ceili(_static.size() / 48.0)
 		for k in n:
 			_static_visibility(_static[_static_at], vb, first_person)
 			_static_at = (_static_at + 1) % _static.size()
 
 	for it in _live:
 		var node: Node3D = it.node
+		# From her eye nothing fades: once a wall or a block has come fully
+		# back, it stays as it is until she lowers the camera.
+		if first_person and it.has("fp_settled"):
+			continue
 		if it.dynamic:
 			# people are on whichever level they stand on, as Mei is: up on a
 			# low roof between floors they're with her, not with the rooftops
@@ -752,6 +772,8 @@ func update(delta: float, player: Player, cam: CameraRig, paused: bool) -> void:
 			if absf(it.opacity - target_op) <= 0.004:
 				it.opacity = target_op
 			_apply_item_opacity(it)
+		elif first_person and not it.dynamic and not node is Resident and not it.swings:
+			it.fp_settled = true
 
 	# interior vs rooftop light
 	var under := walk_space.floor_at(p.x, p.z, p.y)
@@ -819,7 +841,10 @@ func _apply_light_mix(p: Vector3, pb: int) -> void:
 		env.background_energy_multiplier *= 1.0 - 0.6 * dusk
 		env.fog_light_color = env.fog_light_color.lerp(Color(0.5, 0.38, 0.42), dusk * t)
 	sun.shadow_enabled = true
-	sun.directional_shadow_max_distance = lerpf(34.0, 60.0, t)
+	# The usual camera stands 30 m back, so its shadows must reach that far;
+	# from her eye only the near shadows show, and the far city costs a draw
+	# per building in every cascade.
+	sun.directional_shadow_max_distance = lerpf(18.0, 35.0, t) if first_person else lerpf(34.0, 60.0, t)
 	for l in _lights:
 		var lb := int(l.get_meta("band"))
 		l.visible = pb != 2 and lb == pb
