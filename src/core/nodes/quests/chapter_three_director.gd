@@ -66,7 +66,10 @@ var _rope: Node3D
 var _rope_down: MeshInstance3D       # pulley to platform: it pays out as the platform goes down
 var _crate: Node3D
 var _run: Dictionary = {}          # the crate on its way down: path and progress
+var _crate_carrier: Resident
 var _sign_t := -1.0
+var _kit_following_ladder := false
+var _kit_on_roof := false
 
 
 func setup() -> void:
@@ -198,12 +201,16 @@ func _sync_world() -> void:
 	var kit: Resident = world.residents.kit
 	var chiu: Resident = world.residents.chiu
 	var R := BuildWorkshop.ROOF_Y
-	if stage >= FIND_PARTS and stage < SET_UP:
+	# Once Ho has approved the pulley, he steps away from the gap. Otherwise
+	# his higher-priority conversation masks the prompt for laying the plank.
+	if flags.pulley_safe and stage < RUN_CRATE:
+		_pose(world.residents.fanman, Vector3(-5.4, R, 2.8), Vector3(0, 0, 1), "idle")
+	if stage >= FIND_PARTS and stage < SET_UP and not _kit_following_ladder:
 		# Kit goes up to the roof with Mei once the old route is found
 		_pose(kit, Vector3(-4.8, R, 1.2), Vector3(0, 0, 1), "idle")
-	elif stage >= SET_UP and stage < FINAL_CRATE and flags.plank_laid:
-		_pose(kit, world.refs.winch, Vector3(-1, 0, 0), "work" if stage == RUN_CRATE else "idle")
-	elif stage >= SET_UP and stage < FINAL_CRATE:
+	# Rigging the rope must not teleport Kit across the roof or pen Mei against
+	# the winch. She stays at the hatch until Mei asks her to start the run.
+	elif stage >= SET_UP and stage < RUN_CRATE and not _kit_following_ladder:
 		_pose(kit, Vector3(-4.8, R, 1.2), Vector3(0, 0, 1), "idle")
 	elif stage == FINAL_CRATE:
 		_pose(kit, world.refs.lane + Vector3(-2.3, 0, 0.3), Vector3(1, 0, 0), "idle")
@@ -351,13 +358,13 @@ func _meet_chiu() -> void:
 	mark("chiuMet")
 	say("c3_chiu", func() -> void:
 		if stage < LOADING_ROUTE:
-			set_stage(LOADING_ROUTE))
+			set_stage(FIND_PARTS if flags.factory_route_pulley_found else LOADING_ROUTE))
 
 
 func _talk_ho() -> void:
 	if flags.pulley_safe:
 		say("c3_ho_after")
-	elif flags.factory_route_pulley_found:
+	elif stage >= FIND_PARTS and flags.factory_route_pulley_found:
 		say("c3_ho_pulley", func() -> void:
 			flags.pulley_safe = true
 			_parts_changed("notice.c3_pulley_safe"))
@@ -368,7 +375,7 @@ func _talk_ho() -> void:
 func _talk_ng() -> void:
 	if flags.story_item_rope:
 		say("c3_ng_after")
-	elif flags.factory_route_pulley_found:
+	elif stage >= FIND_PARTS and flags.factory_route_pulley_found:
 		say("c3_ng_rope", func() -> void:
 			flags.story_item_rope = true
 			_parts_changed("notice.c3_rope"))
@@ -379,7 +386,7 @@ func _talk_ng() -> void:
 func _talk_chan() -> void:
 	if flags.story_item_plank:
 		say("c3_chan_after")
-	elif flags.factory_route_pulley_found:
+	elif stage >= FIND_PARTS and flags.factory_route_pulley_found:
 		_plank_scene()
 	else:
 		say("c3_chan")
@@ -445,7 +452,7 @@ func _over_the_planks() -> void:
 
 ## The three things seen by turning: the steps, the ladder, the planks.
 func _shortcut_discover() -> void:
-	if not flags.oq05_asked or flags.oq05_bridge or cam.rotating or locks.is_locked() or dialogue.is_open():
+	if flags.oq05_bridge or cam.rotating or locks.is_locked() or dialogue.is_open():
 		return
 	var p := player.position
 	var side := cam.direction == 1 or cam.direction == 3
@@ -453,17 +460,20 @@ func _shortcut_discover() -> void:
 		flags.oq05_stair = true
 		mark("oq05Stair")
 		audio.chime()
-		say("c3_short_stair")
+		if flags.oq05_asked:
+			say("c3_short_stair")
 	elif flags.oq05_stair and not flags.oq05_ladder and absf(p.y - BuildSideQuests.LOW_Y) < 0.4 and p.z < 0.0 and cam.direction == 2:
 		flags.oq05_ladder = true
 		mark("oq05Ladder")
 		audio.chime()
-		say("c3_short_ladder")
+		if flags.oq05_asked:
+			say("c3_short_ladder")
 	elif flags.oq05_ladder and not flags.oq05_bridge and absf(p.y - BuildSideQuests.REAR_Y) < 0.4 and side:
 		flags.oq05_bridge = true
 		mark("oq05Bridge")
 		audio.chime()
-		say("c3_short_bridge")
+		if flags.oq05_asked:
+			say("c3_short_bridge")
 
 
 func _plank_scene() -> void:
@@ -476,6 +486,7 @@ func _plank_scene() -> void:
 ## Rope, plank, and the pulley passed: the route can be set up.
 func _parts_changed(notice_key: String) -> void:
 	hud.notice(notice_key, 3.0)
+	_sync_world()
 	if _has_parts() and stage == FIND_PARTS:
 		set_stage(SET_UP)
 
@@ -500,7 +511,8 @@ func _register_route() -> void:
 		"can_interact": func() -> bool: return stage >= LOADING_ROUTE,
 		"interact": func() -> void:
 			audio.creak()
-			transition(refs.hatchTop, 6, func() -> void: mark("onWorkshopRoof"))})
+			_kit_heads_for_ladder()
+			transition(refs.hatchTop, 6, _reached_workshop_roof)})
 	I.add({"id": "ladderDown", "position": refs.hatchTop, "radius": 0.8, "priority": Q, "verb": "verb.climb_down",
 		"interact": func() -> void:
 			audio.creak()
@@ -519,10 +531,10 @@ func _register_route() -> void:
 	# the signboard in the way: its hinges are round the back
 	var sign_at := Vector3(BuildWorkshop.SIGN_X + 0.45, BuildWorkshop.ROOF_Y, 6.5)
 	I.add({"id": "signboard", "position": sign_at, "radius": 0.9, "priority": Q,
-		"verb": func() -> String: return "verb.fold" if flags.sign_hinges_seen else "verb.look",
+		"verb": func() -> String: return "verb.fold" if stage >= SET_UP and flags.sign_hinges_seen else "verb.look",
 		"can_interact": func() -> bool: return not flags.sign_folded,
 		"interact": func() -> void:
-			if flags.sign_hinges_seen:
+			if stage >= SET_UP and flags.sign_hinges_seen:
 				audio.creak()
 				_fold_sign(false)
 				say("c3_sign_folded")
@@ -541,6 +553,48 @@ func _register_route() -> void:
 				_talk_kit()
 			else:
 				say("c3_winch")})
+
+
+## Mei goes first. Kit crosses the workshop while the screen is down, then
+## climbs out of the same hatch a beat after Mei reaches the roof. Keeping this
+## independent of the pulley discovery prevents a camera turn from spawning her.
+func _kit_heads_for_ladder() -> void:
+	var kit: Resident = world.residents.kit
+	var R := BuildWorkshop.ROOF_Y
+	if _kit_following_ladder or _kit_on_roof or absf(kit.position.y - R) < 0.4:
+		_kit_on_roof = true
+		return
+	_kit_following_ladder = true
+	kit.ghost = true
+	kit.walk([world.refs.ladderBase + Vector3(0.32, 0, 0.0)], func() -> void:
+		kit.fade("out"), 2.0)
+
+
+func _reached_workshop_roof() -> void:
+	mark("onWorkshopRoof")
+	if _kit_following_ladder:
+		later(_kit_climbs_out, 0.8)
+
+
+func _kit_climbs_out() -> void:
+	if not _kit_following_ladder:
+		return
+	var kit: Resident = world.residents.kit
+	var R := BuildWorkshop.ROOF_Y
+	# Start below the roof slab so the hatch masks her lower half as she rises.
+	kit.place_at(Vector3(-1.8, R - 0.9, 0.72))
+	kit.idle_anim = "idle"
+	kit.ghost = true
+	kit.fade("in")
+	kit.walk([
+		Vector3(-1.8, R, 0.72),
+		Vector3(-4.8, R, 1.2),
+	], func() -> void:
+		kit.ghost = false
+		kit.facing = Vector3(0, 0, 1)
+		kit.sprite.facing = kit.facing
+		_kit_following_ladder = false
+		_kit_on_roof = true, 1.8)
 
 
 func _lay_plank() -> void:
@@ -569,6 +623,7 @@ func _fold_sign(instant: bool) -> void:
 		return
 	flags.sign_folded = true
 	world.open_ways["sign"] = true
+	_sync_world()
 	var sign: Node3D = world.level.get_node("Special/Signboard")
 	if instant:
 		sign.rotation.y = -PI / 2
@@ -580,13 +635,26 @@ func _rig_rope() -> void:
 	if flags.rope_rigged:
 		return
 	flags.rope_rigged = true
+	_sync_world()
+	var platform: Node3D = world.level.get_node("Special/LoadingPlatform")
+	for child in platform.get_children():
+		if child.name.begins_with("Chain"):
+			child.visible = true
 	_rope = Node3D.new()
 	_rope.name = "RigRope"
 	world.level.add_child(_rope)
 	var pulley: Vector3 = world.refs.pulley
 	var drum := Vector3(BuildWorkshop.PLATFORM.x, BuildWorkshop.ROOF_Y + 0.95, 6.55)
 	_rope_segment(drum, pulley + Vector3(0, 0.1, 0.12))
-	_rope_down = _rope_segment(pulley, (world.level.get_node("Special/LoadingPlatform") as Node3D).global_position + Vector3(0, 1.2, 0))
+	_rope_down = _rope_segment(pulley, platform.global_position + Vector3(0, 1.2, 0))
+	# Tensioning the newly fitted rope draws the parked platform off the roof and
+	# into its working position over the slot.  Keep the rope attached throughout.
+	var parked := platform.global_position
+	var move := create_tween()
+	move.tween_method(func(t: float) -> void:
+		platform.global_position = parked.lerp(BuildWorkshop.PLATFORM, t)
+		_stretch(_rope_down, pulley, platform.global_position + Vector3(0, 1.2, 0)), 0.0, 1.0, 1.1
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	# the coil of what's left over, hung on the gallows post
 	var coil := MeshInstance3D.new()
 	var tm := TorusMesh.new()
@@ -637,17 +705,51 @@ func _start_run() -> void:
 		mark("crateRun")
 		set_stage(RUN_CRATE)
 		locks.lock("crate")
+		_mei_steps_clear_of_winch()
+		_kit_walks_to_winch()
 		_begin_crate())
 
 
-## The crate's way: up through the hatch, over to the plank, across, along the
-## balcony past the folded sign, onto the platform, and the platform down the
-## slot to the lane. Each leg moves because someone moves it.
+## Give the pulley operator a readable silhouette. If Mei starts the run from
+## the winch prompt, she takes a couple of natural steps along the balcony so
+## she cannot stand directly over Kit's cranking animation. When she starts it
+## by speaking to Kit at the hatch, she instead steps back on the workshop roof.
+func _mei_steps_clear_of_winch() -> void:
+	var R := BuildWorkshop.ROOF_Y
+	var target: Vector3
+	if player.position.z >= float(BuildWorkshop.SLOT_Z[1]):
+		target = world.refs.winch + Vector3(1.25, 0, 0.3)
+	else:
+		target = Vector3(-4.15, R, 0.85)
+	player.traverse([target], 1.8, Callable(), false)
+
+
+## Kit only crosses the roof once the run has begun. This keeps her out of
+## Mei's way while the player is rigging and inspecting the winch.
+func _kit_walks_to_winch() -> void:
+	var kit: Resident = world.residents.kit
+	var R := BuildWorkshop.ROOF_Y
+	var px := (float(BuildWorkshop.PLANK_X[0]) + float(BuildWorkshop.PLANK_X[1])) / 2.0
+	kit.ghost = true
+	kit.walk([
+		Vector3(px, R, 3.6),
+		Vector3(px, R, 6.5),
+		world.refs.winch,
+	], func() -> void:
+		kit.ghost = false
+		kit.facing = Vector3(-1, 0, 0)
+		kit.sprite.facing = kit.facing
+		kit.idle_anim = "work"
+		kit.sprite.play("work"), 1.8)
+
+
+## The last crate is thrown up through the hatch. Ho collects it, carries it
+## across the workshop roof to the near edge of the slot, then reaches it onto
+## the platform. He never crosses to Kit's cramped pulley-side ledge. Only the
+## suspended platform moves by itself after that, pulled by Kit's winch.
 func _begin_crate() -> void:
 	var R := BuildWorkshop.ROOF_Y
 	var hatch := Vector3(-1.8, R, 0.62)
-	var px := (float(BuildWorkshop.PLANK_X[0]) + float(BuildWorkshop.PLANK_X[1])) / 2
-	var plat: Vector3 = BuildWorkshop.PLATFORM
 	_crate = Node3D.new()
 	_crate.name = "LastCrate"
 	world.level.add_child(_crate)
@@ -659,15 +761,54 @@ func _begin_crate() -> void:
 	body.set_instance_shader_parameter("tint", Color("3f6fa8"))
 	body.position = Vector3(0, 0.16, 0)
 	_crate.add_child(body)
-	_crate.global_position = hatch + Vector3(0, -1.2, 0)
-	_run = {"legs": [
-		{"to": hatch, "secs": 2.2, "sound": "ratchet"},
-		{"to": Vector3(px, R, 3.6), "secs": 2.0, "sound": ""},
-		{"to": Vector3(px, R, 6.5), "secs": 2.2, "sound": "crate_down"},
-		{"to": Vector3(plat.x + 0.2, R, 6.5), "secs": 2.4, "sound": ""},
-		{"to": plat, "secs": 1.2, "sound": "crate_down"},
+	_crate.global_position = hatch + Vector3(0.15, -1.0, -0.18)
+	_start_crate_motion([
+		{"to": hatch + Vector3(-0.15, 0, 0.58), "secs": 0.85, "sound": "", "arc": 0.58},
+	], _ho_collects_crate)
+
+
+func _start_crate_motion(legs: Array, on_done: Callable) -> void:
+	_run = {"legs": legs, "i": 0, "t": 0.0, "from": _crate.global_position, "on_done": on_done}
+
+
+func _ho_collects_crate() -> void:
+	audio.play_at("crate_down", _crate.global_position, 18.0, 0.8)
+	var ho: Resident = world.residents.fanman
+	ho.ghost = true
+	ho.walk([_crate.global_position], _ho_picks_up_crate, 2.0)
+
+
+func _ho_picks_up_crate() -> void:
+	var R := BuildWorkshop.ROOF_Y
+	var plat: Vector3 = BuildWorkshop.PLATFORM
+	var ho: Resident = world.residents.fanman
+	ho.set_carrying(true)
+	_crate_carrier = ho
+	# Ho stays on the workshop side and approaches the platform from the circled
+	# loading edge. Kit alone crosses the plank to operate the remote winch.
+	ho.walk([
+		Vector3(-4.4, R, 2.8),
+		Vector3(plat.x, R, float(BuildWorkshop.SLOT_Z[0]) - 0.35),
+	], _ho_places_crate, 1.8)
+
+
+func _ho_places_crate() -> void:
+	var ho: Resident = world.residents.fanman
+	_crate_carrier = null
+	ho.set_carrying(false)
+	ho.ghost = false
+	ho.facing = Vector3(0, 0, 1)
+	ho.sprite.facing = ho.facing
+	_start_crate_motion([
+		{"to": BuildWorkshop.PLATFORM, "secs": 0.55, "sound": "crate_down"},
+	], _lower_loaded_platform)
+
+
+func _lower_loaded_platform() -> void:
+	var plat: Vector3 = BuildWorkshop.PLATFORM
+	_start_crate_motion([
 		{"to": Vector3(plat.x, 0.05, plat.z), "secs": 5.0, "sound": "ratchet", "platform": true},
-	], "i": 0, "t": 0.0, "from": _crate.global_position}
+	], _crate_landed)
 
 
 func _tick_crate(delta: float) -> void:
@@ -680,6 +821,8 @@ func _tick_crate(delta: float) -> void:
 	_run.t = float(_run.t) + delta / float(leg.secs)
 	var t := minf(1.0, float(_run.t))
 	var at: Vector3 = (_run.from as Vector3).lerp(leg.to, t * t * (3.0 - 2.0 * t))
+	if float(leg.get("arc", 0.0)) > 0.0:
+		at.y += sin(t * PI) * float(leg.arc)
 	_crate.global_position = at
 	if leg.get("platform", false):
 		var plat: Node3D = world.level.get_node("Special/LoadingPlatform")
@@ -691,8 +834,10 @@ func _tick_crate(delta: float) -> void:
 		_run.i = int(_run.i) + 1
 		_run.t = 0.0
 		if int(_run.i) >= legs.size():
+			var on_done: Callable = _run.get("on_done", Callable())
 			_run = {}
-			_crate_landed()
+			if on_done.is_valid():
+				on_done.call()
 
 
 func _crate_landed() -> void:
@@ -741,13 +886,14 @@ func _discover() -> void:
 	var p := player.position
 	var R := BuildWorkshop.ROOF_Y
 	var on_roof := absf(p.y - R) < 0.4 and p.z < 4.05 and p.x > -7.1 and p.x < 0.1
-	if stage == LOADING_ROUTE and on_roof and cam.direction == 2:
+	if not flags.factory_route_pulley_found and stage <= LOADING_ROUTE and on_roof and cam.direction == 2:
 		flags.factory_route_pulley_found = true
 		audio.chime()
-		say("c3_pulley_found", func() -> void: set_stage(FIND_PARTS))
+		if stage == LOADING_ROUTE:
+			say("c3_pulley_found", func() -> void: set_stage(FIND_PARTS))
 		return
 	var on_balcony := absf(p.y - R) < 0.4 and p.z > 5.9 and p.x > BuildWorkshop.SIGN_X
-	if stage >= SET_UP and not flags.sign_hinges_seen and on_balcony \
+	if not flags.sign_hinges_seen and on_balcony \
 			and ViewMath.back(cam.current_yaw).dot(Vector3(-1, 0, 0)) > 0.6:
 		flags.sign_hinges_seen = true
 		audio.chime()
@@ -805,6 +951,10 @@ func tick(delta: float, paused: bool) -> void:
 		return
 	_stage_t += delta
 	_refresh_hint()
+	if _crate_carrier and _crate:
+		var carry_forward := _crate_carrier.sprite.facing
+		carry_forward.y = 0
+		_crate.global_position = _crate_carrier.global_position + Vector3(0, 0.66, 0) + carry_forward.normalized() * 0.22
 	_tick_crate(delta)
 	_discover()
 	_shortcut_discover()

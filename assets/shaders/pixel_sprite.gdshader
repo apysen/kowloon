@@ -17,7 +17,8 @@ void vertex() {
 
 void fragment() {
 	vec4 c = texture(sheet, frame_uv(UV));
-	if (c.a < 0.5 || (fade < 0.999 && bayer4(FRAGCOORD.xy) > fade)) {
+	float combined_fade = fade * room_fade;
+	if (c.a < 0.5 || (combined_fade < 0.999 && bayer4(FRAGCOORD.xy) > combined_fade)) {
 		discard;
 	}
 	ALBEDO = c.rgb * tint.rgb;

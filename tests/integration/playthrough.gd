@@ -193,6 +193,20 @@ func _run() -> void:
 	await use("lau", Vector3(3.6, A, -10.4))
 	expect(q.flags.setup_lau_windows, "Lau goes on about the windows again")
 
+	print("-- exploration before the quest catches up")
+	await place(Vector3(1.0, R, -18.0))
+	await frames(8)
+	expect(q.flags.son_seen, "reaching the roof remembers that Wai is already there")
+	await place(Vector3(6.0, R, -19.0))
+	while slice.cam.direction != 2:
+		slice.cam.rotate_view(1)
+		await secs(0.55)
+	await frames(10)
+	expect(q.flags.pigeon_found, "the pigeon can be discovered before anyone asks for her")
+	while slice.cam.direction != 0:
+		slice.cam.rotate_view(1)
+		await secs(0.55)
+
 	print("-- upstairs and the washing")
 	await use("stairsUp", w.refs.stairsUpA)
 	await secs(1.3)
@@ -204,7 +218,7 @@ func _run() -> void:
 
 	print("-- Mrs. Chan")
 	await use("chan", Vector3(-3.4, B, -12.3))
-	expect(q.stage == S.SEARCHING_FOR_SON, "Mrs. Chan sends Mei after her son")
+	expect(q.stage == S.FOUND_SON, "Mrs. Chan accepts that Mei already saw Wai on the roof")
 
 	print("-- the airshaft")
 	await use("shaftBase", w.refs.shaftBase)
@@ -236,7 +250,7 @@ func _run() -> void:
 
 	print("-- the roof: Wai and Mr. Ng")
 	await use("son", Vector3(0.2, R, -18.3))
-	expect(q.stage == S.FOUND_SON, "found Wai")
+	expect(q.stage == S.FOUND_SON, "talking to Wai again does not reset the caught-up quest")
 	await use("ng", Vector3(3.4, R, -19.5))
 	expect(q.ng_briefed, "Mr. Ng explains the lost pigeon")
 	expect(not (w.special.Plane as Node3D).visible, "no jet before the photograph")

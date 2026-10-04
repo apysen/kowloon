@@ -17,6 +17,8 @@ var flags := {
 	"received_camera": false, "photographed_lau": false, "met_chan": false, "found_chan_son": false,
 	"helped_ng": false, "fabric_moved": false, "delivered_medicine": false, "returned_home": false,
 	"rooftop_visited": false, "roof_door_open": false, "pigeon_found": false,
+	# Exploration is remembered even when Mei reaches these beats before the story asks for them.
+	"catwalk_blocked_seen": false, "son_seen": false, "son_met": false,
 	# setups the later chapters pay off
 	"setup_old_photo_seen": false, "setup_lau_windows": false, "setup_ng_home_line": false, "setup_wong_bet": false,
 	"setup_boxes": false, "setup_blue_pipe": false, "theme_rotation": false, "setup_mei_photographs": false,
@@ -202,7 +204,7 @@ func _register_interactions() -> void:
 			mark("chanReached")
 			say("chan_quest", func() -> void:
 				set_stage(S.MET_CHAN)
-				set_stage(S.SEARCHING_FOR_SON))
+				set_stage(S.FOUND_SON if (flags.son_seen or flags.son_met) else S.SEARCHING_FOR_SON))
 		elif stage < S.FOUND_SON:
 			say("chan_waiting")
 		elif stage < S.FABRIC_MOVED:
@@ -213,6 +215,7 @@ func _register_interactions() -> void:
 			say("chan_after"))
 
 	talk("son", 1.6, func() -> void:
+		flags.son_met = true
 		var step: String = errand.get("step", "")
 		if step == "waiting" or step == "unpinning":
 			say("son_catwalk")
@@ -261,8 +264,10 @@ func _register_interactions() -> void:
 		"verb": "verb.look",
 		"can_interact": func() -> bool: return w.fabric_state == "catwalk" and not (errand.get("step", "") in ["waiting", "unpinning"]),
 		"interact": func() -> void:
+			flags.catwalk_blocked_seen = true
 			if stage == S.LAU_PHOTO:
-				say("fabric_first", func() -> void: set_stage(S.CATWALK_BLOCKED))
+				say("fabric_first", func() -> void:
+					set_stage(S.FOUND_SON if flags.son_met else S.CATWALK_BLOCKED))
 			else:
 				say("fabric_again")})
 
@@ -436,6 +441,11 @@ func _discover() -> void:
 			hud.notice("notice.crate_found", 3.2)
 
 	# the pigeon: really hidden by the tank, checked with a ray
+	if not flags.son_seen and stage < S.FOUND_SON and p.y > 12.0:
+		var wai: Vector3 = (world.residents.son as Resident).global_position + Vector3(0, 0.8, 0)
+		if wai.distance_to(p) < 12.0 and cam.on_screen(wai):
+			flags.son_seen = true
+
 	if not flags.pigeon_found and p.y > 12.0 and stage < S.HELPED_NG:
 		var bird: Vector3 = (world.special.LostPigeon as Node3D).global_position + Vector3(0, 0.2, 0)
 		if bird.distance_to(p) < 16.0 and cam.on_screen(bird) and not _occluded_by_tank(bird):
@@ -691,7 +701,10 @@ func _on_photo_kept(id: String) -> void:
 	await scrapbook.file_photo(id)
 	if id == "lau":
 		say("lau_after_photo", func() -> void:
-			set_stage(S.LAU_PHOTO)
+			if flags.catwalk_blocked_seen:
+				set_stage(S.FOUND_SON if flags.son_met else S.CATWALK_BLOCKED)
+			else:
+				set_stage(S.LAU_PHOTO)
 			_hints.scrapbook = true
 			hud.show_hint("hint.scrapbook")
 			later(_clear_scrapbook_hint, 9.0))

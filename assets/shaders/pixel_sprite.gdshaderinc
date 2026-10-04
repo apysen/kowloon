@@ -15,6 +15,7 @@ uniform float anchor_toward_camera = 0.35;        // metres
 instance uniform vec2 frame = vec2(0.0);          // column, row
 instance uniform float flip = 0.0;                // 1 = mirror horizontally
 instance uniform float fade = 1.0;                // dithered fade (doorways)
+instance uniform float room_fade = 1.0;           // synchronized with the room shell
 instance uniform vec4 tint : source_color = vec4(1.0);
 
 varying float v_anchor_depth;

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bms3cadnopdor"
-path.s3tc="res://.godot/imported/plaque_yamen.png-888f7eeefe0805ae2e01cc407c64d898.s3tc.ctex"
+uid="uid://dbtfwqph22p85"
+path.s3tc="res://.godot/imported/carton_label_4.png-18169bcf039913b10404b50ce42ebcb4.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/props/plaque_yamen.png"
-dest_files=["res://.godot/imported/plaque_yamen.png-888f7eeefe0805ae2e01cc407c64d898.s3tc.ctex"]
+source_file="res://assets/textures/props/carton_label_4.png"
+dest_files=["res://.godot/imported/carton_label_4.png-18169bcf039913b10404b50ce42ebcb4.s3tc.ctex"]
 
 [params]
 

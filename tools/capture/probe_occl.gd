@@ -37,5 +37,6 @@ func _run() -> void:
 			continue
 		var b: AABB = it.aabb
 		if b.intersects_segment(eye, mei) != null:
-			print("  blocks: ", w.level.get_path_to(it.node), " fadeable=", it.fadeable, " room='", it.room, "' op=", it.opacity, " band=", it.band)
+			print("  blocks: ", w.level.get_path_to(it.node), " fadeable=", it.fadeable, " room='", it.room,
+				"' side='", it.get("room_side", ""), "' op=", it.opacity, " band=", it.band)
 	quit(0)

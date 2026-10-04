@@ -32,6 +32,10 @@ uniform float foot_grime = 0.18;
 
 instance uniform vec4 tint : source_color = vec4(1.0);
 instance uniform vec2 uv_offset = vec2(0.0);
+// Optional per-face horizontal phase corrections: +X, -X, +Z, -Z.  Filler
+// buildings use these to carry a facade texture around corners without the
+// tile/window grid jumping at each turn; ordinary world pieces leave it zero.
+instance uniform vec4 side_u_offset = vec4(0.0);
 instance uniform float fade = 1.0;
 instance uniform float emission_scale = 1.0;
 instance uniform float base_y = -1000.0;   // world y of the floor this piece stands on
@@ -59,6 +63,8 @@ void surface_fragment(out vec3 o_albedo, out vec3 o_normal_view, out float o_rou
 	// side projections: u along the wall, v down the wall (image rows run downward)
 	vec2 uv_x = vec2(w_pos.z * sign(n.x), -w_pos.y) / tile_size + off;
 	vec2 uv_z = vec2(-w_pos.x * sign(n.z), -w_pos.y) / tile_size + off;
+	uv_x.x += n.x >= 0.0 ? side_u_offset.x : side_u_offset.y;
+	uv_z.x += n.z >= 0.0 ? side_u_offset.z : side_u_offset.w;
 	vec2 uv_y = w_pos.xz / (has_top ? vec2(top_tile) : tile_size.xx) + off;
 
 	vec3 ax = texture(albedo_tex, uv_x).rgb;

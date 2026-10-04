@@ -205,6 +205,12 @@ func _prepare_world() -> void:
 	_pose(world.residents.kit, world.refs.kitWorkshop, Vector3(0, 0, 1), "sweep")
 	# Ho at his fans as ever; Ng up with his birds
 	_pose(world.residents.fanman, Vector3(-3.4, 0, 0.35), Vector3(0, 0, 1), "work")
+	# Leave the storage-room threshold clear. Cheng waits beside its wall where
+	# Mei can still consult him, while both movers wait naturally by their cart.
+	# Their old positions pinched the narrow doorway from both sides.
+	_pose(world.residents.cheng, Vector3(13.45, 0, -2.05), Vector3(0.6, 0, 1), "work")
+	_pose(world.residents.mover_a, Vector3(8.35, 0, 3.55), Vector3(-1, 0, 0.3), "work")
+	_pose(world.residents.mover_b, Vector3(8.95, 0, 3.55), Vector3(-1, 0, 0.2), "work")
 	_set_gone(world.level.get_node_or_null("ChapterProps/Ch4/FongSignDown"), true)
 	_sync_world()
 
@@ -387,14 +393,15 @@ func _tick_fan(delta: float) -> void:
 ## Where the two cords part, only a turned view tells them apart; behind the
 ## storage room's shelves, only the far side shows the plug.
 func _trace_fan() -> void:
-	if not flags.oq02_ho or flags.oq02_fixed or cam.rotating or locks.is_locked() or dialogue.is_open():
+	if flags.oq02_fixed or cam.rotating or locks.is_locked() or dialogue.is_open():
 		return
 	var at: Vector3 = world.refs.cordsPart
 	if not flags.oq02_traced and mei_near(at.x, at.y, at.z, 1.8) and (cam.direction == 1 or cam.direction == 3):
 		flags.oq02_traced = true
 		mark("oq02Traced")
 		audio.chime()
-		say("c4_cords", _refresh_hint)
+		if flags.oq02_ho:
+			say("c4_cords", _refresh_hint)
 		return
 	var p := player.position
 	var in_store := p.y < 1.0 and p.x > 14.0 and p.x < 17.0 and p.z > -6.5 and p.z < -3.5
@@ -402,8 +409,9 @@ func _trace_fan() -> void:
 		flags.oq02_plug_seen = true
 		mark("oq02PlugSeen")
 		audio.chime()
-		hud.notice("notice.c4_plug_seen", 3.2)
-		_refresh_hint()
+		if flags.oq02_ho:
+			hud.notice("notice.c4_plug_seen", 3.2)
+			_refresh_hint()
 
 
 # ----------------------------------------------------------------------------- OQ03, Auntie Fong's sign
@@ -442,7 +450,7 @@ func _unbolt(which: String) -> void:
 ## From the workshop roof, the balcony looks joined on; from the side it isn't.
 ## From the lane, the ladder up its wall shows only looking back from the north.
 func _look_for_fong_way() -> void:
-	if not flags.oq03_asked or flags.oq03_down or cam.rotating or locks.is_locked() or dialogue.is_open():
+	if flags.oq03_down or cam.rotating or locks.is_locked() or dialogue.is_open():
 		return
 	var p := player.position
 	var R := BuildWorkshop.ROOF_Y
@@ -450,13 +458,15 @@ func _look_for_fong_way() -> void:
 			and (cam.direction == 1 or cam.direction == 3):
 		flags.oq03_slot_seen = true
 		mark("oq03SlotSeen")
-		say("c4_fong_slot", _refresh_hint)
+		if flags.oq03_asked:
+			say("c4_fong_slot", _refresh_hint)
 		return
 	if not flags.oq03_ladder_seen and p.y < 1.0 and p.x > -3.5 and p.x < 1.8 and p.z > 4.3 and p.z < 6.0 and cam.direction == 2:
 		flags.oq03_ladder_seen = true
 		mark("oq03LadderSeen")
 		audio.chime()
-		say("c4_ladder_seen", _refresh_hint)
+		if flags.oq03_asked:
+			say("c4_ladder_seen", _refresh_hint)
 
 
 func _set_gone(n: Node, gone: bool) -> void:
@@ -491,6 +501,8 @@ func _talk_cheng() -> void:
 
 func _meet_cheng() -> void:
 	flags.cheng_met = true
+	if flags.side_gap_found:
+		_open_side_gap()
 	mark("chengMet")
 	say("c4_cheng", _refresh_hint)
 
@@ -641,7 +653,7 @@ func _register_route() -> void:
 			audio.creak()
 			transition(refs.laneLadder, 10)})
 	I.add({"id": "plug", "position": refs.socket, "radius": 1.0, "priority": Q, "verb": "verb.plug_in",
-		"can_interact": func() -> bool: return flags.oq02_plug_seen and not flags.oq02_fixed,
+		"can_interact": func() -> bool: return flags.oq02_ho and flags.oq02_plug_seen and not flags.oq02_fixed,
 		"interact": _plug_in})
 	look("cannons", refs.cannons, "env.c4_cannons", 1.2)
 	look("yamenTree", refs.yamenTree, "env.c4_tree", 1.1, InteractionDirector.Priority.DECOR)
@@ -723,7 +735,7 @@ func _move_cabinet() -> void:
 ## into the next building; from the balcony, looking back at the door, the
 ## bolts on its folded leaf.
 func _discover() -> void:
-	if cam.rotating or locks.is_locked() or dialogue.is_open() or not flags.cheng_met or flags.cabinet_moved:
+	if cam.rotating or locks.is_locked() or dialogue.is_open() or flags.cabinet_moved:
 		return
 	var p := player.position
 	var B := LevelBuilder.LEVEL_B
@@ -731,9 +743,10 @@ func _discover() -> void:
 	var in_store := p.y < 1.0 and p.x > 14.0 and p.x < 17.0 and p.z > -6.5 and p.z < -3.5
 	if not flags.side_gap_found and in_store and (cam.direction == 1 or cam.direction == 3):
 		flags.side_gap_found = true
-		_open_side_gap()
 		audio.chime()
-		say("c4_gap_found", _refresh_hint)
+		if flags.cheng_met:
+			_open_side_gap()
+			say("c4_gap_found", _refresh_hint)
 		return
 	var on_top := absf(p.y - B) < 0.5 and p.x > 16.0 and p.z > 3.0 and p.z < 4.4
 	if flags.side_gap_found and not flags.stair_found and on_top and back.dot(Vector3(-1, 0, 0)) > 0.6:

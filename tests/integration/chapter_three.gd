@@ -153,6 +153,8 @@ func _run() -> void:
 	expect(await interact("ladderUp"), "up the ladder through the hatch")
 	await secs(1.5)
 	expect(absf(slice.player.position.y - R) < 0.2, "on the workshop roof")
+	expect(q._kit_following_ladder and w.residents.kit.position.distance_to(Vector3(-4.8, R, 1.2)) > 0.5,
+		"Kit follows through the hatch instead of appearing at her roof position")
 	await turn_to(0)
 	await secs(0.5)
 	expect(q.stage == C.LOADING_ROUTE, "from the front the neighbours' side is cut away")
@@ -160,7 +162,14 @@ func _run() -> void:
 	await secs(0.5)
 	await read_through()
 	expect(q.stage == C.FIND_PARTS and q.flags.factory_route_pulley_found, "looking back, the pulley over the balcony")
+	await secs(3.0)
+	expect(q._kit_on_roof and not q._kit_following_ladder and w.residents.kit.position.distance_to(Vector3(-4.8, R, 1.2)) < 0.1,
+		"Kit climbs out shortly after Mei and walks to her roof position")
 	await turn_to(0)
+	await place(Vector3(-2.5, B, 2.0))
+	await secs(0.55)
+	expect(w.residents.kit.visible and w.residents.kit.sprite.room_fade < 0.01,
+		"after the route cutscene, Kit stays rendered but is fully faded above the workshop")
 	await place(w.refs.plankGap)
 	await interact("plankGap")
 	expect(not q.flags.plank_laid, "no plank yet: just the drop")
@@ -209,6 +218,7 @@ func _run() -> void:
 
 	print("-- setting it up")
 	await place(w.refs.plankGap)
+	expect(slice.interaction.current.get("id", "") == "plankGap", "Ho leaves the plank prompt clear after checking the pulley")
 	expect(await interact("plankGap"), "the plank goes across")
 	expect(q.flags.plank_laid, "the plank is laid")
 	expect(w.walk_space.slide(w.refs.plankGap, Vector2(0, 2.0), Player.RADIUS).z > 5.5, "and it can be walked across")
@@ -225,24 +235,37 @@ func _run() -> void:
 	await secs(1.6)
 	expect(q.flags.sign_folded and w.walk_space.slide(Vector3(-3.3, R, 6.5), Vector2(-2.0, 0), Player.RADIUS).x < BuildWorkshop.SIGN_X, "and the way along the balcony is clear")
 	await place(w.refs.winch)
+	expect(slice.interaction.current.get("id", "") == "winch", "Kit leaves the winch clear while the rope still needs rigging")
 	expect(await interact("winch"), "the rope goes over the pulley")
 	expect(q.flags.rope_rigged, "the rope is rigged")
+	var kit_wait := Vector3(-4.8, R, 1.2)
+	expect(w.residents.kit.position.distance_to(kit_wait) < 0.1, "Kit stays by the hatch after the route is ready")
 
 	print("-- the last batch")
 	await place(w.refs.winch + Vector3(0.3, 0, 0))
-	expect(await interact("kit"), "Kit on the winch")
+	expect(await interact("winch"), "start the run from the pulley-side prompt")
 	expect(q.stage == C.RUN_CRATE, "Uncle! Send it up!")
+	var mei_viewing_position: Vector3 = w.refs.winch + Vector3(1.25, 0, 0.3)
 	var t := 0.0
-	var reached_plank := false
+	var reached_platform := false
+	var ho_carried_crate := false
+	var ho_crossed_slot := false
 	while q.stage == C.RUN_CRATE and t < 25.0:
 		await secs(0.25)
 		t += 0.25
 		var cr: Node3D = q._crate
+		if q._crate_carrier == w.residents.fanman:
+			ho_carried_crate = true
+		if w.residents.fanman.position.z > float(BuildWorkshop.SLOT_Z[0]):
+			ho_crossed_slot = true
 		if cr and absf(cr.global_position.z - 5.0) < 0.8 and cr.global_position.y > R - 0.2:
-			reached_plank = true
+			reached_platform = true
 		if slice.dialogue.is_open():
 			await read_through()
-	expect(reached_plank, "the crate crosses on the plank")
+	expect(ho_carried_crate, "Mr. Ho picks up and carries the thrown crate")
+	expect(not ho_crossed_slot and w.residents.fanman.position.z < float(BuildWorkshop.SLOT_Z[0]), "Mr. Ho stays on the workshop side of the slot")
+	expect(reached_platform, "Mr. Ho places the crate onto the pulley platform from the near edge")
+	expect(slice.player.position.distance_to(mei_viewing_position) < 0.1, "Mei steps back far enough to leave Kit's cranking animation visible")
 	expect(q.flags.crate_down and q.stage == C.FINAL_CRATE, "the platform goes down the slot to the lane")
 	var plat: Node3D = w.level.get_node("Special/LoadingPlatform")
 	expect(plat.global_position.y < 0.5, "the platform is down in the lane")

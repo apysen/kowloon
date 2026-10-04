@@ -332,7 +332,9 @@ func _register_people() -> void:
 	talk("ng", 1.9, _talk_ng)
 	talk("mahjong2", 1.7, _talk_mahjong)
 	talk("mahjong1", 1.7, _talk_mahjong)
-	talk("shopkeeper", 1.8, _talk_kwok)
+	# Keep his conversation clear of the bundle under the shutter. At the old
+	# radius he masked the required reach interaction even at the bundle itself.
+	talk("shopkeeper", 1.4, _talk_kwok)
 	talk("leung", 1.6, _talk_leung)
 
 
@@ -363,7 +365,7 @@ func _talk_leung() -> void:
 ## The stall shows only from its front: with the view turned so the camera is
 ## east of it, and Mei near, the bundle is there under the half-down shutter.
 func _sight_stall() -> void:
-	if flags.oq06_seen or not flags.oq06_asked or cam.rotating or dialogue.is_open() or locks.is_locked():
+	if flags.oq06_seen or cam.rotating or dialogue.is_open() or locks.is_locked():
 		return
 	var p := player.position
 	if p.y > 1.0 or p.x < 2.0 or p.x > 4.2 or p.z < -7.0 or p.z > -3.0:
@@ -372,7 +374,8 @@ func _sight_stall() -> void:
 		flags.oq06_seen = true
 		mark("oq06Seen")
 		audio.chime()
-		hud.notice("notice.c5_note_seen", 3.2)
+		if flags.oq06_asked:
+			hud.notice("notice.c5_note_seen", 3.2)
 
 
 func _take_leung_note() -> void:
@@ -530,7 +533,7 @@ func _register_route() -> void:
 	look("lauBracket", refs.lauSign, "env.c5_bracket", 1.0, InteractionDirector.Priority.DECOR)
 	look("stall", Vector3(2.4, 0, -5.0), "env.c5_stall", 1.0, InteractionDirector.Priority.DECOR)
 	I.add({"id": "stallGap", "position": refs.stallGap, "radius": 1.0, "priority": Q, "verb": "verb.reach",
-		"can_interact": func() -> bool: return flags.oq06_seen and not flags.oq06_note,
+		"can_interact": func() -> bool: return flags.oq06_asked and flags.oq06_seen and not flags.oq06_note,
 		"interact": _take_leung_note})
 	look("fongTap", Vector3(15.9, LevelBuilder.LEVEL_B, -16.8), "env.c5_tap", 0.9)
 	I.add({"id": "unitSinkDry", "position": Vector3(23.2, LevelBuilder.LEVEL_B, -20.2), "radius": 0.8,
@@ -548,7 +551,7 @@ func _register_route() -> void:
 ## Turning the view in the back shop: from the front the pegboard hides it;
 ## from the side, or from behind, the slot at its end shows a narrow stair.
 func _discover() -> void:
-	if cam.rotating or locks.is_locked() or dialogue.is_open() or not flags.items_taken:
+	if cam.rotating or locks.is_locked() or dialogue.is_open():
 		return
 	var B := LevelBuilder.LEVEL_B
 	if not flags.footbridge_seen and mei_near(world.refs.footbridgeGap.x, B, world.refs.footbridgeGap.z, 1.4):

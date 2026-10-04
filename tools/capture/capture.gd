@@ -84,6 +84,11 @@ func _run() -> void:
 			_slice.pause.show_menu()
 		elif action == "camera":
 			_slice.photography.enter()
+		elif action.begins_with("camera="):
+			# camera=x,z: the camera up to Mei's eye, looking that way
+			var cf := action.substr(7).split(",")
+			_slice.player.facing = Vector3(float(cf[0]), 0, float(cf[1])).normalized()
+			_slice.photography.enter()
 		elif action.begins_with("photo="):
 			var tex: Texture2D = await _slice.photography.studio.shoot(action.substr(6))
 			_slice.photography.polaroid.present(tex, ResidentCatalog.entry(action.substr(6)).get("name", ""))

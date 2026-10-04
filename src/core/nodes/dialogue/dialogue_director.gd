@@ -12,9 +12,9 @@ signal event_fired(event: String)
 signal opened
 signal closed
 
-const CHARS_PER_SEC := 55.0
+const CHARS_PER_SEC := 41.25
 ## a Chinese character carries about a word: typed at reading pace, not letter pace
-const CHARS_PER_SEC_CJK := 24.0
+const CHARS_PER_SEC_CJK := 18.0
 
 @export var locks: ControlLocks
 @export var box: DialogueBox

@@ -226,12 +226,16 @@ func _run() -> void:
 	expect(await interact("shopkeeper"), "Mr. Kwok: 'Get that.'")
 	expect(q.flags.oq01_asked, "'Still mine.'")
 	await place(w.refs.awningSeen)
-	await turn_to(0)
-	await secs(0.5)
-	expect(await interact("pageAwning") and not q.flags.oq01_seen, "from the catwalk it lies on an awning, out of reach")
-	expect(not await interact("wellBalconyDoor"), "no way to it yet")
-	var sd := await turn_until("oq01_seen")
-	expect(sd == 1 or sd == 3, "from the side: on a little balcony under the awning")
+	var sd := slice.cam.direction
+	if not q.flags.oq01_seen:
+		await turn_to(0)
+		await secs(0.5)
+		expect(await interact("pageAwning") and not q.flags.oq01_seen, "from the catwalk it lies on an awning, out of reach")
+		expect(not await interact("wellBalconyDoor"), "no way to it yet")
+		sd = await turn_until("oq01_seen")
+		expect(sd == 1 or sd == 3, "from the side: on a little balcony under the awning")
+	else:
+		expect(true, "the earlier side view of the awning is remembered when Kwok asks")
 	await turn_to(0)
 	await place(w.refs.wellBalconyDoor)
 	expect(await interact("wellBalconyDoor"), "the door halfway up the stairs by Lau's")

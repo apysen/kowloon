@@ -191,6 +191,7 @@ func _run() -> void:
 	var sd := await turn_until("oq06_seen")
 	expect(sd == 1, "turned to face the stall's open front: the bundle under the shutter")
 	await turn_to(0)
+	expect(slice.interaction.current.get("id", "") == "stallGap", "Kwok leaves the bundle's reach prompt clear")
 	expect(await interact("stallGap"), "Mei reaches under the shutter")
 	expect(q.flags.oq06_note, "a note in Mrs. Wong's hand")
 	await place(Vector3(3.3, 0, -1.8))

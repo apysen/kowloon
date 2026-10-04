@@ -33,6 +33,9 @@ var home := Vector3.ZERO
 var obstacle: WalkSpace.Obstacle
 var gone := false
 var ghost := false
+## Set immediately from the room target; the visual room_fade may still be
+## easing so residents cannot be used through a closing wall.
+var in_focus := true
 var walk_speed := 2.4
 var _path: Array[Vector3] = []
 var _walk_to: Variant = null
@@ -98,7 +101,7 @@ func face_toward(p: Vector3, hold := 3.0) -> void:
 
 
 func can_talk() -> bool:
-	return visible and not gone and _walk_to == null
+	return visible and in_focus and not gone and _walk_to == null
 
 
 ## Per-frame behaviour, driven by the world so it can pause with the menus.
@@ -119,7 +122,9 @@ func tick(delta: float, paused: bool, mei_pos: Vector3, cam_yaw: float) -> void:
 				f.call()
 	if _walk_to != null:
 		if paused:
-			sprite.speed_scale = 0.0
+			# Dialogue and cutscenes pause routes, not the life in the frame.
+			# Keep the current walk/carry cycle moving while the resident waits.
+			sprite.speed_scale = 1.0
 			return
 		sprite.speed_scale = 1.0
 		var to: Vector3 = (_walk_to as Vector3) - position
@@ -157,7 +162,8 @@ func tick(delta: float, paused: bool, mei_pos: Vector3, cam_yaw: float) -> void:
 		else:
 			position += to * minf(1.0, delta * walk_speed / d)
 		return
-	sprite.speed_scale = 0.0 if paused else 1.0
+	# Ambient idles continue behind conversations and scripted beats.
+	sprite.speed_scale = 1.0
 	if _talk_face_t > 0.0:
 		_talk_face_t -= delta
 		if _talk_face_t <= 0.0:

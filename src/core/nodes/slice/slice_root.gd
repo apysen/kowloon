@@ -230,6 +230,7 @@ func _update_marker() -> void:
 	var pos: Vector3 = interaction.position_of(cur)
 	var id: String = cur.id
 	var kind := "use"
+	var points_down := false
 	var h := 1.3
 	if int(cur.priority) == InteractionDirector.Priority.NPC:
 		kind = "talk"
@@ -241,8 +242,9 @@ func _update_marker() -> void:
 		var v: String = String((verb as Callable).call()) if verb is Callable else String(verb)
 		if v.begins_with("verb.look"):
 			kind = "look"
+		points_down = v in ["verb.downstairs", "verb.climb_down"]
 	var world_pos := pos + Vector3(0, h, 0)
 	if cam.camera.is_position_behind(world_pos):
 		hud.show_marker("", Vector2.ZERO)
 		return
-	hud.show_marker(kind, cam.camera.unproject_position(world_pos))
+	hud.show_marker(kind, cam.camera.unproject_position(world_pos), points_down)

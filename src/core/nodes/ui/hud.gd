@@ -85,7 +85,8 @@ func _build_marker() -> void:
 
 
 ## Show the icon over what Mei can use (kind: talk, look, use), at a screen point.
-func show_marker(kind: String, at: Vector2) -> void:
+## Downward routes mirror the use glyph so its arrow follows Mei's travel.
+func show_marker(kind: String, at: Vector2, points_down := false) -> void:
 	if kind == "":
 		if _marker_kind != "":
 			_marker_kind = ""
@@ -96,6 +97,7 @@ func show_marker(kind: String, at: Vector2) -> void:
 	_marker_kind = kind
 	var frames: Array = _icon_textures[kind]
 	_marker_icon.texture = frames[int(_t * 2.4) % frames.size()]
+	_marker_icon.flip_v = points_down
 	_marker.position = at.round()
 
 

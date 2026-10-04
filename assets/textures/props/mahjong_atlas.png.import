@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bms3cadnopdor"
-path.s3tc="res://.godot/imported/plaque_yamen.png-888f7eeefe0805ae2e01cc407c64d898.s3tc.ctex"
+uid="uid://h3146fwl5cdl"
+path.bptc="res://.godot/imported/mahjong_atlas.png-e99e4876907706dae22d1c8d1a11a3a8.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,13 +11,13 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/props/plaque_yamen.png"
-dest_files=["res://.godot/imported/plaque_yamen.png-888f7eeefe0805ae2e01cc407c64d898.s3tc.ctex"]
+source_file="res://assets/textures/props/mahjong_atlas.png"
+dest_files=["res://.godot/imported/mahjong_atlas.png-e99e4876907706dae22d1c8d1a11a3a8.bptc.ctex"]
 
 [params]
 
 compress/mode=2
-compress/high_quality=false
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

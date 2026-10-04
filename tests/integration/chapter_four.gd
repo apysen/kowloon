@@ -204,6 +204,12 @@ func _run() -> void:
 	expect(await interact("laneLadderUp"), "up the ladder")
 	await secs(1.4)
 	expect(absf(slice.player.position.y - BuildWorkshop.ROOF_Y) < 0.5 and slice.player.position.z > 6.0, "onto the neighbours' balcony")
+	var landing_plant: Node3D = w.level.get_node("Structure/Workshop/Balcony/PlantPot")
+	var landing_gap := Vector2(landing_plant.global_position.x - w.refs.ladderTop.x,
+		landing_plant.global_position.z - w.refs.ladderTop.z).length()
+	expect(landing_gap > 0.9, "the balcony plant leaves the ladder landing clear")
+	await place(w.refs.fongBoltBalcony)
+	expect(slice.interaction.current.get("id", "") == "fongBoltBalcony", "the bolt prompt is clear of the ladder")
 	expect(await interact("fongBoltBalcony"), "the balcony end's bolts undone")
 	expect(q.flags.oq03_down, "the sign swings down into the lane")
 	expect(w.level.get_node("ChapterProps/Ch1-4/FongSign/SignBoard").get_meta("gone", false), "gone from over the slot")
@@ -214,6 +220,10 @@ func _run() -> void:
 	expect(q.flags.oq03_done and q.stage == C.ADDRESSES, "'Leave the posts.'")
 
 	print("-- Mr. Cheng's cabinet")
+	var gap_seen_early: bool = q.flags.side_gap_found
+	var store_threshold := Vector3(14.65, 0, -3.05)
+	expect(w.residents.cheng.position.distance_to(store_threshold) > 1.0, "Mr. Cheng stands clear of the storage doorway")
+	expect(w.residents.mover_a.position.distance_to(store_threshold) > 1.0 and w.residents.mover_b.position.distance_to(store_threshold) > 1.0, "both movers wait away from the storage doorway")
 	await place(Vector3(14.2, 0, -1.2))
 	expect(await interact("cheng"), "Mr. Cheng and his plan")
 	expect(q.flags.cheng_met, "'There is on the plan.'")
@@ -222,9 +232,13 @@ func _run() -> void:
 	await place(Vector3(15.2, 0, -4.2))
 	await turn_to(0)
 	await secs(0.6)
-	expect(not q.flags.side_gap_found, "from the front the storage room looks shut in")
-	var d := await turn_until("side_gap_found")
-	expect(d == 1 or d == 3, "from the side: the gap behind the shelves")
+	var d := slice.cam.direction
+	if gap_seen_early:
+		expect(q.flags.side_gap_found, "the gap noticed while fixing the fan is remembered for Mr. Cheng")
+	else:
+		expect(not q.flags.side_gap_found, "from the front the storage room looks shut in")
+		d = await turn_until("side_gap_found")
+		expect(d == 1 or d == 3, "from the side: the gap behind the shelves")
 	var gap := w.walk_space.slide(Vector3(16.6, 0, -5.95), Vector2(1.2, 0), Player.RADIUS)
 	expect(gap.x > 17.2, "and a way into it")
 	await turn_to(0)

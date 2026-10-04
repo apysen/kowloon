@@ -42,6 +42,12 @@ var fade := 1.0:
 	set(v):
 		fade = clampf(v, 0.0, 1.0)
 		_apply("fade", fade)
+var room_fade := 1.0:
+	set(v):
+		room_fade = clampf(v, 0.0, 1.0)
+		_apply("room_fade", room_fade)
+		if _blob:
+			_blob.albedo_mix = 0.55 * room_fade
 var tint := Color.WHITE:
 	set(v):
 		tint = v
@@ -125,6 +131,7 @@ func _build() -> void:
 	_frame = Vector2(-1, -1)
 	_flip = -1.0
 	_apply("fade", fade)
+	_apply("room_fade", room_fade)
 	_apply("tint", tint)
 	_refresh(true)
 

@@ -20,9 +20,9 @@ void fragment() {
 	vec4 c = texture(sheet, frame_uv(UV));
 	float scene = texture(depth_texture, SCREEN_UV).r;
 	// reverse-Z: larger depth values are nearer the camera
-	if (c.a < 0.5 || scene <= v_anchor_depth + 0.00002) {
+	if (c.a < 0.5 || room_fade < 0.001 || scene <= v_anchor_depth + 0.00002) {
 		discard;
 	}
 	ALBEDO = silhouette_color.rgb;
-	ALPHA = silhouette_color.a * fade;
+	ALPHA = silhouette_color.a * fade * room_fade;
 }

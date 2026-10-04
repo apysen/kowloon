@@ -373,7 +373,7 @@ func _register_circuit() -> void:
 ## the crossing, from the north, the right lead climbs to the mast; at the
 ## tank, round it twice, the lead loops under the coop.
 func _trace() -> void:
-	if stage != LIGHTS_OUT or cam.rotating or locks.is_locked() or dialogue.is_open():
+	if stage > LIGHTS_OUT or cam.rotating or locks.is_locked() or dialogue.is_open():
 		return
 	var refs := world.refs
 	var side := cam.direction == 1 or cam.direction == 3
@@ -382,7 +382,8 @@ func _trace() -> void:
 			flags.lead_hut = true
 			mark("leadHut")
 			audio.chime()
-			say("c6_hut_through", _refresh_hint)
+			if stage == LIGHTS_OUT:
+				say("c6_hut_through", _refresh_hint)
 		return
 	if not flags.lead_cross:
 		var at: Vector3 = refs.leadsCross
@@ -390,7 +391,8 @@ func _trace() -> void:
 			flags.lead_cross = true
 			mark("leadCross")
 			audio.chime()
-			say("c6_leads_seen", _refresh_hint)
+			if stage == LIGHTS_OUT:
+				say("c6_leads_seen", _refresh_hint)
 		return
 	if flags.board_mast and not flags.lead_tank:
 		var tank: Vector3 = refs.tank
@@ -459,7 +461,9 @@ func _call_pigeon() -> void:
 func _register_people() -> void:
 	talk("grandfather", 1.6, _talk_grandfather)
 	talk("mum", 1.5, _talk_mum)
-	talk("ng", 1.9, _talk_ng)
+	# The last electrical board is close to Ng's corner. A wider talk radius
+	# masks that required board even while Mei is standing directly over it.
+	talk("ng", 1.5, _talk_ng)
 	talk("fanman", 1.6, func() -> void: _chat("ho", "c6_ho_talk", "c6_ho_after", "c6_ho_wait"))
 	talk("kit", 1.6, func() -> void:
 		_chat("kit", "c6_kit_talk", "c6_kit_after", "c6_kit_after", func() -> void: Progress.late_notes["kit"] = true))

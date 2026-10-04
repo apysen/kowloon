@@ -351,7 +351,7 @@ func _register_side() -> void:
 		"interact": func() -> void: say("c2_page_awning")})
 	# the door is halfway up the flight: Mei walks up to it
 	I.add({"id": "wellBalconyDoor", "position": refs.wellBalconyDoor, "radius": 0.8, "priority": Q, "verb": "verb.stair_door",
-		"can_interact": func() -> bool: return flags.oq01_seen,
+		"can_interact": func() -> bool: return flags.oq01_asked and flags.oq01_seen,
 		"interact": func() -> void:
 			audio.creak()
 			transition(refs.wellBalcony, 5)})
@@ -372,7 +372,7 @@ func _register_side() -> void:
 		"can_interact": func() -> bool: return flags.oq04_asked and not flags.oq04_tile,
 		"interact": func() -> void: say("c2_tile_crack")})
 	I.add({"id": "tileHole", "position": refs.tileHole, "radius": 1.0, "priority": Q, "verb": "verb.take",
-		"can_interact": func() -> bool: return flags.oq04_seen and not flags.oq04_tile,
+		"can_interact": func() -> bool: return flags.oq04_asked and flags.oq04_seen and not flags.oq04_tile,
 		"interact": func() -> void:
 			flags.oq04_tile = true
 			mark("oq04Tile")
@@ -385,24 +385,32 @@ func _side_discover() -> void:
 	if cam.rotating or locks.is_locked() or dialogue.is_open() or not (cam.direction == 1 or cam.direction == 3):
 		return
 	var at: Vector3 = world.refs.awningSeen
-	if flags.oq01_asked and not flags.oq01_seen and mei_near(at.x, at.y, at.z, 2.6):
+	if not flags.oq01_seen and mei_near(at.x, at.y, at.z, 2.6):
 		flags.oq01_seen = true
 		mark("oq01Seen")
 		audio.chime()
-		say("c2_page_seen", _refresh_side)
+		if flags.oq01_asked:
+			say("c2_page_seen", _refresh_side)
 		return
 	var p := player.position
-	if flags.oq04_asked and not flags.oq04_seen and p.y < 1.0 and p.x > -4.6 and p.x < -1.0 and p.z > 4.3 and p.z < 6.0:
+	if not flags.oq04_seen and p.y < 1.0 and p.x > -4.6 and p.x < -1.0 and p.z > 4.3 and p.z < 6.0:
 		flags.oq04_seen = true
 		mark("oq04Seen")
 		audio.chime()
-		say("c2_tile_seen", _refresh_side)
+		if flags.oq04_asked:
+			say("c2_tile_seen", _refresh_side)
 
 
 func _talk_ho() -> void:
 	if stage <= FIND_HO:
 		mark("hoFound")
-		say("c2_ho_find", func() -> void: set_stage(TRACE))
+		say("c2_ho_find", func() -> void:
+			if flags.window_found or flags.water_trace_2:
+				set_stage(TRACED_WELL)
+			elif flags.water_trace_1:
+				set_stage(TRACED_BRANCH)
+			else:
+				set_stage(TRACE))
 	elif stage < WATER_BACK:
 		say("c2_ho_trace")
 	elif stage == WATER_BACK:
@@ -511,7 +519,7 @@ func _register_puzzle() -> void:
 		"interact": func() -> void: say("c2_chained")})
 	# the back kitchen window: no prompt until she has actually seen it
 	I.add({"id": "unitWindow", "position": refs.unitWindowOutside, "radius": 1.1, "priority": Q, "verb": "verb.climb_in",
-		"can_interact": func() -> bool: return flags.window_found,
+		"can_interact": func() -> bool: return stage >= TRACE and flags.window_found,
 		"interact": func() -> void:
 			audio.creak()
 			once("c2_climb_in", func() -> void:
@@ -528,7 +536,7 @@ func _register_puzzle() -> void:
 	for i in 3:
 		var vx: float = BuildLightWell.VALVE_X[i]
 		I.add({"id": "valve%d" % i, "position": Vector3(vx, LevelBuilder.LEVEL_B, vz), "radius": 0.45, "priority": Q, "verb": "verb.turn",
-			"can_interact": func() -> bool: return not _valve_busy and not flags.water_restored,
+			"can_interact": func() -> bool: return stage >= IN_UNIT and not _valve_busy and not flags.water_restored,
 			"interact": func() -> void: _turn_valve(i)})
 
 
@@ -657,25 +665,27 @@ func _discover(delta: float) -> void:
 	# the branch and the dead line leave the landing together; from the side,
 	# one plainly crosses the well and the other plainly goes down it
 	var at_crossing := on_b and p.x > 9.5 and p.x < 15.5 and p.z > -13.3 and p.z < -10.8
-	if stage == TRACE and at_crossing:
+	if stage <= TRACE and not flags.water_trace_1 and at_crossing:
 		_zone_t += delta
 		if side_view:
 			flags.water_trace_1 = true
 			audio.chime()
-			say("c2_branch_seen", func() -> void: set_stage(TRACED_BRANCH))
+			if stage == TRACE:
+				say("c2_branch_seen", func() -> void: set_stage(TRACED_BRANCH))
 			return
-		if _zone_t > 22.0 and not _hinted.has("blue"):
+		if stage == TRACE and _zone_t > 22.0 and not _hinted.has("blue"):
 			_hinted["blue"] = true
 			say("c2_blue_until", func() -> void: hud.show_hint("hint.turn_view"))
 	# on the far side: behind the air-conditioners it keeps going, past Mrs. Fong's
 	var on_ledge := on_b and p.z < -13.0 and p.z > -17.4 and p.x > 12.0 and p.x < 24.3
-	if stage == TRACED_BRANCH and on_ledge and side_view:
+	if stage <= TRACED_BRANCH and flags.water_trace_1 and not flags.water_trace_2 and on_ledge and side_view:
 		flags.water_trace_2 = true
 		audio.chime()
-		say("c2_well_seen", func() -> void: set_stage(TRACED_WELL))
+		if stage == TRACED_BRANCH:
+			say("c2_well_seen", func() -> void: set_stage(TRACED_WELL))
 		return
 	# the back kitchen window, edge-on from the front: seen from the side
-	if not flags.window_found and stage >= TRACE:
+	if not flags.window_found:
 		var w: Vector3 = world.refs.unitWindow
 		var near := on_b and Vector2(p.x - w.x, p.z - w.z).length() < 7.0
 		if near and ViewMath.back(cam.current_yaw).dot(Vector3(1, 0, 0)) > 0.6:
@@ -683,7 +693,7 @@ func _discover(delta: float) -> void:
 			audio.chime()
 			hud.notice("notice.window_found", 3.4)
 			hud.show_hint("")
-			if stage < TRACED_WELL:
+			if stage >= TRACE and stage < TRACED_WELL:
 				flags.water_trace_2 = true
 				set_stage(TRACED_WELL)
 
